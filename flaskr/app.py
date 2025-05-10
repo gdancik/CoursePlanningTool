@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, session
+from flask import Flask, render_template, request, send_file, session, jsonify
 from docx import Document
 import io
 import random
@@ -42,11 +42,9 @@ def test():
     name = session.get('name', 'unassigned')
     return render_template('test.html', name = name)
 
-@app.route('/react/')
-def react():
-    name = session.get('name', 'unassigned')
-    return render_template('react.html', name = name)
-
+@app.route('/api/hello')
+def hello():
+    return jsonify(message="Hello from Flask!")
 
 if __name__ == '__main__':
     app.run(debug=True)

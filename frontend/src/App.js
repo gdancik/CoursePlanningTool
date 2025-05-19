@@ -38,6 +38,30 @@ function Login() {
 }
 
 
+function Logout() {
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('/logout/')
+      .catch((err) => {
+        setError(err);
+      });
+  }, []);
+ 
+  if (error) {
+    return ( 
+      <div>
+       <h3> Error: Logout was not successful (is flask running?) </h3> 
+      </div>
+    );
+  }
+ 
+  return (
+    <div>
+      <h2>You are logged out! Now check out <Link to = "/hello/">/hello/</Link></h2>
+    </div>
+  );
+}
 
 
 //.catch(err => setMessage('Error fetching data: make sure /api/hello endpoint is available from a running flask instance', err));
@@ -81,13 +105,14 @@ function App() {
       <br/>
       <nav>
         <Link to="/">Home</Link> | <Link to="/login/">Login</Link>
-        | <Link to="/hello/">Hello</Link>
+        | <Link to="/hello/">Hello</Link> | <Link to="/logout/">Logout</Link>
       </nav>
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login/" element={<Login />} />
         <Route path="/hello/" element={<Hello />} />
+        <Route path="/logout/" element={<Logout />} />
       </Routes>
     </Router>
   );

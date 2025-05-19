@@ -33,7 +33,6 @@ def login() :
     return 'Login successful, now you can access <a href = "/api/hello/">/api/hello/</a>' 
 
 @app.route('/logout/')
-@login_required
 def logout():
     logout_user()
     session.clear()

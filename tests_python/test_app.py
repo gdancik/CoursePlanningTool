@@ -7,8 +7,11 @@ import json
 
 # Add the parent directory to the Python path -- required for importing from backend 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from backend.app import app 
 
+# Add the backend directory to the Python path -- required for local imports in app 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
+
+from backend.app import app 
 
 # fixture sets up client once for all tests in this file
 @pytest.fixture(scope="module")

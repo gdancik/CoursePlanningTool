@@ -5,6 +5,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 import io
 import random
 
+import course_planning as cp
+
 ''' Create app and login manager '''
 
 app = Flask(__name__)
@@ -47,7 +49,16 @@ def profile():
 # route to the homepage
 @app.route('/')
 def index() :
-    return '<h1> Course Planning Tool Homepage</h1>'
+    s = '''
+    <h1> Course Planning Tool Homepage</h1>
+    <ul>
+    <li> <a href = '/login/'>Login</a> </li>
+    <li> <a href = '/logout/'>Logout</a> </li>
+    <li> <a href = '/api/hello/'>Hello</a> </li>
+    <li> <a href = '/valid_inputs/'>Valid Inputs </a> </li>
+    </ul>
+    '''
+    return s
 
 ''' 
 The 'session' object allows you to store information specific to a user. We
@@ -85,6 +96,9 @@ def hello():
 def hi():
     return jsonify(message="Hi there from Flask!")
 
+@app.route('/valid_inputs/')
+def valid_inputs():
+    return jsonify(cp.columns)
 
 ''' Generate a word document! '''
 @app.route('/generate/', methods=['GET', 'POST'])

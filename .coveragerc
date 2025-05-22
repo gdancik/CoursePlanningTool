@@ -1,0 +1,13 @@
+# coverage.ini
+[run]
+branch = False
+source = 
+  backend.app
+  backend.course_planning 
+
+[report]
+show_missing = True
+
+[html]
+directory = htmlcov
+title = Backend Coverage Report

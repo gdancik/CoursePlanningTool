@@ -5,7 +5,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 import io
 import random
 
-import course_planning as cp
+import backend.course_planning as cp
 
 ''' Create app and login manager '''
 

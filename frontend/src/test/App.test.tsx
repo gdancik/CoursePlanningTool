@@ -1,12 +1,17 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
-import Welcome from './welcome';
+import App from '../App';
+import Welcome from '../welcome';
+import {BrowserRouter} from "react-router-dom";
 
 /**********************************************************
  * Test whether components render without crashing
  *********************************************************/
 it('<App /> renders without crashing', () => {
-  render(<App />);
+  render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+  );
 });
 
 it('<Welcome /> renders without crashing', () => {
@@ -24,7 +29,11 @@ test('<Welcome /> displays name', () => {
 });
 
 test('Home page includes React Home Page', () => {
-  render(<App />);
+  render(
+      <BrowserRouter>
+        <App />
+        </BrowserRouter>
+  );
   const text = screen.getByText(/React Home Page/i);
   expect(text).toBeInTheDocument();
 });

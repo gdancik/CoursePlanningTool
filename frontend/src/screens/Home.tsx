@@ -1,6 +1,8 @@
 /*
  Home page, Test to see if the previous functional test from old App after being
- merged to this file still work when running npm test
+ merged to this file will still work when running npm test
+
+ Testing: Works
  */
 
 import Welcome from '../welcome';

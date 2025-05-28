@@ -1,5 +1,6 @@
 // Utility function to load and parse the syllabus section data from a CSV file using PapaParse.
 // This data is used to populate the overview cards on the Overview page.
+//CSV file is stored in src/public/data/syllabus_sections.csv
 
 import Papa from "papaparse";
 
@@ -27,7 +28,7 @@ export async function loadSyllabusSections(path: string): Promise<SectionData[]>
             skipEmptyLines: true, //Ignores blank likes in the CSV
             complete: (results) => {
 
-                //Converts parsed data into the expected SectionData Forma.=t,
+                //Converts parsed data into the expected SectionData Format,
                 const parsed = results.data.map((row: any) => ({
                     ...row,
                     completed: row.completed === "true",

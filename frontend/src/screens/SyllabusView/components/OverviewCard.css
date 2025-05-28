@@ -1,3 +1,7 @@
+/* OverviewCard.css
+   This CSS sheet is used in the OverviewCard.tsx
+*/
+
 .overview-card {
     display: flex;
     align-items: center;

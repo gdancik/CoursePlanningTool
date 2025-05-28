@@ -1,5 +1,5 @@
 import React from 'react';
-import {FaPen, FaRegSquare} from 'react-icons/fa';
+import { FaPen, FaRegSquare } from 'react-icons/fa';
 import './OverviewCard.css';
 
 interface Props {
@@ -9,13 +9,11 @@ interface Props {
 }
 
 const OverviewCard: React.FC<Props> = ({ title, description, completed }) => {
-    return(
+    return (
         <div className="overview-card">
-            <div className = "card-left">
-                <div className="card-title">{title}</div>
-                <div className="card-description">{description}</div>
-            </div>
-            <div className="card-right">
+            <div className="card-title-area">{title}</div>
+            <div className="card-description-area">{description}</div>
+            <div className="card-icons">
                 <FaPen className="icon"/>
                 <FaRegSquare className="icon"/>
                 {completed && <span className="status">Completed</span>}
@@ -23,4 +21,5 @@ const OverviewCard: React.FC<Props> = ({ title, description, completed }) => {
         </div>
     );
 };
+
 export default OverviewCard;

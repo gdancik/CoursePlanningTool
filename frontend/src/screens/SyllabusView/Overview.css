@@ -1,0 +1,24 @@
+/* Overview.css */
+
+.overview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    color: #485F6E;
+}
+
+.overview-intro {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    font-weight: bold;
+    color: #333;
+}
+
+.green-text {
+    color: #33975f;
+    font-weight: bold;
+}

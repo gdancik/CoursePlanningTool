@@ -4,6 +4,7 @@
 import {useEffect, useState} from 'react';
 import OverviewCard from "./components/OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../utils/loadSyllabusSections";
+import './Overview.css'
 
 const Overview = () => {
     const [sections, setSections] = useState<SectionData[]>([]);
@@ -12,8 +13,8 @@ const Overview = () => {
         loadSyllabusSections("/data/syllabus_sections.csv").then(setSections);
     }, []);
     return(
-        <div>
-            <p> This tool will guide you through each section of the syllabus. Text entered in the
+        <div className='overview-container'>
+            <p className="overview-intro"> This tool will guide you through each section of the syllabus. Text entered in the
                 <span className="green-text"> green</span> boxes will appear in the final syllabus exactly as written.
                 Below, you'll find a summary of the contents and brainstorming tools for each section. You can save progress at anytime and navigate freely
                 between sections.

@@ -14,7 +14,7 @@ const Overview = () => {
     return(
         <div>
             <p> This tool will guide you through each section of the syllabus. Text entered in the
-                <span className = "green-text" >Green</span> boxes will appear in the final syllabus exactly as written.
+                <span className="green-text"> green</span> boxes will appear in the final syllabus exactly as written.
                 Below, you'll find a summary of the contents and brainstorming tools for each section. You can save progress at anytime and navigate freely
                 between sections.
             </p>

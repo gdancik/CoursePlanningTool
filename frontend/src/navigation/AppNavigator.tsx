@@ -2,12 +2,13 @@
 
 import {Routes, Route} from 'react-router-dom';
 import MainPage from '../screens/Home';
+import Overview from "../screens/SyllabusView/Overview";
 
 const AppNavigator = () => {
     return(
         <main>
             <Routes>
-                <Route path = "/" element = {<MainPage/>} />
+                <Route path = "/" element = {<Overview/>} />
             </Routes>
         </main>
     );

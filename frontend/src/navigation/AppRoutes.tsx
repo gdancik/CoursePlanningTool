@@ -19,7 +19,7 @@ const AppRoutes = () => {
                 <Route path = "/" element = {<MainPage/>} />
                 <Route path = "overview" element={<Overview/>}/>
                 <Route path = "basic-info" element={<BasicInfo/>}/>
-                <Route path = "coure-description" element={<Description/>}/>
+                <Route path = "course-description" element={<Description/>}/>
                 <Route path = "learning-outcomes" element={<LearningOutcomes/>}/>
                 <Route path = "hips" element={<HIPs/>}/>
                 <Route path = "learning-resources" element={<LearningResources/>} />

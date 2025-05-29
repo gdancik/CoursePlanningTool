@@ -5,12 +5,12 @@ import './SyllabusNav.css';
 const tabs = [
     {label: "Overview", path:"/overview"} ,
     {label: "Basic Information", path:"/basic-info"},
-    {label: "Description", path:"/description"},
+    {label: "Description", path:"/course-description"},
     {label: "Learning Outcomes", path: "/learning-outcomes"},
     {label: "HIPs", path: "/hips"},
-    {label: "Learning Resources", path:"/resources"},
+    {label: "Learning Resources", path:"/learning-resources"},
     {label: "Assessment", path:"/assessment"},
-    {label: "Course Schedule", path:"/schedule"},
+    {label: "Course Schedule", path:"/course-schedule"},
     {label: "Checklist", path: "/checklist"},
 ];
 

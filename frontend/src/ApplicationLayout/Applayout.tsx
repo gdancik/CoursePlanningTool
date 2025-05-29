@@ -6,7 +6,7 @@ const Applayout = () => {
         <div>
             <HeaderBanner/>
             <SyllabusNav/>
-            <main style={{padding: '2rem'}}>
+            <main style={{padding: '0.1rem'}}>
             </main>
         </div>
     );

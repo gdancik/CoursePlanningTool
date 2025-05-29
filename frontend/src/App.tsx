@@ -1,11 +1,11 @@
 import React from 'react';
-import AppNavigator from './navigation/AppNavigator'
+import AppRoutes from './navigation/AppRoutes'
 
 const App: React.FC = () => {
     return (
         <>
             <main>
-                <AppNavigator/>
+                <AppRoutes/>
             </main>
         </>
     );

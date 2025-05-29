@@ -1,6 +1,12 @@
+import NavTab from "../../ApplicationLayout/SyllabusNav"
+
 const BasicInfo = () =>{
     return (
-        <h1>Basic info page</h1>
+        <div>
+            <NavTab/>
+            <h1>Basic info page</h1>
+
+        </div>
     );
 };
 export default BasicInfo;

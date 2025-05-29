@@ -7,6 +7,7 @@
 import {useEffect, useState} from 'react';
 import OverviewCard from "./components/OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../utils/loadSyllabusSections";
+import NavTab from "../../ApplicationLayout/SyllabusNav"
 import './Overview.css'
 
 // Functional component that displays the overview page.
@@ -20,6 +21,8 @@ const Overview = () => {
         loadSyllabusSections("/data/syllabus_sections.csv").then(setSections);
     }, []);
     return(
+        <div>
+            <NavTab/>
         <div className='overview-container'>
 
             {/* Introduction message to help users understand the tool */}
@@ -33,6 +36,7 @@ const Overview = () => {
             {sections.map(section =>(
                 <OverviewCard key = {section.id} {...section}/>
             ))}
+        </div>
         </div>
 
     );

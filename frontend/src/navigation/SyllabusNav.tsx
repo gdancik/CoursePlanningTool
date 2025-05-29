@@ -6,7 +6,7 @@ const tabs = [
     {label: "Overview", path:"/overview"} ,
     {label: "Basic Information", path:"/basic-info"},
     {label: "Description", path:"/description"},
-    {label: "Learning Outcomes", path: "learning-outcomes"},
+    {label: "Learning Outcomes", path: "/learning-outcomes"},
     {label: "HIPs", path: "/hips"},
     {label: "Learning Resources", path:"/resources"},
     {label: "Assessment", path:"/assessment"},
@@ -16,7 +16,7 @@ const tabs = [
 
 const SyllabusNav = () => {
     return (
-        <nav className="syllabus-Nav">
+        <nav className="syllabus-nav">
             {tabs.map((tab) => (
                 <NavLink
                     key= {tab.path}

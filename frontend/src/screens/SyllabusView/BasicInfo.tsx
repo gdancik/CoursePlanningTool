@@ -1,4 +1,4 @@
-import NavTab from "../../ApplicationLayout/SyllabusNav"
+import NavTab from "../../navigation/SyllabusNav"
 
 const BasicInfo = () =>{
     return (

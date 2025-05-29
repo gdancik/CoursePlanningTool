@@ -7,7 +7,7 @@
 import {useEffect, useState} from 'react';
 import OverviewCard from "./components/OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../utils/loadSyllabusSections";
-import NavTab from "../../ApplicationLayout/SyllabusNav"
+import AppLayout from "../../ApplicationLayout/Applayout"
 import './Overview.css'
 
 // Functional component that displays the overview page.
@@ -22,7 +22,7 @@ const Overview = () => {
     }, []);
     return(
         <div>
-            <NavTab/>
+            <AppLayout/>
         <div className='overview-container'>
 
             {/* Introduction message to help users understand the tool */}

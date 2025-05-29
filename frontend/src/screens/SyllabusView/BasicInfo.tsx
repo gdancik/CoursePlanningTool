@@ -1,9 +1,8 @@
-import NavTab from "../../navigation/SyllabusNav"
-
+import Applayout from "../../ApplicationLayout/Applayout";
 const BasicInfo = () =>{
     return (
         <div>
-            <NavTab/>
+            <Applayout/>
             <h1>Basic info page</h1>
 
         </div>

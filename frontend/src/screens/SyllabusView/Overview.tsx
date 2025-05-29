@@ -23,20 +23,20 @@ const Overview = () => {
     return(
         <div>
             <AppLayout/>
-        <div className='overview-container'>
+            <div className='overview-container'>
 
-            {/* Introduction message to help users understand the tool */}
-            <p className="overview-intro"> This tool will guide you through each section of the syllabus. Text entered in the
-                <span className="green-text"> green</span> boxes will appear in the final syllabus exactly as written.
+                {/* Introduction message to help users understand the tool */}
+                <p className="overview-intro"> This tool will guide you through each section of the syllabus. Text entered in the
+                    <span className="green-text"> green</span> boxes will appear in the final syllabus exactly as written.
                 Below, you'll find a summary of the contents and brainstorming tools for each section. You can save progress at anytime and navigate freely
                 between sections.
-            </p>
+                </p>
 
-            {/* Render one OverviewCard per section from the CSV */}
-            {sections.map(section =>(
-                <OverviewCard key = {section.id} {...section}/>
+                {/* Render one OverviewCard per section from the CSV */}
+                {sections.map(section =>(
+                    <OverviewCard key = {section.id} {...section}/>
             ))}
-        </div>
+            </div>
         </div>
 
     );

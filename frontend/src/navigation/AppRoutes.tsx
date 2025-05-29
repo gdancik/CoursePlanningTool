@@ -19,12 +19,12 @@ const AppRoutes = () => {
                 <Route path = "/" element = {<MainPage/>} />
                 <Route path = "overview" element={<Overview/>}/>
                 <Route path = "basic-info" element={<BasicInfo/>}/>
-                <Route path = "description" element={<Description/>}/>
+                <Route path = "coure-description" element={<Description/>}/>
                 <Route path = "learning-outcomes" element={<LearningOutcomes/>}/>
                 <Route path = "hips" element={<HIPs/>}/>
-                <Route path = "resources" element={<LearningResources/>} />
+                <Route path = "learning-resources" element={<LearningResources/>} />
                 <Route path ="assessment" element={<Assessment/>} />
-                <Route path = "schedule" element={<CourseSchedule/>}/>
+                <Route path = "course-schedule" element={<CourseSchedule/>}/>
                 <Route path = "checklist" element={<Checklist/>}/>
             </Routes>
         </main>

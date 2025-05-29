@@ -1,6 +1,8 @@
 import React from 'react';
 import { FaPen, FaRegSquare } from 'react-icons/fa';
+import {Link} from 'react-router-dom';
 import './OverviewCard.css';
+
 
 //Props interface for the OverviewCard Component.
 // - title: the section's title
@@ -10,13 +12,14 @@ interface Props {
     title: string;
     description: string;
     completed: boolean;
+    link: string;
 }
 
 //Functional component that renders a syllabus overview card
 //Displays the section title, description, and action icons.
 //The "Completed" status is conditionally shown based on props.
 
-const OverviewCard: React.FC<Props> = ({ title, description, completed }) => {
+const OverviewCard: React.FC<Props> = ({ title, description, completed, link }) => {
     return (
         <div className="overview-card">
             {/*Section Title*/}
@@ -27,7 +30,9 @@ const OverviewCard: React.FC<Props> = ({ title, description, completed }) => {
 
             {/* Action icons and completed status */}
             <div className="card-icons">
-                <FaPen className="icon"/> {/*Edit Icon, NOTE: this currently is non-functional and requires a button*/}
+                <Link to={link}>
+                    <FaPen className="icon"/> {/*Edit Icon, NOTE: this currently is non-functional and requires a button*/}
+                </Link>
                 <FaRegSquare className="icon"/> {/*Placeholder check box icon, needs to update depending on which the user completes*/}
                 {completed && <span className="status">Completed</span>}
             </div>

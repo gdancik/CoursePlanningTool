@@ -10,6 +10,7 @@ export interface SectionData{
     title: string; // Title of the section (e.g., "Basic Information")
     description: string; // Brief description or guidance for the section
     completed: boolean; // Whether the section is marked as completed
+    link: string;
 }
 
 // Asynchronous function to fetch and parse CSV data.
@@ -30,8 +31,11 @@ export async function loadSyllabusSections(path: string): Promise<SectionData[]>
 
                 //Converts parsed data into the expected SectionData Format,
                 const parsed = results.data.map((row: any) => ({
-                    ...row,
+                    id: row.id,
+                    title: row.title,
+                    description: row.description,
                     completed: row.completed === "true",
+                    link: row.link || '',
                 }));
                 resolve(parsed); //Returns processed Data
             },

@@ -4,14 +4,21 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 2rem;
-    max-width: 900px;
+    padding: 3rem;
+    max-width: 1200px;
     margin: 0 auto;
     color: #485F6E;
 }
+.overview-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
 
 .overview-intro {
-    font-size: 1rem;
+    font-size: 1.15rem;
     margin-bottom: 1.5rem;
     line-height: 1.6;
     font-weight: bold;

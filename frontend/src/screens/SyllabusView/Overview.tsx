@@ -33,9 +33,11 @@ const Overview = () => {
                 </p>
 
                 {/* Render one OverviewCard per section from the CSV */}
-                {sections.map(section =>(
-                    <OverviewCard key = {section.id} {...section}/>
-            ))}
+                {sections.map(section => (
+                    <div className="overview-card-margin" key={section.id}>
+                        <OverviewCard {...section}/>
+                    </div>
+                ))}
             </div>
         </div>
 

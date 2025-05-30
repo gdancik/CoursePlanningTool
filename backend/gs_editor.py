@@ -1,13 +1,14 @@
 """
 This module provides functions to create and manage Google Sheets using the Google Sheets and Google Drive APIs.
-It includes functions to create a new sheet, add a column, get values from a column, and update
-values in a column. In order to use this module, you need to have a Google Cloud project with 
-the Google Sheets API enabled and a service account with the appropriate permissions.
-The module will use the json file from the service account to authenticate and accessthe Google Sheets API 
-by dropping the json file in the same directory as this script. In order to edit the sheets you
-also have to share your file with the service account using its gmail.
+It includes functions to create a new sheet, add headers, get and update values in the sheet, and delete the sheet.
+It requires a service account with access to the Google Sheets API and Google Drive API, which can be set up in the 
+Google Cloud Console. The module will use the json file from the service account to authenticate and access the 
+Google Sheets API by storing the json file in an environment variable named `GS_CREDENTIALS_JSON`.
 """
 import gspread
+import os
+import json
+from typing import Dict, Any
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 import course_planning as cp
@@ -22,10 +23,15 @@ def create_gs_client():
              'https://www.googleapis.com/auth/drive']
 
     # Add your service account file
-    credentials = ServiceAccountCredentials.from_json_keyfile_name('key.json', scope)
+    json_str = os.getenv('GS_CREDENTIALS_JSON')
+    
+    # credentials = ServiceAccountCredentials.from_json_keyfile_name(json_key, scope)
+    #TODO Add enviromental var functionailty here 
 
-    # Authorize the client
-    client = gspread.authorize(credentials)
+    credentials_dict: Dict[str, Any] = json.loads(json_str)
+
+    # Create a gspread client using the credentials dictionary
+    client = gspread.service_account_from_dict(credentials_dict)
 
     return client
 
@@ -226,7 +232,18 @@ if __name__ == "__main__":
     # print('=='*10)
     # create_sheet('CPT_Data_Test_Sheet','sencererabel@gmail.com')
    
-    # print('=='*10)
-    # print('Testing get value function')
-    # print('=='*10)
-    # print(getValue("id_2",["crse_subj_syllabus","instructor_name_syllabus"],sheet_name))
+    print('=='*10)
+    print('Testing get value function')
+    print('=='*10)
+    print('Getting value for id_2 in crse_subj_syllabus and instructor_name_syllabus columns:')
+    print(getValue("id_2",["crse_subj_syllabus","instructor_name_syllabus"],sheet_name))
+
+    print('=='*10)
+    print('Testing Update value function')
+    print('=='*10)
+    updateValue("id_2","crse_subj_syllabus","PSY",sheet_name)
+
+    print('=='*10)
+    print('Testing read_sheet function')
+    print('=='*10)
+    read_sheet(sheet_name)

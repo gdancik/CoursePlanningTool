@@ -1,7 +1,14 @@
 //This file contains all routes needed for the Course Planning Tool
 
 import {Routes, Route} from 'react-router-dom';
-import MainPage from '../screens/Home';
+
+//Test Endpoint Imports
+import MainPage from '../screens/testAPI/Home';
+import Login from '../screens/testAPI/Login';
+import Logout from '../screens/testAPI/Logout'
+import Hello from '../screens/testAPI/Hello';
+
+//Application Endpoints
 import Overview from "../screens/SyllabusView/Overview";
 import Assessment from "../screens/SyllabusView/Assessment";
 import BasicInfo from "../screens/SyllabusView/BasicInfo";
@@ -16,7 +23,13 @@ const AppRoutes = () => {
     return(
         <main>
             <Routes>
+                {/*TEST API ENDPOINTS*/}
                 <Route path = "/" element = {<MainPage/>} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/api/hello/" element={<Hello />} />
+
+                {/*Application EndPoints*/}
                 <Route path = "overview" element={<Overview/>}/>
                 <Route path = "basic-info" element={<BasicInfo/>}/>
                 <Route path = "course-description" element={<Description/>}/>

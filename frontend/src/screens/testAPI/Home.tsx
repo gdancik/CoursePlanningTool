@@ -5,7 +5,7 @@
  Testing: Works
  */
 
-import Welcome from '../welcome';
+import Welcome from '../../welcome';
 
 const Home = () => {
     return (

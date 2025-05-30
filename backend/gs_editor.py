@@ -8,9 +8,11 @@ by dropping the json file in the same directory as this script. In order to edit
 also have to share your file with the service account using its gmail.
 """
 import gspread
+import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 import course_planning as cp
 
+#TODO Make so that enviromnetal vars are used to get key.json
 def create_gs_client():
     '''
     Creates a Google Sheets client using a service account.
@@ -27,12 +29,12 @@ def create_gs_client():
 
     return client
 
-#TODO Add optionial email to share the sheet with
-def create_sheet(title: str, email: str = None) -> str:
+def create_sheet(title: str = "CPT_Data", email: str = None) -> str:
     '''
-    Creates a new Google Sheet with the specified title and returns its ID.(Right now it automatically shares the sheet with a specific email)
+    Creates a new Google Sheet with the specified title and returns its ID. Also can take an email to share the sheet with.
     Args:
         title (str): The title of the new Google Sheet.
+        email (str, optional): The email address to share the sheet with. Defaults to None.
     Returns:
         str: The ID of the created Google Sheet.
     '''
@@ -41,9 +43,9 @@ def create_sheet(title: str, email: str = None) -> str:
 
     # Create a new spreadsheet
     spreadsheet = client.create(title)
-
+    spreadsheet_id = spreadsheet.id
     # Print the ID of the created spreadsheet
-    print(f'Created Spreadsheet with ID: {spreadsheet.id}')
+    print(f'Created Spreadsheet with Name: {spreadsheet.title} and ID: {spreadsheet_id}')
 
     if email:
         # Share the spreadsheet with a specific email
@@ -51,13 +53,12 @@ def create_sheet(title: str, email: str = None) -> str:
         print(f'Spreadsheet shared with sencererabel@gmail.com')
 
     # Add course id columns to the spreadsheet
-    add_course_id(spreadsheet_id)
+    add_headers(spreadsheet_id)
     
     # Return the ID of the created spreadsheet
-    return spreadsheet.id
+    return spreadsheet_id
 
-
-def add_course_id(spreadsheet_id):
+def add_headers(spreadsheet_id):
     '''
     Adds a the titles for the course id columns to the specified Google Sheet.
     Args:
@@ -78,92 +79,154 @@ def add_course_id(spreadsheet_id):
     # Update the first row with the new values
     sheet.update([values], 'A1')
 
-    print(f'Course ID columns added to the spreadsheet with ID: {spreadsheet_id}')
+    print(f'Headeres added to the spreadsheet with ID: {spreadsheet_id}')
 
-def getValue(spreadsheet_id: str,cell: str) -> str:
+def getValue(course_id: str,columns: str, sheet_name: str = "CPT_Data") -> str:
     '''
-    Gets the value of a specified column for a specified id. (For now it just gets the value of a specified cell)
+    Gets the value of a specified column for a specified id. 
     Args:
-        spreadsheet_id (str): The ID of the Google Sheet.
-        cell (str): The cell to get the value from (e.g., 'A1').
+        course_id (str): The ID of the course to retrieve values for.
+        columns (str or list): The column name(s) to retrieve values from. Can be a single column name or a list of column names.
+        sheet_name (str): The name of the Google Sheet to read from. Defaults to "CPT_Data".
     Returns:
-        str: The value of the specified cell.
-    '''
-       # Create a Google Sheets client
-    client = create_gs_client()
-
-    # Open the spreadsheet by ID
-    spreadsheet = client.open_by_key(spreadsheet_id)
-
-    # Select the first sheet
-    sheet = spreadsheet.get_worksheet(0)
-
-    # Get the value of the specified cell
-    cell_value = sheet.acell(cell).value
-
-    return cell_value
-    
-def updateValue(spreadsheet_id: str,cell: str, new_val: str):
-    '''
-    Replaces the value of a specified column for a specified id.(Right now it just updates the value of a specified cell)
-    Args:
-        spreadsheet_id (str): The ID of the Google Sheet.
-        cell (str): The cell to update (e.g., 'A1').
-        new_val (str): The new value to set in the specified cell.
+        str: The value of the specified column for the specified course ID.
     '''
     # Create a Google Sheets client
     client = create_gs_client()
 
     # Open the spreadsheet by ID
-    spreadsheet = client.open_by_key(spreadsheet_id)
+    spreadsheet = client.open(sheet_name)
 
     # Select the first sheet
     sheet = spreadsheet.get_worksheet(0)
+    #Get the entire sheet
+    data = sheet.get_all_records()
 
-    # Update the specified cell with the new value
-    sheet.update_acell(new_val, cell)
+    #Make a pandas data from sheet
+    df = pd.DataFrame(data)
 
-def read_sheet(spreadsheet_id: str):
-   # Create a Google Sheets client
-    client = create_gs_client()
+    #Find row with the course id
+    row = df[df['course_id'] == course_id]
 
-    # Open the spreadsheet by ID
-    spreadsheet = client.open_by_key(spreadsheet_id)
-    sheet = spreadsheet.get_worksheet(0)
-   # Get all records
-    records = sheet.get_all_records()
-    print(records)
+    # Check if a row was found
+    if row.empty:
+        print(f"Course ID '{course_id}' not found.")
+        return None
+    
+    #Check if columns is a list or a string
+    #if column is list, we will return a list of cells
+    if isinstance(columns, list):
+        cells_dict = {}
+        for column in columns:
+            if column in row.columns:
+                cells_dict[column] = row[column].values[0]
+            else:
+                print(f"Warning: Column '{column}' not found in the sheet.")
+                cells_dict[column] = None
+        return cells_dict
+    #else we will return a single cell
+    else:
+        cell = row[columns].values[0]
+        return cell
 
-def delete_sheet(spreadsheet_id: str):
+def updateValue(course_id: str,column: str, new_val,sheet_name: str = "CPT_Data"):
     '''
-    Deletes the specified Google Sheet by its ID.
+    Replaces the value of a specified column for a specified id.(Right now it just updates the value of a specified cell)
     Args:
-        spreadsheet_id (str): The ID of the Google Sheet to delete.
+        course_id (str): The ID of the course to update.
+        column (str): The column name to update.
+        new_val: The new value to set in the specified column.
+        sheet_name (str): The name of the Google Sheet to update. Defaults to "CPT_Data". 
+    '''
+    # Create a Google Sheets client
+    client = create_gs_client()
+
+    # Open the spreadsheet by ID
+    spreadsheet = client.open(sheet_name)
+
+    # Select the first sheet
+    sheet = spreadsheet.get_worksheet(0)
+
+    #Get the entire sheet
+    data = sheet.get_all_records()
+
+    #Make a pandas data from sheet
+    df = pd.DataFrame(data)
+
+    #find the row with the course id
+    row = df[df['course_id'] == course_id].index[0] +2 #+2 because gspread is indexed at 1 and we have headers in the first row
+    col_idx = df.columns.get_loc(column)+1 #because gspread is indexed at 1
+
+    #update cell
+    sheet.update_cell(row, col_idx, new_val)
+
+#Used for testing purposes
+def read_sheet(sheet_name: str = "CPT_Data"):
+    '''
+    Reads and prints the contents of the specified Google Sheet.
+    Args:
+        sheet_name (str): The name of the Google Sheet to read from. Defaults to "CPT_Data".
+    '''
+    # Create a Google Sheets client
+    client = create_gs_client()
+
+    # Open the spreadsheet by ID
+    spreadsheet = client.open(sheet_name)
+    sheet = spreadsheet.get_worksheet(0)
+
+    # Get all records
+    records = sheet.get_all_records()
+
+    # Convert to DataFrame for nice formatting
+    df = pd.DataFrame(records)
+    print(df.to_string(index=False))
+
+def delete_sheet(sheet_name: str = "CPT_Data"):
+    '''
+    Deletes the specified Google Sheet by its name.
+    Args:
+        sheet_name (str): The name of the Google Sheet to delete. Defaults to "CPT_Data".
     '''
    # Create a Google Sheets client
     client = create_gs_client()
 
     # Open the spreadsheet by ID
-    spreadsheet = client.open_by_key(spreadsheet_id)
+    spreadsheet = client.open(sheet_name)
 
     # Select the first sheet
     sheet = spreadsheet.get_worksheet(0)
 
-    # Delete the spreadsheet
-    sheet.delete()
-    print(f'Spreadsheet with ID {spreadsheet_id} deleted successfully.')
+    #save spreadsheet id
+    spreadsheet_id = spreadsheet.id
+    from googleapiclient.discovery import build
+    # Define the scope
+    SCOPE = ['https://www.googleapis.com/auth/drive']
+
+    # Authenticate and create the service
+    credentials = ServiceAccountCredentials.from_json_keyfile_name('key.json', SCOPE)
+    drive_service = build('drive', 'v3', credentials=credentials)
+
+    # Delete the specified spreadsheet
+    drive_service.files().delete(fileId=spreadsheet_id).execute()
+    
+    print(f'Spreadsheet with Name: {sheet_name} and ID: {spreadsheet_id} deleted successfully.')
 
 if __name__ == "__main__":
     # Example usage
+    sheet_name = 'CPT_Data_Test_Sheet'
 
-    spreadsheet_id = '1n43mkRVtDJy5SyfATutBVXD85i481G3WzhXm440K0lY'
-    # read_sheet(spreadsheet_id)
-    add_course_id(spreadsheet_id)
-    # updateValue(spreadsheet_id, "241", 'C2')
-    # updateValue(spreadsheet_id, "CSC", 'B2')
-    # updateValue(spreadsheet_id, "Dr. Sencer Erabel", 'A2')
-    # print(getValue(spreadsheet_id,'C2'))
+    # print('=='*10)
+    # print('Testing sheet deletion')
+    # print('=='*10)
+    # print('Calling sheet delete function...')
+    # delete_sheet()
+
+    # print('=='*10)
+    # print('Testing sheet creation')
+    # print('=='*10)
+    # create_sheet('CPT_Data_Test_Sheet','sencererabel@gmail.com')
    
-    # sheet_id = create_sheet("Test Sheet2")
-    # delete_sheet(spreadsheet_id) 
-   
+    # print('=='*10)
+    # print('Testing get value function')
+    # print('=='*10)
+    # print(getValue("id_2",["crse_subj_syllabus","instructor_name_syllabus"],sheet_name))

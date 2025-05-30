@@ -13,7 +13,6 @@ import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 import course_planning as cp
 
-#TODO Make so that enviromnetal vars are used to get key.json
 def create_gs_client():
     '''
     Creates a Google Sheets client using a service account.
@@ -25,9 +24,7 @@ def create_gs_client():
     # Add your service account file
     json_str = os.getenv('GS_CREDENTIALS_JSON')
     
-    # credentials = ServiceAccountCredentials.from_json_keyfile_name(json_key, scope)
-    #TODO Add enviromental var functionailty here 
-
+    #Set credentials from the JSON string
     credentials_dict: Dict[str, Any] = json.loads(json_str)
 
     # Create a gspread client using the credentials dictionary

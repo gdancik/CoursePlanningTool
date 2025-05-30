@@ -1,1 +1,3 @@
-backend/Google API Sheet Module/key.json
+backend/key.json
+/backend/__pycache__
+/venv

@@ -9,7 +9,7 @@ also have to share your file with the service account using its gmail.
 """
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-
+import course_planning as cp
 
 def create_gs_client():
     '''
@@ -73,10 +73,10 @@ def add_course_id(spreadsheet_id):
     sheet = spreadsheet.get_worksheet(0)
 
     # Define the values you want to write to the first row
-    values = ["instructor_name_syllabus", "crse_subj_syllabus", "crse_number_syllabus"]
+    values = cp.columns
 
     # Update the first row with the new values
-    sheet.update([values], 'A1:C1')
+    sheet.update([values], 'A1')
 
     print(f'Course ID columns added to the spreadsheet with ID: {spreadsheet_id}')
 
@@ -157,8 +157,8 @@ if __name__ == "__main__":
     # Example usage
 
     spreadsheet_id = '1n43mkRVtDJy5SyfATutBVXD85i481G3WzhXm440K0lY'
-    read_sheet(spreadsheet_id)
-    # add_course_id(spreadsheet_id)
+    # read_sheet(spreadsheet_id)
+    add_course_id(spreadsheet_id)
     # updateValue(spreadsheet_id, "241", 'C2')
     # updateValue(spreadsheet_id, "CSC", 'B2')
     # updateValue(spreadsheet_id, "Dr. Sencer Erabel", 'A2')

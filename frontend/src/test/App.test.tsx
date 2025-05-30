@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import App from '../App';
 import Welcome from '../welcome';
 import {BrowserRouter} from "react-router-dom";
+import {MemoryRouter} from "react-router-dom";
 
 /**********************************************************
  * Test whether components render without crashing
@@ -36,4 +37,18 @@ test('Home page includes React Home Page', () => {
   );
   const text = screen.getByText(/React Home Page/i);
   expect(text).toBeInTheDocument();
+});
+
+
+/**********************************************************
+ * Test Navigation Behavior
+ *********************************************************/
+test('renders welcome page on default route', () => {
+    render(
+        <MemoryRouter initialEntries={['/']}>
+            <App />
+        </MemoryRouter>
+    );
+
+    expect(screen.getByText(/Hello World/i)).toBeInTheDocument();
 });

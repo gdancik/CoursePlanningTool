@@ -24,6 +24,9 @@ const mockSections = [
     },
 ];
 
+/*******************************************************************
+ * Test to ensure overview displays section cards from mock CSV data
+ *******************************************************************/
 describe('<Overview />', () => {
     test('loads and renders section cards from CSV', async () => {
         (loadSyllabusSections as jest.Mock).mockResolvedValue(mockSections);

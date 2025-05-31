@@ -213,34 +213,3 @@ def delete_sheet(sheet_name: str = "CPT_Data"):
     drive_service.files().delete(fileId=spreadsheet_id).execute()
     
     print(f'Spreadsheet with Name: {sheet_name} and ID: {spreadsheet_id} deleted successfully.')
-
-if __name__ == "__main__":
-    # Example usage
-    sheet_name = 'CPT_Data_Test_Sheet'
-
-    # print('=='*10)
-    # print('Testing sheet deletion')
-    # print('=='*10)
-    # print('Calling sheet delete function...')
-    # delete_sheet()
-
-    # print('=='*10)
-    # print('Testing sheet creation')
-    # print('=='*10)
-    # create_sheet('CPT_Data_Test_Sheet','sencererabel@gmail.com')
-   
-    print('=='*10)
-    print('Testing get value function')
-    print('=='*10)
-    print('Getting value for id_2 in crse_subj_syllabus and instructor_name_syllabus columns:')
-    print(getValue("id_2",["crse_subj_syllabus","instructor_name_syllabus"],sheet_name))
-
-    print('=='*10)
-    print('Testing Update value function')
-    print('=='*10)
-    updateValue("id_2","crse_subj_syllabus","PSY",sheet_name)
-
-    print('=='*10)
-    print('Testing read_sheet function')
-    print('=='*10)
-    read_sheet(sheet_name)

@@ -21,7 +21,7 @@ def create_gs_client():
     scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
 
-    # Add your service account file
+   # Get the JSON string from the environment variable
     json_str = os.getenv('GS_CREDENTIALS_JSON')
     
     #Set credentials from the JSON string
@@ -47,13 +47,14 @@ def create_sheet(title: str = "CPT_Data", email: str = None) -> str:
     # Create a new spreadsheet
     spreadsheet = client.create(title)
     spreadsheet_id = spreadsheet.id
-    # Print the ID of the created spreadsheet
+
+    # Print the name and ID of the created spreadsheet
     print(f'Created Spreadsheet with Name: {spreadsheet.title} and ID: {spreadsheet_id}')
 
     if email:
         # Share the spreadsheet with a specific email
-        spreadsheet.share('sencererabel@gmail.com', perm_type='user', role='writer')
-        print(f'Spreadsheet shared with sencererabel@gmail.com')
+        spreadsheet.share(email, perm_type='user', role='writer')
+        print(f'Spreadsheet shared with {email}')
 
     # Add course id columns to the spreadsheet
     add_headers(spreadsheet_id)
@@ -82,7 +83,7 @@ def add_headers(spreadsheet_id):
     # Update the first row with the new values
     sheet.update([values], 'A1')
 
-    print(f'Headeres added to the spreadsheet with ID: {spreadsheet_id}')
+    print(f'Headers added to the spreadsheet with ID: {spreadsheet_id}')
 
 def getValue(course_id: str,columns: str, sheet_name: str = "CPT_Data") -> str:
     '''
@@ -97,7 +98,7 @@ def getValue(course_id: str,columns: str, sheet_name: str = "CPT_Data") -> str:
     # Create a Google Sheets client
     client = create_gs_client()
 
-    # Open the spreadsheet by ID
+    # Open the spreadsheet by name
     spreadsheet = client.open(sheet_name)
 
     # Select the first sheet
@@ -144,7 +145,7 @@ def updateValue(course_id: str,column: str, new_val,sheet_name: str = "CPT_Data"
     # Create a Google Sheets client
     client = create_gs_client()
 
-    # Open the spreadsheet by ID
+    # Open the spreadsheet by name
     spreadsheet = client.open(sheet_name)
 
     # Select the first sheet
@@ -158,6 +159,7 @@ def updateValue(course_id: str,column: str, new_val,sheet_name: str = "CPT_Data"
 
     #find the row with the course id
     row = df[df['course_id'] == course_id].index[0] +2 #+2 because gspread is indexed at 1 and we have headers in the first row
+    #find the column index
     col_idx = df.columns.get_loc(column)+1 #because gspread is indexed at 1
 
     #update cell
@@ -173,7 +175,7 @@ def read_sheet(sheet_name: str = "CPT_Data"):
     # Create a Google Sheets client
     client = create_gs_client()
 
-    # Open the spreadsheet by ID
+    # Open the spreadsheet by name
     spreadsheet = client.open(sheet_name)
     sheet = spreadsheet.get_worksheet(0)
 
@@ -193,15 +195,14 @@ def delete_sheet(sheet_name: str = "CPT_Data"):
    # Create a Google Sheets client
     client = create_gs_client()
 
-    # Open the spreadsheet by ID
+    # Open the spreadsheet by name
     spreadsheet = client.open(sheet_name)
-
-    # Select the first sheet
-    sheet = spreadsheet.get_worksheet(0)
 
     #save spreadsheet id
     spreadsheet_id = spreadsheet.id
     from googleapiclient.discovery import build
+
+    #Call the Google Drive API to delete the spreadsheet
     # Define the scope
     SCOPE = ['https://www.googleapis.com/auth/drive']
 
@@ -211,5 +212,6 @@ def delete_sheet(sheet_name: str = "CPT_Data"):
 
     # Delete the specified spreadsheet
     drive_service.files().delete(fileId=spreadsheet_id).execute()
-    
+    # Print confirmation message
     print(f'Spreadsheet with Name: {sheet_name} and ID: {spreadsheet_id} deleted successfully.')
+

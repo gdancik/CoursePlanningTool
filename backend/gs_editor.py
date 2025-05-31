@@ -64,7 +64,7 @@ def create_sheet(title: str = "CPT_Data", email: str = None) -> str:
 
 def add_headers(spreadsheet_id):
     '''
-    Adds a the titles for the course id columns to the specified Google Sheet.
+    Adds the column headers for the sheet using course_planning.py columns.
     Args:
         spreadsheet_id (str): The ID of the Google Sheet to update.
     '''
@@ -194,9 +194,11 @@ def updateValue(course_id: str, values_dict: Dict[str, Any], sheet_name: str = "
         # Ensure values are in the correct order for appending
         ordered_new_row = []  # Initialize an empty list to store the ordered values
         for header in sheet_headers:
+            # Append the value from new_row_values or None if not present
+            # This ensures that the new row matches the order of the headers
             value = new_row_values.get(header, None)
             ordered_new_row.append(value)
-        
+        # Append the new row to the sheet
         sheet.append_row(ordered_new_row)
 
     print(f"Successfully processed values for course ID '{course_id}'.")

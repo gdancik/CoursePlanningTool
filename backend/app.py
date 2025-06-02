@@ -2,10 +2,13 @@ from flask import Flask, render_template, request, send_file, session, jsonify
 from docx import Document
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
+
+import requests
 import io
 import random
 
 import course_planning as cp
+import gs_editor as gse
 
 ''' Create app and login manager '''
 
@@ -126,6 +129,34 @@ def generate():
         )
 
     return render_template('form.html')
+
+'''Calls the getValue function from the gs_editor.py module'''
+@app.route('/getValue/', methods=['POST'])
+def getValue():
+    try:
+        data = request.get_json()
+        course_id = data.get('course_id')
+        columns = data.get('list_of_columns')
+        sheet_name = data.get('sheet_name')
+
+        if not course_id or not columns or not sheet_name:
+            return jsonify({"error": "Missing one or more required fields"}), 400
+
+        # Call the getValue function
+        sheet = gse.getValue(course_id, columns, sheet_name)
+
+        # Debugging: Print the sheet object to the console
+        print("Sheet data:", sheet)
+
+        # Check if sheet is None
+        if sheet is None:
+            return jsonify({"error": "No data returned from getValue"}), 500
+
+        # Return the result as JSON
+        return jsonify(sheet)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':

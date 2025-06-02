@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaPen, FaRegSquare } from 'react-icons/fa';
 import {Link} from 'react-router-dom';
+import SafeIcon from '../../../utils/ComponentWrapper'
 import './OverviewCard.css';
 
 
@@ -31,9 +32,9 @@ const OverviewCard: React.FC<Props> = ({ title, description, completed, link }) 
             {/* Action icons and completed status */}
             <div className="card-icons">
                 <Link to={link}>
-                    <FaPen className="icon"/> {/*Edit Icon, NOTE: this currently is non-functional and requires a button*/}
+                    <SafeIcon Icon={FaPen} className="icon"/>
                 </Link>
-                <FaRegSquare className="icon"/> {/*Placeholder check box icon, needs to update depending on which the user completes*/}
+                <SafeIcon Icon={FaRegSquare} className="icon"/>
                 {completed && <span className="status">Completed</span>}
             </div>
         </div>

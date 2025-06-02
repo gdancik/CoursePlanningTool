@@ -1,4 +1,7 @@
 flask
 flask-login
 python-docx
+requests
+bs4
+pandas
 

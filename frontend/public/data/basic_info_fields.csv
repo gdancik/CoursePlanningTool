@@ -1,0 +1,16 @@
+section,label,type,placeholder,required
+Course Information,Subject Code,text,Enter subject code,true
+Course Information,Course Number,text,Enter course number,true
+Course Information,Course Title,text,Enter course title,true
+Course Information,Meeting Days,text,Enter meeting days,true
+Course Information,Meeting Time,text,Enter meeting time,true
+Course Information,Classroom Location,text,Enter classroom location,true
+Course Information,Semester,select,"Fall,Spring",true
+Course Information,Year,select,"2025,2026",true
+Instructor Information,Instructor Name,text,Enter instructor name,true
+Instructor Information,Instructor Title,text,Enter instructor title,true
+Instructor Information,Email,email,Enter email,true
+Instructor Information,Office Location,text,Enter office location,true
+Instructor Information,Phone (optional),tel,Enter phone,false
+Instructor Information,Office Hours,text,Enter office hours,false
+Instructor Information,Additional Information (optional),text,Enter additional info,false

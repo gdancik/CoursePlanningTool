@@ -145,9 +145,6 @@ def getValue():
         # Call the getValue function
         sheet = gse.getValue(course_id, columns, sheet_name)
 
-        # Debugging: Print the sheet object to the console
-        print("Sheet data:", sheet)
-
         # Check if sheet is None
         if sheet is None:
             return jsonify({"error": "No data returned from getValue"}), 500
@@ -158,6 +155,19 @@ def getValue():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/updateValue/', methods=['POST'])
+def updateValue():
+        data = request.get_json()
+        course_id = data.get('course_id')
+        columns = data.get('list_of_columns')
+        sheet_name = data.get('sheet_name')
+
+        if not course_id or not columns or not sheet_name:
+            return jsonify({"error": "Missing one or more required fields"}), 400
+
+        # Call the getValue function
+        gse.updateValue(course_id, columns, sheet_name)
+        return jsonify('Function called successfully')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -6,10 +6,18 @@ import {loadBasicInfoFields, BasicInfoData} from "../../utils/loadBasicInfoField
 const BasicInfo = () =>{
     const [info, setInfo] = useState<BasicInfoData[]>([]);
 
+
+    //Tracks user-entered form data
+    const[formData, setFormData] = useState<Record<string, string>>({})
+
     useEffect(() => {
         loadBasicInfoFields("/data/basic_info_fields.csv").then(setInfo);
     }, []);
 
+
+    const handleChange = (fieldLabel: string, value: string) =>{
+        setFormData(prev)
+    }
     //TODO: Backend Integration for loading/saving
     return (
         <div>

@@ -8,9 +8,12 @@ Google Sheets API by storing the json file in an environment variable named `GS_
 import gspread
 import os
 import json
-from typing import Dict, Any
 import pandas as pd
+
+from typing import Dict, Any
+from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
+
 import course_planning as cp
 
 def create_gs_client():
@@ -32,11 +35,11 @@ def create_gs_client():
 
     return client
 
-def create_sheet(title: str = "CPT_Data", email: str = None) -> str:
+def create_sheet(sheet_name: str = "CPT_Data", email: str = None) -> str:
     '''
-    Creates a new Google Sheet with the specified title and returns its ID. Also can take an email to share the sheet with.
+    Creates a new Google Sheet with the specified name and returns its ID. Also can take an email to share the sheet with.
     Args:
-        title (str): The title of the new Google Sheet.
+        sheet_name (str): The name of the new Google Sheet.
         email (str, optional): The email address to share the sheet with. Defaults to None.
     Returns:
         str: The ID of the created Google Sheet.
@@ -45,11 +48,11 @@ def create_sheet(title: str = "CPT_Data", email: str = None) -> str:
     client = create_gs_client()
 
     # Create a new spreadsheet
-    spreadsheet = client.create(title)
+    spreadsheet = client.create(sheet_name)
     spreadsheet_id = spreadsheet.id
 
     # Print the name and ID of the created spreadsheet
-    print(f'Created Spreadsheet with Name: {spreadsheet.title} and ID: {spreadsheet_id}')
+    print(f'Created Spreadsheet with name: {spreadsheet.title} and ID: {spreadsheet_id}')
 
     if email:
         # Share the spreadsheet with a specific email
@@ -222,7 +225,7 @@ def read_sheet(sheet_name: str = "CPT_Data"):
 
     # Convert to DataFrame for nice formatting
     df = pd.DataFrame(records)
-    print(df.to_string(index=False))
+    return df
 
 def delete_sheet(sheet_name: str = "CPT_Data"):
     '''
@@ -238,14 +241,18 @@ def delete_sheet(sheet_name: str = "CPT_Data"):
 
     #save spreadsheet id
     spreadsheet_id = spreadsheet.id
-    from googleapiclient.discovery import build
-
+    
     #Call the Google Drive API to delete the spreadsheet
     # Define the scope
     SCOPE = ['https://www.googleapis.com/auth/drive']
 
+
+    json_str = os.getenv('GS_CREDENTIALS_JSON')
+    
+    #Set credentials from the JSON string
+    credentials_dict: Dict[str, Any] = json.loads(json_str)
     # Authenticate and create the service
-    credentials = ServiceAccountCredentials.from_json_keyfile_name('key.json', SCOPE)
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scopes=SCOPE)
     drive_service = build('drive', 'v3', credentials=credentials)
 
     # Delete the specified spreadsheet

@@ -1,0 +1,53 @@
+import Applayout from "../../../ApplicationLayout/Applayout";
+import React, {useEffect, useState} from "react";
+import { FaExclamationCircle } from 'react-icons/fa'
+import {loadBasicInfoFields, BasicInfoData} from "../utils/loadBasicInfoFields";
+import SafeIcon from "../../../utils/ComponentWrapper";
+
+
+
+const BasicInfo = () =>{
+    const [fields, setFields] = useState<BasicInfoData[]>([]);
+
+
+    //Tracks user-entered form data
+    const[formData, setFormData] = useState<Record<string, string>>({})
+
+    useEffect(() => {
+        loadBasicInfoFields("/data/basic_info_fields.csv").then(setFields);
+    }, []);
+
+
+    const handleChange = (label: string, value: string) =>{
+        setFormData((prev) => ({...prev, [label]: value}));
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log('Form data to submit:', formData);
+
+    //TODO: Backend Integration for loading/saving
+
+    //Groups fields by section
+    const groupedSections = fields.reduce((acc, field)=> {
+        if(!acc[field.section]) acc[field.section] = [];
+        acc[field.section].push(field);
+        return acc;
+    },  {} as Record<string, BasicInfoData[]>)
+
+    return (
+        <div>
+            <Applayout/>
+            <form className="basic-info-container" onSubmit = {handleSubmit}>
+                <div className="alert">
+                    <SafeIcon Icon ={FaExclamationCircle} className="alert-icon"/>
+                    Information entered on this page will appear in the final syllabus exactly as written.
+                </div>
+                {Object.entries(groupedSections).map(([section, sectionFields]) =>(
+                ))}
+            </form>
+
+        </div>
+    );
+};
+export default BasicInfo;

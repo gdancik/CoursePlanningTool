@@ -9,9 +9,9 @@ import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
 
 //Application Endpoints
-import Overview from "../screens/SyllabusView/Overview";
+import Overview from "../screens/SyllabusView/Overview/Overview";
 import Assessment from "../screens/SyllabusView/Assessment";
-import BasicInfo from "../screens/SyllabusView/BasicInfo";
+import BasicInfo from "../screens/SyllabusView/BasicInformation/BasicInfo";
 import Description from "../screens/SyllabusView/Description";
 import LearningOutcomes from "../screens/SyllabusView/LearningOutcomes";
 import HIPs from "../screens/SyllabusView/HIPs";

@@ -5,9 +5,9 @@
 // A linker map for navigation buttons is handled in AppNavigation (not shown here).
 
 import {useEffect, useState} from 'react';
-import OverviewCard from "./components/OverviewCard";
-import {loadSyllabusSections, SectionData} from "../../utils/loadSyllabusSections";
-import AppLayout from "../../ApplicationLayout/Applayout"
+import OverviewCard from "./OverviewCard";
+import {loadSyllabusSections, SectionData} from "../utils/loadSyllabusSections";
+import AppLayout from "../../../ApplicationLayout/Applayout"
 import './Overview.css'
 
 // Functional component that displays the overview page.

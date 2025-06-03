@@ -1,9 +1,10 @@
-import Applayout from "../../../ApplicationLayout/Applayout";
+import AppLayout from "../../../ApplicationLayout/Applayout";
 import React, {useEffect, useState} from "react";
 import { FaExclamationCircle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import SectionAccordion from "./SectionAccordion";
+import './BasicInfo.css'
 
 
 
@@ -29,6 +30,7 @@ const BasicInfo = () =>{
 
         //TODO: Backend Integration for loading/saving
     }
+
     //Groups fields by section
     const groupedSections = fields.reduce((acc, field)=> {
         if(!acc[field.section]) acc[field.section] = [];
@@ -38,7 +40,7 @@ const BasicInfo = () =>{
 
     return (
         <div>
-            <Applayout/>
+            <AppLayout/>
             <form className="basic-info-container" onSubmit = {handleSubmit}>
                 <div className="alert">
                     <SafeIcon Icon ={FaExclamationCircle} className="alert-icon"/>

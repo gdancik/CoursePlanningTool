@@ -49,4 +49,4 @@ jobs:
         GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
       run: |
         pytest --cov --cov-config=.coveragerc --cov-report=term-missing tests_python       
-        pytest --cov --cov-config=.coveragerc --cov-branch --cov-report=html --cov-report=term-missing tests_python 
+        # pytest --cov --cov-config=.coveragerc --cov-branch --cov-report=html --cov-report=term-missing tests_python 

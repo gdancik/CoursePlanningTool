@@ -138,12 +138,12 @@ def getValue():
         course_id = data.get('course_id')
         columns = data.get('list_of_columns')
         sheet_name = data.get('sheet_name')
-
-        if not course_id or not columns or not sheet_name:
+        if not course_id or not columns:
             return jsonify({"error": "Missing one or more required fields"}), 400
 
         # Call the getValue function
-        sheet = gse.getValue(course_id, columns, sheet_name)
+        gs = gse.gsEditor(sheet_name)
+        sheet = gs.getValue(course_id, columns,)
 
         # Check if sheet is None
         if sheet is None:
@@ -161,12 +161,12 @@ def updateValue():
         course_id = data.get('course_id')
         columns = data.get('list_of_columns')
         sheet_name = data.get('sheet_name')
-
-        if not course_id or not columns or not sheet_name:
+        if not course_id or not columns:
             return jsonify({"error": "Missing one or more required fields"}), 400
 
         # Call the getValue function
-        gse.updateValue(course_id, columns, sheet_name)
+        gs = gse.gsEditor(sheet_name)
+        gs.updateValue(course_id, columns)
         return jsonify('Function called successfully')
 
 if __name__ == '__main__':

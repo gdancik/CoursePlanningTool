@@ -205,7 +205,7 @@ class gsEditor:
                     col_index = sheet_headers.index(column) + 1 # Convert to 1-based index
                     sheet.update_cell(course_row_index, col_index, new_val)
                 else:
-                    print(f"Warning: Column '{column}' not found in sheet '{sheet_name}'. Skipping update for this column.")
+                    print(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'. Skipping update for this column.")
         else:
             print(f"Course ID '{course_id}' not found. Appending new row...")
             # If course_id does not exist, prepare a new row
@@ -223,7 +223,7 @@ class gsEditor:
                 if column in sheet_headers:
                     new_row_values[column] = new_val
                 else:
-                    print(f"Warning: Column '{column}' not found in sheet '{sheet_name}'.")
+                    print(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'.")
 
             # Ensure values are in the correct order for appending
             ordered_new_row = []  # Initialize an empty list to store the ordered values

@@ -4,7 +4,7 @@ The 'course_calendar' module provides functionality for working with course
 calendars for the Course Planning Tool, and includes a web scraper and 
 calendar generator.
 
-Example code for scraping a calendar:
+-- Example code for scraping a calendar:
 
 url = 'https://www.easternct.edu/academics/academic-calendar/index.html'
 target = 'Spring 2026'
@@ -12,12 +12,23 @@ target = 'Spring 2026'
 soup = get_target_webpage(url, target)
 df = get_dates(soup, target)
 df
+
+-- Example code for generating a schedule:
+
+start_date = datetime.strptime('08/02/2014', "%m/%d/%Y").date()
+end_date = datetime.strptime('07/15/2019', "%m/%d/%Y").date()
+
+days = 'TR'
+
+generate_schedule(start_date, end_date, days)
+
 """
 
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from io import StringIO
+from datetime import datetime, timedelta
 
 def get_webpage(url) :
     ''' Returns the text from url, if valid. '''
@@ -67,8 +78,35 @@ def get_dates(soup, target_semester):
 
 # %%
 
+def generate_schedule(start_date, end_date, days):
+    '''
+    Returns a data frame for given days between start_date and end_date
+    - start_date, end_date: datetime or date objects
+    - days: string of days, e.g., MWF
+    '''
+   
+    if start_date > end_date :
+        raise Exception(f'Start date {start_date} must come before end date {end_date}')
 
+    # convert days to full names
+    days_dict = {'M': 'Monday',
+             'T': 'Tuesday',
+             'W': 'Wednesday',
+             'R': 'Thursday',
+             'F': 'Friday'}
 
+    
+    days = [days_dict[d] for d in days]
+    
 
+    # create data frame of days
+    dates_list = []
+    current_date = start_date
+    while current_date <= end_date :
+        day = current_date.strftime('%A')
+        if day in days :
+            dates_list.append((day, current_date.strftime('%m/%d/%Y')))
+        current_date += timedelta(days = 1)
 
-
+    df = pd.DataFrame(dates_list, columns = ['Day', 'Date'])
+    return(df)

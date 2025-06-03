@@ -1,0 +1,34 @@
+.section-accordion {
+    border-top: 1px solid #c5c5c5;
+    margin-bottom: 1rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    cursor: pointer;
+    padding: 0.75rem 0;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #002e5d;
+}
+
+.section-arrow {
+    font-size: 1rem;
+    color: #002e5d;
+    transition: transform 0.3s ease;
+}
+
+details[open] .section-arrow {
+    transform: rotate(180deg);
+}
+
+.section-content {
+    padding: 0.5rem 0 1rem 0;
+    background: #fff;
+}

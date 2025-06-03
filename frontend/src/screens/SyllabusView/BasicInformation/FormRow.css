@@ -1,0 +1,29 @@
+.form-row {
+    margin-bottom: 0.75rem;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #007A33;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+    outline: none;
+    border-color: #004b23;
+    box-shadow: 0 0 0 2px rgba(0, 122, 51, 0.2);
+}
+
+.form-row label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #002e5d;
+}

@@ -6,7 +6,7 @@
 
 import {useEffect, useState} from 'react';
 import OverviewCard from "./OverviewCard";
-import {loadSyllabusSections, SectionData} from "../utils/loadSyllabusSections";
+import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSections";
 import AppLayout from "../../../ApplicationLayout/Applayout"
 import './Overview.css'
 

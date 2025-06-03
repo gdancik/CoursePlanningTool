@@ -1,6 +1,6 @@
 import React from 'react';
 import FormField from "./FormField";
-import {BasicInfoData} from "../utils/loadBasicInfoFields";
+import {BasicInfoData} from "../../../utils/loadBasicInfoFields";
 
 interface Props{
     field: BasicInfoData;

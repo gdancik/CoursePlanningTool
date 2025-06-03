@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import Overview from '../screens/SyllabusView/Overview/Overview';
 import { BrowserRouter } from 'react-router-dom';
-import { loadSyllabusSections } from '../screens/SyllabusView/utils/loadSyllabusSections';
+import { loadSyllabusSections } from '../utils/loadSyllabusSections';
 
-jest.mock('../screens/SyllabusView/utils/loadSyllabusSections', () => ({
+jest.mock('../utils/loadSyllabusSections', () => ({
     loadSyllabusSections: jest.fn(),
 }));
 

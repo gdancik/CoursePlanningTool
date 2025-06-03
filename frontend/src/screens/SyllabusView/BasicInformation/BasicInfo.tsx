@@ -1,8 +1,9 @@
 import Applayout from "../../../ApplicationLayout/Applayout";
 import React, {useEffect, useState} from "react";
 import { FaExclamationCircle } from 'react-icons/fa'
-import {loadBasicInfoFields, BasicInfoData} from "../utils/loadBasicInfoFields";
+import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
 import SafeIcon from "../../../utils/ComponentWrapper";
+import SectionAccordion from "./SectionAccordion";
 
 
 
@@ -26,8 +27,8 @@ const BasicInfo = () =>{
         e.preventDefault();
         console.log('Form data to submit:', formData);
 
-    //TODO: Backend Integration for loading/saving
-
+        //TODO: Backend Integration for loading/saving
+    }
     //Groups fields by section
     const groupedSections = fields.reduce((acc, field)=> {
         if(!acc[field.section]) acc[field.section] = [];
@@ -44,9 +45,16 @@ const BasicInfo = () =>{
                     Information entered on this page will appear in the final syllabus exactly as written.
                 </div>
                 {Object.entries(groupedSections).map(([section, sectionFields]) =>(
+                    <SectionAccordion
+                        key = {section}
+                        sectionName={section}
+                        fields={sectionFields}
+                        formData={formData}
+                        onFieldChange={handleChange}
+                    />
                 ))}
+                <button type ="submit" className="save-button">Save</button>
             </form>
-
         </div>
     );
 };

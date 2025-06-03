@@ -28,6 +28,11 @@ class gsEditor:
     '''
 
     def __init__(self, sheet_name: str="CPT_Data"):
+        '''
+        Initializes the gsEditor with a specified sheet name.
+        Args:
+            sheet_name (str): The name of the Google Sheet to be created or managed. Defaults to "CPT_Data".
+        '''
         self.sheet_name = sheet_name
         self.client = self.create_gs_client()
 

@@ -29,6 +29,18 @@ details[open] .section-arrow {
 }
 
 .section-content {
-    padding: 0.5rem 0 1rem 0;
-    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.form-row label {
+    flex: 1; /* each label/input combo grows evenly */
+    min-width: 150px; /* minimum width for smaller screens */
 }

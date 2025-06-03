@@ -1,0 +1,51 @@
+/* OverviewCard.css
+   This CSS sheet is used in the OverviewCard.tsx
+*/
+
+.overview-card {
+    display: flex;
+    align-items: center;
+    border: 2px solid #c5c5c5;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.2rem;
+    background-color: white;
+    gap: 1rem;
+}
+
+.card-title-area {
+    flex: 0 0 25%;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #002e5d;
+    white-space: wrap;
+}
+
+.card-description-area {
+    flex: 1 1 60%;
+    font-size: 1.2rem;
+    color: #3f3f3f;
+    line-height: 1.5;
+}
+
+
+
+.card-icons {
+    flex: 0 0 15%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 90px;
+}
+
+.icon {
+    font-size: 1.7rem;
+    color: #002e5d;
+}
+
+.status {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #002e5d;
+}

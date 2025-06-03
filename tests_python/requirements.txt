@@ -1,4 +1,0 @@
-python-docx
-flask
-pytest
-

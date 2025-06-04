@@ -39,16 +39,14 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-
-    - name: set environment variables
+    - name: Test with pytest
       env:
         GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
       run: |
-        echo "Environment variables set."
-    - name: Test with pytest
-      run: |
         pytest tests_python
     - name: Show code coverage
+      env:
+        GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
       run: |
         pytest --cov --cov-config=.coveragerc --cov-report=term-missing tests_python       
         pytest --cov --cov-config=.coveragerc --cov-branch --cov-report=html --cov-report=term-missing tests_python 

@@ -1,17 +1,21 @@
 from flask import Flask, render_template, request, send_file, session, jsonify
 from docx import Document
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from gs_editor import gsEditor
 
+import requests
 import io
 import random
 
 import course_planning as cp
 
+
 ''' Create app and login manager '''
 
 app = Flask(__name__)
 app.secret_key = "my secret key"
-
+app.gs_client = gsEditor()
+gs = app.gs_client
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -127,6 +131,45 @@ def generate():
 
     return render_template('form.html')
 
+'''Calls the getValue function from the gs_editor.py module'''
+@app.route('/getValue/', methods=['POST'])
+def getValue():
+    try:
+        data = request.get_json()
+        course_id = data.get('course_id')
+        columns = data.get('list_of_columns')
+        sheet_name = data.get('sheet_name')
+        if not course_id or not columns:
+            return jsonify({"error": "Missing one or more required fields"}), 400
+
+        # Call the getValue function
+        gs.set_sheet_name(sheet_name)
+        sheet = gs.getValue(course_id, columns,)
+
+        # Check if sheet is None
+        if sheet is None:
+            return jsonify({"error": "No data returned from getValue"}), 500
+
+        # Return the result as JSON
+        return jsonify(sheet)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/updateValue/', methods=['POST'])
+def updateValue():
+        data = request.get_json()
+        course_id = data.get('course_id')
+        columns = data.get('list_of_columns')
+        sheet_name = data.get('sheet_name')
+
+        if not course_id or not columns:
+            return jsonify({"error": "Missing one or more required fields"}), 400
+
+        # Call the getValue function
+        gs.set_sheet_name(sheet_name)
+        gs.updateValue(course_id, columns)
+        return jsonify('Function called successfully')
 
 if __name__ == '__main__':
     app.run(debug=True)

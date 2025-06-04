@@ -40,6 +40,7 @@ const SectionAccordion: React.FC<Props> = ({
                                     field={field}
                                     value={formData[field.label] || ''}
                                     onChange={onFieldChange}
+                                    className={field.label.includes ('Additional Information') ? 'full-width': ''}
                                 />
                             ))}
                         </div>

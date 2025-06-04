@@ -2,6 +2,7 @@
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
 }
 
 .form-row label {
@@ -10,10 +11,39 @@
     flex-direction: column;
 }
 
+
 .form-row input,
 .form-row select {
     width: 90%;
     border: 2px solid green;
     padding: 0.5rem;
-    border-radius: 4px;
+    border-radius: 5px;
+}
+
+.form-row textarea{
+    width: 100%;
+    border: 2px solid green;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+
+/* Full-width row specifically for textarea */
+.form-row.full-width {
+    flex: 1 1 100%;
+}
+
+/* Make the label itself take full width */
+.form-row.full-width label {
+    width: 100%;
+}
+
+/* Make the textarea expand fully */
+.form-row.full-width textarea {
+    width: 100%;
+    min-height: 10rem; /* or whatever height feels good */
+    border: 2px solid green;
+    padding: 0.5rem;
+    border-radius: 5px;
+    resize: vertical; /* let user resize vertically */
 }

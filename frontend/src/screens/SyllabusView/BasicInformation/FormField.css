@@ -1,0 +1,8 @@
+label.text-area-width {
+    grid-column: 1 / -1;
+}
+
+label.text-area-width textarea{
+    width: 100%;
+    height: 10rem;
+}

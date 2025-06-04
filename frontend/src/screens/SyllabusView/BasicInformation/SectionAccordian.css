@@ -29,18 +29,31 @@ details[open] .section-arrow {
 }
 
 .section-content {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
 }
 
 .form-row {
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     flex-wrap: wrap;
 }
 
 .form-row label {
     flex: 1;
-    min-width: 150px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-width: 200px;
+}
+
+.form-row.full-width {
+    flex: 1 1 100%;
+}
+
+
+.form-row.full-width textarea {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
 }

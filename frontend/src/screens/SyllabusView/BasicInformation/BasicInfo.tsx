@@ -1,6 +1,6 @@
 import AppLayout from "../../../ApplicationLayout/Applayout";
 import React, {useEffect, useState} from "react";
-import { FaExclamationCircle } from 'react-icons/fa'
+import { FaExclamationTriangle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import SectionAccordion from "./SectionAccordion";
@@ -43,7 +43,7 @@ const BasicInfo = () =>{
             <AppLayout/>
             <form className="basic-info-container" onSubmit = {handleSubmit}>
                 <div className="alert">
-                    <SafeIcon Icon ={FaExclamationCircle} className="alert-icon"/>
+                    <SafeIcon Icon ={FaExclamationTriangle} className="alert-icon"/>
                     Information entered on this page will appear in the final syllabus exactly as written.
                 </div>
                 {Object.entries(groupedSections).map(([section, sectionFields]) =>(

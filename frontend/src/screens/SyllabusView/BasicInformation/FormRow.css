@@ -12,8 +12,8 @@
 
 .form-row input,
 .form-row select {
-    width: 100%;
-    border: 1px solid green;
+    width: 90%;
+    border: 2px solid green;
     padding: 0.5rem;
     border-radius: 4px;
 }

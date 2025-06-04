@@ -19,7 +19,7 @@ export async function loadBasicInfoFields(path: string): Promise<BasicInfoData[]
         Papa.parse(text, {
             header: true,
             skipEmptyLines: true,
-            complete: (results) => {
+            complete: (results: { data: any[]; }) => {
                 const parsed: BasicInfoData[] = results.data.map((row: any) => ({
                     section: row.section,
                     row: row.row ? parseInt(row.row, 10) : 0,

@@ -7,16 +7,17 @@
 }
 
 .alert {
+    font-size: 1.2rem;
     display: flex;
     align-items: center;
-    color: #b10000;
     margin-bottom: 1.5rem;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .alert-icon {
+    color: #FF0000;
     margin-right: 0.5rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 .section-title {

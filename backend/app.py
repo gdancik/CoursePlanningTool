@@ -29,14 +29,27 @@ class User(UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     # need to look up user based on user_id
-    return User('testUser', 'testUser')
+    return User(user_id, user_id)
 
-@app.route('/login/')
-def login() :
-    # need to check credentials
-    user = User('testUser', 'testUser')
+@app.route('/test_login/', methods = ['GET'])
+def test_login() :
+
+    error = 'Error: url must be in format /?test_login/user=user&password=password', 400
+    if (len(request.args) != 2 or
+        'user' not in request.args or 
+        'password' not in request.args): 
+            return error
+    
+    username = request.args['user']
+    password = request.args['password']
+    
+    if password != 'password' : 
+        return 'invalid password', 401
+        
+    user = User(username, username)
     login_user(user)
-    return 'Login successful, now you can access <a href = "/api/hello/">/api/hello/</a>' 
+
+    return jsonify(user = username)    
 
 @app.route('/logout/')
 def logout():
@@ -56,9 +69,10 @@ def index() :
     s = '''
     <h1> Course Planning Tool Homepage</h1>
     <ul>
-    <li> <a href = '/login/'>Login</a> </li>
+    <li> <a href = '/test_login/?user=annie&password=password'>Test Login</a> </li>
     <li> <a href = '/logout/'>Logout</a> </li>
     <li> <a href = '/api/hello/'>Hello</a> </li>
+    <li> <a href = '/profile/'>Profile</a> </li>
     <li> <a href = '/valid_inputs/'>Valid Inputs </a> </li>
     </ul>
     '''

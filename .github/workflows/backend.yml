@@ -42,7 +42,9 @@ jobs:
 
     - name: set environment variables
       env:
-            GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
+        GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
+      run: |
+        echo "Environment variables set."
     - name: Test with pytest
       run: |
         pytest tests_python

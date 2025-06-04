@@ -53,8 +53,6 @@ def delete_test_sheet():
     gs = gsEditor('Test_Sheet1')
     gs.delete_sheet()
 
-#This test will only run if the environment variable is set
-@pytest.mark.skipif(os.getenv('GS_CREDENTIALS_JSON') is None,reason="Environment variable not set")
 ## This test checks the /getValue/ endpoint to ensure it returns the expected data
 def test_getValue(client):
     # Define the test data
@@ -78,8 +76,6 @@ def test_getValue(client):
     assert response_data['crse_subj_syllabus'] == 'Test Subject2'
     assert response_data['crse_number_syllabus'] == 'Test Number2'
 
-#This test will only run if the environment variable is set
-@pytest.mark.skipif(os.getenv('GS_CREDENTIALS_JSON') is None,reason="Environment variable not set")
 ## This tests the /getValue/ endpoint for missing fields
 def test_getValue_missing_fields(client):
     # Define the test data with missing fields
@@ -105,8 +101,6 @@ def test_getValue_missing_fields(client):
     response_data = json.loads(response.data)
     assert response_data['error'] == "Missing one or more required fields"
 
-#This test will only run if the environment variable is set
-@pytest.mark.skipif(os.getenv('GS_CREDENTIALS_JSON') is None,reason="Environment variable not set")
 ## This test checks the /updateValue/ endpoint to ensure it updates the data successfully
 def test_updateValue_success(client):
     # Define the test data for a successful request
@@ -128,8 +122,6 @@ def test_updateValue_success(client):
     # Assert the content of the response
     assert b'Function called successfully' in response.data
 
-#This test will only run if the environment variable is set
-@pytest.mark.skipif(os.getenv('GS_CREDENTIALS_JSON') is None,reason="Environment variable not set")
 ## This tests the /updateValue/ endpoint for missing fields
 def test_updateValue_missing_fields(client):
     # Define test data with missing fields

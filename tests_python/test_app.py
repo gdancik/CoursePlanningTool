@@ -18,9 +18,12 @@ from backend.gs_editor import gsEditor
 @pytest.fixture(scope="module")
 def client():
     with app.test_client() as client:
-        setup_test_sheet()
-        yield client
-        delete_test_sheet()
+        if os.getenv('GS_CREDENTIALS_JSON') is not None:
+            setup_test_sheet()
+            yield client
+            delete_test_sheet()
+        else:
+            yield client
 
 def test_index(client):
     response = client.get('/')

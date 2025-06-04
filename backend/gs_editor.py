@@ -66,9 +66,21 @@ class gsEditor:
         '''
         self.sheet_name = sheet_name
 
+    def sheet_exists(self) :
+        '''
+        Returns True if the current 'sheet_name' exists
+        '''
+        files = self.client.list_spreadsheet_files()
+        for f in files :
+            if f['name'] == self.sheet_name :
+                return True
+        return False
+
+
     def create_sheet(self, email: str = None) -> str:
         '''
         Creates a new Google Sheet with the specified name and optionally shares it with a given email.
+        If the sheet exists, a new sheet will not be created.
         Args:
             email (str): The email address to share the sheet with. If None, the sheet will not be shared.
         Returns:
@@ -77,23 +89,27 @@ class gsEditor:
         # Create a Google Sheets client
         client = self.client
 
-        # Create a new spreadsheet
-        spreadsheet = client.create(self.sheet_name)
-        spreadsheet_id = spreadsheet.id
+        if not self.sheet_exists() :
+            # Create a new spreadsheet
+            spreadsheet = client.create(self.sheet_name)            
 
-        # Print the name and ID of the created spreadsheet
-        print(f'Created Spreadsheet with name: {spreadsheet.title} and ID: {spreadsheet_id}')
+            # Add course id columns to the spreadsheet
+            self.add_headers(spreadsheet.id)
+       
+            # Print the name and ID of the created spreadsheet
+            print(f'Created Spreadsheet with name: {spreadsheet.title} and ID: {spreadsheet.id}')
+
+        else :
+            spreadsheet = client.open(self.sheet_name)
+            print(f'Spreadsheet {spreadsheet.title} already exists and will not be created')
 
         if email:
             # Share the spreadsheet with a specific email
             spreadsheet.share(email, perm_type='user', role='writer')
             print(f'Spreadsheet shared with {email}')
-
-        # Add course id columns to the spreadsheet
-        self.add_headers(spreadsheet_id)
-        
+ 
         # Return the ID of the created spreadsheet
-        return spreadsheet_id
+        return spreadsheet.id
 
     def add_headers(self, spreadsheet_id):
         '''
@@ -292,3 +308,16 @@ class gsEditor:
         drive_service.files().delete(fileId=spreadsheet_id).execute()
         # Print confirmation message
         print(f'Spreadsheet with Name: {self.sheet_name} and ID: {spreadsheet_id} deleted successfully.')
+
+    def delete_all_sheets(self):
+        '''
+        Deletes all sheets owned by the client 
+            (should only be used for debugging)
+        '''
+
+        for f in self.client.list_spreadsheet_files() :
+            try :
+                self.client.del_spreadsheet(f['id'])
+                print(f'Deleted file {f["name"]} with id {f["id"]}')
+            except :
+                print(f'Could not delete file {f["name"]} with id {f["id"]}')

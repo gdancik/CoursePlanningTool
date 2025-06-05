@@ -28,7 +28,14 @@ const BasicInfo = () =>{
         e.preventDefault();
         console.log('Form data to submit:', formData);
 
-        //TODO: Backend Integration for loading/saving
+        const jsonBlob = new Blob([JSON.stringify(formData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(jsonBlob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'form_data.json';
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     //Groups fields by section

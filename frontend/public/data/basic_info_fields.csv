@@ -5,7 +5,7 @@ Course Information,1,1,Course Title,text,Enter course title,true,
 Course Information,1,2,Meeting Days,checkbox-group,,true,"M,T,W,R,F"
 Course Information,1,2,Meeting Time,text,Enter meeting time,true,
 Course Information,1,2,Classroom Location,text,Enter classroom location,true,
-Course Information,1,3,Semester,select,,true,"Fall,Spring"
+Course Information,1,3,Semester,select,,false,"Fall,Spring"
 Course Information,1,3,Year,text,,true,"2025,2026"
 Instructor Information,2,1,Instructor Name,text,Enter instructor name,true,
 Instructor Information,2,1,Instructor Title,text,Enter instructor title,true,

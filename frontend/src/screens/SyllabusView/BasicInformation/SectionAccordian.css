@@ -206,10 +206,3 @@ details[open] .section-arrow {
     box-sizing: border-box;
 }
 
-/* Word count styling */
-.form-row.additional-information-optional .word-count {
-    text-align: right;
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 0.25rem;
-}

@@ -4,6 +4,7 @@ import { FaExclamationTriangle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import SectionAccordion from "./SectionAccordion";
+import {jsonFieldsMapper} from "../../../utils/jsonFieldsMapper";
 import './BasicInfo.css'
 
 
@@ -28,7 +29,11 @@ const BasicInfo = () =>{
         e.preventDefault();
         console.log('Form data to submit:', formData);
 
-        const jsonBlob = new Blob([JSON.stringify(formData, null, 2)], { type: 'application/json' });
+        //Mapping Applied before save
+        const dataMapped = jsonFieldsMapper(formData);
+        console.log('Mapped Data:', dataMapped);
+
+        const jsonBlob = new Blob([JSON.stringify(dataMapped, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(jsonBlob);
 
         const a = document.createElement('a');

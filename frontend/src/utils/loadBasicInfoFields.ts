@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 export interface BasicInfoData{
     section: string;
     row: number;
+    layoutRow: number;
     label: string;
     type: string;
     placeholder: string;
@@ -23,6 +24,7 @@ export async function loadBasicInfoFields(path: string): Promise<BasicInfoData[]
                 const parsed: BasicInfoData[] = results.data.map((row: any) => ({
                     section: row.section,
                     row: row.row ? parseInt(row.row, 10) : 0,
+                    layoutRow: row.layoutRow ? parseInt(row.layoutRow, 10) : 0,
                     label: row.label,
                     type: row.type,
                     placeholder: row.placeholder,

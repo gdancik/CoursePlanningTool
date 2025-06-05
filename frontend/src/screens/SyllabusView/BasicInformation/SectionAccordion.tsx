@@ -17,7 +17,7 @@ const SectionAccordion: React.FC<Props> = ({
                                                onFieldChange,
                                            }) => {
     const groupedRows = fields.reduce((acc, field) => {
-        const rowKey = field.row || 'default';
+        const rowKey = `${field.row}-${field.layoutRow || '0'}`;
         if (!acc[rowKey]) acc[rowKey] = [];
         acc[rowKey].push(field);
         return acc;
@@ -32,8 +32,8 @@ const SectionAccordion: React.FC<Props> = ({
                 </summary>
 
                 <div className="section-content">
-                    {Object.entries(groupedRows).map(([row, rowFields]) => (
-                        <div key={row} className="form-row">
+                    {Object.entries(groupedRows).map(([rowKey, rowFields]) => (
+                        <div key={rowKey} className="form-row">
                             {rowFields.map((field, index) => (
                                 <FormRow
                                     key={index}

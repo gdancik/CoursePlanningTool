@@ -13,7 +13,7 @@
 }
 
 .section-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: #002e5d;
 }
@@ -39,60 +39,54 @@ details[open] .section-arrow {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
     align-items: start;
 }
 
-/* General styling for all input containers */
-.form-row > div {
-
-    min-width: 150px;
-}
-
 /* Styling for specific rows to adjust width/flex */
-.row-subject-code > div {
-    flex: 1 1 100px; /* smaller width */
+.form-row.subject-code {
+    flex: 1 1 200px; /* smaller width */
 }
 
-.row-course-number > div {
-    flex: 1 1 100px;
-}
-
-.row-course-title > div {
-    flex: 2 1 300px; /* bigger width */
-}
-
-.row-meeting-days > div {
+.form-row.course-number {
     flex: 1 1 200px;
 }
 
-.row-meeting-time > div {
+.form-row.course-title {
+    flex: 2 1 300px; /* bigger width */
+}
+
+.form-row.meeting-days {
+    flex: 1 1 200px;
+}
+
+.form-row.meeting-time {
     flex: 1 1 150px;
 }
 
-.row-classroom-location > div {
-    flex: 2 1 300px;
+.form-row.classroom-location {
+    flex: 1 1 300px;
 }
 
-.row-semester > div,
-.row-year > div {
+.form-row.semester,
+.form-row.year {
     flex: 1 1 150px;
 }
 
 /* Instructor section */
-.row-instructor-name > div,
-.row-instructor-title > div {
-    flex: 1 1 200px;
+.form-row.instructor-name,
+.form-row.instructor-title {
+    flex: 0 0 300px;
 }
 
-.row-email > div,
-.row-office-location > div,
-.row-phone-optional > div {
-    flex: 1 1 200px;
+.form-row.email,
+.form-row.office-location,
+.form-row.phone-optional {
+    flex: 0 0 200px;
 }
 
-.row-office-hours > div {
-    flex: 2 1 400px;
+.form-row.office-hours {
+    flex: 0 1 300px;
 }
 
 
@@ -105,6 +99,7 @@ details[open] .section-arrow {
     padding: 0.5rem;
     border-radius: 5px;
     box-sizing: border-box;
+    min-height: 3rem;
 }
 
 
@@ -112,7 +107,7 @@ details[open] .section-arrow {
 /* Label styling */
 .form-row label {
     display: block;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 0.25rem;
 }

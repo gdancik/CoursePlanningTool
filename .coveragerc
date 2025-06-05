@@ -3,7 +3,8 @@
 branch = False
 source = 
   backend.app
-  backend.course_planning 
+  backend.course_planning
+  backend.gs_editor 
 
 [report]
 show_missing = True

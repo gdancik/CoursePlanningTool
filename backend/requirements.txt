@@ -5,4 +5,7 @@ requests
 bs4
 pandas
 datetime
-
+gspread
+typing
+google-api-python-client
+oauth2client

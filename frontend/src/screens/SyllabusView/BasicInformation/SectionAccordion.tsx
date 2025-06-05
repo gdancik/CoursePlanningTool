@@ -2,6 +2,8 @@ import React from 'react';
 import FormRow from './FormRow';
 import { BasicInfoData } from '../../../utils/loadBasicInfoFields';
 import './SectionAccordian.css';
+import {FaAngleUp} from "react-icons/fa";
+import SafeIcon from "../../../utils/ComponentWrapper";
 
 interface Props {
     sectionName: string;
@@ -28,7 +30,7 @@ const SectionAccordion: React.FC<Props> = ({
             <details open>
                 <summary className="section-header">
                     <span className="section-title">{sectionName}</span>
-                    <span className="section-arrow">▼</span>
+                    <SafeIcon Icon ={FaAngleUp} className="section-arrow"/>
                 </summary>
 
                 <div className="section-content">

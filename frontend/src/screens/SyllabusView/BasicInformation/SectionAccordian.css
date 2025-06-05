@@ -1,9 +1,9 @@
 .section-accordion {
-    border-top: 1px solid #c5c5c5;
     margin-bottom: 1rem;
 }
 
 .section-header {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -13,13 +13,17 @@
 }
 
 .section-title {
+    flex: 1;
+    width: 100%;
+    border-bottom: 2px solid #c5c5c5;
     font-size: 1.8rem;
     font-weight: 700;
     color: #002e5d;
 }
 
 .section-arrow {
-    font-size: 1rem;
+    margin-left: auto;
+    font-size: 1.3rem;
     color: #002e5d;
     transition: transform 0.3s ease;
 }
@@ -53,7 +57,7 @@ details[open] .section-arrow {
 }
 
 .form-row.course-title {
-    flex: 2 1 300px; /* bigger width */
+    flex: 2 1 300px;
 }
 
 .form-row.meeting-days {

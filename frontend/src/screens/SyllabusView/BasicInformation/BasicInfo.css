@@ -20,15 +20,6 @@
     font-size: 1.2rem;
 }
 
-.section-title {
-    font-size: 1.4rem;
-    color: #002e5d;
-    margin-bottom: 0.75rem;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 0.25rem;
-}
-
 
 .save-button {
     display: inline-block;

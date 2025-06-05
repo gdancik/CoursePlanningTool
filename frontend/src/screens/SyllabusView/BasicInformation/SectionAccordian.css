@@ -34,30 +34,72 @@ details[open] .section-arrow {
     gap: 1rem;
 }
 
-/* Each row is a 2-column grid */
+/* General container styling for all form rows */
 .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
+    margin-bottom: 0.5rem;
     align-items: start;
 }
 
-.form-row.full-width {
-    grid-column: 1 / -1;
-    display: block;
+/* General styling for all input containers */
+.form-row > div {
+
+    min-width: 150px;
 }
 
-/* Remove default label styling that interferes */
-.form-row label {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
+/* Styling for specific rows to adjust width/flex */
+.row-subject-code > div {
+    flex: 1 1 100px; /* smaller width */
 }
 
-/* Inputs, selects, and textareas consistent style */
+.row-course-number > div {
+    flex: 1 1 100px;
+}
+
+.row-course-title > div {
+    flex: 2 1 300px; /* bigger width */
+}
+
+.row-meeting-days > div {
+    flex: 1 1 200px;
+}
+
+.row-meeting-time > div {
+    flex: 1 1 150px;
+}
+
+.row-classroom-location > div {
+    flex: 2 1 300px;
+}
+
+.row-semester > div,
+.row-year > div {
+    flex: 1 1 150px;
+}
+
+/* Instructor section */
+.row-instructor-name > div,
+.row-instructor-title > div {
+    flex: 1 1 200px;
+}
+
+.row-email > div,
+.row-office-location > div,
+.row-phone-optional > div {
+    flex: 1 1 200px;
+}
+
+.row-office-hours > div {
+    flex: 2 1 400px;
+}
+
+
+/* Input styles */
 .form-row input,
-.form-row select,
-.form-row textarea {
+.form-row select
+{
     width: 100%;
     border: 2px solid green;
     padding: 0.5rem;
@@ -65,7 +107,56 @@ details[open] .section-arrow {
     box-sizing: border-box;
 }
 
-.form-row.full-width textarea {
-    min-height: 10rem;
+
+
+/* Label styling */
+.form-row label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+/* Target the additional information row specifically */
+.form-row.additional-information-optional {
+    width: 100%;
+    flex: 1 1 100%;
+    display: block;
+    flex-direction: column;
+}
+
+
+/* Label styling */
+.form-row.additional-information-optional label {
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+/* Sub-label / help text styling */
+.form-row.additional-information-optional .sub-label {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+/* Textarea styling */
+.form-row.additional-information-optional textarea {
+    width: 100%;
+    min-height: 12rem;
+    border: 2px solid green;
+    border-radius: 5px;
+    padding: 1rem;
     resize: vertical;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+/* Word count styling */
+.form-row.additional-information-optional .word-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.25rem;
 }

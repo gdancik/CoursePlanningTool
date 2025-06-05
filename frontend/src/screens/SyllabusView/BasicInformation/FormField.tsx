@@ -12,19 +12,12 @@ const FormField: React.FC<Props> = ({ field, value, onChange }) => {
         onChange(field.label, e.target.value);
     };
 
-    // Determine if this is the Additional Information field
-    const isFullWidth = field.label.toLowerCase().includes('additional information');
-
     if (field.type === 'select') {
         const options = field.placeholder.split(',').map(opt => opt.trim());
         return (
-            <label className={isFullWidth ? 'full-width' : ''}>
+            <label>
                 {field.label}
-                <select
-                    value={value}
-                    onChange={handleInputChange}
-                    required={field.required}
-                >
+                <select value={value} onChange={handleInputChange} required={field.required}>
                     <option value="">Select</option>
                     {options.map((opt, i) => <option key={i}>{opt}</option>)}
                 </select>
@@ -34,7 +27,7 @@ const FormField: React.FC<Props> = ({ field, value, onChange }) => {
 
     if (field.type === 'textarea') {
         return (
-            <label className={isFullWidth ? 'full-width' : ''}>
+            <label>
                 {field.label}
                 <textarea
                     placeholder={field.placeholder}
@@ -47,7 +40,7 @@ const FormField: React.FC<Props> = ({ field, value, onChange }) => {
     }
 
     return (
-        <label className={isFullWidth ? 'full-width' : ''}>
+        <label>
             {field.label}
             <input
                 type={field.type}
@@ -59,5 +52,6 @@ const FormField: React.FC<Props> = ({ field, value, onChange }) => {
         </label>
     );
 };
+
 
 export default FormField;

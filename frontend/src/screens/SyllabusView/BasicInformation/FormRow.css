@@ -1,49 +1,37 @@
 .form-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
     gap: 1rem;
     margin-bottom: 1rem;
-    flex-wrap: wrap;
+    align-items: start;
 }
 
+/* Labels styling */
 .form-row label {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem; /* Small gap between label and input */
 }
 
-
+/* Inputs, selects, and textareas have consistent styling */
 .form-row input,
-.form-row select {
-    width: 90%;
-    border: 2px solid green;
-    padding: 0.5rem;
-    border-radius: 5px;
-}
-
-.form-row textarea{
+.form-row select,
+.form-row textarea {
     width: 100%;
     border: 2px solid green;
     padding: 0.5rem;
+    box-sizing: border-box;
     border-radius: 5px;
 }
 
-
-/* Full-width row specifically for textarea */
+/* Full-width row (like for textarea) */
 .form-row.full-width {
-    flex: 1 1 100%;
+    grid-column: 1 / -1; /* Span all columns */
 }
 
-/* Make the label itself take full width */
-.form-row.full-width label {
-    width: 100%;
-}
-
-/* Make the textarea expand fully */
+/* Additional textarea styling */
 .form-row.full-width textarea {
-    width: 100%;
-    min-height: 10rem; /* or whatever height feels good */
-    border: 2px solid green;
-    padding: 0.5rem;
-    border-radius: 5px;
-    resize: vertical; /* let user resize vertically */
+    min-height: 10rem;
+    resize: vertical;
 }

@@ -1,10 +1,12 @@
 import AppLayout from "../../../ApplicationLayout/Applayout";
 import React, {useEffect, useState} from "react";
+import {useNavigate, useLocation} from "react-router-dom";
 import { FaExclamationTriangle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
 import SafeIcon from "../../../utils/ComponentWrapper";
+import {saveJsonFile} from "../../../utils/ButtonLogic";
+import {handleBack, handleNext, handlePreview} from "../../../utils/ButtonLogic";
 import SectionAccordion from "./SectionAccordion";
-import {jsonFieldsMapper} from "../../../utils/jsonFieldsMapper";
 import './BasicInfo.css'
 
 
@@ -16,6 +18,9 @@ const BasicInfo = () =>{
     //Tracks user-entered form data
     const[formData, setFormData] = useState<Record<string, string>>({})
 
+    const navigate = useNavigate();
+    const location = useLocation();
+
     useEffect(() => {
         loadBasicInfoFields("/data/basic_info_fields.csv").then(setFields);
     }, []);
@@ -25,23 +30,11 @@ const BasicInfo = () =>{
         setFormData((prev) => ({...prev, [label]: value}));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log('Form data to submit:', formData);
-
-        //Mapping Applied before save
-        const dataMapped = jsonFieldsMapper(formData);
-        console.log('Mapped Data:', dataMapped);
-
-        const jsonBlob = new Blob([JSON.stringify(dataMapped, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(jsonBlob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'form_data.json';
-        a.click();
-        URL.revokeObjectURL(url);
-    }
+    // Provide actual logic for button clicks!
+    const handleSave = () => saveJsonFile(formData, "form_data.json");
+    const handleSaveAndExit = () => saveJsonFile(formData, "form_data_exit.json");
+    const handleBackClick = () => handleBack(navigate, location.pathname);
+    const handleNextClick = () => handleNext(navigate, location.pathname);
 
     //Groups fields by section
     const groupedSections = fields.reduce((acc, field)=> {
@@ -52,8 +45,14 @@ const BasicInfo = () =>{
 
     return (
         <div>
-            <AppLayout/>
-            <form className="basic-info-container" onSubmit = {handleSubmit}>
+            <AppLayout
+                    onBack={handleBackClick}
+                    onNext={handleNextClick}
+                    onSave={handleSave}
+                    onSaveAndExit={handleSaveAndExit}
+                    onPreview={handlePreview}
+                   />
+            <form className="basic-info-container">
                 <div className="alert">
                     <SafeIcon Icon ={FaExclamationTriangle} className="alert-icon"/>
                     Information entered on this page will appear in the final syllabus exactly as written.
@@ -67,7 +66,7 @@ const BasicInfo = () =>{
                         onFieldChange={handleChange}
                     />
                 ))}
-                <button type ="submit" className="save-button">Save</button>
+
             </form>
         </div>
     );

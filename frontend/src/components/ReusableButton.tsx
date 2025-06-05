@@ -1,9 +1,10 @@
 //This file contains the buttons for the form with individual styling for reusability
 
 import React from 'react';
+import './ReusableButton.css'
 //Another Import here
 
-interface ResusableButtonsProps{
+interface ReusableButtonsProps{
     label: string;
     onClick?: () => void;
     type?: "button" | "submit";
@@ -11,7 +12,7 @@ interface ResusableButtonsProps{
     variant: "primary" | "secondary" | "green";
 }
 
-const ReusableButton: React.FC<ResusableButtonsProps> = ({
+const ReusableButton: React.FC<ReusableButtonsProps> = ({
     label,
     onClick,
     type = "button",

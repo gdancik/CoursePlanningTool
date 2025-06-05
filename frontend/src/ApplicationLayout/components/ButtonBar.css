@@ -1,0 +1,9 @@
+.button-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #fff;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #ccc;
+    gap: 0.5rem;
+}

@@ -34,7 +34,10 @@ class gsEditor:
             sheet_name (str): The name of the Google Sheet to be created or managed. Defaults to "CPT_Data".
         '''
         self.sheet_name = sheet_name
+        self.id = None
         self.client = self.create_gs_client()
+        self.api_count = 0
+
 
     @staticmethod
     def create_gs_client():
@@ -56,6 +59,13 @@ class gsEditor:
 
         return client
     
+    def increase_api_count(self, message = None) :
+        '''increases api_count by 1 and prints an optional message'''
+        self.api_count += 1
+        if message :
+            print(message)
+
+
     def set_sheet_name(self, sheet_name: str="CPT_Data"):
         '''
         Sets the name of the Google Sheet to be created or managed.
@@ -64,12 +74,16 @@ class gsEditor:
         Returns:
             None
         '''
-        self.sheet_name = sheet_name
+        if sheet_name != self.sheet_name :
+            self.sheet_name = sheet_name
+            self.id = None
 
     def sheet_exists(self) :
         '''
         Returns True if the current 'sheet_name' exists
         '''
+
+        self.increase_api_count('API call: list spreadsheet files')
         files = self.client.list_spreadsheet_files()
         for f in files :
             if f['name'] == self.sheet_name :
@@ -88,9 +102,10 @@ class gsEditor:
         '''
         # Create a Google Sheets client
         client = self.client
-
+        
         if not self.sheet_exists() :
             # Create a new spreadsheet
+            self.increase_api_count('API call: create')
             spreadsheet = client.create(self.sheet_name)            
 
             # Add course id columns to the spreadsheet
@@ -100,15 +115,18 @@ class gsEditor:
             print(f'Created Spreadsheet with name: {spreadsheet.title} and ID: {spreadsheet.id}')
 
         else :
+            self.increase_api_count('API call: open')
             spreadsheet = client.open(self.sheet_name)
             print(f'Spreadsheet {spreadsheet.title} already exists and will not be created')
 
         if email:
             # Share the spreadsheet with a specific email
+            self.increase_api_count('API call: share')
             spreadsheet.share(email, perm_type='user', role='writer')
             print(f'Spreadsheet shared with {email}')
  
         # Return the ID of the created spreadsheet
+        self.id = spreadsheet.id
         return spreadsheet.id
 
     def add_headers(self, spreadsheet_id):
@@ -123,15 +141,18 @@ class gsEditor:
         client = self.client
 
         # Open the spreadsheet by ID
+        self.increase_api_count('API call: open by key')
         spreadsheet = client.open_by_key(spreadsheet_id)
 
         # Select the first sheet
+        self.increase_api_count('API call: get worksheet')
         sheet = spreadsheet.get_worksheet(0)
 
         # Define the values you want to write to the first row
         values = cp.columns
 
         # Update the first row with the new values
+        self.increase_api_count('API call: update')
         sheet.update([values], 'A1')
 
         print(f'Headers added to the spreadsheet with ID: {spreadsheet_id}')
@@ -149,11 +170,14 @@ class gsEditor:
         client = self.client
 
         # Open the spreadsheet by name
+        self.increase_api_count('API call: open')
         spreadsheet = client.open(self.sheet_name)
 
         # Select the first sheet
+        self.increase_api_count('API call: get worksheet')
         sheet = spreadsheet.get_worksheet(0)
         #Get the entire sheet
+        self.increase_api_count('API call: get all records')
         data = sheet.get_all_records()
 
         #Make a pandas data from sheet
@@ -196,12 +220,15 @@ class gsEditor:
         # Create a Google Sheets client
         client = self.client
         # Open the spreadsheet by name
+        self.increase_api_count('API call: open')
         spreadsheet = client.open(self.sheet_name)
 
         # Select the first sheet
+        self.increase_api_count('API call: get_worksheet')
         sheet = spreadsheet.get_worksheet(0) 
 
         # Get all records to check for existing course_id and column headers
+        self.increase_api_count('API call: get all records')
         data = sheet.get_all_records()
         df = pd.DataFrame(data)
 
@@ -265,10 +292,14 @@ class gsEditor:
         
 
         # Open the spreadsheet by name
+        self.increase_api_count('API call: open')
         spreadsheet = client.open(self.sheet_name)
+
+        print('API call: get worksheet')
         sheet = spreadsheet.get_worksheet(0)
 
         # Get all records
+        self.increase_api_count('API call: get all records')
         records = sheet.get_all_records()
 
         # Convert to DataFrame for nice formatting
@@ -286,6 +317,7 @@ class gsEditor:
         client = self.create_gs_client()
         
         # Open the spreadsheet by name
+        self.increase_api_count('API call: open')
         spreadsheet = client.open(self.sheet_name)
 
         #save spreadsheet id
@@ -315,8 +347,10 @@ class gsEditor:
             (should only be used for debugging)
         '''
 
+        self.increase_api_count('API call: list spreadsheet files')
         for f in self.client.list_spreadsheet_files() :
             try :
+                self.increase_api_count('API call: delete spreadsheet')
                 self.client.del_spreadsheet(f['id'])
                 print(f'Deleted file {f["name"]} with id {f["id"]}')
             except :

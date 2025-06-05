@@ -38,7 +38,7 @@ details[open] .section-arrow {
 .form-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-bottom: 0.2rem;
     align-items: start;
 }
@@ -57,7 +57,7 @@ details[open] .section-arrow {
 }
 
 .form-row.meeting-days {
-    flex: 1 1 200px;
+    flex: 1 1 050px;
 }
 
 .form-row.meeting-time {
@@ -70,7 +70,7 @@ details[open] .section-arrow {
 
 .form-row.semester,
 .form-row.year {
-    flex: 1 1 150px;
+    flex: 0 0 150px;
 }
 
 /* Instructor section */
@@ -102,7 +102,61 @@ details[open] .section-arrow {
     min-height: 3rem;
 }
 
+.form-row.meeting-days .checkbox-options{
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: row;
+    align-items: center;
+}
 
+/* Checkbox-specific styling */
+.form-row input[type="checkbox"] {
+    appearance: none;
+    width: 1.2rem;
+    height: 1rem;
+    border: 2px solid green;
+    border-radius: 3px;
+    margin: 0 0.2rem 0 0;
+    vertical-align: middle;
+    cursor: pointer;
+    position: relative;
+    background-color: white;
+    min-height: initial;
+}
+
+.form-row input[type="checkbox"]:checked {
+    background-color: green;
+}
+
+.form-row input[type="checkbox"]:checked::after {
+    content: '✔';
+    color: white;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Additional tweaks for checkbox group */
+.form-row .checkbox-options{
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Each checkbox-label pair horizontally aligned */
+.form-row.meeting-days .checkbox-options label {
+    display: flex !important;
+    align-items: center;
+    gap: 0.2rem;
+    margin: 0;
+    font-weight: normal;
+}
 
 /* Label styling */
 .form-row label {

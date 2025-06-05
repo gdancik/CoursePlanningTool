@@ -12,14 +12,19 @@ const FormField: React.FC<Props> = ({ field, value, onChange }) => {
         onChange(field.label, e.target.value);
     };
 
-    if (field.type === 'select') {
-        const options = field.placeholder.split(',').map(opt => opt.trim());
+    if (field.type === 'select' && field.options) {
         return (
             <label>
                 {field.label}
-                <select value={value} onChange={handleInputChange} required={field.required}>
+                <select
+                    value={value}
+                    onChange={handleInputChange}
+                    required={field.required}
+                >
                     <option value="">Select</option>
-                    {options.map((opt, i) => <option key={i}>{opt}</option>)}
+                    {field.options.map((opt, i) => (
+                        <option key={i} value={opt}>{opt}</option>
+                    ))}
                 </select>
             </label>
         );
@@ -36,6 +41,35 @@ const FormField: React.FC<Props> = ({ field, value, onChange }) => {
                     required={field.required}
                 />
             </label>
+        );
+    }
+    if (field.type === 'checkbox-group' && field.options) {
+        return (
+            <div className="checkbox-group">
+                <label>{field.label}</label>
+                <div className="checkbox-options">
+                    {field.options.map((day, idx) => (
+                        <label key={idx}>
+                            <input
+                                type="checkbox"
+                                checked={value.includes(day)}
+                                value={day}
+                                onChange={(e) => {
+                                    const isChecked = e.target.checked;
+                                    let updatedValue = value.split(',').filter(Boolean);
+                                    if (isChecked) {
+                                        updatedValue.push(day);
+                                    } else {
+                                        updatedValue = updatedValue.filter((v) => v !== day);
+                                    }
+                                    onChange(field.label, updatedValue.join(','));
+                                }}
+                            />
+                            {day}
+                        </label>
+                    ))}
+                </div>
+            </div>
         );
     }
 

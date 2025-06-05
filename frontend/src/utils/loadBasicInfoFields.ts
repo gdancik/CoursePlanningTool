@@ -1,6 +1,6 @@
 import Papa from 'papaparse';
 
-export interface BasicInfoData{
+export interface BasicInfoData {
     section: string;
     row: number;
     layoutRow: number;
@@ -12,7 +12,6 @@ export interface BasicInfoData{
 }
 
 export async function loadBasicInfoFields(path: string): Promise<BasicInfoData[]> {
-
     const res = await fetch(path);
     const text = await res.text();
 
@@ -20,7 +19,7 @@ export async function loadBasicInfoFields(path: string): Promise<BasicInfoData[]
         Papa.parse(text, {
             header: true,
             skipEmptyLines: true,
-            complete: (results: { data: any[]; }) => {
+            complete: (results: { data: any[] }) => {
                 const parsed: BasicInfoData[] = results.data.map((row: any) => ({
                     section: row.section,
                     row: row.row ? parseInt(row.row, 10) : 0,
@@ -29,7 +28,11 @@ export async function loadBasicInfoFields(path: string): Promise<BasicInfoData[]
                     type: row.type,
                     placeholder: row.placeholder,
                     required: row.required === "true",
-                    options: row.type === "select" ? row.placeholder.split(",") : undefined
+                    options: row.options
+                        ? row.options.split(/[,|]/).map((opt: string) => opt.trim()).filter((opt: string) => opt !== '')
+                        : (row.type === "select"
+                            ? row.placeholder.split(',').map((opt: string) => opt.trim())
+                            : undefined)
                 }));
                 resolve(parsed);
             },

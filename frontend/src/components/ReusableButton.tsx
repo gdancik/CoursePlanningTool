@@ -9,7 +9,7 @@ interface ReusableButtonsProps{
     onClick?: () => void;
     type?: "button" | "submit";
     icon?: React.ReactNode;
-    variant: "primary" | "secondary" | "green";
+    variant: "primary" | "secondary" | "green" | "exit";
 }
 
 const ReusableButton: React.FC<ReusableButtonsProps> = ({

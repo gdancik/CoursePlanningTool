@@ -2,31 +2,39 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
+    font-weight: 700;
+    padding: 0.7rem 1rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
-
-.reusable-button.back {
+.reusable-button.primary{
+    background: #00a859;
+    color: #ffffff;
+}
+.reusable-button.secondary {
     background: #f5f5f5;
     color: #002e5d;
 
 }
 
-.reusable-button.next{
+.reusable-button.secondary{
     background: #f5f5f5;
     color: #002e5d;
 }
 
 .reusable-button.green {
-    background: #00a859;
+    background: #034BA6;
     color: #fff;
 }
 
+.reusable-button.exit{
+    background: #cf0a2c;
+    color: #ffffff;
+}
+
 .reusable-button:hover {
-    opacity: 0.85;
+    opacity: 0.8;
 }
 
 .button-icon {

@@ -11,6 +11,7 @@ interface AppLayoutProps {
     onSaveAndExit?: () => void;
     onPreview?: () => void;
     children?: React.ReactNode;
+
 }
 
 const Applayout: React.FC<AppLayoutProps> = ({

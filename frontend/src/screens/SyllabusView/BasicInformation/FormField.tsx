@@ -34,8 +34,8 @@ const FormField: React.FC<Props> = ({ field, value, onChange }) => {
         return (
             <label>
                 {field.label}
+                <p className="helper-text">{field.placeholder}</p>
                 <textarea
-                    placeholder={field.placeholder}
                     value={value}
                     onChange={handleInputChange}
                     required={field.required}

@@ -1,6 +1,6 @@
 import React from "react";
 import ReusableButton from "../../components/ReusableButton";
-import { FaArrowLeft, FaArrowRight, FaEye } from "react-icons/fa";
+import {FaArrowLeft, FaArrowRight, FaEye, FaRegSave, FaRegWindowClose} from "react-icons/fa";
 import SafeIcon from "../../utils/ComponentWrapper";
 import "./ButtonBar.css";
 
@@ -10,15 +10,16 @@ interface ButtonBarProps {
     onSave?: () => void;
     onSaveAndExit?: () => void;
     onPreview?: () => void;
+    showSaveButtons?: boolean;
 }
 
 const ButtonBar: React.FC<ButtonBarProps> = ({
-                                                         onBack,
-                                                         onNext,
-                                                         onSave,
-                                                         onSaveAndExit,
-                                                         onPreview,
-                                                     }) => {
+                                                 onBack,
+                                                 onNext,
+                                                 onSave,
+                                                 onSaveAndExit,
+                                                 onPreview,
+                                             }) => {
     return (
         <div className="button-bar">
             <ReusableButton
@@ -35,12 +36,14 @@ const ButtonBar: React.FC<ButtonBarProps> = ({
             />
             <ReusableButton
                 label="Save"
+                icon ={<SafeIcon Icon={FaRegSave}/>}
                 variant ="primary"
                 onClick={onSave}
             />
             <ReusableButton
                 label="Save & Exit"
-                variant ="primary"
+                icon={<SafeIcon Icon={FaRegWindowClose}/>}
+                variant ="exit"
                 onClick={onSaveAndExit}
             />
             <ReusableButton

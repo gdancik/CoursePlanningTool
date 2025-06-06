@@ -42,34 +42,34 @@ details[open] .section-arrow {
 .form-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 1rem;
     margin-bottom: 0.2rem;
     align-items: start;
 }
 
 /* Styling for specific rows to adjust width/flex */
 .form-row.subject-code {
-    flex: 1 1 200px; /* smaller width */
+    flex: 0 0 300px; /* smaller width */
 }
 
 .form-row.course-number {
-    flex: 1 1 200px;
+    flex: 0 0 300px;
 }
 
 .form-row.course-title {
-    flex: 2 1 300px;
+    flex: 0 0 300px;
 }
 
 .form-row.meeting-days {
-    flex: 1 1 050px;
+    flex: 1 1 0px;
 }
 
 .form-row.meeting-time {
-    flex: 1 1 150px;
+    flex: 0 0 300px;
 }
 
 .form-row.classroom-location {
-    flex: 1 1 300px;
+    flex: 1 2  300px;
 }
 
 .form-row.semester,
@@ -110,7 +110,6 @@ details[open] .section-arrow {
     display: flex;
     gap: 0.5rem;
     flex-direction: row;
-    align-items: center;
 }
 
 /* Checkbox-specific styling */
@@ -188,11 +187,12 @@ details[open] .section-arrow {
 }
 
 /* Sub-label / help text styling */
-.form-row.additional-information-optional .sub-label {
+.form-row.additional-information-optional .helper-text {
     font-size: 0.85rem;
     color: #666;
     margin-bottom: 0.5rem;
 }
+
 
 /* Textarea styling */
 .form-row.additional-information-optional textarea {

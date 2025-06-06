@@ -5,7 +5,7 @@
 # description.
 #
 
-Note: .env needs to include credentials
+# Note: .env needs to include credentials
 
 import sys
 

@@ -9,18 +9,16 @@ import random
 
 import course_planning as cp
 
-
 ''' Create app and login manager '''
-
 app = Flask(__name__)
 app.secret_key = "my secret key"
-app.gs_client = gsEditor()
-gs = app.gs_client
+gs = gsEditor()
+gs.create_sheet()
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 ''' Classes and functions to handle login '''
-
 class User(UserMixin):
     def __init__(self, id, name):
       self.id = id
@@ -184,6 +182,66 @@ def updateValue():
         gs.set_sheet_name(sheet_name)
         gs.updateValue(course_id, columns)
         return jsonify('Function called successfully')
+
+
+
+'''Calls the getValue function from the gs_editor.py module'''
+@app.route('/getSheet/', methods=['POST'])
+def getSheet():
+    try:
+        data = request.get_json()        
+        sheet_name = data.get('sheet_name')
+        if not sheet_name:
+            return jsonify({"error": "sheet_name is required"}), 400
+
+        # Call the getValue function
+        gs.set_sheet_name(sheet_name)
+        sheet = gs.read_sheet()
+
+        # Check if sheet is None
+        if sheet is None:
+            return jsonify({"error": "No data returned from getSheet"}), 500
+
+        # Return the result as JSON
+        return jsonify(sheet.to_dict(orient = 'records'))
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+'''Calls the create_sheet function to share the current sheet'''
+@app.route('/shareSheet/', methods=['POST'])
+def shareSheet():
+    try:
+        data = request.get_json()                
+        email = data.get('email')
+        if not email:
+            return jsonify({"error": "email is required"}), 400
+
+        # Call the create_sheet method        
+        id = gs.create_sheet(email = email)
+        url = 'https://docs.google.com/spreadsheets/d/' + id
+        # Return the result as JSON
+        return jsonify({'id': id, 'url': url})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+'''Admin page'''
+@app.route('/admin/')
+def admin():
+    url = f'https://docs.google.com/spreadsheets/d/{gs.id}'
+    
+    page = f'''
+    <h2> Admin Page </h2>
+    <ul>
+    <li>Sheet name: {gs.sheet_name} </li>
+    <li>Sheet id: {gs.id} </li>
+    <li>url: <a href = "{url}">{url}</a></li>
+    <li>API count: {gs.api_count}
+    </ul>
+    '''
+    return page
 
 if __name__ == '__main__':
     app.run(debug=True)

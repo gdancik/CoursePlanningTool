@@ -9,3 +9,4 @@ gspread
 typing
 google-api-python-client
 oauth2client
+tabulate

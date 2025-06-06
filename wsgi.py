@@ -3,7 +3,8 @@
 # This file contains the WSGI configuration required to serve up your
 # web application. It works by setting the variable 'application' to a WSGI handler of some
 # description.
-#Note: .env needs to include credentials
+
+# Note: .env needs to include credentials
 
 import sys
 

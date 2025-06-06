@@ -12,7 +12,7 @@ import backend.doc_editor as de
 from docx import Document
 import pandas as pd
 
-doc = '(Test)Doc1.docx'
+doc = 'TestFiles/(Test)Doc1.docx'
 
 def test_replaceTextInParagraph():
     test_dict ={
@@ -20,8 +20,8 @@ def test_replaceTextInParagraph():
         '<<Age>>': '30',
         '<<Hobby>>': 'cooking'
                 }
-    de.replaceTextInParagraph(doc,test_dict,'(Test)Doc1_modified.docx')
-    modified_doc = Document('(Test)Doc1_modified.docx')
+    de.replaceTextInParagraph(doc,test_dict,'TestFiles/(Test)Doc1_modified.docx')
+    modified_doc = Document('TestFiles/(Test)Doc1_modified.docx')
     para = ""
     for paragraph in modified_doc.paragraphs:
         text = paragraph.text.strip()

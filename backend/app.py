@@ -145,6 +145,41 @@ def generate():
 
     return render_template('form.html')
 
+
+''' Preview syllabus '''
+@app.route('/preview/', methods=['POST'])
+def preview():
+
+    try:
+        data = request.get_json()
+        name = data.get('name')
+        message = data.get('message')
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+    #return jsonify({'name': name, 'message': message})
+
+    # Create Word document in memory
+    doc = Document()
+    doc.add_heading(f"Message from {name}", 0)
+    doc.add_paragraph(message)
+
+    # Save to a BytesIO stream
+    file_stream = io.BytesIO()
+    doc.save(file_stream)
+    file_stream.seek(0)
+
+    return send_file(
+        file_stream,
+        as_attachment=True,
+        download_name=f"message_from_{name}.docx",
+        mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    )
+
+
+
+
 '''Calls the getValue function from the gs_editor.py module'''
 @app.route('/getValue/', methods=['POST'])
 def getValue():

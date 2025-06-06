@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../b
 import pytest
 import backend.doc_editor as de
 from docx import Document
+import pandas as pd
 
 doc = '(Test)Doc1.docx'
 
@@ -28,7 +29,6 @@ def test_replaceTextInParagraph():
             para += text + "\n"
     assert para == 'Hello my name is Fetty, I am 30 years old.\nMy favorite hobby is cooking.\n'
     
-
 def test_printParagraphs(capsys):
     
     de.printParagraphs(doc)
@@ -39,7 +39,6 @@ def test_getParagraph():
     para = de.getParagraph(doc, 0)
     para = para.strip()
     assert para == 'Hello my name is <<Name>>, I am <<Age>> years old.'
-
 
 def test_printTables(capsys):
     de.printTables(doc)
@@ -56,5 +55,15 @@ def test_printTables(capsys):
 +----+-----+-------+------+
         '''
     assert captured.out.strip() == x.strip()
+
 def test_getTable():
-    pass
+    x = [
+        ['Hi', 'this', 'is'],
+        ['my', 'table', 'that'],
+        ['I', 'test', 'with']
+    ]
+
+    expected_df = pd.DataFrame(x)
+    y = de.getTable(doc,0)
+    pd.testing.assert_frame_equal(y, expected_df)
+    

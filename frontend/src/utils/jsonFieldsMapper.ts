@@ -1,4 +1,4 @@
-//This file Takes the dictionary Data Structure from teh field Mappings and assignts them accordingly
+//This file Takes the dictionary Data Structure from teh field Mappings and assigns them accordingly
 
 import {fieldMappings} from "./fieldMappings";
 

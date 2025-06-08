@@ -1,9 +1,14 @@
 /**
- *
- * Function for button logic and to download a JSON form the given data
+ * This file contains utility functions for:
+ * - Navigating between pages using the `react-router-dom` `navigate` function
+ * - Handling back/next page logic
+ * - Preview functionality (currently logs to console)
+ * - Saving form data as a downloadable JSON file
  */
+
 import { NavigateFunction } from "react-router-dom";
 
+// Ordered list of page routes for navigation
 const pageOrder = [
     "/overview",
     "/basic-info",
@@ -16,41 +21,58 @@ const pageOrder = [
     "/checklist"
 ];
 
+/**
+ * Navigates to the previous page in `pageOrder` based on the current path.
+ */
 export const handleBack = (navigate: NavigateFunction, currentPath: string) => {
-    const index = pageOrder.indexOf(currentPath);
+    const index = pageOrder.indexOf(currentPath); // Find the index of the current page
     if (index > 0) {
-        navigate(pageOrder[index - 1]);
+        navigate(pageOrder[index - 1]); // Navigate to the previous page
     } else {
-        console.log("No previous page");
+        console.log("No previous page"); // No previous page (already at first)
     }
 };
 
+/**
+ * Navigates to the next page in `pageOrder` based on the current path.
+ */
 export const handleNext = (navigate: NavigateFunction, currentPath: string) => {
     console.log("Current Path:", currentPath);
-    const index = pageOrder.indexOf(currentPath);
+    const index = pageOrder.indexOf(currentPath); // Find the index of the current page
     console.log("Current index:", index);
 
     if (index >= 0 && index < pageOrder.length - 1) {
-        const nextPage = pageOrder[index + 1];
+        const nextPage = pageOrder[index + 1]; // Determine the next page
         console.log("Navigating to:", nextPage);
-        navigate(nextPage);
+        navigate(nextPage); // Navigate to the next page
     } else {
-        console.log("No next page found");
+        console.log("No next page found"); // No next page (already at last)
     }
 };
 
+/**
+ * Handles preview logic. Currently just logs to the console.
+ */
 export const handlePreview = () => {
-    console.log("Preview clicked!");
+    console.log("Preview clicked!"); // Placeholder for future preview functionality
 };
 
+/**
+ * Saves the provided data as a JSON file for download.
+ * @param data - The data to be saved
+ * @param fileName - The name of the downloaded JSON file
+ */
 export function saveJsonFile(data: Record<string, string>, fileName: string) {
+    // Create a Blob containing the JSON data
     const jsonBlob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(jsonBlob);
+    const url = URL.createObjectURL(jsonBlob); // Create a URL for the Blob
 
+    // Create an anchor element and trigger download
     const a = document.createElement("a");
     a.href = url;
     a.download = fileName;
     a.click();
 
+    // Revoke the object URL to free up memory
     URL.revokeObjectURL(url);
 }

@@ -13,6 +13,7 @@ interface ButtonBarProps {
     showSaveButtons?: boolean;
 }
 
+// Functional component that renders a button bar
 const ButtonBar: React.FC<ButtonBarProps> = ({
                                                  onBack,
                                                  onNext,
@@ -22,38 +23,48 @@ const ButtonBar: React.FC<ButtonBarProps> = ({
                                              }) => {
     return (
         <div className="button-bar">
+            {/* Back Button */}
             <ReusableButton
                 label="Back"
-                icon={<SafeIcon Icon={FaArrowLeft} />}
-                variant ="secondary"
-                onClick={onBack}
+                icon={<SafeIcon Icon={FaArrowLeft} />} // Left arrow icon
+                variant="secondary"                   // Secondary styling variant
+                onClick={onBack}                      // Call the onBack callback if provided
             />
+
+            {/* Next Button */}
             <ReusableButton
                 label="Next"
-                icon={<SafeIcon Icon={FaArrowRight} />}
-                variant="secondary"
-                onClick={onNext}
+                icon={<SafeIcon Icon={FaArrowRight} />} // Right arrow icon
+                variant="secondary"                     // Secondary styling variant
+                onClick={onNext}                        // Call the onNext callback if provided
             />
+
+            {/* Save Button */}
             <ReusableButton
                 label="Save"
-                icon ={<SafeIcon Icon={FaRegSave}/>}
-                variant ="primary"
-                onClick={onSave}
+                icon={<SafeIcon Icon={FaRegSave} />}   // Save icon
+                variant="primary"                      // Primary styling variant
+                onClick={onSave}                       // Call the onSave callback if provided
             />
+
+            {/* Save & Exit Button */}
             <ReusableButton
                 label="Save & Exit"
-                icon={<SafeIcon Icon={FaRegWindowClose}/>}
-                variant ="exit"
-                onClick={onSaveAndExit}
+                icon={<SafeIcon Icon={FaRegWindowClose} />} // Close icon
+                variant="exit"                               // Exit styling variant
+                onClick={onSaveAndExit}                      // Call the onSaveAndExit callback if provided
             />
+
+            {/* Preview Syllabus Button */}
             <ReusableButton
                 label="Preview Syllabus"
-                variant="green"
-                icon={<SafeIcon Icon={FaEye} />}
-                onClick={onPreview}
+                icon={<SafeIcon Icon={FaEye} />}     // Eye icon for preview
+                variant="green"                      // Green styling variant
+                onClick={onPreview}                  // Call the onPreview callback if provided
             />
         </div>
     );
 };
+
 
 export default ButtonBar;

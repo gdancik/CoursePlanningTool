@@ -8,14 +8,16 @@ export const useLogin = () =>{
     const [message, setMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const handleLogin = async (user: string, password: string) =>{
+    const handleLogin = async (user: string, password: string) => {
         setError(null);
         setMessage(null);
-        try{
+        try {
             const data = await login(user, password);
             setMessage(`Welcome, ${data.user}!`);
-        } catch (err:any){
+            return data;
+        } catch (err: any) {
             setError(err.message);
+            throw err;
         }
     };
 

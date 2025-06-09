@@ -7,7 +7,7 @@ import "./LoginScreen.css";
 const LoginScreen: React.FC = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { message, error, handleLogin, handleLogout } = useLogin();
+    const {error, handleLogin,} = useLogin();
     const [loginSuccess, setLoginSuccess] = useState(false);
     const navigate = useNavigate();
 

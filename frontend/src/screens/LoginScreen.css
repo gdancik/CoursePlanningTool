@@ -13,7 +13,7 @@
 
 /* Logo at the top */
 .logo-container {
-    margin-top: 1rem;
+    margin-top: 2rem;
 }
 
 .logo {
@@ -25,8 +25,8 @@
 /* Main container: split layout */
 .login-page-container {
     display: flex;
-    width: 85%;
-    height: calc(73vh - 80px);
+    width: 80%;
+    height: calc(75vh - 80px);
     font-family: sans-serif;
 
 }
@@ -39,20 +39,20 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden
 }
 
 .left-section h1 {
-    font-size: 4rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 700;
     margin-bottom: 1rem;
 }
 
 .left-section p {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2vw, 1.2rem);
     line-height: 1.5;
     margin-bottom: 0.5rem;
 }
-
 .details-bottom {
     margin-top: 1rem;
     font-weight: 500;

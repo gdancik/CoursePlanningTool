@@ -1,0 +1,37 @@
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: start;
+}
+
+/* Labels styling */
+.form-row label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem; /* Small gap between label and input */
+}
+
+/* Inputs, selects, and textareas have consistent styling */
+.form-row input,
+.form-row select,
+.form-row textarea {
+    width: 100%;
+    border: 2px solid green;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+/* Full-width row (like for textarea) */
+.form-row.full-width {
+    grid-column: 1 / -1; /* Span all columns */
+}
+
+/* Additional textarea styling */
+.form-row.full-width textarea {
+    min-height: 10rem;
+    resize: vertical;
+}

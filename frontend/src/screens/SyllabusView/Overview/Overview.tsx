@@ -5,15 +5,24 @@
 // A linker map for navigation buttons is handled in AppNavigation (not shown here).
 
 import {useEffect, useState} from 'react';
-import OverviewCard from "./components/OverviewCard";
-import {loadSyllabusSections, SectionData} from "../../utils/loadSyllabusSections";
-import AppLayout from "../../ApplicationLayout/Applayout"
+import {useNavigate, useLocation} from "react-router-dom";
+import OverviewCard from "./OverviewCard";
+import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSections";
+import AppLayout from "../../../ApplicationLayout/Applayout"
 import './Overview.css'
+import {handleBack, handleNext} from "../../../utils/ButtonLogic";
 
 // Functional component that displays the overview page.
 const Overview = () => {
     // State to hold the array of section data loaded from the CSV file.
     const [sections, setSections] = useState<SectionData[]>([]);
+
+
+    //Page Navigation for Buttons
+    const navigate = useNavigate();
+    const location = useLocation();
+    const handleBackClick = () => handleBack(navigate, location.pathname);
+    const handleNextClick = () => handleNext(navigate, location.pathname);
 
     // useEffect runs once on component mount to fetch CSV data
     // using the custom loadSyllabusSections utility function.
@@ -22,7 +31,10 @@ const Overview = () => {
     }, []);
     return(
         <div>
-            <AppLayout/>
+            <AppLayout
+                onBack={handleBackClick}
+                onNext={handleNextClick}
+            />
             <div className='overview-container'>
 
                 {/* Introduction message to help users understand the tool */}

@@ -17,7 +17,7 @@ const LoginScreen: React.FC = () => {
             await handleLogin(username, password);
             setLoginSuccess(true);
             setTimeout(() => {
-                navigate("/overview");
+                navigate("/course-page");
             }, 3000);
         } catch (err) {
             console.error(err);

@@ -1,0 +1,13 @@
+.header-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #002e5d;
+    padding: 1rem 2rem;
+    color: white;
+}
+
+.ecsu-logo-standard{
+    height: 60px;
+    object-fit: contain;
+}

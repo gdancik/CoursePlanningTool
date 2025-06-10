@@ -10,4 +10,5 @@ typing
 google-api-python-client
 oauth2client
 tabulate
+flask-cors
 flask_session

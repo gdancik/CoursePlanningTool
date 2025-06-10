@@ -4,7 +4,7 @@ import {Routes, Route} from 'react-router-dom';
 
 //Test Endpoint Imports
 import MainPage from '../screens/testAPI/Home';
-import Login from '../screens/testAPI/Login';
+import LoginScreen from '../screens/LoginScreen';
 import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
 
@@ -25,7 +25,7 @@ const AppRoutes = () => {
             <Routes>
                 {/*TEST API ENDPOINTS*/}
                 <Route path = "/" element = {<MainPage/>} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<LoginScreen />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
 

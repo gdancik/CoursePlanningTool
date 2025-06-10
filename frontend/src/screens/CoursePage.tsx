@@ -22,11 +22,11 @@ const CoursePage = () =>{
                 <h1 className ="course-tool-head">Course Planning Tool</h1>
 
                 <ReusableButton
-                label="New Course"
-                icon={<SafeIcon Icon={FaPlus}/>}
-                variant="primary"
-                onClick={() =>setModalOpen(true)}
-                className ="course-page-button"
+                    label="New Course"
+                    icon={<SafeIcon Icon={FaPlus}/>}
+                    variant="primary"
+                    onClick={() =>setModalOpen(true)}
+                    className ="course-page-button"
                 />
             </div>
             <CourseModal

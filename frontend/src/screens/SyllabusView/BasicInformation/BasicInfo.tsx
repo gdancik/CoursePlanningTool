@@ -4,12 +4,13 @@
 import AppLayout from "../../../ApplicationLayout/Applayout";
 import React, {useEffect, useState} from "react";
 import {useNavigate, useLocation} from "react-router-dom";
-import { FaExclamationTriangle } from 'react-icons/fa'
+import {FaExclamationTriangle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import {saveJsonFile} from "../../../utils/ButtonLogic";
 import {handleBack, handleNext, handlePreview} from "../../../utils/ButtonLogic";
 import SectionAccordion from "./SectionAccordion";
+import {jsonFieldsMapper} from "../../../utils/jsonFieldsMapper";
 import './BasicInfo.css'
 
 
@@ -40,8 +41,14 @@ const BasicInfo = () =>{
     };
 
     // Button action handlers
-    const handleSave = () => saveJsonFile(formData, "form_data.json");
-    const handleSaveAndExit = () => saveJsonFile(formData, "form_data_exit.json");
+    const handleSave = () => {
+        const mappedData = jsonFieldsMapper(formData);
+        saveJsonFile(mappedData, "form_data.json")
+    };
+    const handleSaveAndExit = () => {
+        const mappedData = jsonFieldsMapper(formData);
+        saveJsonFile(mappedData, "form_data_exit.json")
+    }
     const handleBackClick = () => handleBack(navigate, location.pathname);
     const handleNextClick = () => handleNext(navigate, location.pathname);
 

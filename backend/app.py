@@ -3,6 +3,10 @@ from docx import Document
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from gs_editor import gsEditor
 
+from flask_cors import CORS
+
+import pandas as pd
+
 import requests
 import io
 import random
@@ -12,6 +16,9 @@ import course_planning as cp
 ''' Create app and login manager '''
 app = Flask(__name__)
 app.secret_key = "my secret key"
+
+#CORS(app, resources = {r'/api/*': {'origins': '*'}})
+
 gs = gsEditor()
 gs.create_sheet()
 
@@ -29,7 +36,7 @@ def load_user(user_id):
     # need to look up user based on user_id
     return User(user_id, user_id)
 
-@app.route('/test_login/', methods = ['GET'])
+@app.route('/api/test_login/', methods = ['GET'])
 def test_login() :
 
     error = 'Error: url must be in format /?test_login/user=user&password=password', 400
@@ -49,7 +56,7 @@ def test_login() :
 
     return jsonify(user = username)    
 
-@app.route('/logout/')
+@app.route('/api/logout/')
 def logout():
     logout_user()
     session.clear()
@@ -81,12 +88,12 @@ The 'session' object allows you to store information specific to a user. We
 may be able to accomplish the same thing using flask_login and current_user
 ''' 
 
-@app.route('/get_session_number/')
+@app.route('/api/get_session_number/')
 def get_session_number():
     session['number'] = random.randint(0,100)
     return 'A random number has been assigned; go to /show_session_number/ to view'
 
-@app.route('/show_session_number/')
+@app.route('/api/show_session_number/')
 def test():
     number = session.get('number', None) 
     if number :
@@ -112,7 +119,7 @@ def hello():
 def hi():
     return jsonify(message="Hi there from Flask!")
 
-@app.route('/valid_inputs/')
+@app.route('/api/valid_inputs/')
 def valid_inputs():
     return jsonify(cp.columns)
 
@@ -145,7 +152,7 @@ def generate():
 
 
 ''' Preview syllabus '''
-@app.route('/preview/', methods=['POST'])
+@app.route('/api/preview/', methods=['POST'])
 def preview():
 
     try:
@@ -176,10 +183,8 @@ def preview():
     )
 
 
-
-
 '''Calls the getValue function from the gs_editor.py module'''
-@app.route('/getValue/', methods=['POST'])
+@app.route('/api/getValue/', methods=['POST'])
 def getValue():
     try:
         data = request.get_json()
@@ -203,7 +208,7 @@ def getValue():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/updateValue/', methods=['POST'])
+@app.route('/api/updateValue/', methods=['POST'])
 def updateValue():
         data = request.get_json()
         course_id = data.get('course_id')
@@ -219,9 +224,34 @@ def updateValue():
         return jsonify('Function called successfully')
 
 
+@app.route('/api/getCourses/', methods=['POST'])
+def getCourses():
+        data = request.get_json()
+        user_id = data.get('user')
+        
+        if not user_id:
+            return jsonify({"error": "Missing one or more required fields"}), 400
+
+
+        df = pd.DataFrame({'a': [1,2,3],
+                           'b': [4,9,20]})
+        
+        return jsonify(df.to_dict(orient = 'records'))
+
+@app.route('/api/getNewCourseId/', methods=['POST'])
+def getNewCourseId():
+        data = request.get_json()
+        user_id = data.get('user')
+        
+        if not user_id:
+            return jsonify({"error": "Missing one or more required fields"}), 400
+
+        return jsonify(course_id = '4')
+
+
 
 '''Calls the getValue function from the gs_editor.py module'''
-@app.route('/getSheet/', methods=['POST'])
+@app.route('/api/getSheet/', methods=['POST'])
 def getSheet():
     try:
         data = request.get_json()        
@@ -245,7 +275,7 @@ def getSheet():
 
 
 '''Calls the create_sheet function to share the current sheet'''
-@app.route('/shareSheet/', methods=['POST'])
+@app.route('/api/shareSheet/', methods=['POST'])
 def shareSheet():
     try:
         data = request.get_json()                

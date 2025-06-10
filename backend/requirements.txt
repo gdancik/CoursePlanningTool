@@ -10,3 +10,4 @@ typing
 google-api-python-client
 oauth2client
 tabulate
+flask_session

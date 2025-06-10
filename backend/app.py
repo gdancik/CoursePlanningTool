@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, send_file, session, jsonify
 from docx import Document
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_session import Session
+
+
 from gs_editor import gsEditor
 
 import requests
@@ -12,11 +15,14 @@ import course_planning as cp
 ''' Create app and login manager '''
 app = Flask(__name__)
 app.secret_key = "my secret key"
-gs = gsEditor()
-gs.create_sheet()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+app.config["SESSION_PERMANENT"] = False     # Sessions expire when the browser is closed
+app.config["SESSION_TYPE"] = "filesystem"     # Store session data in files
+
+Session(app)
 
 ''' Classes and functions to handle login '''
 class User(UserMixin):
@@ -46,6 +52,13 @@ def test_login() :
         
     user = User(username, username)
     login_user(user)
+
+    session['client'] = gsEditor(f'{username}')
+  
+    print("Session client set:", session.get('client'))  # Debug print
+    print("Session contents after set:", session)  # Debug print
+    session['client'].create_sheet()
+
 
     return jsonify(user = username)    
 
@@ -181,6 +194,7 @@ def preview():
 '''Calls the getValue function from the gs_editor.py module'''
 @app.route('/getValue/', methods=['POST'])
 def getValue():
+    gs = session['client']
     try:
         data = request.get_json()
         course_id = data.get('course_id')
@@ -205,6 +219,10 @@ def getValue():
 
 @app.route('/updateValue/', methods=['POST'])
 def updateValue():
+    print("Session contents before access:", session)  # Debug print
+    gs = session['client']
+    try:
+        
         data = request.get_json()
         course_id = data.get('course_id')
         columns = data.get('list_of_columns')
@@ -217,12 +235,15 @@ def updateValue():
         gs.set_sheet_name(sheet_name)
         gs.updateValue(course_id, columns)
         return jsonify('Function called successfully')
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 
 '''Calls the getValue function from the gs_editor.py module'''
 @app.route('/getSheet/', methods=['POST'])
 def getSheet():
+    gs = session['client']
     try:
         data = request.get_json()        
         sheet_name = data.get('sheet_name')
@@ -243,10 +264,10 @@ def getSheet():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 '''Calls the create_sheet function to share the current sheet'''
 @app.route('/shareSheet/', methods=['POST'])
 def shareSheet():
+    gs = session['client']
     try:
         data = request.get_json()                
         email = data.get('email')

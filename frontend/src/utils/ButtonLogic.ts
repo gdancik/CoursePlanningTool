@@ -64,6 +64,7 @@ export const handlePreview = () => {
  */
 export function saveJsonFile(data: Record<string, string>, fileName: string) {
     // Create a Blob containing the JSON data
+
     const jsonBlob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(jsonBlob); // Create a URL for the Blob
 

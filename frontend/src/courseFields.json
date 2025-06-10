@@ -13,12 +13,12 @@
   },
   {
     "type": "text",
-    "placeholder": "Subject Code",
+    "placeholder": "Course Code",
     "required": true
   },
   {
     "type": "text",
-    "placeholder": "Course Number",
+    "placeholder": "Course number",
     "required": true
   },
   {

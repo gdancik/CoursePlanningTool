@@ -1,0 +1,7 @@
+type,placeholder,required,options
+select,Semester,true,"Fall,Winter,Spring,Summer"
+select,year,true,
+text,Course Code,true,
+text,Course number,true,
+text,Course Title,true,
+select,Choose One,true,"No,Yes - ELAC Seminar,Yes- ELAC Disciplinary"

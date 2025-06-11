@@ -32,6 +32,17 @@ const BasicInfo = () =>{
     // Load the basic info fields from CSV when the component mounts
     useEffect(() => {
         loadBasicInfoFields("/data/basic_info_fields.csv").then(setFields);
+        // Load the course modal data JSON
+
+        const storedData = localStorage.getItem("newCourseData");
+        if (storedData) {
+            try{
+                const parsed = JSON.parse(storedData);
+                setFormData(parsed);
+            } catch (err) {
+                console.warn("Failed to parse saved course data:", err);
+            }
+        }
     }, []);
 
 

@@ -75,7 +75,7 @@ const CourseModal: React.FC <CourseModalProps> = ({
                                         <>
                                             <label className="elac-label">
                                                 Is this an ELAC course? <br />
-                                                <a href="https://elac.example.com" target="_blank" rel="noopener noreferrer">
+                                                <a href="https://www.easternct.edu/academic-affairs/student-resources/hands-on-learning/elac.html" target="_blank" rel="noopener noreferrer">
                                                     Learn more about ELAC ↗
                                                 </a>
                                             </label>

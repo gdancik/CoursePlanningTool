@@ -3,7 +3,6 @@ from docx import Document
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_session import Session
 
-
 from gs_editor import gsEditor
 
 from flask_cors import CORS
@@ -20,15 +19,27 @@ import course_planning as cp
 app = Flask(__name__)
 app.secret_key = "my secret key"
 
-#CORS(app, resources = {r'/api/*': {'origins': '*'}})
+CORS(app, resources = {r"/api/*": 
+    {"origins": [
+        "http://127.0.0.1:3000",
+        "http://localhost:3000",
+        "need to add domain here"
+    ]}},
+    supports_credentials = True
+)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-app.config["SESSION_PERMANENT"] = False     # Sessions expire when the browser is closed
+app.config["SESSION_PERMANENT"] = True     # Sessions expire when the browser is closed
 app.config["SESSION_TYPE"] = "filesystem"     # Store session data in files
 
 Session(app)
+
+def get_gs_editor() :
+    #return gsEditor('annie')
+    #return gsEditor(session['user'])
+    return gsEditor(current_user.id)
 
 ''' Classes and functions to handle login '''
 class User(UserMixin):
@@ -43,7 +54,6 @@ def load_user(user_id):
 
 @app.route('/api/test_login/', methods = ['GET'])
 def test_login() :
-
     error = 'Error: url must be in format /?test_login/user=user&password=password', 400
     if (len(request.args) != 2 or
         'user' not in request.args or 
@@ -58,10 +68,9 @@ def test_login() :
         
     user = User(username, username)
     login_user(user)
-    session['username'] = username
-    gs = gsEditor(f'{username}')
+   
+    gs = get_gs_editor()
     gs.create_sheet()
-
 
     return jsonify(user = username)    
 
@@ -193,9 +202,11 @@ def preview():
 
 
 '''Calls the getValue function from the gs_editor.py module'''
+
 @app.route('/api/getValue/', methods=['POST'])
+@login_required
 def getValue():
-    gs = gsEditor(session['username'])
+    gs = get_gs_editor()
     try:
         data = request.get_json()
         course_id = data.get('course_id')
@@ -219,8 +230,9 @@ def getValue():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/updateValue/', methods=['POST'])
+@login_required
 def updateValue():
-    gs = gsEditor(session['username'])
+    gs = get_gs_editor()
     try:
         
         data = request.get_json()
@@ -238,7 +250,7 @@ def updateValue():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
+# TO DO: login should be required
 @app.route('/api/getCourses/', methods=['POST'])
 def getCourses():
         data = request.get_json()
@@ -253,6 +265,7 @@ def getCourses():
         
         return jsonify(df.to_dict(orient = 'records'))
 
+#TO DO: login should be required
 @app.route('/api/getNewCourseId/', methods=['POST'])
 def getNewCourseId():
         data = request.get_json()
@@ -264,13 +277,15 @@ def getNewCourseId():
         return jsonify(course_id = '4')
 
 
-
 '''Calls the getValue function from the gs_editor.py module'''
 @app.route('/api/getSheet/', methods=['POST'])
+@login_required
 def getSheet():
-    gs = gsEditor(session['username'])
+    gs = get_gs_editor()
     try:
-        data = request.get_json()        
+        print('requesting data')
+        data = request.get_json()
+        print(data) 
         sheet_name = data.get('sheet_name')
         if not sheet_name:
             return jsonify({"error": "sheet_name is required"}), 400
@@ -292,7 +307,7 @@ def getSheet():
 '''Calls the create_sheet function to share the current sheet'''
 @app.route('/api/shareSheet/', methods=['POST'])
 def shareSheet():
-    gs = gsEditor(session['username'])
+    gs = get_gs_editor()
     try:
         data = request.get_json()                
         email = data.get('email')
@@ -311,7 +326,10 @@ def shareSheet():
 '''Admin page'''
 @app.route('/admin/')
 def admin():
-    gs = gsEditor(session['username'])
+
+    return '<h2>Under construction</h2>'
+
+    gs = get_gs_editor()
     url = f'https://docs.google.com/spreadsheets/d/{gs.id}'
     
     page = f'''

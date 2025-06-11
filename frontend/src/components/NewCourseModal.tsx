@@ -3,6 +3,7 @@
 import React, {useState, useEffect } from 'react';
 import courseFields from '../courseFields.json'
 import './CourseModal.css'
+import {useNavigate} from "react-router-dom";
 
 //Type Definitions for the fields
 
@@ -24,6 +25,9 @@ const CourseModal: React.FC <CourseModalProps> = ({
     onClose,
     onCreate
 }) => {
+
+    const navigate = useNavigate()
+
     const [formData, setFormData] = useState<Record<string, string>>({});
 
     //Generate dynamic year options
@@ -53,6 +57,8 @@ const CourseModal: React.FC <CourseModalProps> = ({
         console.log("JSON to Send:", formData);
         onCreate(formData);
         onClose();
+
+        navigate("/overview");
     };
     if(!isOpen) return null;
 

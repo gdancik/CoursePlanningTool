@@ -48,7 +48,12 @@ from io import StringIO
 from datetime import datetime, timedelta
 import numpy as np
 
-def create_schedule(term, year, url = 'https://www.easternct.edu/academics/academic-calendar/index.html') :
+def create_schedule(term, year, days, url = 'https://www.easternct.edu/academics/academic-calendar/index.html') :
+    '''
+    Creates a table for the course schedule, 
+    integrated with the academic calendar, for the
+    given term (e.g., 'Fall'), year (e.g., '2025') and days (e.g., 'MWF')
+    '''
 
     target = term + ' ' + year
 
@@ -59,7 +64,7 @@ def create_schedule(term, year, url = 'https://www.easternct.edu/academics/acade
 
     start, end = get_start_and_end_dates(df_calendar)
 
-    df_schedule = generate_schedule(start, end, 'MWF')
+    df_schedule = generate_schedule(start, end, days)
 
     schedule = combine_date_dfs(df_schedule,  df_calendar, start, end)
     return schedule

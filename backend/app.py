@@ -7,6 +7,8 @@ from gs_editor import gsEditor
 
 from flask_cors import CORS
 
+from course_calendar import create_schedule
+
 import pandas as pd
 
 import requests
@@ -342,6 +344,42 @@ def admin():
     </ul>
     '''
     return page
+
+
+def missing_params(param_list) :
+    '''
+    Returns True if any item in the param_list is None.
+    This is useful for checkign whether required request parameters
+    have been specified.
+    '''
+    if type(param_list) != list :
+        raise Exception('param_list must be a list in missing_params')
+    
+    return any(x == None for x in param_list)
+
+@app.route('/api/generateSchedule/', methods=['POST'])
+def generateSchedule():
+    
+    try:
+        data = request.get_json()                
+        term = data.get('term')
+        year = data.get('year')
+        days = data.get('days')
+
+        if missing_params([term, year, days]) :
+            return jsonify({"error": 
+                            "At least one required parameter is missing. Term, year, and days are required"}), 400
+
+        if term not in ['Fall', 'Spring'] :
+            return jsonify({"error": "term must be Fall or Spring"}), 400
+
+        schedule = create_schedule(term, year, days, url = 'https://www.easternct.edu/academics/academic-calendar/index.html')
+
+        return jsonify({'schedule': schedule.to_dict(orient = 'records')})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -10,6 +10,7 @@ interface ReusableButtonsProps {
     type?: "button" | "submit";          // HTML button type: "button" or "submit" (default is "button")
     icon?: React.ReactNode;              // Optional icon to display before the label
     variant: "primary" | "secondary" | "green" | "exit"; // Styling variant
+    className?: string;
 }
 
 // Functional component that renders a styled button
@@ -20,11 +21,12 @@ const ReusableButton: React.FC<ReusableButtonsProps> = ({
     type = "button",
     icon,
     variant= "secondary",
+    className="",
 }) =>{
     return(
         <button
         type = {type}
-        className={`reusable-button ${variant}`}
+        className={`reusable-button ${variant} ${className}`}
         onClick={onClick}
         >
             {icon && <span className="button-icon">{icon}</span>}

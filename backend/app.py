@@ -4,7 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_session import Session
 
 from gs_editor import gsEditor
-
+import doc_editor as de
 from flask_cors import CORS
 
 from course_calendar import create_schedule
@@ -70,8 +70,9 @@ def test_login() :
         
     user = User(username, username)
     login_user(user)
-   
-    gs = get_gs_editor()
+
+    session['username'] = username
+    gs = gsEditor(f'{username}')
     gs.create_sheet()
 
     return jsonify(user = username)    
@@ -94,11 +95,12 @@ def index() :
     s = '''
     <h1> Course Planning Tool Homepage</h1>
     <ul>
-    <li> <a href = '/test_login/?user=annie&password=password'>Test Login</a> </li>
-    <li> <a href = '/logout/'>Logout</a> </li>
+    <li> <a href = '/api/test_login/?user=annie&password=password'>Test Login</a> </li>
+    <li> <a href = '/api/logout/'>Logout</a> </li>
     <li> <a href = '/api/hello/'>Hello</a> </li>
     <li> <a href = '/profile/'>Profile</a> </li>
     <li> <a href = '/valid_inputs/'>Valid Inputs </a> </li>
+    <li> <a href = '/api/preview/?id=id_1'>Preview</a></li>
     </ul>
     '''
     return s
@@ -173,35 +175,43 @@ def generate():
 
 ''' Preview syllabus '''
 @app.route('/api/preview/', methods=['POST'])
+@login_required
 def preview():
-
+    gs = gsEditor(session['username'])
+    # Get params for the request and get course ID
     try:
         data = request.get_json()
-        name = data.get('name')
-        message = data.get('message')
-
+        course_id = data.get('course_id')
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-    #return jsonify({'name': name, 'message': message})
 
-    # Create Word document in memory
-    doc = Document()
-    doc.add_heading(f"Message from {name}", 0)
-    doc.add_paragraph(message)
+    #Use course_id to pull values of syllabus from the googles sheet
+    try:
+        fr = gs.getValue(course_id, cp.columns)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+    #call functions to replace
+    path = "SyllabusTemplate.docx"
+    doc = Document(path)
+    list = ['time2']
+
+    de.replaceTextInParagraph(path, fr, 'new.docx')
+    de.remove_blocks('new.docx', list, 'CSC210_Fall_2025_current_time.docx')
 
     # Save to a BytesIO stream
     file_stream = io.BytesIO()
     doc.save(file_stream)
     file_stream.seek(0)
 
+   
     return send_file(
         file_stream,
         as_attachment=True,
-        download_name=f"message_from_{name}.docx",
+        download_name=f"CSC210_Fall_2025_current_time.docx",
         mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
-
 
 '''Calls the getValue function from the gs_editor.py module'''
 
@@ -231,6 +241,7 @@ def getValue():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+'''Calls the updateValue function from the gs_editor.py module'''
 @app.route('/api/updateValue/', methods=['POST'])
 @login_required
 def updateValue():
@@ -278,8 +289,7 @@ def getNewCourseId():
 
         return jsonify(course_id = '4')
 
-
-'''Calls the getValue function from the gs_editor.py module'''
+'''Calls the read_sheet function from the gs_editor.py module'''
 @app.route('/api/getSheet/', methods=['POST'])
 @login_required
 def getSheet():

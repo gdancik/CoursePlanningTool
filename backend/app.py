@@ -22,9 +22,6 @@ app.secret_key = "my secret key"
 
 #CORS(app, resources = {r'/api/*': {'origins': '*'}})
 
-gs = gsEditor()
-gs.create_sheet()
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -61,12 +58,9 @@ def test_login() :
         
     user = User(username, username)
     login_user(user)
-
-    session['client'] = gsEditor(f'{username}')
-  
-    print("Session client set:", session.get('client'))  # Debug print
-    print("Session contents after set:", session)  # Debug print
-    session['client'].create_sheet()
+    session['username'] = username
+    gs = gsEditor(f'{username}')
+    gs.create_sheet()
 
 
     return jsonify(user = username)    
@@ -201,7 +195,7 @@ def preview():
 '''Calls the getValue function from the gs_editor.py module'''
 @app.route('/api/getValue/', methods=['POST'])
 def getValue():
-    gs = session['client']
+    gs = gsEditor(session['username'])
     try:
         data = request.get_json()
         course_id = data.get('course_id')
@@ -226,8 +220,7 @@ def getValue():
 
 @app.route('/api/updateValue/', methods=['POST'])
 def updateValue():
-    print("Session contents before access:", session)  # Debug print
-    gs = session['client']
+    gs = gsEditor(session['username'])
     try:
         
         data = request.get_json()
@@ -275,7 +268,7 @@ def getNewCourseId():
 '''Calls the getValue function from the gs_editor.py module'''
 @app.route('/api/getSheet/', methods=['POST'])
 def getSheet():
-    gs = session['client']
+    gs = gsEditor(session['username'])
     try:
         data = request.get_json()        
         sheet_name = data.get('sheet_name')
@@ -299,7 +292,7 @@ def getSheet():
 '''Calls the create_sheet function to share the current sheet'''
 @app.route('/api/shareSheet/', methods=['POST'])
 def shareSheet():
-    gs = session['client']
+    gs = gsEditor(session['username'])
     try:
         data = request.get_json()                
         email = data.get('email')
@@ -318,6 +311,7 @@ def shareSheet():
 '''Admin page'''
 @app.route('/admin/')
 def admin():
+    gs = gsEditor(session['username'])
     url = f'https://docs.google.com/spreadsheets/d/{gs.id}'
     
     page = f'''

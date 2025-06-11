@@ -2,6 +2,7 @@
 
 import React, {useState, useEffect } from 'react';
 import courseFields from '../courseFields.json'
+import './CourseModal.css'
 
 //Type Definitions for the fields
 
@@ -55,48 +56,62 @@ const CourseModal: React.FC <CourseModalProps> = ({
     };
     if(!isOpen) return null;
 
-    return(
+    return (
         <div className="modal-overlay">
-            <div className="modal-content">
-                <button className = "close-btn" onClick={onClose}>
-                    &times;
-                </button>
-                <h2>New courseDetails</h2>
-                <p>Please enter the course details. You can update it at any time.</p>
+            <div className="modal-wrapper">
                 <div className="modal-left">
+                    <h2>NEW COURSE DETAILS</h2>
+                    <p>Please enter the course details. You can update it at any time.</p>
+                </div>
+                <div className="modal-right">
+                    <button className="close-btn" onClick={onClose}>
+                        &times;
+                    </button>
                     <form onSubmit={handleSubmit}>
-                        {courseFields.map((field: CourseField, idx: number)=>(
-                            <div key={idx} className="form-group">
-                                <label>{field.placeholder}</label>
-                                {field.type === "select" ? (
-                                    <select
-                                        name = {field.placeholder}
-                                        required={field.required}
-                                        value = {formData[field.placeholder] || ""}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="">Select</option>
-                                        {field.options?.map((option, i) => (
-                                            <option key={i} value={option}>
-                                                {option}
-                                            </option>
-                                        ))}
-                                    </select>
-                                ) : (
-                                    <input
-                                        type={field.type}
-                                        name={field.placeholder}
-                                        placeholder={field.placeholder}
-                                        required={field.required}
-                                        value={formData[field.placeholder] || ""}
-                                        onChange={handleChange}
-                                    />
-                                )}
-                            </div>
-                        ))}
-                        <button type ="submit" className="create-button">
-                            Create Course
-                        </button>
+                        <div className="form-grid">
+                            {courseFields.map((field: CourseField, idx: number) => (
+                                <div key={idx} className="form-group">
+                                    {field.placeholder === "Choose One" ? (
+                                        <>
+                                            <label className="elac-label">
+                                                Is this an ELAC course? <br />
+                                                <a href="https://elac.example.com" target="_blank" rel="noopener noreferrer">
+                                                    Learn more about ELAC ↗
+                                                </a>
+                                            </label>
+                                        </>
+                                    ) : (
+                                        <label>{field.placeholder}</label>
+                                    )}
+
+                                    {field.type === "select" ? (
+                                        <select
+                                            name={field.placeholder}
+                                            required={field.required}
+                                            value={formData[field.placeholder] || ""}
+                                            onChange={handleChange}
+                                        >
+                                            <option value="">Select</option>
+                                            {field.options?.map((option, i) => (
+                                                <option key={i} value={option}>
+                                                    {option}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type={field.type}
+                                            name={field.placeholder}
+                                            placeholder={field.placeholder}
+                                            required={field.required}
+                                            value={formData[field.placeholder] || ""}
+                                            onChange={handleChange}
+                                        />
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                        <button type="submit" className="create-button">Create Course</button>
                     </form>
                 </div>
             </div>

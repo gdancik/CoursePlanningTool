@@ -7,6 +7,7 @@ import MainPage from '../screens/testAPI/Home';
 import LoginScreen from '../screens/LoginScreen';
 import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
+import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
 
 //Application Endpoints
 import Overview from "../screens/SyllabusView/Overview/Overview";
@@ -30,8 +31,24 @@ const AppRoutes = () => {
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
 
+                <Route path="/auto_login"
+                       element = {<AutoTestLogin
+                           baseurl = "http://127.0.0.1:5000/api/test_login/"
+                           user = "mike"
+                           password = "password"
+                       />}
+                />
+
+                <Route path="/test_post"
+                       element = {<AutoPostRequest
+                           url = 'http://127.0.0.1:5000/api/getSheet/'
+                           body = {JSON.stringify( {sheet_name: 'annie'})}
+                       />}
+                />
+
+
                 {/*Application EndPoints*/}
-                <Route path = "course-page" element = {<CoursePage/>}/>
+                <Route path  ="course-page" element={<CoursePage/>}/>
                 <Route path = "overview" element={<Overview/>}/>
                 <Route path = "basic-info" element={<BasicInfo/>}/>
                 <Route path = "course-description" element={<Description/>}/>

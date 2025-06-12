@@ -174,7 +174,6 @@ def preview():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-
     #Use course_id to pull values of syllabus from the googles sheet
     try:
         fr = gs.getValue(course_id, cp.columns)
@@ -184,10 +183,8 @@ def preview():
     #call functions to replace
     path = "SyllabusTemplate.docx"
     doc = Document(path)
-    list = ['time2']
 
-    de.replaceTextInParagraph(path, fr, 'new.docx')
-    de.remove_blocks('new.docx', list, 'CSC210_Fall_2025_current_time.docx')
+    de.replaceTextInParagraph(doc, fr,['time2'])
 
     # Save to a BytesIO stream
     file_stream = io.BytesIO()

@@ -6,49 +6,22 @@ from python_docx_replace import docx_replace, docx_blocks
 #TODO Need to change to be more algorithmically efficient
 #Currently it is O(n^2) because it iterates through the paragraphs for each key in the dictionary
 
-def replaceTextInParagraph(doc, fr_dict,new_file_name=None):
+def replaceTextInParagraph(doc, fr_dict,block_ls=None):
     '''
-    Replaces placeholders in a Word document with corresponding values from a dictionary.
+    Replaces text in a Word document based on a dictionary of replacements.
     Args:
-        doc (str): Path to the Word document.
-        fr_dict (dict): Dictionary containing placeholders as keys and their replacements as values.
-        new_file_name (str, optional): If provided, saves the modified document with this name. Defaults to None. If new_file_name is None, the original document is overwritten.
-    Returns:
-        None
+        doc (str): Word document object.
+        fr_dict (dict): Dictionary containing text to be replaced as keys and their replacements as values.
+        block_ls (list, optional): List of blocks to be removed. Defaults to None.
     '''
-    document = Document(doc)
+    document = doc
     docx_replace(document, **fr_dict)
     
-    if new_file_name:
-        # Save the modified document with the new file name
-        document.save(new_file_name)
-    else:
-        # Overwrite the original document
-        document.save(doc)
-
-def remove_blocks(doc,block_ls,new_file_name=None):
-    '''
-    Removes specified blocks from a Word document.
-    Args:
-        doc (str): Path to the Word document.
-        block_ls (list): List of block indices to be removed.
-        new_file_name (str, optional): If provided, saves the modified document with this name. Defaults to None. If new_file_name is None, the original document is overwritten.
-    Returns:
-        None
-    '''
-    
-    document = Document(doc)
-    for i in block_ls:
-       options = {i: False}
-    docx_blocks(document, **options)
-    
-    if new_file_name:
-        # Save the modified document with the new file name
-        document.save(new_file_name)
-    else:
-        # Overwrite the original document
-        document.save(doc)
-
+    if block_ls:
+        for i in block_ls:
+            options = {i: False}
+        docx_blocks(document, **options)
+ 
 def printParagraphs(doc):
     '''
     Prints all paragraphs in a Word document.

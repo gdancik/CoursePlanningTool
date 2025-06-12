@@ -55,7 +55,7 @@ const CourseModal: React.FC <CourseModalProps> = ({
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const courseId = `${formData["Course Code"]}-${formData["Course number"]}-${formData["Year"]}`;
+        const courseId = `${formData["Subject Code"]}-${formData["Course number"]}-${formData["Year"]}-${formData["Semester"]}-${formData["Course Title"]}`;
         const existingCourses = JSON.parse(localStorage.getItem("allCourses") || "{}");
 
         if (existingCourses[courseId]) {

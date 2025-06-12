@@ -53,8 +53,38 @@ export const handleNext = (navigate: NavigateFunction, currentPath: string) => {
 /**
  * Handles preview logic. Currently just logs to the console.
  */
-export const handlePreview = () => {
-    console.log("Preview clicked!"); // Placeholder for future preview functionality
+export const handlePreview = async (_formData: Record<string, string>) => {
+    try {
+        const testPayload = {
+            name: "Eddie",
+            message: "Does this work?"
+        };
+
+        const response = await fetch("https://gdancik.pythonanywhere.com/api/preview/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(testPayload),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server responded with ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "syllabus_preview.docx";
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error("Preview failed:", error);
+        alert("Failed to generate preview. Please try again.");
+    }
 };
 
 /**

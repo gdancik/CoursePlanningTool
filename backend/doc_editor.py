@@ -10,30 +10,29 @@ def replaceTextInParagraph(doc, fr_dict,block_ls=None):
     '''
     Replaces text in a Word document based on a dictionary of replacements.
     Args:
-        doc (str): Word document object.
+        doc: Word document object.
         fr_dict (dict): Dictionary containing text to be replaced as keys and their replacements as values.
         block_ls (list, optional): List of blocks to be removed. Defaults to None.
     '''
-    document = doc
-    docx_replace(document, **fr_dict)
+
+    docx_replace(doc, **fr_dict)
     
     if block_ls:
         for i in block_ls:
             options = {i: False}
-        docx_blocks(document, **options)
+        docx_blocks(doc, **options)
  
 def printParagraphs(doc):
     '''
     Prints all paragraphs in a Word document.
     Args:
-        doc (str): Path to the Word document.
+        doc: Word document object.
     Returns:
         None
     '''
-    # Open the document
-    document = Document(doc)
+   
     # Iterate through the paragraphs in the document and print them
-    for paragraph in document.paragraphs:
+    for paragraph in doc.paragraphs:
         text = paragraph.text.strip()
         if text:  # Only print non-empty paragraphs
             print(text)
@@ -42,15 +41,13 @@ def getParagraph(doc, i):
     '''
     Retrieves a specific paragraph from a Word document.
     Args:
-        doc (str): Path to the Word document.
+        doc: Word document object.
         i (int): Index of the paragraph to retrieve.
     Returns:
         str: Text of the specified paragraph.
     '''
-    # Open the document
-    document = Document(doc)
     
-    paragraph = document.paragraphs[i].text.strip()
+    paragraph = doc.paragraphs[i].text.strip()
     return paragraph
     
 def print_table(t):
@@ -74,14 +71,14 @@ def printTables(doc):
     '''
     Prints all tables in a Word document in a tabular format.
     Args:
-        doc (str): Path to the Word document.
+        doc: Word document object.
     Returns:
         None
     '''
     # Open the document
-    document = Document(doc)
+    
     # Iterate through the tables in the document and print them
-    for i in range(len(document.tables)):
+    for i in range(len(doc.tables)):
         # Convert the table to a DataFrame
         table = getTable(doc, i)
         # Print the DataFrame in a tabular format
@@ -91,14 +88,14 @@ def getTable(doc, i):
     '''
     Retrieves a specific table from a Word document and converts it to a DataFrame.
     Args:
-        doc (str): Path to the Word document.
+        doc: Word document object.
         i (int): Index of the table to retrieve.
     Returns:
         pd.DataFrame: DataFrame containing the table data.
     '''
     # Open the document
-    document = Document(doc)
-    table = document.tables[i]
+
+    table = doc.tables[i]
    
     # Initialize an empty list to store rows
     rows = []

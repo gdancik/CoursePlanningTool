@@ -72,8 +72,7 @@ def test_login() :
     user = User(username, username)
     login_user(user)
 
-    session['username'] = username
-    gs = gsEditor(f'{username}')
+    gs = get_gs_editor()
     gs.create_sheet()
 
     return jsonify(user = username)    
@@ -178,7 +177,7 @@ def generate():
 @app.route('/api/preview/', methods=['GET','POST'])
 @login_required
 def preview():
-    gs = gsEditor(session['username'])
+    gs = get_gs_editor()
     # Get params for the request and get course ID
     try:
         # data = request.get_json()

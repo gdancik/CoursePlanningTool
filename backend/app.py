@@ -5,7 +5,7 @@ from flask_session import Session
 
 
 from gs_editor import gsEditor
-import doc_editor as de
+from doc_editor import replaceTextInParagraph
 from flask_cors import CORS
 
 import pandas as pd
@@ -163,14 +163,16 @@ def generate():
 
 
 ''' Preview syllabus '''
-@app.route('/api/preview/', methods=['POST'])
+@app.route('/api/preview/', methods=['GET','POST'])
 @login_required
 def preview():
     gs = gsEditor(session['username'])
     # Get params for the request and get course ID
     try:
-        data = request.get_json()
-        course_id = data.get('course_id')
+        # data = request.get_json()
+        # course_id = data.get('course_id')
+        #test previewing from homepage
+        course_id = request.args['id']
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
@@ -184,7 +186,7 @@ def preview():
     path = "SyllabusTemplate.docx"
     doc = Document(path)
 
-    de.replaceTextInParagraph(doc, fr,['time2'])
+    replaceTextInParagraph(doc, fr,['time2'])
 
     # Save to a BytesIO stream
     file_stream = io.BytesIO()

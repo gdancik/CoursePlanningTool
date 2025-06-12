@@ -54,12 +54,28 @@ const CourseModal: React.FC <CourseModalProps> = ({
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("JSON to Send:", formData);
+
+        const courseId = `${formData["Course Code"]}-${formData["Course number"]}-${formData["Year"]}`;
+        const existingCourses = JSON.parse(localStorage.getItem("allCourses") || "{}");
+
+        if (existingCourses[courseId]) {
+            alert("Course already exists. Redirecting to existing course.");
+            localStorage.setItem("selectedCourse", courseId);
+            navigate("/overview");
+            return;
+        }
+
+        // Save new course
+        existingCourses[courseId] = formData;
+        localStorage.setItem("allCourses", JSON.stringify(existingCourses));
+        localStorage.setItem("selectedCourse", courseId);
+
+        console.log("New course created:", formData);
         onCreate(formData);
         onClose();
-
         navigate("/overview");
     };
+
     if(!isOpen) return null;
 
     return (

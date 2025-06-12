@@ -63,6 +63,10 @@ const BasicInfo = () =>{
     const handleBackClick = () => handleBack(navigate, location.pathname);
     const handleNextClick = () => handleNext(navigate, location.pathname);
 
+    const handlePreviewClick = () => {
+        handlePreview(formData);
+    };
+
     //Groups fields by section
     const groupedSections = fields.reduce((acc, field)=> {
         if(!acc[field.section]) acc[field.section] = [];
@@ -78,7 +82,7 @@ const BasicInfo = () =>{
                     onNext={handleNextClick}
                     onSave={handleSave}
                     onSaveAndExit={handleSaveAndExit}
-                    onPreview={handlePreview}
+                    onPreview={handlePreviewClick}
                    />
 
             {/* Main form for entering basic info */}

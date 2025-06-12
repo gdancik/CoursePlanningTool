@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_file, session, jsonify
 from docx import Document
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_session import Session
+from datetime import datetime
 
 from gs_editor import gsEditor
 from doc_editor import replaceTextInParagraph
@@ -204,11 +205,20 @@ def preview():
     doc.save(file_stream)
     file_stream.seek(0)
 
-   
+    current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    title =""
+
+    for i, j in fr.items():
+        if i == 'subj_code':
+            title +=str(j)
+        if i == 'crse_number':
+            title += str(j)
+            break
+    
     return send_file(
         file_stream,
         as_attachment=True,
-        download_name=f"CSC210_Fall_2025_current_time.docx",
+        download_name=f"{title}_Fall_2025_{current_datetime}.docx",
         mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
 

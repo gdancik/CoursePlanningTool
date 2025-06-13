@@ -234,7 +234,7 @@ def getValue():
 
         # Call the getValue function
         sheet = gs.getValue(course_id, columns,)
-
+        
         # Check if sheet is None
         if sheet is None:
             return jsonify({"error": "No data returned from getValue"}), 500
@@ -298,9 +298,6 @@ def getNewCourseId():
 def getSheet():
     gs = get_gs_editor()
     try:
-        print('requesting data')
-        data = request.get_json()
-        print(data) 
 
         # Call the read_sheet function
         sheet = gs.read_sheet()
@@ -310,7 +307,7 @@ def getSheet():
             return jsonify({"error": "No data returned from getSheet"}), 500
 
         # Return the result as JSON
-        return jsonify(sheet.to_dict(orient = 'records'))
+        return jsonify(sheet.to_dict(orient='records'))
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -10,7 +10,7 @@ import gspread
 import os
 import json
 import pandas as pd
-
+import numpy as np
 from typing import Dict, Any
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
@@ -65,7 +65,6 @@ class gsEditor:
         if message :
             print(message)
 
-
     def set_sheet_name(self, sheet_name: str="CPT_Data"):
         '''
         Sets the name of the Google Sheet to be created or managed.
@@ -89,7 +88,6 @@ class gsEditor:
             if f['name'] == self.sheet_name :
                 return True
         return False
-
 
     def create_sheet(self, email: str = None) -> str:
         '''
@@ -201,7 +199,7 @@ class gsEditor:
                 else:
                     print(f"Warning: Column '{column}' not found in the sheet.")
                     cells_dict[column] = None
-            return cells_dict
+            return self._convert_numpy_int64_to_int(cells_dict)
         #else we will return a single cell
         else:
             cell = row[columns].values[0]
@@ -304,7 +302,7 @@ class gsEditor:
 
         # Convert to DataFrame for nice formatting
         df = pd.DataFrame(records)
-        return df
+        return self._convert_numpy_int64_to_int(df)
 
     def delete_sheet(self):
         '''
@@ -355,3 +353,13 @@ class gsEditor:
                 print(f'Deleted file {f["name"]} with id {f["id"]}')
             except :
                 print(f'Could not delete file {f["name"]} with id {f["id"]}')
+    
+    def _convert_numpy_int64_to_int(self,obj):
+        if isinstance(obj, np.int64):
+            return int(obj)
+        elif isinstance(obj, dict):
+            return {key: self._convert_numpy_int64_to_int(value) for key, value in obj.items()}
+        elif isinstance(obj, list):
+            return [self._convert_numpy_int64_to_int(item) for item in obj]
+        else:
+            return obj

@@ -73,12 +73,14 @@ def test_login() :
     return jsonify(user = username)    
 
 @app.route('/api/logout/')
+@login_required
 def logout():
     logout_user()
     session.clear()
     return 'User is logged out, now you cannot access <a href = "/api/hello/">/api/hello/</a>' 
 
 @app.route('/profile/')
+@login_required
 def profile():
    if current_user.is_authenticated :
       return f'<p>ID: {current_user.id}</p><p>Name: {current_user.name}</p>'
@@ -95,7 +97,6 @@ def index() :
     <li> <a href = '/api/hello/'>Hello</a> </li>
     <li> <a href = '/profile/'>Profile</a> </li>
     <li> <a href = '/valid_inputs/'>Valid Inputs </a> </li>
-    <li> <a href = '/api/preview/?id=id_1'>Preview</a></li>
     </ul>
     '''
     return s
@@ -117,7 +118,6 @@ def test():
       return f'The number is : {number}'
 
     return 'To get a number, go to /get_session_number/'
-
 
 ''' 
 API calls should return a jsonified message.
@@ -141,7 +141,7 @@ def valid_inputs():
     return jsonify(cp.columns)
 
 ''' Generate a word document! '''
-@app.route('/generate/', methods=['GET', 'POST'])
+@app.route('/generate/', methods=['POST'])
 def generate():
 
     if request.method == 'POST':
@@ -168,17 +168,17 @@ def generate():
     return render_template('form.html')
 
 ''' Preview syllabus '''
-@app.route('/api/preview/', methods=['GET','POST'])
+@app.route('/api/preview/', methods=['POST'])
 @login_required
 def preview():
     gs = get_gs_editor()
     
     # Get params for the request and get course ID
     try:
-        # data = request.get_json()
-        # course_id = data.get('course_id')
-        #test previewing from homepage
-        course_id = request.args['id']
+        data = request.get_json()
+        course_id = data.get('course_id')
+        # #test previewing from homepage
+        # course_id = request.args['id']
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
@@ -210,11 +210,13 @@ def preview():
     title =""
     title += str(ns.get('subj_code', None))
     title += str(ns.get('crse_number',None))
+    title += "_" + str(ns.get('term',None))
+    title += "_" + current_datetime
     
     return send_file(
         file_stream,
         as_attachment=True,
-        download_name=f"{title}_Fall_2025_{current_datetime}.docx",
+        download_name=f"{title}.docx",
         mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
 
@@ -227,12 +229,10 @@ def getValue():
         data = request.get_json()
         course_id = data.get('course_id')
         columns = data.get('list_of_columns')
-        sheet_name = data.get('sheet_name')
         if not course_id or not columns:
             return jsonify({"error": "Missing one or more required fields"}), 400
 
         # Call the getValue function
-        gs.set_sheet_name(sheet_name)
         sheet = gs.getValue(course_id, columns,)
 
         # Check if sheet is None
@@ -251,17 +251,14 @@ def getValue():
 def updateValue():
     gs = get_gs_editor()
     try:
-        
         data = request.get_json()
         course_id = data.get('course_id')
-        columns = data.get('list_of_columns')
-        sheet_name = data.get('sheet_name')
+        columns = data.get('dict_of_columns_and_vals')
 
         if not course_id or not columns:
             return jsonify({"error": "Missing one or more required fields"}), 400
 
-        # Call the getValue function
-        gs.set_sheet_name(sheet_name)
+        # Call the updateValue function
         gs.updateValue(course_id, columns)
         return jsonify('Function called successfully')
     except Exception as e:
@@ -269,6 +266,7 @@ def updateValue():
 
 # TO DO: login should be required
 @app.route('/api/getCourses/', methods=['POST'])
+@login_required
 def getCourses():
         data = request.get_json()
         user_id = data.get('user')
@@ -284,6 +282,7 @@ def getCourses():
 
 #TO DO: login should be required
 @app.route('/api/getNewCourseId/', methods=['POST'])
+@login_required
 def getNewCourseId():
         data = request.get_json()
         user_id = data.get('user')
@@ -302,12 +301,8 @@ def getSheet():
         print('requesting data')
         data = request.get_json()
         print(data) 
-        sheet_name = data.get('sheet_name')
-        if not sheet_name:
-            return jsonify({"error": "sheet_name is required"}), 400
 
-        # Call the getValue function
-        gs.set_sheet_name(sheet_name)
+        # Call the read_sheet function
         sheet = gs.read_sheet()
 
         # Check if sheet is None
@@ -322,6 +317,7 @@ def getSheet():
 
 '''Calls the create_sheet function to share the current sheet'''
 @app.route('/api/shareSheet/', methods=['POST'])
+@login_required
 def shareSheet():
     gs = get_gs_editor()
     try:
@@ -359,7 +355,6 @@ def admin():
     '''
     return page
 
-
 def missing_params(param_list) :
     '''
     Returns True if any item in the param_list is None.
@@ -372,6 +367,7 @@ def missing_params(param_list) :
     return any(x == None for x in param_list)
 
 @app.route('/api/generateSchedule/', methods=['POST'])
+@login_required
 def generateSchedule():
     
     try:
@@ -393,7 +389,6 @@ def generateSchedule():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True)

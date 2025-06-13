@@ -2,9 +2,10 @@ from flask import Flask, render_template, request, send_file, session, jsonify
 from docx import Document
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_session import Session
+from datetime import datetime
 
 from gs_editor import gsEditor
-
+from doc_editor import replaceTextInParagraph, removeBlocks
 from flask_cors import CORS
 
 from course_calendar import create_schedule
@@ -32,11 +33,6 @@ CORS(app, resources = {r"/api/*":
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-app.config["SESSION_PERMANENT"] = True     # Sessions expire when the browser is closed
-app.config["SESSION_TYPE"] = "filesystem"     # Store session data in files
-
-Session(app)
 
 def get_gs_editor() :
     #return gsEditor('annie')
@@ -70,7 +66,7 @@ def test_login() :
         
     user = User(username, username)
     login_user(user)
-   
+
     gs = get_gs_editor()
     gs.create_sheet()
 
@@ -94,11 +90,12 @@ def index() :
     s = '''
     <h1> Course Planning Tool Homepage</h1>
     <ul>
-    <li> <a href = '/test_login/?user=annie&password=password'>Test Login</a> </li>
-    <li> <a href = '/logout/'>Logout</a> </li>
+    <li> <a href = '/api/test_login/?user=annie&password=password'>Test Login</a> </li>
+    <li> <a href = '/api/logout/'>Logout</a> </li>
     <li> <a href = '/api/hello/'>Hello</a> </li>
     <li> <a href = '/profile/'>Profile</a> </li>
     <li> <a href = '/valid_inputs/'>Valid Inputs </a> </li>
+    <li> <a href = '/api/preview/?id=id_1'>Preview</a></li>
     </ul>
     '''
     return s
@@ -170,41 +167,58 @@ def generate():
 
     return render_template('form.html')
 
-
 ''' Preview syllabus '''
-@app.route('/api/preview/', methods=['POST'])
+@app.route('/api/preview/', methods=['GET','POST'])
+@login_required
 def preview():
-
+    gs = get_gs_editor()
+    
+    # Get params for the request and get course ID
     try:
-        data = request.get_json()
-        name = data.get('name')
-        message = data.get('message')
-
+        # data = request.get_json()
+        # course_id = data.get('course_id')
+        #test previewing from homepage
+        course_id = request.args['id']
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-    #return jsonify({'name': name, 'message': message})
+    #Use course_id to pull values of syllabus from the googles sheet
+    try:
+        fr = gs.getValue(course_id, cp.columns)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+    # If the key ends is _syllabus then add it to our new dictonary
+    # then remove the _syllabus from the key
+    ns = {}
+    ns = {key[:-9]: value for key, value in fr.items() if key.endswith('_syllabus')}
 
-    # Create Word document in memory
-    doc = Document()
-    doc.add_heading(f"Message from {name}", 0)
-    doc.add_paragraph(message)
+    #call functions to replace
+    path = "SyllabusTemplate.docx"
+    doc = Document(path)
+
+    replaceTextInParagraph(doc, ns)
+    removeBlocks(doc,['time2'])
 
     # Save to a BytesIO stream
     file_stream = io.BytesIO()
     doc.save(file_stream)
     file_stream.seek(0)
 
+    current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M")
+
+    title =""
+    title += str(ns.get('subj_code', None))
+    title += str(ns.get('crse_number',None))
+    
     return send_file(
         file_stream,
         as_attachment=True,
-        download_name=f"message_from_{name}.docx",
+        download_name=f"{title}_Fall_2025_{current_datetime}.docx",
         mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
 
-
 '''Calls the getValue function from the gs_editor.py module'''
-
 @app.route('/api/getValue/', methods=['POST'])
 @login_required
 def getValue():
@@ -231,6 +245,7 @@ def getValue():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+'''Calls the updateValue function from the gs_editor.py module'''
 @app.route('/api/updateValue/', methods=['POST'])
 @login_required
 def updateValue():
@@ -278,8 +293,7 @@ def getNewCourseId():
 
         return jsonify(course_id = '4')
 
-
-'''Calls the getValue function from the gs_editor.py module'''
+'''Calls the read_sheet function from the gs_editor.py module'''
 @app.route('/api/getSheet/', methods=['POST'])
 @login_required
 def getSheet():

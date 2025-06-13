@@ -1,58 +1,47 @@
 from docx import Document
 import pandas as pd
 import tabulate
+from python_docx_replace import docx_replace, docx_blocks
 
 #TODO Need to change to be more algorithmically efficient
 #Currently it is O(n^2) because it iterates through the paragraphs for each key in the dictionary
 
-def replaceTextInParagraph(doc, fr_dict,new_file_name=None):
+def replaceTextInParagraph(doc, fr_dict):
     '''
-    Replaces placeholders in a Word document with corresponding values from a dictionary.
+    Replaces text in a Word document based on a dictionary of replacements.
     Args:
-        doc (str): Path to the Word document.
-        fr_dict (dict): Dictionary containing placeholders as keys and their replacements as values.
-        new_file_name (str, optional): If provided, saves the modified document with this name. Defaults to None. If new_file_name is None, the original document is overwritten.
+        doc: Word document object.
+        fr_dict (dict): Dictionary containing text to be replaced as keys and their replacements as values.
+        block_ls (list, optional): List of blocks to be removed. Defaults to None.
+    '''
+
+    docx_replace(doc, **fr_dict)
+        
+def removeBlocks(doc, block_ls):
+    '''
+    Removes specified blocks from a Word document.
+    Args:
+        doc: Word document object.
+        block_ls (list): List of blocks to be removed.
     Returns:
         None
     '''
-    # Open the document
-    document = Document(doc)
-    # Iterate through the dictionary
-    for key, val in fr_dict.items():
-        # Iterate through the paragraphs in the document
-        for paragraph in document.paragraphs:
-            #strip the paragraph text to remove leading/trailing whitespace
-            text = paragraph.text.strip()
-            # Check if the key is in the paragraph text and store the index
-            placeholder_index = text.find(key)
-            if placeholder_index >= 0 :
-                #get the end index of the placeholder
-                placeholder_end_index = placeholder_index + len(key) -1
-                # Replace the placeholder with the value
-                # print(f'start of word: {placeholder_index}. end of word: {placeholder_end_index}')
-                text = text[:placeholder_index] + val + text[placeholder_end_index + 1:]
-                # Update the paragraph text
-                paragraph.text = text
     
-    if new_file_name:
-        # Save the modified document with the new file name
-        document.save(new_file_name)
-    else:
-        # Overwrite the original document
-        doc.save(doc)
-
+    for i in block_ls:
+        options = {i: False}
+    docx_blocks(doc, **options)
+ 
 def printParagraphs(doc):
     '''
     Prints all paragraphs in a Word document.
     Args:
-        doc (str): Path to the Word document.
+        doc: Word document object.
     Returns:
         None
     '''
-    # Open the document
-    document = Document(doc)
+   
     # Iterate through the paragraphs in the document and print them
-    for paragraph in document.paragraphs:
+    for paragraph in doc.paragraphs:
         text = paragraph.text.strip()
         if text:  # Only print non-empty paragraphs
             print(text)
@@ -61,15 +50,13 @@ def getParagraph(doc, i):
     '''
     Retrieves a specific paragraph from a Word document.
     Args:
-        doc (str): Path to the Word document.
+        doc: Word document object.
         i (int): Index of the paragraph to retrieve.
     Returns:
         str: Text of the specified paragraph.
     '''
-    # Open the document
-    document = Document(doc)
     
-    paragraph = document.paragraphs[i].text.strip()
+    paragraph = doc.paragraphs[i].text.strip()
     return paragraph
     
 def print_table(t):
@@ -93,14 +80,14 @@ def printTables(doc):
     '''
     Prints all tables in a Word document in a tabular format.
     Args:
-        doc (str): Path to the Word document.
+        doc: Word document object.
     Returns:
         None
     '''
     # Open the document
-    document = Document(doc)
+    
     # Iterate through the tables in the document and print them
-    for i in range(len(document.tables)):
+    for i in range(len(doc.tables)):
         # Convert the table to a DataFrame
         table = getTable(doc, i)
         # Print the DataFrame in a tabular format
@@ -110,14 +97,14 @@ def getTable(doc, i):
     '''
     Retrieves a specific table from a Word document and converts it to a DataFrame.
     Args:
-        doc (str): Path to the Word document.
+        doc: Word document object.
         i (int): Index of the table to retrieve.
     Returns:
         pd.DataFrame: DataFrame containing the table data.
     '''
     # Open the document
-    document = Document(doc)
-    table = document.tables[i]
+
+    table = doc.tables[i]
    
     # Initialize an empty list to store rows
     rows = []

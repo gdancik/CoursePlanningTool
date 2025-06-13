@@ -6,7 +6,7 @@ from python_docx_replace import docx_replace, docx_blocks
 #TODO Need to change to be more algorithmically efficient
 #Currently it is O(n^2) because it iterates through the paragraphs for each key in the dictionary
 
-def replaceTextInParagraph(doc, fr_dict,block_ls=None):
+def replaceTextInParagraph(doc, fr_dict):
     '''
     Replaces text in a Word document based on a dictionary of replacements.
     Args:
@@ -16,11 +16,20 @@ def replaceTextInParagraph(doc, fr_dict,block_ls=None):
     '''
 
     docx_replace(doc, **fr_dict)
+        
+def removeBlocks(doc, block_ls):
+    '''
+    Removes specified blocks from a Word document.
+    Args:
+        doc: Word document object.
+        block_ls (list): List of blocks to be removed.
+    Returns:
+        None
+    '''
     
-    if block_ls:
-        for i in block_ls:
-            options = {i: False}
-        docx_blocks(doc, **options)
+    for i in block_ls:
+        options = {i: False}
+    docx_blocks(doc, **options)
  
 def printParagraphs(doc):
     '''

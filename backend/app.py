@@ -5,7 +5,7 @@ from flask_session import Session
 from datetime import datetime
 
 from gs_editor import gsEditor
-from doc_editor import replaceTextInParagraph
+from doc_editor import replaceTextInParagraph, removeBlocks
 from flask_cors import CORS
 
 from course_calendar import create_schedule
@@ -33,11 +33,6 @@ CORS(app, resources = {r"/api/*":
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-app.config["SESSION_PERMANENT"] = True     # Sessions expire when the browser is closed
-app.config["SESSION_TYPE"] = "filesystem"     # Store session data in files
-
-Session(app)
 
 def get_gs_editor() :
     #return gsEditor('annie')
@@ -172,12 +167,12 @@ def generate():
 
     return render_template('form.html')
 
-
 ''' Preview syllabus '''
 @app.route('/api/preview/', methods=['GET','POST'])
 @login_required
 def preview():
     gs = get_gs_editor()
+    
     # Get params for the request and get course ID
     try:
         # data = request.get_json()
@@ -193,11 +188,17 @@ def preview():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+    # If the key ends is _syllabus then add it to our new dictonary
+    # then remove the _syllabus from the key
+    ns = {}
+    ns = {key[:-9]: value for key, value in fr.items() if key.endswith('_syllabus')}
+
     #call functions to replace
     path = "SyllabusTemplate.docx"
     doc = Document(path)
 
-    replaceTextInParagraph(doc, fr,['time2'])
+    replaceTextInParagraph(doc, ns)
+    removeBlocks(doc,['time2'])
 
     # Save to a BytesIO stream
     file_stream = io.BytesIO()
@@ -205,14 +206,10 @@ def preview():
     file_stream.seek(0)
 
     current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    title =""
 
-    for i, j in fr.items():
-        if i == 'subj_code':
-            title +=str(j)
-        if i == 'crse_number':
-            title += str(j)
-            break
+    title =""
+    title += str(ns.get('subj_code', None))
+    title += str(ns.get('crse_number',None))
     
     return send_file(
         file_stream,
@@ -222,7 +219,6 @@ def preview():
     )
 
 '''Calls the getValue function from the gs_editor.py module'''
-
 @app.route('/api/getValue/', methods=['POST'])
 @login_required
 def getValue():

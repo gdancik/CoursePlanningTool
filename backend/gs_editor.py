@@ -11,11 +11,37 @@ import os
 import json
 import pandas as pd
 import numpy as np
+import time
+import random
+
 from typing import Dict, Any
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
 import course_planning as cp
+
+
+def exponential_backoff(request_func):
+    '''
+    Decorator to apply exponential backoff to request_func, for use with the gs_editor class
+    '''
+    def f(self, *args, **kwargs) :
+        
+        wait = 1  # initial wait (in seconds)  
+        for ntries in range(self.api_config['max_tries']) :        
+            try :
+                r = request_func(self, *args)
+                return r
+            except Exception as err :
+                if err.error.get('code') == 429 :
+                    sleep_time = wait + random.random()
+                    print(f'waiting for {sleep_time:.2f} seconds')                                       
+                    time.sleep(sleep_time)
+                    wait = wait * 2    
+                    if wait > self.api_config['maximum_backoff'] :
+                        wait = self.api_config['maximum_backoff']
+        return r
+    return f
 
 class gsEditor:
     '''
@@ -27,7 +53,7 @@ class gsEditor:
         client (gspread.Client): The Google Sheets client used to interact with the API.
     '''
 
-    def __init__(self, sheet_name: str="CPT_Data"):
+    def __init__(self, sheet_name: str):
         '''
         Initializes the gsEditor with a specified sheet name.
         Args:
@@ -37,7 +63,14 @@ class gsEditor:
         self.id = None
         self.client = self.create_gs_client()
         self.api_count = 0
+        
+        self.api_config = {}
+        self.set_api_config()
 
+    def set_api_config(self, max_tries = 6, maximum_backoff = 32) :
+        '''Setter for api_config max_tries and maximum_backoff'''
+        self.api_config['max_tries'] = max_tries
+        self.api_config['maximum_backoff'] = maximum_backoff
 
     @staticmethod
     def create_gs_client():
@@ -77,6 +110,7 @@ class gsEditor:
             self.sheet_name = sheet_name
             self.id = None
 
+    @exponential_backoff
     def sheet_exists(self) :
         '''
         Returns True if the current 'sheet_name' exists
@@ -89,6 +123,7 @@ class gsEditor:
                 return True
         return False
 
+    @exponential_backoff
     def create_sheet(self, email: str = None) -> str:
         '''
         Creates a new Google Sheet with the specified name and optionally shares it with a given email.
@@ -105,18 +140,21 @@ class gsEditor:
             # Create a new spreadsheet
             self.increase_api_count('API call: create')
             spreadsheet = client.create(self.sheet_name)            
-
-            # Add course id columns to the spreadsheet
-            self.add_headers(spreadsheet.id)
-       
+            
             # Print the name and ID of the created spreadsheet
             print(f'Created Spreadsheet with name: {spreadsheet.title} and ID: {spreadsheet.id}')
 
-        else :
-            self.increase_api_count('API call: open')
-            spreadsheet = client.open(self.sheet_name)
-            print(f'Spreadsheet {spreadsheet.title} already exists and will not be created')
+        
+        self.increase_api_count('API call: open')
+        spreadsheet = client.open(self.sheet_name)
+        print(f'Spreadsheet {spreadsheet.title} already exists and will not be created')
 
+
+        # Add course id columns to the spreadsheet -- we do this here in case we exceed rate limit after creating the sheet
+        df  = self.read_sheet()
+        if df.shape[0] == 0 :
+            self.add_headers(spreadsheet.id)
+       
         if email:
             # Share the spreadsheet with a specific email
             self.increase_api_count('API call: share')
@@ -127,6 +165,7 @@ class gsEditor:
         self.id = spreadsheet.id
         return spreadsheet.id
 
+    @exponential_backoff
     def add_headers(self, spreadsheet_id):
         '''
         Adds headers to the first row of the specified Google Sheet.
@@ -155,6 +194,7 @@ class gsEditor:
 
         print(f'Headers added to the spreadsheet with ID: {spreadsheet_id}')
 
+    @exponential_backoff
     def getValue(self, course_id: str,columns: str) -> str:
         '''
         Retrieves a value from the Google Sheet based on the course ID and specified column.
@@ -180,6 +220,11 @@ class gsEditor:
 
         #Make a pandas data from sheet
         df = pd.DataFrame(data)
+        
+        # df is empty if there is only a header row; handle this case
+        if df.shape[0] == 0:
+            print(f"Course ID '{course_id}' not found.")
+            return None
 
         #Find row with the course id
         row = df[df['course_id'] == course_id]
@@ -205,6 +250,7 @@ class gsEditor:
             cell = row[columns].values[0]
             return cell
 
+    @exponential_backoff
     def updateValue(self, course_id: str, values_dict: Dict[str, Any]):
         '''
         Updates a value in the Google Sheet for a given course ID. If the course ID exists, it updates the existing row;
@@ -279,6 +325,7 @@ class gsEditor:
         print(f"Successfully processed values for course ID '{course_id}'.")
 
     #Used for testing purposes
+    @exponential_backoff
     def read_sheet(self):
         '''
         Reads the entire Google Sheet and returns it as a pandas DataFrame.
@@ -304,6 +351,7 @@ class gsEditor:
         df = pd.DataFrame(records)
         return self._convert_numpy_int64_to_int(df)
 
+    @exponential_backoff
     def delete_sheet(self):
         '''
         Deletes the Google Sheet with the specified name.
@@ -339,6 +387,7 @@ class gsEditor:
         # Print confirmation message
         print(f'Spreadsheet with Name: {self.sheet_name} and ID: {spreadsheet_id} deleted successfully.')
 
+    @exponential_backoff
     def delete_all_sheets(self):
         '''
         Deletes all sheets owned by the client 

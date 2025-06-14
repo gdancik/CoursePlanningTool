@@ -26,13 +26,13 @@ def testSpring() :
 def testInvalidYear() :
     try: 
         url = 'https://www.easternct.edu/academics/academic-calendar/index.html'
-        target = 'FAIL 2025'
+        target = 'FFFF 2025'
 
         soup = cc.get_target_webpage(url, target)
         df = cc.get_dates(soup, target)
     except Exception as err :
         print(err)
-        assert str(err) == 'Term FAIL 2025 not found in current or upcoming urls'
+        assert str(err) == 'Term FFFF 2025 not found in current or upcoming urls'
 
 def testGenerateSchedule() :
     start_date = datetime.strptime('08/02/2014', "%m/%d/%Y").date()
@@ -42,7 +42,12 @@ def testGenerateSchedule() :
     df = cc.generate_schedule(start_date, end_date, 'MWF')
 
     assert list(df['Day']) == ['Monday', 'Wednesday', 'Friday']
-    assert list(df['Date']) == ['08/04/2014', '08/06/2014', '08/08/2014']
+   
+    assert(list(df['Date']) == 
+       [datetime.date(datetime(2014, 8, 4)),
+        datetime.date(datetime(2014, 8, 6)),
+        datetime.date(datetime(2014, 8, 8))
+    ])
 
     # we should only have 1 Tuesday
     df = cc.generate_schedule(start_date, end_date, 'T')

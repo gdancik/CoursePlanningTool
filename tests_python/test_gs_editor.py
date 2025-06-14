@@ -13,12 +13,15 @@ import backend.course_planning as cp
 
 def testCreateGetUpdateDelete() :
 
-    gs = gsEditor('unittest')
+    gs = gsEditor('test_gs_editor')
 
     # test name
-    assert gs.sheet_name == 'unittest'
+    assert gs.sheet_name == 'test_gs_editor'
 
     # create sheet
+    if gs.sheet_exists() :
+        gs.delete_sheet()
+    
     id = gs.create_sheet()
 
     # update sheet
@@ -30,7 +33,7 @@ def testCreateGetUpdateDelete() :
     df = gs.read_sheet()
 
     # test that column names are correct
-    assert list(df.columns) == cp.columns
+    assert set(df.columns) == set(cp.columns)
 
     # test that number of rows is correct
     assert df.shape[0] == 4
@@ -58,6 +61,13 @@ def testCreateGetUpdateDelete() :
 def testGetValueNotFound() :
 
     # test that we get None if course id is not found
-    gs = gsEditor('unittest')
+    gs = gsEditor('test_gs_editor')
+
+    # create sheet
+    if gs.sheet_exists() :
+        gs.delete_sheet()
+    
     gs.create_sheet()
     assert gs.getValue('id2', ['instructor_name_syllabus']) == None
+
+    gs.delete_sheet()

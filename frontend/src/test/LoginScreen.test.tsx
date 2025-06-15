@@ -68,7 +68,7 @@ describe("LoginScreen", () => {
 
         await waitFor(
             () => {
-                expect(mockedNavigate).toHaveBeenCalledWith("/overview");
+                expect(mockedNavigate).toHaveBeenCalledWith("/course-page");
             },
             { timeout: 3500 }
         );

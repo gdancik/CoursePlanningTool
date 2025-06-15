@@ -60,9 +60,6 @@ details[open] .section-arrow {
     flex: 0 0 300px;
 }
 
-.form-row.meeting-days {
-    flex: 1 1 0px;
-}
 
 .form-row.meeting-time {
     flex: 0 0 300px;

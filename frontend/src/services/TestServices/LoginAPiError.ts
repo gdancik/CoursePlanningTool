@@ -18,7 +18,7 @@ export const login = async (user: string, password: string): Promise<{ user: str
 export const logout = async (): Promise<void> => {
     try {
         const response = await fetch(
-            "https://gdancik.pythonanywhere.com/test_logout/",
+            "https://gdancik.pythonanywhere.com/api/test_logout/",
             {
                 method: "GET",
                 credentials: "include",

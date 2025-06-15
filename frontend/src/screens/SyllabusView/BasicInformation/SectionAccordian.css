@@ -61,7 +61,9 @@ details[open] .section-arrow {
 }
 
 
-.form-row.meeting-time {
+.form-row.meeting-time,
+.form-row.additional-meeting-time
+{
     flex: 0 0 300px;
 }
 
@@ -103,11 +105,13 @@ details[open] .section-arrow {
     min-height: 3rem;
 }
 
-.form-row.meeting-days .checkbox-options{
+.form-row.meeting-days .checkbox-options
+{
     display: flex;
     gap: 0.5rem;
     flex-direction: row;
 }
+
 
 /* Checkbox-specific styling */
 .form-row input[type="checkbox"] {
@@ -150,13 +154,16 @@ details[open] .section-arrow {
 }
 
 /* Each checkbox-label pair horizontally aligned */
-.form-row.meeting-days .checkbox-options label {
+.form-row.meeting-days .checkbox-options label,
+.form-row.additional-meeting-days .checkbox-options label
+{
     display: flex !important;
     align-items: center;
     gap: 0.2rem;
     margin: 0;
     font-weight: normal;
 }
+
 
 /* Label styling */
 .form-row label {

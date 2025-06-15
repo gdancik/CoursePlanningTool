@@ -6,6 +6,8 @@ export const fieldMappings: Record<string, string> = {
     "Course Title": "crse_title",
     "Meeting Time": "times1",
     "Meeting Days": "days1",
+    "Additional Meeting Time": "times2",
+    "Additional Meeting Days": "days2",
     "Classroom Location": "location1",
     "Semester": "term",
     "Year": "year",

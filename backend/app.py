@@ -72,6 +72,29 @@ def test_login() :
 
     return jsonify(user = username)    
 
+@app.route('/api/test_data/', methods = ['GET'])
+@login_required
+def test_data() :
+    '''
+    Generates data for course_id = 'test'
+    Data has format column_name + "1"
+    '''
+
+    try :
+        gs = get_gs_editor()
+        gs.create_sheet()
+
+        course_id = 'test'
+
+        d = {col: col + '1' for col in cp.columns if col != 'course_id'}
+
+        gs.updateValue(course_id, d)
+    
+    except Exception as e :
+        return jsonify({"error": str(e)}), 400
+        
+    return jsonify(course_id = course_id, status = 'success'), 200    
+
 @app.route('/api/logout/')
 @login_required
 def logout():

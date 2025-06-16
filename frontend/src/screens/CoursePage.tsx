@@ -12,6 +12,8 @@ const CoursePage = () =>{
     const handleCreateCourse = (data: Record<string, string>) => {
         console.log("CourseData submitted form modal :", data);
         localStorage.setItem("newCourseData", JSON.stringify(data));
+
+
         //TODO: Set up backend or save local
     }
     return(

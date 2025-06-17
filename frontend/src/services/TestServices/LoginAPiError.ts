@@ -1,30 +1,27 @@
-// /src/services/loginApiError.ts
-export const login = async (user: string, password: string): Promise<{ user: string }> => {
-    const response = await fetch(
-        `https://gdancik.pythonanywhere.com/api/test_login/?user=${user}&password=${password}`
-    );
+import api from "../../api/axios"; // Use your Axios instance
 
-    if (response.status === 200) {
-        return response.json();
-    } else if (response.status === 401) {
-        throw new Error("Invalid password");
-    } else if (response.status === 400) {
-        throw new Error("Invalid format or missing parameters");
-    } else {
-        throw new Error("Unknown error occurred");
+export const login = async (user: string, password: string): Promise<{ user: string }> => {
+    try {
+        const response = await api.get(
+            `/test_login/?user=${encodeURIComponent(user)}&password=${encodeURIComponent(password)}`
+        );
+
+        return response.data;
+    } catch (err: any) {
+        if (err.response?.status === 401) {
+            throw new Error("Invalid password");
+        } else if (err.response?.status === 400) {
+            throw new Error("Invalid format or missing parameters");
+        } else {
+            throw new Error("Unknown error occurred");
+        }
     }
 };
 
 export const logout = async (): Promise<void> => {
     try {
-        const response = await fetch(
-            "https://gdancik.pythonanywhere.com/api/test_logout/",
-            {
-                method: "GET",
-                credentials: "include",
-            }
-        );
-        if (!response.ok) {
+        const response = await api.get("/logout/");
+        if (response.status !== 200) {
             throw new Error("Failed to log out");
         }
     } catch (err) {

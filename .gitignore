@@ -1,5 +1,8 @@
 /backend/__pycache__
-/venv
+/backend/venv
 
 
 /backend/experiments
+frontend/.env
+
+backend/service_account.json

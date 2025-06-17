@@ -41,26 +41,42 @@ def extractFromAccordian(soup):
             headers_and_content[header] = content 
     return headers_and_content
 
-def getStatements(url):
+def getStatements(url,selected_statements = None):
     '''
     Gets the syllabus statements from the given URL. by searching for the accordion classes then finding the rows and extracting the header and content.
     Args:
         url (str): The URL of the webpage to scrape.
+        selected_statements (list, optional): A list of strings to filter the statements by their headers. If None, all statements are returned.
     Returns:
-        dict: A dictionary where keys are headers and values are the corresponding content from the accordions.
+        dict: A dictionary where keys are headers and values are lists of content for the corresponding statements.
     '''
     soup = get_webpage(url)
-    return extractFromAccordian(soup)
 
-def create_syllabus_statment_page(doc):
+    #get all statements
+    all_statements = extractFromAccordian(soup)
+
+    #Filter only the statements selected (Will have to search header for string)
+    statments = all_statements
+    if selected_statements:
+        statments = {}
+        for i in selected_statements:
+            for key, val in all_statements.items():
+
+                if re.search(i, str(key)):
+                    statments[key] = val
+    #return selected statements
+    return statments
+
+def create_syllabus_statment_page(doc,selected_statements=None):
     '''
     Creates a syllabus statement page in the given Word document by fetching statements from a the syllabus statement website and adding them to the document.
     Args:
         doc (Document): The Word document object to which the syllabus statements will be added.
+        selected_statements (list, optional): A list of strings to filter the statements by their headers. If None, all statements are returned.
     Returns:
         None
     '''
-    x = getStatements('https://www.easternct.edu/center-for-teaching-learning-and-assessment/course-design-resources/syllabus-statements.html')
+    x = getStatements('https://www.easternct.edu/center-for-teaching-learning-and-assessment/course-design-resources/syllabus-statements.html',selected_statements)
     for header, content in x.items():
         header_string = str(header)
         content_string = str(list(content)[0])

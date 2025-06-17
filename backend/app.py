@@ -68,7 +68,7 @@ def test_login() :
     login_user(user)
 
     gs = get_gs_editor()
-    gs.create_sheet(email="christowindow@gmail.com")
+    gs.create_sheet()
 
     return jsonify(user = username)    
 
@@ -83,7 +83,6 @@ def test_data() :
     try :
         gs = get_gs_editor()
         gs.create_sheet()
-
 
         course_id = 'test'
 

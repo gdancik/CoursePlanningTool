@@ -82,15 +82,15 @@ class gsEditor:
                 'https://www.googleapis.com/auth/drive']
 
     # Get the JSON string from the environment variable
-        ## json_str = os.getenv('GS_CREDENTIALS_JSON')
+        json_str = os.getenv('GS_CREDENTIALS_JSON')
         
         #Set credentials from the JSON string
-        ## credentials_dict: Dict[str, Any] = json.loads(json_str)
+        credentials_dict: Dict[str, Any] = json.loads(json_str)
 
         # Create a gspread client using the credentials dictionary
-        # client = gspread.service_account_from_dict(credentials_dict)
+        client = gspread.service_account_from_dict(credentials_dict)
 
-        return gspread.service_account(filename="service_account.json")
+        return client
     
     def increase_api_count(self, message = None) :
         '''increases api_count by 1 and prints an optional message'''
@@ -379,8 +379,7 @@ class gsEditor:
         #Set credentials from the JSON string
         credentials_dict: Dict[str, Any] = json.loads(json_str)
         # Authenticate and create the service
-        ## credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scopes=SCOPE)
-        credentials = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scopes=SCOPE)
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scopes=SCOPE)
         drive_service = build('drive', 'v3', credentials=credentials)
 
         # Delete the specified spreadsheet

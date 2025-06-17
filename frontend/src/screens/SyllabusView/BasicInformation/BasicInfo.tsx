@@ -7,8 +7,8 @@ import {useNavigate, useLocation} from "react-router-dom";
 import {FaExclamationTriangle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
 import SafeIcon from "../../../utils/ComponentWrapper";
-import {saveJsonFile} from "../../../utils/ButtonLogic";
-import {handleBack, handleNext, handlePreview} from "../../../utils/ButtonLogic";
+import {handleBack, handleNext, saveJsonFile} from "../../../utils/ButtonLogic";
+import {saveToBackend, logoutUser, previewSyllabus} from "../../../services/TestServices/syllabusService";
 import SectionAccordion from "./SectionAccordion";
 import {jsonFieldsMapper} from "../../../utils/jsonFieldsMapper";
 import './BasicInfo.css'
@@ -52,20 +52,56 @@ const BasicInfo = () =>{
     };
 
     // Button action handlers
-    const handleSave = () => {
+    const handleSave = async () => {
         const mappedData = jsonFieldsMapper(formData);
-        saveJsonFile(mappedData, "form_data.json")
+        const course_id = mappedData["course_id"] || "test";
+
+        try{
+            await saveToBackend(course_id, mappedData);
+            saveJsonFile(mappedData, "form_data.json");
+            alert("Saved to backend.")
+        } catch (err){
+            console.error("Save Error: ", err);
+            alert("Failed To Save.")
+        }
     };
-    const handleSaveAndExit = () => {
+    const handleSaveAndExit = async () => {
         const mappedData = jsonFieldsMapper(formData);
-        saveJsonFile(mappedData, "form_data_exit.json")
-    }
+        const course_id = mappedData["course_id"] || "test";
+
+        try {
+            await saveToBackend(course_id, mappedData);
+            saveJsonFile(mappedData, "form_data_exit.json");
+            await logoutUser();
+            navigate("/login");
+        } catch (err) {
+            console.error("Save & Exit error:", err);
+            alert("Failed to save and exit.");
+        }
+    };
+
     const handleBackClick = () => handleBack(navigate, location.pathname);
     const handleNextClick = () => handleNext(navigate, location.pathname);
 
-    const handlePreviewClick = () => {
-        handlePreview(formData);
+    const handlePreviewClick = async () => {
+        const mappedData = jsonFieldsMapper(formData);
+        const course_id = mappedData["course_id"] || "test";
+
+        try {
+            await saveToBackend(course_id, mappedData);
+            const blob = await previewSyllabus(course_id);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "syllabus_preview.docx";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error("Preview failed:", err);
+            alert("Failed to generate preview.");
+        }
     };
+
 
     //Groups fields by section
     const groupedSections = fields.reduce((acc, field)=> {

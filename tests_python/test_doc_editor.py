@@ -12,7 +12,7 @@ import backend.doc_editor as de
 from docx import Document
 import pandas as pd
 
-document = 'TestFiles/(Test)Doc1.docx'
+document = 'tests_python/TestFiles/(Test)Doc1.docx'
 doc= Document(document)
 def test_replaceTextInParagraph():
     test_dict ={

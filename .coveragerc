@@ -4,7 +4,9 @@ branch = False
 source = 
   backend.app
   backend.course_planning
-  backend.gs_editor 
+  backend.gs_editor
+  backend.doc_editor
+  backend.syllabus_fetcher
 
 [report]
 show_missing = True

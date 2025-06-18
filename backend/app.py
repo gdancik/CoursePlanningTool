@@ -195,7 +195,7 @@ def generate():
 @login_required
 def preview():
     gs = get_gs_editor()
-    
+   
     # Get params for the request and get course ID
     try:
         data = request.get_json()
@@ -204,6 +204,8 @@ def preview():
         # course_id = request.args['id']
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+    # return jsonify({"result": course_id}), 200
 
     #Use course_id to pull values of syllabus from the googles sheet
     try:
@@ -216,12 +218,27 @@ def preview():
     ns = {}
     ns = {key[:-9]: value for key, value in fr.items() if key.endswith('_syllabus')}
 
-    #call functions to replace
-    path = "SyllabusTemplate.docx"
-    doc = Document(path)
+    #return jsonify({"result": "created ns"}), 200
 
+    # try local file, otherwise try full path for PythonAnywhere
+    try :
+        path = "SyllabusTemplate.docx"
+        doc = Document(path)
+    except :
+
+        try :
+            path = "/home/gdancik/CoursePlanningTool/backend/SyllabusTemplate.docx"
+            doc = Document(path)
+        except :
+            return jsonify({"error": "could not open Syllabus Template"}), 500
+
+    
+    #return jsonify({"result": "created doc"}), 200
+
+    #call functions to replace
     replaceTextInParagraph(doc, ns)
     removeBlocks(doc,['time2'])
+    
 
     # Save to a BytesIO stream
     file_stream = io.BytesIO()

@@ -49,7 +49,13 @@ const SectionAccordion: React.FC<Props> = ({
                         <div key={rowKey} className="form-row">
 
                             {/* Render each field in the row */}
-                            {rowFields.map((field, index) => (
+                            {rowFields
+                                .filter((field) => {
+                                    const isConditional = field.row === 1 && field.layoutRow === 3;
+                                    const valueTrigger = formData["Additional Meeting Times"] || "";
+                                    return !isConditional || valueTrigger.includes("Yes");
+                                })
+                                .map((field, index) => (
                                 <FormRow
                                     key={index}                             // Unique key for the row
                                     field={field}                           // Field data

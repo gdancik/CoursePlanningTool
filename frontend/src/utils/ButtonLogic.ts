@@ -50,12 +50,14 @@ export const handleNext = (navigate: NavigateFunction, currentPath: string) => {
     }
 };
 
+
+
+
 /**
  * Handles preview logic. Currently just logs to the console.
  */
-export const handlePreview = () => {
-    console.log("Preview clicked!"); // Placeholder for future preview functionality
-};
+
+//TODO: Preview
 
 /**
  * Saves the provided data as a JSON file for download.

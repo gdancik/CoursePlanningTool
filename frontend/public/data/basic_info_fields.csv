@@ -5,8 +5,11 @@ Course Information,1,1,Course Title,text,Enter course title,true,
 Course Information,1,2,Meeting Days,checkbox-group,,true,M|T|W|R|F|
 Course Information,1,2,Meeting Time,text,Enter meeting time,true,
 Course Information,1,2,Classroom Location,text,Enter classroom location,true,
-Course Information,1,3,Semester,select,,true,"Fall,Winter,Spring,Summer"
-Course Information,1,3,Year,text,,true,"2025,2026"
+Course Information,1,2,Additional Meeting Times,checkbox-group,,false,Yes
+Course Information,1,3,Additional Meeting Days,checkbox-group,,true,M|T|W|R|F|
+Course Information,1,3,Additional Meeting Time,text,Enter meeting time,true,
+Course Information,1,4,Semester,select,,true,"Fall,Winter,Spring,Summer"
+Course Information,1,4,Year,text,,true,"2025,2026"
 Instructor Information,2,1,Instructor Name,text,Enter instructor name,true,
 Instructor Information,2,1,Instructor Title,text,Enter instructor title,true,
 Instructor Information,2,2,Email,email,Enter email,true,

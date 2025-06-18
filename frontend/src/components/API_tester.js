@@ -36,7 +36,7 @@ export function AutoTestLogin(props) {
     };
 
     getData();
-  }, []);
+  }, [login_url]);
 
   return (
     <div>
@@ -75,7 +75,7 @@ export function AutoPostRequest(props) {
     };
 
     postData();
-  }, []);
+  }, [url, body]);
 
   return (
     <div>

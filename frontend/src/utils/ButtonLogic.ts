@@ -56,7 +56,9 @@ export const handleNext = (navigate: NavigateFunction, currentPath: string) => {
 /**
  * Handles preview logic. Currently just logs to the console.
  */
+
 //TODO: Preview
+
 /**
  * Saves the provided data as a JSON file for download.
  * @param data - The data to be saved

@@ -12,33 +12,34 @@ import backend.doc_editor as de
 from docx import Document
 import pandas as pd
 
-doc = 'TestFiles/(Test)Doc1.docx'
-
+document = 'tests_python/TestFiles/(Test)Doc1.docx'
+doc= Document(document)
 def test_replaceTextInParagraph():
     test_dict ={
-        '<<Name>>': 'Fetty',
-        '<<Age>>': '30',
-        '<<Hobby>>': 'cooking'
+        'Name': 'Fetty',
+        'Age': '30',
+        'Hobby': 'cooking'
                 }
-    de.replaceTextInParagraph(doc,test_dict,'TestFiles/(Test)Doc1_modified.docx')
-    modified_doc = Document('TestFiles/(Test)Doc1_modified.docx')
+    de.replaceTextInParagraph(doc,test_dict)
+    modified_doc = doc
     para = ""
     for paragraph in modified_doc.paragraphs:
         text = paragraph.text.strip()
         if text:
             para += text + "\n"
-    assert para == 'Hello my name is Fetty, I am 30 years old.\nMy favorite hobby is cooking.\n'
+    assert para == 'Hello my name is Fetty, I am 30 years old.\nMy favorite hobby is cooking.\n<test>Test block</test>\n'
     
 def test_printParagraphs(capsys):
-    
+    doc= Document(document)
     de.printParagraphs(doc)
     captured = capsys.readouterr()
-    assert captured.out == 'Hello my name is <<Name>>, I am <<Age>> years old.\nMy favorite hobby is <<Hobby>>.\n'
+    assert captured.out == 'Hello my name is ${Name}, I am ${Age} years old.\nMy favorite hobby is ${Hobby}.\n<test>Test block</test>\n'
 
 def test_getParagraph():
+    doc= Document(document)
     para = de.getParagraph(doc, 0)
     para = para.strip()
-    assert para == 'Hello my name is <<Name>>, I am <<Age>> years old.'
+    assert para == 'Hello my name is ${Name}, I am ${Age} years old.'
 
 def test_printTables(capsys):
     de.printTables(doc)
@@ -67,3 +68,13 @@ def test_getTable():
     y = de.getTable(doc,0)
     pd.testing.assert_frame_equal(y, expected_df)
     
+def test_removeBlocks():
+    doc= Document(document)
+    de.removeBlocks(doc,['test'])
+    para = ""
+    for paragraph in doc.paragraphs:
+        text = paragraph.text.strip()
+        if text:
+            para += text + "\n"
+    assert para == 'Hello my name is ${Name}, I am ${Age} years old.\nMy favorite hobby is ${Hobby}.\n'
+    pass

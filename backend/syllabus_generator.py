@@ -109,3 +109,24 @@ def _strip_whitespace_from_div(html_content):
     stripped_html = re.sub(r'(<\/p>)\s+', r'\1', stripped_html)  
     stripped_html = re.sub(r'(<\/div class="content">)\s+', r'\1', stripped_html)
     return stripped_html
+
+def add_table(doc, table_list:list, header = True):
+    '''
+    Adds a table to the given Word document using the provided list of lists.
+    Args:
+        doc (Document): The Word document object to which the table will be added.
+        table_list (list of lists): A list of lists representing the table data.
+        header (bool, optional): If True, the first row of table_list is treated as the header row. Defaults to True.
+    Returns:
+        None
+    '''
+    table = doc.add_table(rows=len(table_list), cols=len(table_list[0]),style='Table Grid')
+    if header == True:
+        for i, row in enumerate(table_list):
+            for j, cell_data in enumerate(row):
+                table.cell(i, j).text = str(cell_data)
+    else:
+        for i, row in enumerate(table_list[1:],start = 1):
+            for j, cell_data in enumerate(row):
+                table.cell(i, j).text = str(cell_data)
+

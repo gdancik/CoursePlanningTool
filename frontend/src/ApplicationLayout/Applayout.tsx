@@ -1,7 +1,7 @@
 import React from "react";
-import HeaderBanner from "./components/HeaderBanner";
-import SyllabusNav from "../navigation/SyllabusNav";
-import ButtonBar from "./components/ButtonBar";
+import HeaderBanner from "./components/Header/HeaderBanner";
+import SyllabusNav from "./components/Navigation/SyllabusNav";
+import ButtonBar from "./components/Button/ButtonBar";
 
 
 interface AppLayoutProps {

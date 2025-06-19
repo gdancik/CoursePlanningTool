@@ -1,5 +1,5 @@
 // Import the function to be tested
-import { saveJsonFile } from "../utils/ButtonLogic";
+import { saveJsonFile } from "../components/Button/ButtonLogic";
 
 test("creates a JSON file for download", () => {
     // Test data to be saved

@@ -1,4 +1,4 @@
-jest.mock('../api/axios', () => ({
+jest.mock('../services/axios', () => ({
     default: {
         get: jest.fn(),
         post: jest.fn(),

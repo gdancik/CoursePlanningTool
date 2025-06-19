@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLogin } from "../hooks/useLogin";
-import ecsuBlack from '../assets/images/ecsu-logo-black-stacked-alt.png';
+import { useLogin } from "../../hooks/useLogin";
+import ecsuBlack from '../../assets/images/ecsu-logo-black-stacked-alt.png';
 import "./LoginScreen.css";
 
 const LoginScreen: React.FC = () => {

@@ -7,7 +7,7 @@ import {useNavigate, useLocation} from "react-router-dom";
 import {FaExclamationTriangle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
 import SafeIcon from "../../../utils/ComponentWrapper";
-import {handleBack, handleNext, saveJsonFile} from "../../../utils/ButtonLogic";
+import {handleBack, handleNext, saveJsonFile} from "../../../components/Button/ButtonLogic";
 import {saveToBackend, logoutUser, previewSyllabus} from "../../../services/TestServices/syllabusService";
 import SectionAccordion from "./SectionAccordion";
 import {jsonFieldsMapper} from "../../../utils/jsonFieldsMapper";

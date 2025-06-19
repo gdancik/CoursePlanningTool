@@ -1,7 +1,7 @@
 //New Course Modal.tsx
 
 import React, {useState, useEffect } from 'react';
-import courseFields from '../courseFields.json'
+import courseFields from '../../courseFields.json'
 import './CourseModal.css'
 import {useNavigate} from "react-router-dom";
 

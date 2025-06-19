@@ -1,4 +1,4 @@
-import api from "../../api/axios";
+import api from "../axios";
 
 // Login with query params
 export async function login(user: string, password: string) {

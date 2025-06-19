@@ -1,4 +1,4 @@
-import api from '../../api/axios';
+import api from '../axios';
 
 export async function saveToBackend (course_id: string, values: Record<string,string>) {
     return api.post("/updateValue/", {

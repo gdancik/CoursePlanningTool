@@ -1,4 +1,4 @@
-import api from "../../api/axios"; // Use your Axios instance
+import api from "../axios"; // Use your Axios instance
 
 export const login = async (user: string, password: string): Promise<{ user: string }> => {
     try {

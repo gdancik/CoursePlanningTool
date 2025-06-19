@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import StandardHeader from "../components/standardHeader";
-import ReusableButton from "../components/ReusableButton";
+import StandardHeader from "../../components/Header/standardHeader";
+import ReusableButton from "../../components/Button/ReusableButton";
 import {FaPlus} from "react-icons/fa";
-import SafeIcon from "../utils/ComponentWrapper";
-import CourseModal from "../components/NewCourseModal";
+import SafeIcon from "../../utils/ComponentWrapper";
+import CourseModal from "../../components/CourseModal/NewCourseModal";
 import './CoursePage.css'
 
 const CoursePage = () =>{

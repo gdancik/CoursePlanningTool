@@ -4,7 +4,7 @@ import {Routes, Route} from 'react-router-dom';
 
 //Test Endpoint Imports
 import MainPage from '../screens/testAPI/Home';
-import LoginScreen from '../screens/LoginScreen';
+import LoginScreen from '../screens/Login/LoginScreen';
 import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
 import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
@@ -19,15 +19,14 @@ import HIPs from "../screens/SyllabusView/HIPs";
 import CourseSchedule from "../screens/SyllabusView/CourseSchedule";
 import LearningResources from "../screens/SyllabusView/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";
-import CoursePage from "../screens/CoursePage";
+import CoursePage from "../screens/Home/CoursePage";
 
 const AppRoutes = () => {
     return(
         <main>
             <Routes>
                 {/*TEST API ENDPOINTS*/}
-                <Route path = "/" element = {<MainPage/>} />
-                <Route path="/login" element={<LoginScreen />} />
+                <Route path="/" element={<LoginScreen />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
 

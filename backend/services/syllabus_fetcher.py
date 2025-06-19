@@ -62,7 +62,7 @@ def getStatements(url,selected_statements = None):
         for i in selected_statements:
             for key, val in all_statements.items():
 
-                if i in str(key):
+                if re.search(i,str(key)):
                     statments[key] = val
     #return selected statements
     return statments

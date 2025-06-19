@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
 
 import pytest
-import backend.doc_editor as de
+import backend.services.doc_editor as de
 from docx import Document
 import pandas as pd
 

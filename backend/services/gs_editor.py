@@ -18,15 +18,14 @@ from typing import Dict, Any
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
-import course_planning as cp
-
+import backend.services.course_planning as cp
 
 def exponential_backoff(request_func):
     '''
     Decorator to apply exponential backoff to request_func, for use with the gs_editor class
     '''
     def f(self, *args, **kwargs) :
-        
+        r = None
         wait = 1  # initial wait (in seconds)  
         for ntries in range(self.api_config['max_tries']) :        
             try :

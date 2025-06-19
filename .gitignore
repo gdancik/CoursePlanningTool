@@ -1,7 +1,7 @@
 /backend/__pycache__
 /backend/venv
 /venv
-
+/frontend/node_modules
 
 /backend/experiments
 frontend/.env

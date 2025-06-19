@@ -2,14 +2,14 @@ import sys
 import os
 
 # Add the parent directory to the Python path -- required for direct testing of this file
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Add the backend directory to the Python path -- required for local imports in module 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
 
 import pytest
-from backend.gs_editor import gsEditor
-import backend.course_planning as cp
+from backend.services.gs_editor import gsEditor
+import backend.services.course_planning as cp
 
 def testCreateGetUpdateDelete() :
 

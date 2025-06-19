@@ -11,8 +11,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 # Add the backend directory to the Python path -- required for local imports in app 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
 
-from backend.app import app 
-from backend.gs_editor import gsEditor
+from backend import app 
+from backend.services.gs_editor import gsEditor
 
 # fixture sets up client once for all tests in this file
 @pytest.fixture(scope="module")

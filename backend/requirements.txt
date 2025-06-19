@@ -14,4 +14,3 @@ flask-cors
 flask_session
 python_docx_replace
 htmldocx
-re

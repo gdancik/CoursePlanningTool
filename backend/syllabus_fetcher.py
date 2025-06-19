@@ -67,16 +67,17 @@ def getStatements(url,selected_statements = None):
     #return selected statements
     return statments
 
-def create_syllabus_statment_page(doc,selected_statements=None):
+def create_syllabus_statment_page(doc,url,selected_statements=None):
     '''
     Creates a syllabus statement page in the given Word document by fetching statements from a the syllabus statement website and adding them to the document.
     Args:
         doc (Document): The Word document object to which the syllabus statements will be added.
+        url (str): The URL of the webpage to scrape for syllabus statements.
         selected_statements (list, optional): A list of strings to filter the statements by their headers. If None, all statements are returned.
     Returns:
         None
     '''
-    x = getStatements('https://www.easternct.edu/center-for-teaching-learning-and-assessment/course-design-resources/syllabus-statements.html',selected_statements)
+    x = getStatements(url,selected_statements)
     for header, content in x.items():
         header_string = str(header)
         content_string = str(list(content)[0])

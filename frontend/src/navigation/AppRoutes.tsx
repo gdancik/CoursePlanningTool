@@ -1,6 +1,9 @@
 //This file contains all routes needed for the Course Planning Tool
 
 import {Routes, Route} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import ErrorModal from "../components/ErrorModal/ErrorModal";
+import {setErrorModalHandler as setGlobalModal} from "../utils/errorHandler";
 
 //Test Endpoint Imports
 import MainPage from '../screens/testAPI/Home';
@@ -22,8 +25,16 @@ import Checklist from "../screens/SyllabusView/Checklist";
 import CoursePage from "../screens/Home/CoursePage";
 
 const AppRoutes = () => {
+    const [modalMessage, setModalMessage] = useState<string | null>(null);
+
+    useEffect(() => {
+        setGlobalModal((msg: string) => setModalMessage(msg));
+    }, []);
     return(
         <main>
+            {modalMessage && (
+                <ErrorModal message={modalMessage} onClose={() => setModalMessage(null)}/>
+            )}
             <Routes>
                 {/*TEST API ENDPOINTS*/}
                 <Route path="/" element={<LoginScreen />} />
@@ -54,7 +65,7 @@ const AppRoutes = () => {
                 <Route path = "learning-outcomes" element={<LearningOutcomes/>}/>
                 <Route path = "hips" element={<HIPs/>}/>
                 <Route path = "learning-resources" element={<LearningResources/>} />
-                <Route path ="assessment" element={<Assessment/>} />
+                <Route path = "assessment" element={<Assessment/>} />
                 <Route path = "course-schedule" element={<CourseSchedule/>}/>
                 <Route path = "checklist" element={<Checklist/>}/>
             </Routes>

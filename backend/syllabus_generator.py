@@ -2,9 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 from docx import Document
 from htmldocx import HtmlToDocx
-import re
+from docx.shared import RGBColor
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn 
+
+import re
 #%%
 def get_webpage(url) :
     ''' 
@@ -207,4 +209,5 @@ def change_table_header_font(table):
         for paragraph in cell.paragraphs:
             run = paragraph.runs[0]# if paragraph.runs else paragraph.add_run()
             run.bold = True
+            run.font.color.rgb = RGBColor(32, 44, 92)
             paragraph.alignment = 1  # Center align the header text

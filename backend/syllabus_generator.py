@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 from docx import Document
 from htmldocx import HtmlToDocx
+from docx.shared import RGBColor
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn 
+
 import re
 #%%
 def get_webpage(url) :
@@ -109,3 +113,101 @@ def _strip_whitespace_from_div(html_content):
     stripped_html = re.sub(r'(<\/p>)\s+', r'\1', stripped_html)  
     stripped_html = re.sub(r'(<\/div class="content">)\s+', r'\1', stripped_html)
     return stripped_html
+
+def add_table_to_doc(doc, table_list:list, header = True):
+    '''
+    Adds a table to the given Word document using the provided list of lists.
+    Args:
+        doc (Document): The Word document object to which the table will be added.
+        table_list (list of lists): A list of lists representing the table data.
+        header (bool, optional): If True, the first row of table_list is treated as the header row. Defaults to True.
+    Returns:
+        
+    '''
+    table = doc.add_table(rows=len(table_list), cols=len(table_list[0]),style = "Table Grid")
+    
+    if header == True:
+        for i, row in enumerate(table_list):
+            for j, cell_data in enumerate(row):
+                table.cell(i, j).text = str(cell_data)
+    else:
+        for i, row in enumerate(table_list[1:],start = 1):
+            for j, cell_data in enumerate(row):
+                table.cell(i, j).text = str(cell_data)
+    return table
+    
+def center_table_text(table):
+    '''
+    Centers the text in all cells of a specified table in the given Word document.
+    Args:
+        doc (Document): The Word document object containing the table.
+        table (Table): The table object whose cell text will be centered.
+    Returns:
+        None
+    '''
+    for row in table.rows:
+        for cell in row.cells:
+            cell.paragraphs[0].alignment = 1  # 1 corresponds to center alignment
+
+def style_table_borders(table):
+    '''
+    Styles the borders of a specified table in the given Word document.
+    Args:
+        doc (Document): The Word document object containing the table.
+        table (Table): The table object whose borders will be styled.
+    Returns:
+        None
+    '''
+    for row in table.rows:
+            for cell in row.cells:
+                tcPr = cell._element.tcPr  # Get the table cell properties element
+                if tcPr is None:
+                    tcPr = OxmlElement('w:tcPr')
+                    cell._element.append(tcPr)
+
+            
+                tcBorders = tcPr.find(qn('w:tcBorders'))
+                if tcBorders is None:
+                    tcBorders = OxmlElement('w:tcBorders')
+                    tcPr.append(tcBorders)
+
+                #Couldn't get the loop for this working so I just ran it for every cell - Sencere
+                top_border = tcBorders.find(qn('w:top'))
+                if top_border is None:
+                    top_border = OxmlElement('w:top')
+                    tcBorders.append(top_border)
+                top_border.set(qn('w:val'), 'nil')
+
+                #only set first column's left border to nil
+                if cell._element.getparent().index(cell._element) == 0:
+                    # Set the left border style to 'nil' (no border)
+                    left_border = tcBorders.find(qn('w:left'))
+                    if left_border is None:
+                        left_border = OxmlElement('w:left')
+                        tcBorders.append(left_border)
+                    left_border.set(qn('w:val'), 'nil')
+
+                #only set last column's right border to nil
+                if cell._element.getparent().index(cell._element) == len(row.cells) - 1:
+                    # Set the right border style to 'nil' (no border)
+                    right_border = tcBorders.find(qn('w:right'))
+                    if right_border is None:
+                        right_border = OxmlElement('w:right')
+                        tcBorders.append(right_border)
+                    right_border.set(qn('w:val'), 'nil')
+
+def change_table_header_font(table):
+    '''
+    Changes the font of the header row in a specified table in the given Word document.
+    Args:
+        table (Table): The table object whose header font will be changed.
+    Returns:
+        None
+    '''
+    header_row = table.rows[0]
+    for cell in header_row.cells:
+        for paragraph in cell.paragraphs:
+            run = paragraph.runs[0]# if paragraph.runs else paragraph.add_run()
+            run.bold = True
+            run.font.color.rgb = RGBColor(32, 44, 92)
+            paragraph.alignment = 1  # Center align the header text

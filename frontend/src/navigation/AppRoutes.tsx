@@ -11,6 +11,9 @@ import LoginScreen from '../screens/Login/LoginScreen';
 import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
 import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
+import TestPage from "../screens/testAPI/TestPage"
+import ScheduleTest from "../components/courseSchedule"
+import GradeTable from "../components/gradeTable"
 
 //Application Endpoints
 import Overview from "../screens/SyllabusView/Overview/Overview";
@@ -46,6 +49,9 @@ const AppRoutes = () => {
                 <Route path="/" element={<LoginScreen />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
+                <Route path = "/test-page" element={<TestPage/>}/>
+                <Route path ="/courseSchedule" element={<ScheduleTest/>}/>
+                <Route path= "grade-table" element={<GradeTable/>} />
 
                 <Route path="/auto_login"
                        element = {<AutoTestLogin

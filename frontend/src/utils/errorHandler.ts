@@ -39,6 +39,7 @@ export const handleApiError= (error: unknown):void =>{
             break;
         case 500:
             showErrorModal({message:"Server Error: Please try again later.", code: 500});
+            break;
         default:
             showErrorModal({ message: `Unexpected error occurred.`, code: status });
     }

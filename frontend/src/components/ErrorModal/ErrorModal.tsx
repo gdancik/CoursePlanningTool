@@ -1,4 +1,6 @@
 import React, {useEffect} from "react";
+import './ErrorModal.css'
+import ErrorIcon from "../../assets/images/Error-Message.png"
 
 type Props ={
     message: string;
@@ -17,7 +19,7 @@ const ErrorModal: React.FC<Props> = ({message, errorCode, onClose}) => {
             <div className="error-modal">
                 <button className="close-button" onClick={onClose}>x</button>
                     <img
-                        src="../../assets/images/Error-Message.png"
+                        src={ErrorIcon}
                         alt="Error Icon"
                         className="error-icon"
                     />

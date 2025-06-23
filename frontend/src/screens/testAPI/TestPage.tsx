@@ -12,7 +12,7 @@ const TestPage: React.FC = () => {
 
     return (
         <div style={{ padding: "2rem" }}>
-            <h1> Component Test Page</h1>
+            <h1>Component Test Page</h1>
             <ul style={{ lineHeight: "2rem", listStyle: "square" }}>
                 <li><Link to="/courseSchedule">Course Schedule Page</Link></li>
                 <li><Link to="/grade-table">Grade Table Page</Link></li>

@@ -25,15 +25,21 @@ import Checklist from "../screens/SyllabusView/Checklist";
 import CoursePage from "../screens/Home/CoursePage";
 
 const AppRoutes = () => {
-    const [modalMessage, setModalMessage] = useState<string | null>(null);
+    const [modalMessage, setModalMessage] = useState<{ message: string; code?: number } | null>(null);
 
     useEffect(() => {
-        setGlobalModal((msg: string) => setModalMessage(msg));
+        setGlobalModal((error: { message: string; code?: number; }) => {
+            setModalMessage(error)
+        });
     }, []);
     return(
         <main>
             {modalMessage && (
-                <ErrorModal message={modalMessage} onClose={() => setModalMessage(null)}/>
+                <ErrorModal
+                    message={modalMessage.message}
+                    errorCode={modalMessage.code}
+                    onClose={() => setModalMessage(null)}
+                />
             )}
             <Routes>
                 {/*TEST API ENDPOINTS*/}

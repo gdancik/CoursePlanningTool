@@ -2,7 +2,7 @@
 /backend/venv
 /venv
 /frontend/node_modules
-/node_modules
+node_modules/
 /backend/experiments
 frontend/.env
 

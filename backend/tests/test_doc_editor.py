@@ -2,17 +2,17 @@ import sys
 import os
 
 # Add the parent directory to the Python path -- required for direct testing of this file
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Add the backend directory to the Python path -- required for local imports in module 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
 
 import pytest
 import backend.services.doc_editor as de
 from docx import Document
 import pandas as pd
 
-document = 'tests_python/TestFiles/(Test)Doc1.docx'
+document = 'backend/tests/TestFiles/(Test)Doc1.docx'
 doc= Document(document)
 def test_replaceTextInParagraph():
     test_dict ={

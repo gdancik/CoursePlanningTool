@@ -32,6 +32,8 @@ def exponential_backoff(request_func):
                 r = request_func(self, *args)
                 return r
             except Exception as err :
+                r = err
+                print(r)
                 if err.error.get('code') == 429 :
                     sleep_time = wait + random.random()
                     print(f'waiting for {sleep_time:.2f} seconds')                                       

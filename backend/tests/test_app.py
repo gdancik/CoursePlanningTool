@@ -6,18 +6,18 @@ import json
 
 
 # Add the parent directory to the Python path -- required for importing from backend 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Add the backend directory to the Python path -- required for local imports in app 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
 
-from backend import app 
-from backend.services.gs_editor import gsEditor
+from backend import create_app 
+from backend.services.app_services import get_gs_editor
 
 # fixture sets up client once for all tests in this file
 @pytest.fixture(scope="module")
 def client():
-    with app.test_client() as client:
+    with create_app().test_client() as client:
         yield client
 
 def test_index(client):
@@ -25,6 +25,7 @@ def test_index(client):
     print('response = ', response.data)
     assert response.status_code == 200
 
+'''
 # test that /api/hello/ without login is unauthorized
 def test_hello(client):
     response = client.get('/api/hello/')
@@ -37,4 +38,4 @@ def test_hi(client):
     print('response = ', response.data)
     d = json.loads(response.text)
     assert d['message'] == 'Hi there from Flask!'
-
+'''

@@ -414,3 +414,17 @@ class gsEditor:
             return [self._convert_numpy_int64_to_int(item) for item in obj]
         else:
             return obj
+
+    @staticmethod 
+    def generate_test_data(sheet_name, n) :                
+        '''
+        Generates 'n' records for given sheet_name
+        '''
+
+        # TO DO: may need to update to handle created_at and last_edited
+
+        gs = gsEditor(sheet_name)
+        for i in range(1,n+1) :
+            course_id = 'test' + str(i)
+            d = {col: col + str(i) for col in cp.columns if col != 'course_id'}
+            gs.updateValue(course_id, d)

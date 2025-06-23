@@ -29,3 +29,10 @@ export const logoutUser = async () => {
         url: "/logout/",
     })();
 };
+
+export const getNewCourseId = async (): Promise<string | null> => {
+    return await createApiCaller<string>({
+        method: "GET",
+        url: "/getNewCourseId",
+    })();
+};

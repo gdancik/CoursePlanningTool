@@ -26,6 +26,7 @@ import CourseSchedule from "../screens/SyllabusView/CourseSchedule";
 import LearningResources from "../screens/SyllabusView/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";
 import CoursePage from "../screens/Home/CoursePage";
+import NotFoundPage from "../screens/NotFoundPage";
 
 const AppRoutes = () => {
     const [modalMessage, setModalMessage] = useState<{ message: string; code?: number } | null>(null);
@@ -80,6 +81,7 @@ const AppRoutes = () => {
                 <Route path = "assessment" element={<Assessment/>} />
                 <Route path = "course-schedule" element={<CourseSchedule/>}/>
                 <Route path = "checklist" element={<Checklist/>}/>
+                <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
         </main>
     );

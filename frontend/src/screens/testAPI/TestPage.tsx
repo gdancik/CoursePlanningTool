@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { showErrorModal } from "../../utils/errorHandler";
 
 const TestPage: React.FC = () => {
-    const triggerTestError = () => {
+    const triggerError = (code: number) => {
         showErrorModal({
-            message: "This is a test Error",
-            code: 999,
+            message: `Simulated error for status ${code}`,
+            code,
         });
     };
 
@@ -18,9 +18,14 @@ const TestPage: React.FC = () => {
                 <li><Link to="/grade-table">Grade Table Page</Link></li>
             </ul>
 
-            <button onClick={triggerTestError} style={{ marginTop: "2rem", padding: "0.5rem 1rem" }}>
-                 Trigger Error Modal
-            </button>
+            <div style={{ marginTop: "2rem" }}>
+                <h2>Trigger Error Modals</h2>
+                <button onClick={() => triggerError(400)}>Trigger 400 (Bad Request)</button><br/>
+                <button onClick={() => triggerError(401)}>Trigger 401 (Unauthorized)</button><br/>
+                <button onClick={() => triggerError(404)}>Trigger 404 (Not Found)</button><br/>
+                <button onClick={() => triggerError(500)}>Trigger 500 (Internal Server Error)</button><br/>
+                <button onClick={() => triggerError(999)}>Trigger Unknown Error</button>
+            </div>
         </div>
     );
 };

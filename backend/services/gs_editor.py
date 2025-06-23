@@ -32,7 +32,8 @@ def exponential_backoff(request_func):
                 r = request_func(self, *args)
                 return r
             except Exception as err :
-                r = err
+                if ntries == self.api_config['max_tries'] - 1 :
+                   raise err
                 print(r)
                 if err.error.get('code') == 429 :
                     sleep_time = wait + random.random()
@@ -41,7 +42,7 @@ def exponential_backoff(request_func):
                     wait = wait * 2    
                     if wait > self.api_config['maximum_backoff'] :
                         wait = self.api_config['maximum_backoff']
-        return r
+        return Exception('Error in return from exponential_backoff') 
     return f
 
 class gsEditor:

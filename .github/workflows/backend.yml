@@ -6,12 +6,10 @@ name: backend
 on:
   push:
     paths: 
-      - backend/*
-      - tests_python/*    
+      - backend/**
   pull_request:
     paths: 
-      - backend/*
-      - tests_python/*    
+      - backend/**
   workflow_dispatch:
       
 permissions:
@@ -43,10 +41,10 @@ jobs:
       env:
         GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
       run: |
-        pytest tests_python
+        pytest backend/tests/
     - name: Show code coverage
       env:
         GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
       run: |
-        pytest --cov --cov-config=.coveragerc --cov-report=term-missing tests_python       
+        pytest --cov --cov-config=.coveragerc --cov-report=term-missing backend/tests      
         # pytest --cov --cov-config=.coveragerc --cov-branch --cov-report=html --cov-report=term-missing tests_python 

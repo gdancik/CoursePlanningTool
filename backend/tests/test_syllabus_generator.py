@@ -8,7 +8,7 @@ import os
 #sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
 
 import pytest
-import backend.services.syllabus_fetcher as sf
+import backend.services.syllabus_generator as sf
 from docx import Document
 
 syllabus_webpage = 'https://www.easternct.edu/center-for-teaching-learning-and-assessment/syllabus-statements/index.html'

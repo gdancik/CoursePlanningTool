@@ -8,7 +8,6 @@ from backend.api import api_bp
 from backend.auth import auth_bp
 from backend.admin import admin_bp
 
-
 from backend.config import Config
 
 ###############################################

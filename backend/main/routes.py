@@ -10,7 +10,7 @@ def index() :
     <li> <a href = '/api/logout/'>Logout</a> </li>
     <li> <a href = '/api/hello/'>Hello</a> </li>
     <li> <a href = '/profile/'>Profile</a> </li>
-    <li> <a href = '/valid_inputs/'>Valid Inputs </a> </li>
+    <li> <a href = '/api/valid_inputs/'>Valid Inputs </a> </li>
     <li> <a href = '/admin/'>admin </a> </li>
     </ul>
     '''

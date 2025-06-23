@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from docx import Document
 from htmldocx import HtmlToDocx
-from docx.shared import RGBColor
+from docx.shared import RGBColor, Pt
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn 
 
@@ -125,15 +125,14 @@ def add_table_to_doc(doc, table_list:list, header = True):
         
     '''
     table = doc.add_table(rows=len(table_list), cols=len(table_list[0]),style = "Table Grid")
-    
+
+    for i, row in enumerate(table_list):
+        for j, cell_data in enumerate(row):
+            table.cell(i, j).text = str(cell_data)
+
     if header == True:
-        for i, row in enumerate(table_list):
-            for j, cell_data in enumerate(row):
-                table.cell(i, j).text = str(cell_data)
-    else:
-        for i, row in enumerate(table_list[1:],start = 1):
-            for j, cell_data in enumerate(row):
-                table.cell(i, j).text = str(cell_data)
+        style_table_header(table)
+   
     return table
     
 def center_table_text(table):
@@ -196,7 +195,23 @@ def style_table_borders(table):
                         tcBorders.append(right_border)
                     right_border.set(qn('w:val'), 'nil')
 
-def change_table_header_font(table):
+def style_table_text(table):
+    '''
+    Changes the font, size, and color of all text in a specified table in the given Word document.
+    Args:
+        table (Table): The table object whose font will be changed.
+    Returns:
+        None
+    '''
+    for row in table.rows:
+        for cell in row.cells:
+            for paragraph in cell.paragraphs:
+                run = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+                run.font.size = Pt(11)
+                run.font.name = 'Calibri'
+                run.font.color.rgb = RGBColor(0, 0, 0)
+                
+def style_table_header(table):
     '''
     Changes the font of the header row in a specified table in the given Word document.
     Args:
@@ -207,7 +222,30 @@ def change_table_header_font(table):
     header_row = table.rows[0]
     for cell in header_row.cells:
         for paragraph in cell.paragraphs:
-            run = paragraph.runs[0]# if paragraph.runs else paragraph.add_run()
+            run = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
             run.bold = True
             run.font.color.rgb = RGBColor(32, 44, 92)
-            paragraph.alignment = 1  # Center align the header text
+            run.font.size = Pt(12)
+            # paragraph.alignment = 1  # Center align the header text
+
+def add_styled_table(doc, table_list:list, header = True, center = False):
+    '''
+    Adds a styled table to the given Word document using the provided list of lists.
+    Args:
+        doc (Document): The Word document object to which the table will be added.  
+        table_list (list of lists): A list of lists representing the table data.
+        header (bool, optional): If True, the first row of table_list is treated as the header row. Defaults to True.
+        center (bool, optional): If True, the text in the table will be centered. Defaults to False.
+    Returns:
+        table (Table): The created and styled table object.
+    '''
+    # Make table
+    table = add_table_to_doc(doc, table_list, header)
+    # Style table
+    style_table_borders(table)
+    if center == True:
+        center_table_text(table)
+    style_table_text(table)
+    if header == True:
+        style_table_header(table)
+    return table

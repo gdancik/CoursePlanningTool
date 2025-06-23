@@ -246,6 +246,5 @@ def add_styled_table(doc, table_list:list, header = True, center = False):
     if center == True:
         center_table_text(table)
     style_table_text(table)
-    style_table_header(table)
 
     return table

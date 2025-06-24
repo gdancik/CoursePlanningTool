@@ -4,11 +4,8 @@ import sys
 import os
 import json
 
-# Add the parent directory to the Python path -- required for importing from backend 
-#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-# Add the backend directory to the Python path -- required for local imports in app 
-#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
+# Add the grandparent directory to the Python path -- required for importing from backend 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
 
 from backend import create_app
 from backend.services.app_services import get_gs_editor

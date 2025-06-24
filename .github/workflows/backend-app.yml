@@ -1,7 +1,9 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: backend
+# tests and coverage for backend app
+
+name: backend-app
 
 on:
   push:
@@ -12,11 +14,14 @@ on:
       - backend/**
   workflow_dispatch:
       
+concurrency:
+  group: backend
+
 permissions:
   contents: read
 
 jobs:
-  test-backend:
+  test:
 
     runs-on: ubuntu-latest
 
@@ -41,10 +46,10 @@ jobs:
       env:
         GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
       run: |
-        pytest backend/tests/
+        pytest backend/tests/app/
     - name: Show code coverage
       env:
         GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
       run: |
-        pytest --cov --cov-config=.coveragerc --cov-report=term-missing backend/tests      
+        pytest --cov=backend/ --cov-report=term-missing --cov-report=term-missing backend/tests/app/      
         # pytest --cov --cov-config=.coveragerc --cov-branch --cov-report=html --cov-report=term-missing tests_python 

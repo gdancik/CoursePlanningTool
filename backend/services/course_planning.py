@@ -14,6 +14,6 @@ columns = [ 'course_id',
     'office_hours_syllabus',
     'instructor_title_syllabus',
     'form_of_address_syllabus',
-    'time_created',
-    'time_last_edited',
+    'created_at',
+    'last_edited',
 ]

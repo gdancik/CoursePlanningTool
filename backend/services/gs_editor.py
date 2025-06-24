@@ -14,11 +14,12 @@ import numpy as np
 import time
 import random
 
+from datetime import datetime
 from typing import Dict, Any
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
-import backend.services.course_planning as cp
+import  backend.services.course_planning as cp
 
 def exponential_backoff(request_func):
     '''
@@ -323,7 +324,6 @@ class gsEditor:
                 ordered_new_row.append(value)
             # Append the new row to the sheet
             sheet.append_row(ordered_new_row)
-
         print(f"Successfully processed values for course ID '{course_id}'.")
 
     #Used for testing purposes
@@ -428,3 +428,71 @@ class gsEditor:
             course_id = 'test' + str(i)
             d = {col: col + str(i) for col in cp.columns if col != 'course_id'}
             gs.updateValue(course_id, d)
+
+#TODO Add  doc strings
+    def updateTimeCreated(self, course_id):
+        current_time = datetime.now()
+        formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+        self.updateValue(course_id,{'time_created':f'{formatted_current_time}'})
+
+    def updateTimeLastEdited(self, course_id):
+        current_time = datetime.now()
+        formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+        self.updateValue(course_id,{'time_last_edited':f'{formatted_current_time}'})
+
+    def createNewCourse(self, values_dict: Dict[str, Any]):
+        # Create a Google Sheets client
+        client = self.client
+        # Open the spreadsheet by name
+        self.increase_api_count('API call: open')
+        spreadsheet = client.open(self.sheet_name)
+
+        # Select the first sheet
+        self.increase_api_count('API call: get_worksheet')
+        sheet = spreadsheet.get_worksheet(0) 
+
+        # Get all records to check for existing course_id and column headers
+        self.increase_api_count('API call: get all records')
+        data = sheet.get_all_records()
+        df = pd.DataFrame(data)
+
+        # Get the current column headers from the sheet
+        sheet_headers = sheet.row_values(1) 
+
+        # Initialize new row with None for all *known* sheet headers
+        new_row_values = {}  
+        for col in sheet_headers:
+            new_row_values[col] = None
+
+        # Generate new course id by incrementing from last course_id
+        if df.empty or len(df) == 1 and df["course_id"].iloc[0] == df.columns[0]:
+            # If the DataFrame is empty or only has headers, start with a default course_id
+            new_num = 1  
+        else:
+            last_course_id = df["course_id"].iloc[-1]
+            new_num = int(last_course_id[1:])+1
+        new_course_id = f'c{new_num}'
+        
+        # Set the course_id in the new row
+        new_row_values['course_id'] = new_course_id
+
+        # Add the provided values from values_dict
+        for column, new_val in values_dict.items():
+            if column in sheet_headers:
+                new_row_values[column] = new_val
+            else:
+                print(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'.")
+
+        # Ensure values are in the correct order for appending
+        ordered_new_row = []  # Initialize an empty list to store the ordered values
+        for header in sheet_headers:
+            # Append the value from new_row_values or None if not present
+            # This ensures that the new row matches the order of the headers
+            value = new_row_values.get(header, None)
+            ordered_new_row.append(value)
+        # Append the new row to the sheet
+        sheet.append_row(ordered_new_row)
+        print(f"Successfully processed values for course ID '{new_course_id}'.")
+        return new_course_id
+        
+        

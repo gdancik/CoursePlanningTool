@@ -136,6 +136,7 @@ def updateValue():
 
         # Call the updateValue function
         gs.updateValue(course_id, columns)
+        gs.updateTimeLastEdited(course_id)
         return jsonify('Function called successfully')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -210,3 +211,22 @@ def generateSchedule():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+'''Calls the createNewCourse function from the gs_editor.py module'''
+@api_bp.route('createNewCourse/', methods=['POST'])
+@login_required
+def createNewCourse():
+    gs = get_gs_editor()
+    try:
+        data = request.get_json()
+        columns = data.get('dict_of_columns_and_vals')
+
+        if not columns:
+            return jsonify({"error": "Missing one or more required fields"}), 400
+
+        # Call the createNewCourse function
+        course_id = gs.createNewCourse(columns)
+        gs.updateTimeLastEdited(course_id)
+        gs.updateTimeCreated(course_id)
+        return jsonify('Function called successfully')
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

@@ -11,7 +11,7 @@ import LoginScreen from '../screens/Login/LoginScreen';
 import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
 import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
-import TestPage from "../screens/testAPI/TestPage"
+import TestPage from "../screens/TestPage"
 import ScheduleTest from "../components/courseSchedule"
 import GradeTable from "../components/gradeTable"
 

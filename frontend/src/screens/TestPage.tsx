@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { showErrorModal } from "../../utils/errorHandler";
+import { showErrorModal } from "../utils/errorHandler";
+import RedirectingModal from './../components/RedirectingModal/RedirectingModal';
 
 const TestPage: React.FC = () => {
+    const [showRedirectModal, setShowRedirectModal] = useState(false);
+
     const triggerError = (code: number) => {
         showErrorModal({
             message: `Simulated error for status ${code}`,
@@ -26,6 +29,13 @@ const TestPage: React.FC = () => {
                 <button onClick={() => triggerError(500)}>Trigger 500 (Internal Server Error)</button><br/>
                 <button onClick={() => triggerError(999)}>Trigger Unknown Error</button>
             </div>
+
+            <div style={{ marginTop: "2rem" }}>
+                <h2>Trigger Redirect Modal</h2>
+                <button onClick={() => setShowRedirectModal(true)}>Show Redirecting Modal</button>
+            </div>
+
+            {showRedirectModal && <RedirectingModal />}
         </div>
     );
 };

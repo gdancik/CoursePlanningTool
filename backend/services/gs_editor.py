@@ -431,16 +431,38 @@ class gsEditor:
 
 #TODO Add  doc strings
     def updateTimeCreated(self, course_id):
+        '''
+        This function retrieves the current date and time, formats it, and updates the 'created_at' field in the sheet.
+        Args:
+        course_id (str): The course ID to update.
+        Returns:
+        None
+        '''
+
         current_time = datetime.now()
         formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
         self.updateValue(course_id,{'created_at':f'{formatted_current_time}'})
 
     def updateTimeLastEdited(self, course_id):
+        '''
+        This function retrieves the current date and time, formats it, and updates the 'last_edited' field in the sheet.
+        Args:
+        course_id (str): The course ID to update.
+        Returns:
+        None
+        '''
         current_time = datetime.now()
         formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
         self.updateValue(course_id,{'last_edited':f'{formatted_current_time}'})
 
     def createNewCourse(self, values_dict: Dict[str, Any]):
+        '''
+        Creates a new course in the Google Sheet with the specified values.
+        Args:
+        values_dict (Dict[str, Any]): A dictionary containing column names as keys and the new
+        Returns:
+        str: The course ID of the newly created course.
+        '''
         # Create a Google Sheets client
         client = self.client
         # Open the spreadsheet by name

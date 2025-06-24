@@ -433,12 +433,12 @@ class gsEditor:
     def updateTimeCreated(self, course_id):
         current_time = datetime.now()
         formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-        self.updateValue(course_id,{'time_created':f'{formatted_current_time}'})
+        self.updateValue(course_id,{'created_at':f'{formatted_current_time}'})
 
     def updateTimeLastEdited(self, course_id):
         current_time = datetime.now()
         formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-        self.updateValue(course_id,{'time_last_edited':f'{formatted_current_time}'})
+        self.updateValue(course_id,{'last_edited':f'{formatted_current_time}'})
 
     def createNewCourse(self, values_dict: Dict[str, Any]):
         # Create a Google Sheets client

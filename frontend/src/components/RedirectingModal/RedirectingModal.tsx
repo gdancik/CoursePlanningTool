@@ -7,7 +7,7 @@ const RedirectingModal: React.FC = () => {
             <div className="redirect-content">
                 <div className="spinner"></div>
                 <h2>Successfully Logged in</h2>
-                <p>Message</p>
+                <p>Please wait, while we gather information...</p>
             </div>
         </div>
     );

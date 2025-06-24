@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
 import ecsuBlack from '../../assets/images/ecsu-logo-black-stacked-alt.png';
 import "./LoginScreen.css";
+import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
 
 const LoginScreen: React.FC = () => {
     const [username, setUsername] = useState("");
@@ -69,11 +70,7 @@ const LoginScreen: React.FC = () => {
                         <button type="submit">Login</button>
                     </form>
 
-                    {loginSuccess && (
-                        <p className="success-message">
-                            {`Welcome, ${username}! Redirecting in 3 seconds...`}
-                        </p>
-                    )}
+                    {loginSuccess && <RedirectingModal />}
                     {error && <p className="error-message">{error}</p>}
                 </div>
             </div>

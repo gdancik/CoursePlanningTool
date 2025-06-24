@@ -136,7 +136,6 @@ def updateValue():
 
         # Call the updateValue function
         gs.updateValue(course_id, columns)
-        gs.updateTimeLastEdited(course_id)
         return jsonify('Function called successfully')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -224,9 +223,7 @@ def createNewCourse():
             return jsonify({"error": "Missing one or more required fields"}), 400
 
         # Call the createNewCourse function
-        course_id = gs.createNewCourse(columns)
-        gs.updateTimeLastEdited(course_id)
-        gs.updateTimeCreated(course_id)
+        gs.createNewCourse(columns)
         return jsonify('Function called successfully')
     except Exception as e:
         return jsonify({"error": str(e)}), 500

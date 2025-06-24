@@ -19,7 +19,7 @@ from typing import Dict, Any
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
-import  backend.services.course_planning as cp
+import backend.services.course_planning as cp
 
 def exponential_backoff(request_func):
     '''
@@ -287,6 +287,10 @@ class gsEditor:
         if not df.empty and course_id in df['course_id'].values:
             course_row_index = df[df['course_id'] == course_id].index[0] + 2 # +1 for 1-based, +1 for header row
 
+        #update last_edit columns
+        formatted_current_time = self._fetch_current_time()
+        values_dict['last_edited'] = formatted_current_time
+
         if course_row_index:
             print(f"Course ID '{course_id}' found. Updating existing row...")
             # Update existing record
@@ -429,32 +433,20 @@ class gsEditor:
             d = {col: col + str(i) for col in cp.columns if col != 'course_id'}
             gs.updateValue(course_id, d)
 
-#TODO Add  doc strings
-    def updateTimeCreated(self, course_id):
+    @staticmethod
+    def _fetch_current_time():
         '''
-        This function retrieves the current date and time, formats it, and updates the 'created_at' field in the sheet.
+        This function retrieves the current date and time and formats it.
         Args:
-        course_id (str): The course ID to update.
-        Returns:
         None
+        Returns:
+        formatted_current_time: the formatted time
         '''
 
         current_time = datetime.now()
         formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-        self.updateValue(course_id,{'created_at':f'{formatted_current_time}'})
-
-    def updateTimeLastEdited(self, course_id):
-        '''
-        This function retrieves the current date and time, formats it, and updates the 'last_edited' field in the sheet.
-        Args:
-        course_id (str): The course ID to update.
-        Returns:
-        None
-        '''
-        current_time = datetime.now()
-        formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-        self.updateValue(course_id,{'last_edited':f'{formatted_current_time}'})
-
+        return formatted_current_time
+       
     def createNewCourse(self, values_dict: Dict[str, Any]):
         '''
         Creates a new course in the Google Sheet with the specified values.
@@ -497,6 +489,11 @@ class gsEditor:
         
         # Set the course_id in the new row
         new_row_values['course_id'] = new_course_id
+
+        #Update created and edited columns
+        formatted_current_time = self._fetch_current_time()
+        values_dict['created_at'] = formatted_current_time
+        values_dict['last_edited'] = formatted_current_time
 
         # Add the provided values from values_dict
         for column, new_val in values_dict.items():

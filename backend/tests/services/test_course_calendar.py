@@ -2,8 +2,8 @@ import sys
 import os
 from datetime import datetime
 
-# Add the parent directory to the Python path -- required for direct testing of this file
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Add the greatgrandparent directory to the Python path -- required for direct testing of this file
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
 
 import backend.services.course_calendar as cc
 

@@ -1,11 +1,8 @@
 import sys
 import os
 
-# Add the parent directory to the Python path -- required for direct testing of this file
-#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-# Add the backend directory to the Python path -- required for local imports in module 
-#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend/')))
+# Add the greatgrandparent directory to the Python path -- required for direct testing of this file
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
 
 import pytest
 import backend.services.syllabus_generator as sf

@@ -1,23 +1,32 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: backend
+# tests and coverage for backend-end services
+
+name: backend-services
 
 on:
   push:
     paths: 
-      - backend/**
+      - backend/services/*
+      - backend/tests/services/
   pull_request:
     paths: 
-      - backend/**
+      - backend/services/*
+      - backend/tests/services/
   workflow_dispatch:
+
+concurrency:
+  group: backend
       
 permissions:
   contents: read
 
 jobs:
-  test-backend:
-
+  test:
+    if: github.event_name != 'pull_request' ||
+        github.event.pull_request.head.repo.full_name !=
+        github.event.pull_request.base.repo.full_name
     runs-on: ubuntu-latest
 
     steps:
@@ -37,14 +46,9 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+    - name: Test code and show coverage
       env:
         GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
       run: |
-        pytest backend/tests/
-    - name: Show code coverage
-      env:
-        GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
-      run: |
-        pytest --cov --cov-config=.coveragerc --cov-report=term-missing backend/tests      
+        pytest --cov=backend/services --cov-report=term-missing backend/tests/services/      
         # pytest --cov --cov-config=.coveragerc --cov-branch --cov-report=html --cov-report=term-missing tests_python 

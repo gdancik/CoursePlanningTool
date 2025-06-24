@@ -30,12 +30,15 @@ def exponential_backoff(request_func):
         wait = 1  # initial wait (in seconds)  
         for ntries in range(self.api_config['max_tries']) :        
             try :
+                print(f'try #{ntries+1}')
                 r = request_func(self, *args)
+                print('request successful...returning')
                 return r
             except Exception as err :
+                print('Error:', err)
                 if ntries == self.api_config['max_tries'] - 1 :
+                   print('reached limit, raise error')
                    raise err
-                print(r)
                 if err.error.get('code') == 429 :
                     sleep_time = wait + random.random()
                     print(f'waiting for {sleep_time:.2f} seconds')                                       
@@ -70,7 +73,7 @@ class gsEditor:
         self.api_config = {}
         self.set_api_config()
 
-    def set_api_config(self, max_tries = 6, maximum_backoff = 32) :
+    def set_api_config(self, max_tries = 10, maximum_backoff = 32) :
         '''Setter for api_config max_tries and maximum_backoff'''
         self.api_config['max_tries'] = max_tries
         self.api_config['maximum_backoff'] = maximum_backoff
@@ -420,18 +423,16 @@ class gsEditor:
             return obj
 
     @staticmethod 
-    def generate_test_data(sheet_name, n) :                
+    def generate_test_data(sheet_name, n, email = None) :                
         '''
         Generates 'n' records for given sheet_name
         '''
-
-        # TO DO: may need to update to handle created_at and last_edited
-
         gs = gsEditor(sheet_name)
+        gs.create_sheet(email)
         for i in range(1,n+1) :
             course_id = 'test' + str(i)
             d = {col: col + str(i) for col in cp.columns if col != 'course_id'}
-            gs.updateValue(course_id, d)
+            gs.createNewCourse(d)
 
     @staticmethod
     def _fetch_current_time():
@@ -513,5 +514,4 @@ class gsEditor:
         sheet.append_row(ordered_new_row)
         print(f"Successfully processed values for course ID '{new_course_id}'.")
         return new_course_id
-        
         

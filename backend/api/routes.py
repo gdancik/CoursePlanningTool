@@ -13,7 +13,24 @@ import backend.services.course_planning as cp
 from backend.services.app_services import get_gs_editor
 
 from . import api_bp
+import logging
+logging.basicConfig(level=logging.DEBUG,format="%(levelname)s from %(funcName)s: %(message)s")
 
+def valid_parameters(actual, required):
+    actual_set = set(actual)
+    required_set = set(required)
+    response = required_set.issubset(actual_set)
+    if len(actual) > len(required):
+        logging.warning(f'You have more parameters than needed the additional parameters are {actual_set - required_set}')
+        logging.debug(f'All actual parameters: {actual_set}')
+        return response
+    elif len(actual) < len(required):
+        logging.error(f'You are missing some of the required parameters, the missing parameters are: {required_set - actual_set}')
+        logging.debug(f'All actual parameters: {actual_set}')
+        return response
+    else:
+        logging.debug(f'All actual parameters: {actual_set}')
+        return response
 def missing_params(param_list) :
     '''
     Returns True if any item in the param_list is None.

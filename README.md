@@ -1,4 +1,14 @@
-# Course Planning Tool  [![frontend](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml/badge.svg)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml) [![backend](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend.yml/badge.svg)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend.yml) [![nb](https://github.com/gdancik/CoursePlanningTool/actions/workflows/notebooks.yml/badge.svg)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/notebooks.yml)
+
+# Course Planning Tool  
+
+| Version  | Frontend App | Backend App | Service Modules |
+| ------------- | ------------- | ------------- | ------------- |
+| main |[![frontend](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml/badge.svg?branch=main)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml)  |  [![backend-app](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-app.yml/badge.svg?branch=main)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-app.yml)| [![backend-services](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-services.yml/badge.svg?branch=main)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-services.yml)|
+| dev |[![frontend](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml/badge.svg?branch=dev)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml)  |  [![backend-app](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-app.yml/badge.svg?branch=dev)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-app.yml)| [![backend-services](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-services.yml/badge.svg?branch=dev)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-services.yml)|
+
+
+
+
 
 This is the repository for a forthcoming Course Planning Tool developed by students from [Eastern Connecticut State University](https://www.easternct.edu).
 
@@ -48,3 +58,4 @@ pip install -r requirements.txt
 ### Issues
 
 See [issues](/issues.md) for known issues.
+

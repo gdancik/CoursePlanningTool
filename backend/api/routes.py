@@ -31,6 +31,7 @@ def valid_parameters(actual, required):
     else:
         logging.debug(f'All actual parameters: {actual_set}')
         return response
+    
 def missing_params(param_list) :
     '''
     Returns True if any item in the param_list is None.
@@ -48,39 +49,46 @@ def missing_params(param_list) :
 #@login_required
 def preview():
     gs = get_gs_editor()
+    logging.info(f'Created gs_editor object')
    
     # Get params for the request and get course ID
     try:
         data = request.get_json()
+        logging.debug('Fetching data...')
         course_id = data.get('course_id')
+        logging.debug(f'Fetched course_id. course_id = {course_id}')
         # #test previewing from homepage
         # course_id = request.args['id']
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-
-    # return jsonify({"result": course_id}), 200
-
+    
+    
     #Use course_id to pull values of syllabus from the googles sheet
     try:
+        logging.info('Calling getValue function')
         fr = gs.getValue(course_id, cp.columns)
+        logging.debug(f'Values = {fr} ')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
     # If the key ends is _syllabus then add it to our new dictonary
     # then remove the _syllabus from the key
     ns = {}
+    logging.debug('Removing "_syllabus" from the column names')
     ns = {key[:-9]: value for key, value in fr.items() if key.endswith('_syllabus')}
-
+    logging.debug(f'"_syllabus" removed.')
     #return jsonify({"result": "created ns"}), 200
 
     # try local file, otherwise try full path for PythonAnywhere
     try :
         path = "backend/docx/SyllabusTemplate.docx"
+        logging.debug(f'Opening template file at: {path}')
         doc = Document(path)
     except :
 
         try :
             path = "/home/gdancik/CoursePlanningTool/backend/docx/SyllabusTemplate.docx"
+            logging.debug(f'Opening template file at {path}')
             doc = Document(path)
         except :
             return jsonify({"error": "could not open Syllabus Template"}), 500
@@ -89,11 +97,15 @@ def preview():
     #return jsonify({"result": "created doc"}), 200
 
     #call functions to replace
+    logging.debug(f'Replacing text in file')
     replaceTextInParagraph(doc, ns)
+    blocks = ['time2']
+    logging.debug(f'Removing blocks: {blocks}')
     removeBlocks(doc,['time2'])
     
 
     # Save to a BytesIO stream
+    logging.debug(f'Saving to BytesIO stream')
     file_stream = io.BytesIO()
     doc.save(file_stream)
     file_stream.seek(0)
@@ -106,6 +118,7 @@ def preview():
     title += "_" + str(ns.get('term',None))
     title += "_" + current_datetime
     
+    logging.debug(f'Prompting to download')
     return send_file(
         file_stream,
         as_attachment=True,
@@ -118,14 +131,19 @@ def preview():
 @login_required
 def getValue():
     gs = get_gs_editor()
+    logging.info(f'Created gs_editor object')
     try:
+        logging.debug('Fetching data...')
         data = request.get_json()
         course_id = data.get('course_id')
+        logging.debug(f'Fetched course_id: {course_id}')
         columns = data.get('list_of_columns')
+        logging.debug(f'Fetched list_of_columns: {columns}')
         if not course_id or not columns:
             return jsonify({"error": "Missing one or more required fields"}), 400
 
         # Call the getValue function
+        logging.info('Calling getValue Function')
         sheet = gs.getValue(course_id, columns,)
         
         # Check if sheet is None
@@ -143,15 +161,21 @@ def getValue():
 @login_required
 def updateValue():
     gs = get_gs_editor()
+    logging.info(f'Created gs_editor object')
     try:
+        logging.debug(f'Fetching data...')
         data = request.get_json()
         course_id = data.get('course_id')
+        logging.debug(f'Fetched course_id: {course_id}')
         columns = data.get('dict_of_columns_and_vals')
+        logging.debug(f'Fetched dict_of_columns_and_vals: {columns}')
+
 
         if not course_id or not columns:
             return jsonify({"error": "Missing one or more required fields"}), 400
 
         # Call the updateValue function
+        logging.info(f'Calling updateValue function')
         gs.updateValue(course_id, columns)
         return jsonify('Function called successfully')
     except Exception as e:
@@ -188,6 +212,7 @@ def getNewCourseId():
 @login_required
 def getSheet():
     gs = get_gs_editor()
+    logging.info(f'Created gs_editor object')
     try:
 
         # Call the read_sheet function
@@ -232,14 +257,18 @@ def generateSchedule():
 @login_required
 def createNewCourse():
     gs = get_gs_editor()
+    logging.info(f'Created gs_editor object')
     try:
+        logging.debug(f'Fetching data')
         data = request.get_json()
         columns = data.get('dict_of_columns_and_vals')
+        logging.debug(f'Fetched dict_of_columns_and_vals: {columns}')
 
         if not columns:
             return jsonify({"error": "Missing one or more required fields"}), 400
 
         # Call the createNewCourse function
+        logging.info('Calling createNewCourse function')
         gs.createNewCourse(columns)
         return jsonify('Function called successfully')
     except Exception as e:

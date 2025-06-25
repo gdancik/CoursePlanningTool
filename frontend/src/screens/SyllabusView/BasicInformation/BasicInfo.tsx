@@ -8,6 +8,7 @@ import {FaExclamationTriangle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import {handleBack, handleNext,} from "../../../components/Button/ButtonLogic";
+import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
 import SectionAccordion from "./SectionAccordion";
 import './BasicInfo.css'
 
@@ -49,10 +50,22 @@ const BasicInfo = () =>{
         setFormData((prev) => ({...prev, [label]: value}));
     };
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
+
+    const modalControls = {
+        setVisible: setModalVisible,
+        setStatus: setModalStatus,
+        setTitle: setModalTitle,
+        setMessage: setModalMessage,
+    };
+
     // Button Action Handlers
-    const handleSave = createSaveHandler(formData);
-    const handleSaveAndExit = createSaveAndExitHandler(formData,navigate);
-    const handlePreviewClick = createPreviewHandler(formData);
+    const handleSave = createSaveHandler(formData, modalControls);
+    const handleSaveAndExit = createSaveAndExitHandler(formData,navigate, modalControls);
+    const handlePreviewClick = createPreviewHandler(formData, modalControls);
 
     const handleBackClick = () => handleBack(navigate, location.pathname);
     const handleNextClick = () => handleNext(navigate, location.pathname);
@@ -96,6 +109,14 @@ const BasicInfo = () =>{
                     />
                 ))}
             </form>
+
+            <RedirectingModal
+                visible={modalVisible}
+                status={modalStatus}
+                title={modalTitle}
+                message={modalMessage}
+            />
+
         </div>
     );
 };

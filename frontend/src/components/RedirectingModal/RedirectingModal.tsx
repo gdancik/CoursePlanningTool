@@ -1,13 +1,26 @@
 import React from "react";
 import "./RedirectingModal.css"
 
-const RedirectingModal: React.FC = () => {
-    return(
+interface RedirectingModalProps {
+    visible: boolean;
+    status: "loading" | "success";
+    title: string;
+    message: string;
+}
+
+const RedirectingModal: React.FC<RedirectingModalProps> = ({ visible, status, title, message }) => {
+    if (!visible) return null;
+
+    return (
         <div className="redirect-overlay">
             <div className="redirect-content">
-                <div className="spinner"></div>
-                <h2>Successfully Logged in</h2>
-                <p>Please wait, while we gather information...</p>
+                {status === "loading" ? (
+                    <div className="spinner"></div>
+                ) : (
+                    <div className="checkmark">&#10004;</div>
+                )}
+                <h2>{title}</h2>
+                <p>{message}</p>
             </div>
         </div>
     );

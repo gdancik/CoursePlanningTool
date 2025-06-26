@@ -47,6 +47,8 @@ import pandas as pd
 from io import StringIO
 from datetime import datetime, timedelta
 import numpy as np
+import logging
+
 
 def create_schedule(term, year, days, url = 'https://www.easternct.edu/academics/academic-calendar/index.html') :
     '''
@@ -55,6 +57,7 @@ def create_schedule(term, year, days, url = 'https://www.easternct.edu/academics
     given term (e.g., 'Fall'), year (e.g., '2025') and days (e.g., 'MWF')
     '''
 
+    logging.info('Creating Schedule')
     target = term + ' ' + year
 
     soup = get_target_webpage(url, target)
@@ -72,6 +75,7 @@ def create_schedule(term, year, days, url = 'https://www.easternct.edu/academics
 
 def get_webpage(url) :
     ''' Returns the text from url, if valid. '''
+    logging.info('Fetching webpage')
     try :        
         r = requests.get(url)
     except Exception as error:
@@ -89,7 +93,7 @@ def get_webpage(url) :
 def get_target_webpage(url, target):
     
     soup = get_webpage(url)
-
+    logging.info('Getting target webpage')
     if not soup.table.find('td', string = target) :
         a = soup.find(lambda element: element.name =='a' and 'Upcoming Academic Calendar' in element.text.strip())
 
@@ -107,6 +111,9 @@ def get_target_webpage(url, target):
 # %%
 def get_dates(soup, target_semester):
     '''Returns the target table as a data frame'''
+
+    logging.info('Getting table for target semester')
+
     for t in soup.find_all('table')[1:] :
         if t.td.text.strip() == target_semester :           
             df = pd.read_html(StringIO(str(t)))[0]
@@ -121,7 +128,7 @@ def filter_non_relevant_dates(df, col = 'Description'):
     Filters the data frame (df) by removing non-relevant dates, looking at 'col'
     and returns the updated data frame
     '''
-
+    logging.info('Filtering out non-relevant dates')
     # descriptions containing these terms (case insensitive) are removed 
     removeList = ['Faculty', 'University Meeting', 'Orientation',
               'Academic Year', '%', 'Internship', 'Advis', 'audit',
@@ -138,6 +145,7 @@ def clean_dates(x) :
     Returns a 'cleaned' version of list/series 'x' with 
     Jan. replaced by January, etc
     '''
+
     replace_dict = {r'Jan\.': 'January',
                     r'Feb\.': 'February',
                     r'Aug\.': 'August',
@@ -155,6 +163,7 @@ def add_date_column(df, col, year) :
     converts to a datetime object; for date spans, 
     e.g., Feb 1 - Feb 4, only first date is used.
     '''
+
     df['Date'] = df[col]
     df['Date'] = df['Date'].apply(lambda x: x.split('–')[0])
     df['Date'] = df['Date'].apply(lambda x: x.split('-')[0])
@@ -194,6 +203,7 @@ def combine_date_dfs(df1, df2, start, end) :
 
 
 def get_start_and_end_dates(df):
+    logging.debug('Fetching start and end dates')
     cc = df['Description'].str.contains('Classes Begin|Last Day of classes', case = False, na = False)
     df_range = df.loc[cc,:]  
     if df_range.shape[0] != 2 :

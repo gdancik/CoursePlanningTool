@@ -3,6 +3,9 @@ import pandas as pd
 import tabulate
 from python_docx_replace import docx_replace, docx_blocks
 
+import logging
+
+
 #TODO Need to change to be more algorithmically efficient
 #Currently it is O(n^2) because it iterates through the paragraphs for each key in the dictionary
 
@@ -14,7 +17,7 @@ def replaceTextInParagraph(doc, fr_dict):
         fr_dict (dict): Dictionary containing text to be replaced as keys and their replacements as values.
         block_ls (list, optional): List of blocks to be removed. Defaults to None.
     '''
-
+    logging.info('Replacing text in document')
     docx_replace(doc, **fr_dict)
         
 def removeBlocks(doc, block_ls):
@@ -26,7 +29,7 @@ def removeBlocks(doc, block_ls):
     Returns:
         None
     '''
-    
+    logging.info('Removing blocks from doc')
     for i in block_ls:
         options = {i: False}
     docx_blocks(doc, **options)
@@ -39,7 +42,7 @@ def printParagraphs(doc):
     Returns:
         None
     '''
-   
+    logging.info('Printing paragraphs')
     # Iterate through the paragraphs in the document and print them
     for paragraph in doc.paragraphs:
         text = paragraph.text.strip()
@@ -55,7 +58,7 @@ def getParagraph(doc, i):
     Returns:
         str: Text of the specified paragraph.
     '''
-    
+    logging.info(f'Fetching paragraph {i}')
     paragraph = doc.paragraphs[i].text.strip()
     return paragraph
     
@@ -67,6 +70,7 @@ def print_table(t):
     Returns:
         None
     '''
+    logging.info('Printing table')
     #Check if t is a DataFrame
     if not isinstance(t, pd.DataFrame):
         raise ValueError("Input must be a pandas DataFrame.")
@@ -84,7 +88,7 @@ def printTables(doc):
     Returns:
         None
     '''
-    # Open the document
+    logging.info('Printing all tables in the doc')
     
     # Iterate through the tables in the document and print them
     for i in range(len(doc.tables)):
@@ -102,7 +106,7 @@ def getTable(doc, i):
     Returns:
         pd.DataFrame: DataFrame containing the table data.
     '''
-    # Open the document
+    logging.info(f'Fetching table {i}')
 
     table = doc.tables[i]
    

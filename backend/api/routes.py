@@ -43,14 +43,15 @@ def missing_params(param_list) :
     
     return any(x == None for x in param_list)
 
-
 ''' Preview syllabus '''
 @api_bp.route('preview/', methods=['POST'])
 #@login_required
 def preview():
     gs = get_gs_editor()
-    logging.info(f'Created gs_editor object')
-   
+    logging.debug(f'Created gs_editor object')
+
+    logging.info('Attempting syllabus download')
+
     # Get params for the request and get course ID
     try:
         data = request.get_json()
@@ -65,9 +66,9 @@ def preview():
     
     #Use course_id to pull values of syllabus from the googles sheet
     try:
-        logging.info('Calling getValue function')
+        logging.debug('Pulling values of columns from the google sheet')
         fr = gs.getValue(course_id, cp.columns)
-        logging.debug(f'Values = {fr} ')
+        logging.debug(f'Values: {fr} ')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
@@ -76,7 +77,6 @@ def preview():
     ns = {}
     logging.debug('Removing "_syllabus" from the column names')
     ns = {key[:-9]: value for key, value in fr.items() if key.endswith('_syllabus')}
-    logging.debug(f'"_syllabus" removed.')
     #return jsonify({"result": "created ns"}), 200
 
     # try local file, otherwise try full path for PythonAnywhere
@@ -131,7 +131,7 @@ def preview():
 @login_required
 def getValue():
     gs = get_gs_editor()
-    logging.info(f'Created gs_editor object')
+    logging.debug(f'Created gs_editor object')
     try:
         logging.debug('Fetching data...')
         data = request.get_json()
@@ -143,8 +143,8 @@ def getValue():
             return jsonify({"error": "Missing one or more required fields"}), 400
 
         # Call the getValue function
-        logging.info('Calling getValue Function')
-        sheet = gs.getValue(course_id, columns,)
+        logging.info("Retrieving Value from Sheet")
+        sheet = gs.getValue(course_id, columns)
         
         # Check if sheet is None
         if sheet is None:
@@ -161,7 +161,7 @@ def getValue():
 @login_required
 def updateValue():
     gs = get_gs_editor()
-    logging.info(f'Created gs_editor object')
+    logging.debug(f'Created gs_editor object')
     try:
         logging.debug(f'Fetching data...')
         data = request.get_json()
@@ -175,7 +175,7 @@ def updateValue():
             return jsonify({"error": "Missing one or more required fields"}), 400
 
         # Call the updateValue function
-        logging.info(f'Calling updateValue function')
+        logging.info("Updating a value in the google sheet")
         gs.updateValue(course_id, columns)
         return jsonify('Function called successfully')
     except Exception as e:
@@ -212,10 +212,11 @@ def getNewCourseId():
 @login_required
 def getSheet():
     gs = get_gs_editor()
-    logging.info(f'Created gs_editor object')
+    logging.debug(f'Created gs_editor object')
     try:
 
         # Call the read_sheet function
+        logging.info('Reading the google sheet')
         sheet = gs.read_sheet()
 
         # Check if sheet is None
@@ -233,10 +234,14 @@ def getSheet():
 def generateSchedule():
     
     try:
+        logging.debug('Fetching data...')
         data = request.get_json()                
         term = data.get('term')
+        logging.debug(f'Fetched term. term = {term}')
         year = data.get('year')
+        logging.debug(f'Fetched year. year = {year}')
         days = data.get('days')
+        logging.debug(f'Fetched days. days = {days}')
 
         if missing_params([term, year, days]) :
             return jsonify({"error": 
@@ -245,6 +250,7 @@ def generateSchedule():
         if term not in ['Fall', 'Spring'] :
             return jsonify({"error": "term must be Fall or Spring"}), 400
 
+        logging.info('Creating Schedule')
         schedule = create_schedule(term, year, days, url = 'https://www.easternct.edu/academics/academic-calendar/index.html')
 
         return jsonify({'schedule': schedule.to_dict(orient = 'records')})
@@ -257,7 +263,7 @@ def generateSchedule():
 @login_required
 def createNewCourse():
     gs = get_gs_editor()
-    logging.info(f'Created gs_editor object')
+    logging.debug(f'Created gs_editor object')
     try:
         logging.debug(f'Fetching data')
         data = request.get_json()

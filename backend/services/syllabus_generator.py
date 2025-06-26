@@ -7,6 +7,9 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn 
 
 import re
+import logging
+
+
 #%%
 def get_webpage(url) :
     ''' 
@@ -16,6 +19,7 @@ def get_webpage(url) :
     Returns:
         BeautifulSoup object: Parsed HTML content of the webpage.
     '''
+    logging.info(f'Fetching webpage')
     try :        
         r = requests.get(url)
     except Exception as error:
@@ -35,6 +39,7 @@ def extractFromAccordian(soup):
     Returns:
         dict: A dictionary where keys are headers and values are the corresponding content.
     '''
+    logging.info(f'Extracting text from accordians')
     headers_and_content = {}
     classes = soup.find_all(class_='accordion')
     for item in classes:
@@ -55,6 +60,8 @@ def getStatements(url,selected_statements = None):
         dict: A dictionary where keys are headers and values are lists of content for the corresponding statements.
     '''
     soup = get_webpage(url)
+
+    logging.info(f'Getting selected syllabus statements')
 
     #get all statements
     all_statements = extractFromAccordian(soup)
@@ -81,6 +88,7 @@ def create_syllabus_statment_page(doc,url,selected_statements=None):
     Returns:
         None
     '''
+    logging.info(f'Creating statement page')
     x = getStatements(url,selected_statements)
     for header, content in x.items():
         header_string = str(header)
@@ -97,6 +105,8 @@ def html_to_word_htmldocx(doc,html_content):
     Returns:
         None
     '''
+
+    logging.debug(f'Formatting html to doc')
     cleaned_html = _strip_whitespace_from_div(html_content)
     new_parser = HtmlToDocx()
     new_parser.add_html_to_document(cleaned_html,doc)
@@ -122,8 +132,9 @@ def add_table_to_doc(doc, table_list:list, header = True):
         table_list (list of lists): A list of lists representing the table data.
         header (bool, optional): If True, the first row of table_list is treated as the header row. Defaults to True.
     Returns:
-        
     '''
+
+    logging.info(f'Adding table to document')
     table = doc.add_table(rows=len(table_list), cols=len(table_list[0]),style = "Table Grid")
 
     for i, row in enumerate(table_list):
@@ -144,6 +155,7 @@ def center_table_text(table):
     Returns:
         None
     '''
+    logging.debug(f'Centering table text')
     for row in table.rows:
         for cell in row.cells:
             cell.paragraphs[0].alignment = 1  # 1 corresponds to center alignment
@@ -157,6 +169,7 @@ def style_table_borders(table):
     Returns:
         None
     '''
+    logging.debug(f'Styling table borders')
     for row in table.rows:
             for cell in row.cells:
                 tcPr = cell._element.tcPr  # Get the table cell properties element
@@ -203,6 +216,7 @@ def style_table_text(table):
     Returns:
         None
     '''
+    logging.debug(f'Styling table text')
     for row in table.rows:
         for cell in row.cells:
             for paragraph in cell.paragraphs:
@@ -219,6 +233,7 @@ def style_table_header(table):
     Returns:
         None
     '''
+    logging.debug(f'styling table heaer')
     header_row = table.rows[0]
     for cell in header_row.cells:
         for paragraph in cell.paragraphs:

@@ -39,7 +39,7 @@ def exponential_backoff(request_func):
                 if ntries == self.api_config['max_tries'] - 1 :
                    print('reached limit, raise error')
                    raise err
-                if err.error.get('code') == 429 :
+                if hasattr(err, 'code') and err.code == 429:
                     sleep_time = wait + random.random()
                     print(f'waiting for {sleep_time:.2f} seconds')                                       
                     time.sleep(sleep_time)
@@ -304,33 +304,7 @@ class gsEditor:
                 else:
                     print(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'. Skipping update for this column.")
         else:
-            print(f"Course ID '{course_id}' not found. Appending new row...")
-            # If course_id does not exist, prepare a new row
-            # Initialize new row with None for all *known* sheet headers
-            
-            new_row_values = {}  
-            for col in sheet_headers:
-                new_row_values[col] = None
-
-            # Set the course_id in the new row
-            new_row_values['course_id'] = course_id
-
-            # Add the provided values from values_dict
-            for column, new_val in values_dict.items():
-                if column in sheet_headers:
-                    new_row_values[column] = new_val
-                else:
-                    print(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'.")
-
-            # Ensure values are in the correct order for appending
-            ordered_new_row = []  # Initialize an empty list to store the ordered values
-            for header in sheet_headers:
-                # Append the value from new_row_values or None if not present
-                # This ensures that the new row matches the order of the headers
-                value = new_row_values.get(header, None)
-                ordered_new_row.append(value)
-            # Append the new row to the sheet
-            sheet.append_row(ordered_new_row)
+            raise ValueError("Course does not exist. Please try a different course id.")
         print(f"Successfully processed values for course ID '{course_id}'.")
 
     #Used for testing purposes

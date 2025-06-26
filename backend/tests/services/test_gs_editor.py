@@ -21,12 +21,12 @@ def testCreateGetUpdateDelete() :
     
     id = gs.create_sheet()
 
-    # update sheet
-    gs.updateValue('id1', {'instructor_name_syllabus': 'joe', 'crse_number_syllabus': 210})
-    gs.updateValue('id2', {'instructor_name_syllabus': 'steve', 'crse_number_syllabus': 203})
-    gs.updateValue('id3', {'instructor_name_syllabus': 'bob', 'crse_number_syllabus': 203})
-    gs.updateValue('id4', {'instructor_name_syllabus': 'bob', 'crse_number_syllabus': 211})
-    
+    # Create courses and update sheet
+    gs.createNewCourse({'instructor_name_syllabus': 'joe', 'crse_number_syllabus': 210})
+    gs.createNewCourse({'instructor_name_syllabus': 'steve', 'crse_number_syllabus': 203})
+    gs.createNewCourse({'instructor_name_syllabus': 'bob', 'crse_number_syllabus': 203})
+    gs.createNewCourse({'instructor_name_syllabus': 'bob', 'crse_number_syllabus': 211})
+   
     df = gs.read_sheet()
 
     # test that column names are correct
@@ -36,17 +36,17 @@ def testCreateGetUpdateDelete() :
     assert df.shape[0] == 4
 
     # test getValue method
-    val = gs.getValue('id2', ['instructor_name_syllabus', 'crse_number_syllabus'])
+    val = gs.getValue('c2', ['instructor_name_syllabus', 'crse_number_syllabus'])
     assert val == {'instructor_name_syllabus': 'steve', 'crse_number_syllabus': 203}
 
     # test getting a single value
-    val = gs.getValue('id4', 'instructor_name_syllabus')
+    val = gs.getValue('c4', 'instructor_name_syllabus')
     assert val == 'bob'
 
     # test updateValue method changes a value
-    gs.updateValue('id2', {'instructor_name_syllabus': 'alice'})
+    gs.updateValue('c2', {'instructor_name_syllabus': 'alice'})
     
-    val = gs.getValue('id2', ['instructor_name_syllabus', 'crse_number_syllabus'])
+    val = gs.getValue('c2', ['instructor_name_syllabus', 'crse_number_syllabus'])
     assert val == {'instructor_name_syllabus': 'alice', 'crse_number_syllabus': 203}
 
     # test delete sheet and sheet_exists
@@ -65,6 +65,6 @@ def testGetValueNotFound() :
         gs.delete_sheet()
     
     gs.create_sheet()
-    assert gs.getValue('id2', ['instructor_name_syllabus']) == None
+    assert gs.getValue('c2', ['instructor_name_syllabus']) == None
 
     gs.delete_sheet()

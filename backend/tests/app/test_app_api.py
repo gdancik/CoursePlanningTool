@@ -32,11 +32,11 @@ def setup_test_sheet():
         gs.delete_sheet()
     
     gs.create_sheet()
-    gs.updateValue('id_1', {'instructor_name_syllabus': 'Test Instructor1', 'subj_code_syllabus': 'Test Subject1','crse_number_syllabus': 'Test Number1'})
-    gs.updateValue('id_2', {'instructor_name_syllabus': 'Test Instructor2', 'subj_code_syllabus': 'Test Subject2','crse_number_syllabus': 'Test Number2'})
-    gs.updateValue('id_3', {'instructor_name_syllabus': 'Test Instructor3', 'subj_code_syllabus': 'Test Subject3','crse_number_syllabus': 'Test Number3'})
-    gs.updateValue('id_4', {'instructor_name_syllabus': 'Billy', 'subj_code_syllabus': 'COM','crse_number_syllabus': '101'})
-    gs.updateValue('id_5', {'instructor_name_syllabus': 'Test Instructor5', 'subj_code_syllabus': 'Test Subject5','crse_number_syllabus': 'Test Number5'})
+    gs.createNewCourse({'instructor_name_syllabus': 'Test Instructor1', 'subj_code_syllabus': 'Test Subject1','crse_number_syllabus': 'Test Number1'})
+    gs.createNewCourse({'instructor_name_syllabus': 'Test Instructor2', 'subj_code_syllabus': 'Test Subject2','crse_number_syllabus': 'Test Number2'})
+    gs.createNewCourse({'instructor_name_syllabus': 'Test Instructor3', 'subj_code_syllabus': 'Test Subject3','crse_number_syllabus': 'Test Number3'})
+    gs.createNewCourse({'instructor_name_syllabus': 'Billy', 'subj_code_syllabus': 'COM','crse_number_syllabus': '101'})
+    gs.createNewCourse({'instructor_name_syllabus': 'Test Instructor5', 'subj_code_syllabus': 'Test Subject5','crse_number_syllabus': 'Test Number5'})
 
 def delete_test_sheet():
     gs = get_gs_editor()
@@ -46,7 +46,7 @@ def delete_test_sheet():
 def test_getValue(client):
     # Define the test data
     test_data = {
-        "course_id": "id_2",
+        "course_id": "c2",
         "list_of_columns": ['instructor_name_syllabus', 'subj_code_syllabus', 'crse_number_syllabus']
     }
 
@@ -72,7 +72,7 @@ def test_getValue_missing_fields(client):
     }
 
     test_data_missing_columns = {
-        "course_id": "id_2"        
+        "course_id": "c2"        
     }
 
     # Send a POST request with missing course_id
@@ -91,7 +91,7 @@ def test_getValue_missing_fields(client):
 def test_updateValue_success(client):
     # Define the test data for a successful request
     test_data = {
-        "course_id": "id_2",
+        "course_id": "c2",
         "dict_of_columns_and_vals": {'instructor_name_syllabus': 'Dr. Smith', 'subj_code_syllabus': 'Math'}        
     }
 
@@ -115,7 +115,7 @@ def test_updateValue_missing_fields(client):
     }
 
     test_data_missing_columns = {
-        "course_id": "id_2"    
+        "course_id": "c2"    
     }
 
     # Send a POST request with missing course_id

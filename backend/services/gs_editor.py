@@ -18,8 +18,8 @@ from datetime import datetime
 from typing import Dict, Any
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
-
 import backend.services.course_planning as cp
+import logging
 
 def exponential_backoff(request_func):
     '''
@@ -30,18 +30,18 @@ def exponential_backoff(request_func):
         wait = 1  # initial wait (in seconds)  
         for ntries in range(self.api_config['max_tries']) :        
             try :
-                print(f'try #{ntries+1}')
+                logging.debug(f'try #{ntries+1}')
                 r = request_func(self, *args)
-                print('request successful...returning')
+                logging.debug('request successful...returning')
                 return r
             except Exception as err :
-                print('Error:', err)
+                logging.error('Error:', err)
                 if ntries == self.api_config['max_tries'] - 1 :
-                   print('reached limit, raise error')
+                   logging.debug('reached limit, raise error')
                    raise err
-                if err.error.get('code') == 429 :
+                if hasattr(err, 'code') and err.code == 429:
                     sleep_time = wait + random.random()
-                    print(f'waiting for {sleep_time:.2f} seconds')                                       
+                    logging.debug(f'waiting for {sleep_time:.2f} seconds')                                       
                     time.sleep(sleep_time)
                     wait = wait * 2    
                     if wait > self.api_config['maximum_backoff'] :
@@ -83,6 +83,7 @@ class gsEditor:
         '''
         Creates a Google Sheets client using a service account.
         '''
+        logging.info('Creating GS client')
         # Define the scope
         scope = ['https://spreadsheets.google.com/feeds',
                 'https://www.googleapis.com/auth/drive']
@@ -100,9 +101,10 @@ class gsEditor:
     
     def increase_api_count(self, message = None) :
         '''increases api_count by 1 and prints an optional message'''
+        logging.info('Increasing API count')
         self.api_count += 1
         if message :
-            print(message)
+            logging.debug(message)
 
     def set_sheet_name(self, sheet_name: str="CPT_Data"):
         '''
@@ -112,6 +114,7 @@ class gsEditor:
         Returns:
             None
         '''
+        logging.info('Setting sheet name')
         if sheet_name != self.sheet_name :
             self.sheet_name = sheet_name
             self.id = None
@@ -121,7 +124,7 @@ class gsEditor:
         '''
         Returns True if the current 'sheet_name' exists
         '''
-
+        logging.info('checking if sheet exist')
         self.increase_api_count('API call: list spreadsheet files')
         files = self.client.list_spreadsheet_files()
         for f in files :
@@ -139,21 +142,23 @@ class gsEditor:
         Returns:
             str: The ID of the created Google Sheet.
         '''
+       
         # Create a Google Sheets client
         client = self.client
-        
+
         if not self.sheet_exists() :
+            logging.info(f'Creating sheet')
             # Create a new spreadsheet
             self.increase_api_count('API call: create')
             spreadsheet = client.create(self.sheet_name)            
             
             # Print the name and ID of the created spreadsheet
-            print(f'Created Spreadsheet with name: {spreadsheet.title} and ID: {spreadsheet.id}')
+            logging.debug(f'Created Spreadsheet with name: {spreadsheet.title} and ID: {spreadsheet.id}')
 
         
         self.increase_api_count('API call: open')
         spreadsheet = client.open(self.sheet_name)
-        print(f'Spreadsheet {spreadsheet.title} already exists and will not be created')
+        logging.debug(f'Spreadsheet {spreadsheet.title} already exists and will not be created')
 
 
         # Add course id columns to the spreadsheet -- we do this here in case we exceed rate limit after creating the sheet
@@ -162,10 +167,11 @@ class gsEditor:
             self.add_headers(spreadsheet.id)
        
         if email:
+            logging.debug(f'Sharing sheet with {email}')
             # Share the spreadsheet with a specific email
             self.increase_api_count('API call: share')
             spreadsheet.share(email, perm_type='user', role='writer')
-            print(f'Spreadsheet shared with {email}')
+            logging.debug(f'Spreadsheet shared with {email}')
  
         # Return the ID of the created spreadsheet
         self.id = spreadsheet.id
@@ -180,6 +186,7 @@ class gsEditor:
         Returns:
             None
         '''
+        logging.debug('Adding headers to sheet')
         # Create a Google Sheets client
         client = self.client
 
@@ -198,7 +205,7 @@ class gsEditor:
         self.increase_api_count('API call: update')
         sheet.update([values], 'A1')
 
-        print(f'Headers added to the spreadsheet with ID: {spreadsheet_id}')
+        logging.debug(f'Headers added to the spreadsheet with ID: {spreadsheet_id}')
 
     @exponential_backoff
     def getValue(self, course_id: str,columns: str) -> str:
@@ -210,9 +217,12 @@ class gsEditor:
         Returns:
             str or dict: The value from the specified column for the given course ID, or a dictionary of values if multiple columns are specified.
         '''
+
+
         # Create a Google Sheets client
         client = self.client
 
+        logging.debug(f'Opening spreadsheet')
         # Open the spreadsheet by name
         self.increase_api_count('API call: open')
         spreadsheet = client.open(self.sheet_name)
@@ -229,7 +239,7 @@ class gsEditor:
         
         # df is empty if there is only a header row; handle this case
         if df.shape[0] == 0:
-            print(f"Course ID '{course_id}' not found.")
+            logging.debug(f"Course ID '{course_id}' not found.")
             return None
 
         #Find row with the course id
@@ -237,9 +247,10 @@ class gsEditor:
 
         # Check if a row was found
         if row.empty:
-            print(f"Course ID '{course_id}' not found.")
+            logging.debug(f"Course ID '{course_id}' not found.")
             return None
         
+        logging.debug(f'Checking if columns is a list or a string')
         #Check if columns is a list or a string
         #if column is list, we will return a list of cells
         if isinstance(columns, list):
@@ -248,7 +259,7 @@ class gsEditor:
                 if column in row.columns:
                     cells_dict[column] = row[column].values[0]
                 else:
-                    print(f"Warning: Column '{column}' not found in the sheet.")
+                    logging.warn(f"Warning: Column '{column}' not found in the sheet.")
                     cells_dict[column] = None
             return self._convert_numpy_int64_to_int(cells_dict)
         #else we will return a single cell
@@ -267,6 +278,7 @@ class gsEditor:
         Returns:
             None
         '''
+        logging.debug(f'Opening sheet')
         # Create a Google Sheets client
         client = self.client
         # Open the spreadsheet by name
@@ -285,53 +297,31 @@ class gsEditor:
         # Get the current column headers from the sheet
         sheet_headers = sheet.row_values(1) 
 
+        logging.debug(f'Looking for course id')
         # Find the row index for the course_id if it exists
         course_row_index = None
         if not df.empty and course_id in df['course_id'].values:
             course_row_index = df[df['course_id'] == course_id].index[0] + 2 # +1 for 1-based, +1 for header row
 
         #update last_edit columns
+        logging.debug(f'Updating last_edit column')
         formatted_current_time = self._fetch_current_time()
         values_dict['last_edited'] = formatted_current_time
 
+        
         if course_row_index:
-            print(f"Course ID '{course_id}' found. Updating existing row...")
+            logging.debug(f'Updating row')
+            logging.debug(f"Course ID '{course_id}' found. Updating existing row...")
             # Update existing record
             for column, new_val in values_dict.items():
                 if column in sheet_headers:
                     col_index = sheet_headers.index(column) + 1 # Convert to 1-based index
                     sheet.update_cell(course_row_index, col_index, new_val)
                 else:
-                    print(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'. Skipping update for this column.")
+                    logging.warn(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'. Skipping update for this column.")
         else:
-            print(f"Course ID '{course_id}' not found. Appending new row...")
-            # If course_id does not exist, prepare a new row
-            # Initialize new row with None for all *known* sheet headers
-            
-            new_row_values = {}  
-            for col in sheet_headers:
-                new_row_values[col] = None
-
-            # Set the course_id in the new row
-            new_row_values['course_id'] = course_id
-
-            # Add the provided values from values_dict
-            for column, new_val in values_dict.items():
-                if column in sheet_headers:
-                    new_row_values[column] = new_val
-                else:
-                    print(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'.")
-
-            # Ensure values are in the correct order for appending
-            ordered_new_row = []  # Initialize an empty list to store the ordered values
-            for header in sheet_headers:
-                # Append the value from new_row_values or None if not present
-                # This ensures that the new row matches the order of the headers
-                value = new_row_values.get(header, None)
-                ordered_new_row.append(value)
-            # Append the new row to the sheet
-            sheet.append_row(ordered_new_row)
-        print(f"Successfully processed values for course ID '{course_id}'.")
+            raise ValueError("Course does not exist. Please try a different course id.")
+        logging.debug(f"Successfully processed values for course ID '{course_id}'.")
 
     #Used for testing purposes
     @exponential_backoff
@@ -344,14 +334,14 @@ class gsEditor:
         # Create a Google Sheets client
         client = self.create_gs_client()
         
-
+        logging.debug(f'Opening spreadsheet')
         # Open the spreadsheet by name
         self.increase_api_count('API call: open')
         spreadsheet = client.open(self.sheet_name)
 
-        print('API call: get worksheet')
+        logging.debug('API call: get worksheet')
         sheet = spreadsheet.get_worksheet(0)
-
+        logging.info(f'getting all records from sheet')
         # Get all records
         self.increase_api_count('API call: get all records')
         records = sheet.get_all_records()
@@ -368,6 +358,8 @@ class gsEditor:
         Returns:
             None
         '''
+
+        logging.debug(f'Opening Sheet')
     # Create a Google Sheets client
         client = self.create_gs_client()
         
@@ -391,10 +383,11 @@ class gsEditor:
         credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scopes=SCOPE)
         drive_service = build('drive', 'v3', credentials=credentials)
 
+        logging.info(f'Deleting Sheet')
         # Delete the specified spreadsheet
         drive_service.files().delete(fileId=spreadsheet_id).execute()
         # Print confirmation message
-        print(f'Spreadsheet with Name: {self.sheet_name} and ID: {spreadsheet_id} deleted successfully.')
+        logging.debug(f'Spreadsheet with Name: {self.sheet_name} and ID: {spreadsheet_id} deleted successfully.')
 
     @exponential_backoff
     def delete_all_sheets(self):
@@ -402,17 +395,18 @@ class gsEditor:
         Deletes all sheets owned by the client 
             (should only be used for debugging)
         '''
-
+        logging.info(f'Deleting all sheets')
         self.increase_api_count('API call: list spreadsheet files')
         for f in self.client.list_spreadsheet_files() :
             try :
                 self.increase_api_count('API call: delete spreadsheet')
                 self.client.del_spreadsheet(f['id'])
-                print(f'Deleted file {f["name"]} with id {f["id"]}')
+                logging.debug(f'Deleted file {f["name"]} with id {f["id"]}')
             except :
-                print(f'Could not delete file {f["name"]} with id {f["id"]}')
+                logging.error(f'Could not delete file {f["name"]} with id {f["id"]}')
     
     def _convert_numpy_int64_to_int(self,obj):
+        logging.debug('Converting numpy object to integer')
         if isinstance(obj, np.int64):
             return int(obj)
         elif isinstance(obj, dict):
@@ -427,6 +421,8 @@ class gsEditor:
         '''
         Generates 'n' records for given sheet_name
         '''
+        # TO DO: may need to update to handle created_at and last_edited
+        logging.info(f'Generating test data')
         gs = gsEditor(sheet_name)
         gs.create_sheet(email)
         for i in range(1,n+1) :
@@ -443,7 +439,7 @@ class gsEditor:
         Returns:
         formatted_current_time: the formatted time
         '''
-
+        logging.debug(f'Fetching current time')
         current_time = datetime.now()
         formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
         return formatted_current_time
@@ -456,6 +452,8 @@ class gsEditor:
         Returns:
         str: The course ID of the newly created course.
         '''
+        logging.info('Creating new course')
+        logging.debug('Opening sheet ')
         # Create a Google Sheets client
         client = self.client
         # Open the spreadsheet by name
@@ -479,6 +477,7 @@ class gsEditor:
         for col in sheet_headers:
             new_row_values[col] = None
 
+        logging.debug(f'Getting last course id and incrementing')
         # Generate new course id by incrementing from last course_id
         if df.empty or len(df) == 1 and df["course_id"].iloc[0] == df.columns[0]:
             # If the DataFrame is empty or only has headers, start with a default course_id
@@ -488,20 +487,23 @@ class gsEditor:
             new_num = int(last_course_id[1:])+1
         new_course_id = f'c{new_num}'
         
+
         # Set the course_id in the new row
         new_row_values['course_id'] = new_course_id
 
+        logging.debug(f'Update time create and edited columns')
         #Update created and edited columns
         formatted_current_time = self._fetch_current_time()
         values_dict['created_at'] = formatted_current_time
         values_dict['last_edited'] = formatted_current_time
 
+        logging.debug(f'Add new row')
         # Add the provided values from values_dict
         for column, new_val in values_dict.items():
             if column in sheet_headers:
                 new_row_values[column] = new_val
             else:
-                print(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'.")
+                logging.warn(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'.")
 
         # Ensure values are in the correct order for appending
         ordered_new_row = []  # Initialize an empty list to store the ordered values
@@ -512,6 +514,6 @@ class gsEditor:
             ordered_new_row.append(value)
         # Append the new row to the sheet
         sheet.append_row(ordered_new_row)
-        print(f"Successfully processed values for course ID '{new_course_id}'.")
+        logging.debug(f"Successfully processed values for course ID '{new_course_id}'.")
         return new_course_id
         

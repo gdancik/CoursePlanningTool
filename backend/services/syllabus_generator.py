@@ -24,7 +24,7 @@ def get_webpage(url) :
         r = requests.get(url)
     except Exception as error:
         # handle the exception
-        print("An exception occurred:", error)
+        logging.error("An exception occurred:", error)
 
     if r.status_code != 200 :
         raise(f'Error with connection to {url}\n, status code is {r.status_code}')

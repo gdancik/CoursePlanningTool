@@ -6,7 +6,6 @@ from backend.services.app_services import get_gs_editor
 
 from . import auth_bp
 import logging
-logging.basicConfig(level=logging.DEBUG,format="%(levelname)s from %(funcName)s: %(message)s")
 
 ''' Routes to handle login and logout'''
 

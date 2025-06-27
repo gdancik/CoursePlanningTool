@@ -10,6 +10,8 @@ from backend.admin import admin_bp
 
 from backend.config import Config
 
+
+
 ###############################################
 # create app
 ###############################################
@@ -40,7 +42,24 @@ def create_app(config = Config):
     if app.config['DEBUG'] :
         from backend.test_api import test_api_bp
         app.register_blueprint(test_api_bp, url_prefix='/api')
-
+    
+  
+    import logging
+    if app.config['LOGGING'] == 'DEBUG':
+        logging.basicConfig(level=logging.DEBUG,format="%(levelname)s from %(funcName)s: %(message)s")
+    if app.config['LOGGING'] == 'INFO':
+        logging.basicConfig(level=logging.INFO,format="%(levelname)s from %(funcName)s: %(message)s")
+    elif app.config['LOGGING'] == 'WARN':
+        logging.basicConfig(level=logging.WARN,format="%(levelname)s from %(funcName)s: %(message)s")
+    elif app.config['LOGGING'] == 'ERROR':
+        logging.basicConfig(level=logging.ERROR,format="%(levelname)s from %(funcName)s: %(message)s")
+    elif app.config['LOGGING'] == 'CRITICAL':
+        logging.basicConfig(level=logging.CRITICAL,format="%(levelname)s from %(funcName)s: %(message)s")
+    elif app.config['LOGGING'] == 'NONE':
+        logger = logging.getLogger()
+        logging.disable(logging.CRITICAL)
+    
+        
     return app
 
 

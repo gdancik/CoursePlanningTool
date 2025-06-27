@@ -14,7 +14,7 @@ from backend.services.app_services import get_gs_editor
 
 from . import api_bp
 import logging
-logging.basicConfig(level=logging.DEBUG,format="%(levelname)s from %(funcName)s: %(message)s")
+
 
 def valid_parameters(actual, required):
     actual_set = set(actual)

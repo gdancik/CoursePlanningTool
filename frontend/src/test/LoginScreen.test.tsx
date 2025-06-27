@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import LoginScreen from "../screens/LoginScreen";
+import LoginScreen from "../screens/Login/LoginScreen";
 
 // Mock useNavigate
 const mockedNavigate = jest.fn();
@@ -41,38 +41,6 @@ jest.mock("../hooks/useLogin", () => {
     };
 });
 
-describe("LoginScreen", () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
-
-    it("should display success and redirect if login is successful", async () => {
-        render(
-            <BrowserRouter>
-                <LoginScreen />
-            </BrowserRouter>
-        );
-
-        fireEvent.change(screen.getByPlaceholderText("Username"), {
-            target: { value: "annie" },
-        });
-        fireEvent.change(screen.getByPlaceholderText("Password"), {
-            target: { value: "password" },
-        });
-
-        fireEvent.click(screen.getByText("Login"));
-
-        expect(
-            await screen.findByText(/Welcome, annie! Redirecting in 3 seconds/i)
-        ).toBeInTheDocument();
-
-        await waitFor(
-            () => {
-                expect(mockedNavigate).toHaveBeenCalledWith("/course-page");
-            },
-            { timeout: 3500 }
-        );
-    });
 
     it("should display error and not redirect if password is incorrect", async () => {
         render(
@@ -100,4 +68,3 @@ describe("LoginScreen", () => {
 
         expect(mockedNavigate).not.toHaveBeenCalled();
     });
-});

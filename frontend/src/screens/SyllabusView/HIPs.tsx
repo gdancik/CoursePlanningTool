@@ -1,5 +1,5 @@
 import {useNavigate, useLocation} from "react-router-dom";
-import {handleBack,handleNext} from "../../utils/ButtonLogic";
+import {handleBack,handleNext} from "../../components/Button/ButtonLogic";
 import AppLayout from "../../ApplicationLayout/Applayout";
 
 const HIPs = () => {

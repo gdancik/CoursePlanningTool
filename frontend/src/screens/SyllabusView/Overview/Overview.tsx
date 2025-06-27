@@ -10,7 +10,7 @@ import OverviewCard from "./OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSections";
 import AppLayout from "../../../ApplicationLayout/Applayout"
 import './Overview.css'
-import {handleBack, handleNext} from "../../../utils/ButtonLogic";
+import {handleBack, handleNext} from "../../../components/Button/ButtonLogic";
 
 // Functional component that displays the overview page.
 const Overview = () => {

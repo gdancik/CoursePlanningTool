@@ -1,4 +1,4 @@
-// useLogin.ts This hook manages the hook wit regards to handling user data pre google implementation
+// useLogin.ts This hook manages the hook with regards to handling user data pre google implementation
 
 import {useState} from "react";
 import {login,logout} from "../services/TestServices/LoginAPiError";

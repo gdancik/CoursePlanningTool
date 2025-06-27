@@ -8,3 +8,4 @@ frontend/.env
 .coverage/
 
 backend/service_account.json
+/backend/admin/__pycache__

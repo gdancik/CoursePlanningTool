@@ -1,4 +1,25 @@
-import { createApiCaller } from "../../utils/apiFactory";
+///Old Code could still be use
+// TEMP: Bypass CORS for testing only
+//const proxy = "https://cors-anywhere.herokuapp.com/";
+//onst BASE_URL = proxy + "https://gdancik.pythonanywhere.com/api";
+
+// Get all courses from a given sheet (ex: 'annie')
+//export const getCoursesFromSheet = async (sheetName: string) => {
+//   const response = await axios.post(`${BASE_URL}/getSheet`, {
+//       sheet_name: sheetName,
+//   });
+///   return response.data;
+//};
+
+// Create a new course
+///export const createNewCourse = async () => {
+ //   const response = await axios.post(`${BASE_URL}/createNewCourse`);
+ //   return response.data;
+//};
+
+
+import Papa from "papaparse";
+import axios from "axios";
 
 export interface Course {
     course_id: string;
@@ -8,22 +29,22 @@ export interface Course {
     last_edited: string;
     [key: string]: string;
 }
+const USE_CSV = true;
 
-// Fetch all courses
-export const fetchCourses = createApiCaller<Course[]>({
-    url: "https://gdancik.pythonanywhere.com/api/getSheet/",
-    method: "POST",
-    withCredentials: true,
-    transformResponse: (data) => data ?? [],
-});
+export const fetchCourses = async (): Promise<Course[]> => {
+    if (USE_CSV) {
+        const res = await fetch("/data/mock_courses.csv");
+        const text = await res.text();
+        const parsed = Papa.parse<Course>(text, {
+            header: true,
+            skipEmptyLines: true,
+            dynamicTyping: true
+        });
 
-// Create a new course and get back the new course_id
-export const createNewCourse = (data: Record<string, string>) =>
-    createApiCaller<{ course_id: string }>({
-        url: "/createNewCourse/",
-        method: "POST",
-        withCredentials: true,
-        data: {
-            dict_of_columns_and_vals: data,
-        },
-    })();
+        // Filter out empty rows or rows missing course_id
+        return parsed.data.filter((row) => row.course_id?.trim());
+    } else {
+        const res = await axios.post("/api/getSheet");
+        return res.data;
+    }
+};

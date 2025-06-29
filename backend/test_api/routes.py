@@ -79,7 +79,7 @@ def hi():
 
 @test_api_bp.route('valid_inputs/')
 def valid_inputs():
-    return jsonify(cp.columns)
+    return jsonify(cp.columns_detailed)
 
 ''' Generate a word document! '''
 @test_api_bp.route('generate/', methods=['POST'])

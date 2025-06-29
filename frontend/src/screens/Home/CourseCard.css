@@ -1,0 +1,7 @@
+.course-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 16px;
+    margin: 10px 0;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+}

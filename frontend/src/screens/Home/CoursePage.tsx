@@ -3,25 +3,21 @@ import StandardHeader from "../../components/Header/standardHeader";
 import ReusableButton from "../../components/Button/ReusableButton";
 import { FaPlus } from "react-icons/fa";
 import SafeIcon from "../../utils/ComponentWrapper";
+import {fetchCourses, Course} from "../../services/course/courseService";
 import CourseModal from "../../components/CourseModal/NewCourseModal";
-import {getCoursesFromSheet} from "../../services/course/courseService";
+import CourseCard from "./CourseCard"
 import './CoursePage.css'
 
 const CoursePage = () =>{
     const[isModalOpen, setModalOpen] = useState(false);
-    const [courses, setCourses] = useState([]);
-    const sheetName = "annie";
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCourses = async() => {
-            try {
-                const data = await getCoursesFromSheet(sheetName);
-                setCourses(data);
-            }catch (err){
-                console.error("Failed to load courses", err);
-            }
-        };
-        fetchCourses();
+        fetchCourses()
+            .then(setCourses)
+            .catch((err) => console.error("Error loading courses:", err))
+            .finally(() => setLoading(false));
     }, []);
 
     const handleCreateCourse = (data: Record<string, string>) => {
@@ -35,7 +31,6 @@ const CoursePage = () =>{
         <div>
             <StandardHeader/>
             <div className="course-page">
-
                 <h1 className="course-tool-head">Course Planning Tool</h1>
 
                 <ReusableButton
@@ -47,12 +42,16 @@ const CoursePage = () =>{
                 />
 
                 <div className="course-list">
-                    {courses.map((course: any, idx) => (
-                        <div key={idx} className="course-item">
-                            <h3>{course.course_title || "Untitled Course"}</h3>
-                            <p>Instructor: {course.instructor || "N/A"}</p>
-                        </div>
-                    ))}
+                    <h1> My Courses</h1>
+                    {loading ? (<p>Loading...</p>):
+                        (
+                            courses.map((course) => (
+                                <CourseCard
+                                key ={course.course_id}
+                                course = {course}
+                                onEdit={(id) => console.log("Edit", id)}
+                                />
+                            )))}
                 </div>
         </div>
     <CourseModal

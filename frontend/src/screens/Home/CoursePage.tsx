@@ -6,6 +6,7 @@ import SafeIcon from "../../utils/ComponentWrapper";
 import {fetchCourses, Course} from "../../services/course/courseService";
 import CourseModal from "../../components/CourseModal/NewCourseModal";
 import CourseCard from "./CourseCard"
+import bgImage from '../../assets/images/bookstack-bg.png'
 import './CoursePage.css'
 
 const CoursePage = () =>{
@@ -30,7 +31,16 @@ const CoursePage = () =>{
     return(
         <div>
             <StandardHeader/>
-            <div className="course-page">
+            <div className="course-page"
+                 style={{
+                     backgroundImage: `url(${bgImage})`,
+                     backgroundSize: 'cover',
+                     backgroundPosition: 'center',
+                     backgroundRepeat: 'no-repeat',
+                     backgroundAttachment: 'fixed',
+                     minHeight: '100vh',
+                 }}>
+                <div className="overlay"/>
                 <h1 className="course-tool-head">Course Planning Tool</h1>
 
                 <ReusableButton

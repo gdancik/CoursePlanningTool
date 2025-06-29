@@ -26,25 +26,28 @@ export interface Course {
     course_title: string;
     instructor: string;
     term: string;
+    course_type: string;
+    crested_at: string;
     last_edited: string;
     [key: string]: string;
 }
 
 const USE_CSV = true;
 
-export const fetchCourses = async(): Promise<Course[]> => {
+export const fetchCourses = async (): Promise<Course[]> => {
     if (USE_CSV) {
-        const res = await fetch ("/mock_courses.csv");
+        const res = await fetch("/data/mock_courses.csv");
         const text = await res.text();
-        const parsed = Papa.parse<Course> (text, {
+        const parsed = Papa.parse<Course>(text, {
             header: true,
             skipEmptyLines: true,
+            dynamicTyping: true
         });
-        return parsed.data ;
+
+        // Filter out empty rows or rows missing course_id
+        return parsed.data.filter((row) => row.course_id?.trim());
+    } else {
+        const res = await axios.post("/api/getSheet");
+        return res.data;
     }
-    else
-    {
-     const res = await axios.post("/api/getSheet");
-     return res.data;
-    }
-}
+};

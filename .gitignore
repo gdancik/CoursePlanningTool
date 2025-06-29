@@ -14,3 +14,4 @@ backend/service_account.json
 /backend/auth/__pycache__
 /backend/models/__pycache__
 /backend/services/__pycache__
+backend/tests/api_integration_test.py

@@ -23,15 +23,12 @@ import axios from "axios";
 
 export interface Course {
     course_id: string;
-    course_title: string;
-    instructor: string;
-    term: string;
-    course_type: string;
-    crested_at: string;
+    course_title_syllabus: string;
+    instructor_name_syllabus: string;
+    term_syllabus: string;
     last_edited: string;
     [key: string]: string;
 }
-
 const USE_CSV = true;
 
 export const fetchCourses = async (): Promise<Course[]> => {

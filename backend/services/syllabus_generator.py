@@ -307,3 +307,41 @@ def generate_grading_policies(doc, policies:list):
         run_description.font.name = 'Calibri'
         run_description.bold = False
         run_description.italic = False
+        
+import doc_editor as de
+import gs_editor as gse
+import course_planning as cp
+
+from docx import Document
+
+def generate_syllabus(doc ,course_id):
+
+    def table_placeholder_replacement(doc,paragraph,placeholder_text, table_list):
+        if placeholder_text in paragraph.text:
+            table = add_styled_table(doc,table_list)
+            paragraph.clear()
+            paragraph._p.addnext(table._tbl)
+
+    # Do find and replace for syllabus template
+    #use gs editor to get fr_dict
+    #TODO Change name to user.id
+    gs = gse.gsEditor('annie')
+    column_names=cp.columns
+    fr_dict = gs.getValue(course_id, column_names)
+    #call find replace for syllabus 
+    ns = {}
+    logging.debug('Removing "_syllabus" from the column names')
+    ns = {key[:-9]: value for key, value in fr_dict.items() if key.endswith('_syllabus')}
+    de.replaceTextInParagraph(doc, ns)
+
+    #Fill out table for placeholders
+    tables_col = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_list')}
+    for paragraph in doc.paragraphs:
+        for key, value in tables_col.items():
+            table_placeholder_replacement(doc,paragraph,key, value)
+
+    # policy place holders are replaced
+    # Blocks are removed
+    # syllabus is saved as a doc
+    pass
+    

@@ -1,3 +1,5 @@
+## change to .yml to activate -- but note this runs all nb/*.ipynb files, some of which generate data for testing 
+
 name: nb
 
 on:

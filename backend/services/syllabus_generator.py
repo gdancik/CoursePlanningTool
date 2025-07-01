@@ -11,7 +11,7 @@ import logging
 
 
 #%%
-def get_webpage(url) :
+def get_webpage(url: str) :
     ''' 
     Returns the text from url, if valid.
     Args:
@@ -50,7 +50,7 @@ def extractFromAccordian(soup):
             headers_and_content[header] = content 
     return headers_and_content
 
-def getStatements(url,selected_statements = None):
+def getStatements(url,selected_statements:list = None):
     '''
     Gets the syllabus statements from the given URL. by searching for the accordion classes then finding the rows and extracting the header and content.
     Args:
@@ -78,7 +78,7 @@ def getStatements(url,selected_statements = None):
     #return selected statements
     return statments
 
-def create_syllabus_statment_page(doc,url,selected_statements=None):
+def create_syllabus_statment_page(doc,url: str,selected_statements=None):
     '''
     Creates a syllabus statement page in the given Word document by fetching statements from a the syllabus statement website and adding them to the document.
     Args:
@@ -96,7 +96,7 @@ def create_syllabus_statment_page(doc,url,selected_statements=None):
         html_to_word_htmldocx(doc,header_string)
         html_to_word_htmldocx(doc,content_string)  
 
-def html_to_word_htmldocx(doc,html_content):
+def html_to_word_htmldocx(doc,html_content: str):
     '''
     Converts HTML content to a Word document using the HtmlToDocx module and adds it to the specified document.
     Args:
@@ -111,7 +111,7 @@ def html_to_word_htmldocx(doc,html_content):
     new_parser = HtmlToDocx()
     new_parser.add_html_to_document(cleaned_html,doc)
 
-def _strip_whitespace_from_div(html_content):
+def _strip_whitespace_from_div(html_content: str):
     '''
     Strips unnecessary whitespace from HTML content, specifically around <p> and <div class="content"> tags.
     Args:
@@ -124,18 +124,33 @@ def _strip_whitespace_from_div(html_content):
     stripped_html = re.sub(r'(<\/div class="content">)\s+', r'\1', stripped_html)
     return stripped_html
 
-def add_table_to_doc(doc, table_list:list, header = True):
+def add_table_to_doc(doc, table_list:list, merge: list = None, header = True):
     '''
     Adds a table to the given Word document using the provided list of lists.
     Args:
         doc (Document): The Word document object to which the table will be added.
         table_list (list of lists): A list of lists representing the table data.
+        merge (list of list): A list of list where each sublist contains three elements:
+            - The row number (1-indexed) where the merge should occur.
+            - The first cell to merge (1-indexed).
+            - The second cell to merge (1-indexed).
         header (bool, optional): If True, the first row of table_list is treated as the header row. Defaults to True.
     Returns:
+        table (Table): The created table object.
     '''
 
     logging.info(f'Adding table to document')
     table = doc.add_table(rows=len(table_list), cols=len(table_list[0]),style = "Table Grid")
+
+    if merge:
+        logging.debug('Merging Cells')
+        #iterate through list
+        for i in merge:
+            #for each list the first val is the row num and the other 2 are the cells to combine
+            row = table.rows[i[0]-1]
+            cell1= row.cells[i[1]-1]
+            cell2= row.cells[i[2]-1]
+            cell1.merge(cell2)
 
     for i, row in enumerate(table_list):
         for j, cell_data in enumerate(row):
@@ -255,7 +270,7 @@ def add_styled_table(doc, table_list:list, header = True, center = False):
         table (Table): The created and styled table object.
     '''
     # Make table
-    table = add_table_to_doc(doc, table_list, header)
+    table = add_table_to_doc(doc, table_list, False)
     # Style table
     style_table_borders(table)
     if center == True:
@@ -264,3 +279,31 @@ def add_styled_table(doc, table_list:list, header = True, center = False):
     if header == True:
         style_table_header(table)
     return table
+
+def generate_grading_policies(doc, policies:list):
+    '''
+    Generates a section in the Word document for grading policies, formatting each policy with a title and description.
+    Args:
+        doc (Document): The Word document object to which the grading policies will be added.
+        policies (list of dict): A list of dictionaries where each dictionary contains a policy title and its description.
+    Returns:
+        None
+    '''
+    for i in policies:
+        title = list(i.keys())[0]
+        paragraph = doc.add_paragraph(title)
+        run_title = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+        run_title.font.color.rgb = RGBColor(32, 44, 92)
+        run_title.font.size = Pt(13)
+        run_title.font.name = 'Calibri'
+        run_title.bold = True
+        run_title.italic = True
+
+        description = list(i.values())[0]
+        paragraph = doc.add_paragraph(description)
+        run_description = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+        run_description.font.color.rgb = RGBColor(0, 0, 0)
+        run_description.font.size = Pt(11)
+        run_description.font.name = 'Calibri'
+        run_description.bold = False
+        run_description.italic = False

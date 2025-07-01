@@ -7,7 +7,7 @@ node_modules/
 frontend/.env
 .coverage/
 
-backend/service_account.json
+backend/GS_CREDENTIALS_JSON.json
 /backend/admin/__pycache__
 /backend/api/__pycache__
 /backend/main/__pycache__

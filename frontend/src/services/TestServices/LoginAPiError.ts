@@ -1,9 +1,9 @@
+
 // /src/services/loginApiError.ts
 export const login = async (user: string, password: string): Promise<{ user: string }> => {
     const response = await fetch(
-            `https://gdancik.pythonanywhere.com/api/test_login/?user=${user}&password=${password}`
+        `https://gdancik.pythonanywhere.com/api/test_login/?user=${user}&password=${password}`
     );
-
     if (response.status === 200) {
         return response.json();
     } else if (response.status === 401) {

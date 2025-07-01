@@ -29,7 +29,11 @@ export interface Course {
     last_edited: string;
     [key: string]: string;
 }
-const USE_CSV = true;
+const USE_CSV = false;
+const proxy = "https://cors-anywhere.herokuapp.com/";
+const BASE_URL = proxy + "https://gdancik.pythonanywhere.com/api";
+
+
 
 export const fetchCourses = async (): Promise<Course[]> => {
     if (USE_CSV) {
@@ -44,7 +48,7 @@ export const fetchCourses = async (): Promise<Course[]> => {
         // Filter out empty rows or rows missing course_id
         return parsed.data.filter((row) => row.course_id?.trim());
     } else {
-        const res = await axios.post("/api/getSheet");
+        const res = await axios.post(`${BASE_URL}/getSheet`, {}, { withCredentials: true });
         return res.data;
     }
 };

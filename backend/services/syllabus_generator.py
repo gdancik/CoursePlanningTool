@@ -94,7 +94,7 @@ def create_syllabus_statment_page(doc,url: str,selected_statements=None):
         header_string = str(header)
         content_string = str(list(content)[0])
         html_to_word_htmldocx(doc,header_string)
-        html_to_word_htmldocx(doc,content_string)  
+        html_to_word_htmldocx(doc,content_string)
 
 def html_to_word_htmldocx(doc,html_content: str):
     '''
@@ -311,36 +311,52 @@ def generate_grading_policies(doc, policies:list):
 import doc_editor as de
 import gs_editor as gse
 import course_planning as cp
+import ast
 
-from docx import Document
+def generate_syllabus(doc, course_id):
+    """
+    Generates a syllabus document by replacing placeholders with actual values.
 
-def generate_syllabus(doc ,course_id):
-
-    def table_placeholder_replacement(doc,paragraph,placeholder_text, table_list):
+    Args:
+        doc (Document): The Word document object to be modified.
+        course_id (str): The ID of the course for which the syllabus is generated.
+    """
+    def table_placeholder_replacement(doc, paragraph, placeholder_text, table_list):
         if placeholder_text in paragraph.text:
-            table = add_styled_table(doc,table_list)
+            table = add_styled_table(doc, table_list)
             paragraph.clear()
             paragraph._p.addnext(table._tbl)
+            return True
+        return False
 
-    # Do find and replace for syllabus template
-    #use gs editor to get fr_dict
-    #TODO Change name to user.id
+    # Retrieve course data using gsEditor
     gs = gse.gsEditor('annie')
-    column_names=cp.columns
+    column_names = cp.columns
     fr_dict = gs.getValue(course_id, column_names)
-    #call find replace for syllabus 
-    ns = {}
-    logging.debug('Removing "_syllabus" from the column names')
+
+    # Process dictionary to remove "_syllabus" suffix from keys
     ns = {key[:-9]: value for key, value in fr_dict.items() if key.endswith('_syllabus')}
+    logging.debug('Removing "_syllabus" from the column names')
     de.replaceTextInParagraph(doc, ns)
 
-    #Fill out table for placeholders
+    # Process dictionary to handle table placeholders
     tables_col = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_list')}
+    logging.debug('Processing table placeholders')
+    policy = fr_dict.get('policy_statements',None)
+    # Iterate through paragraphs and replace table placeholders
     for paragraph in doc.paragraphs:
         for key, value in tables_col.items():
-            table_placeholder_replacement(doc,paragraph,key, value)
+            logging.debug(f'placeholder name: {key}')
+            if value:
+                try:
+                    # Clean and evaluate the string to convert it to a list
+                    cleaned_value = value.rstrip('\'')
+                    evaluated_value = ast.literal_eval(cleaned_value)
+                    if table_placeholder_replacement(doc, paragraph, key, evaluated_value):
+                        logging.info('Table placeholder replaced')
+                except (ValueError, SyntaxError) as e:
+                    logging.error(f"Error evaluating string for key {key}: {e}")
 
-    # policy place holders are replaced
     # Blocks are removed
     # syllabus is saved as a doc
     pass

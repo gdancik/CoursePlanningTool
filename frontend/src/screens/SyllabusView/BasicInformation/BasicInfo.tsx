@@ -1,5 +1,4 @@
 // Imports layout, React, routing, icons, utility functions, and components
-
 import AppLayout from "../../../ApplicationLayout/Applayout";
 import React, {useEffect, useState} from "react";
 import {createSaveHandler, createSaveAndExitHandler, createPreviewHandler} from "../../../utils/handlers/formHandlersFactory";
@@ -35,12 +34,9 @@ const BasicInfo = () =>{
 
         const storedData = localStorage.getItem("newCourseData");
         if (storedData) {
-            try{
-                const parsed = JSON.parse(storedData);
-                setFormData(parsed);
-            } catch (err) {
-                console.warn("Failed to parse saved course data:", err);
-            }
+            const parsed = JSON.parse(storedData);
+            console.log("Loaded course ID:", parsed.course_id); // Must not be undefined
+            setFormData(parsed);
         }
     }, []);
 

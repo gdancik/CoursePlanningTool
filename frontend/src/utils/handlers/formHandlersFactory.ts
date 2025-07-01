@@ -11,6 +11,7 @@ type ModalControls = {
 }
 
 export const createSaveHandler = (
+
     formData: Record<string, string>,
     modal: ModalControls
 
@@ -41,6 +42,7 @@ export const createSaveHandler = (
             modal.setVisible(false);
         }
     };
+
 };
 export const createSaveAndExitHandler = (
     formData: Record<string, string>,

@@ -16,8 +16,8 @@ export const fetchCourses = createApiCaller<Course[]>({
     withCredentials: true,
 });
 export const createNewCourse = (data: Record<string, string>) =>
-    createApiCaller<void>({
-        url: "createNewCourse/",
+    createApiCaller<{ course_id: string }>({
+        url: "/createNewCourse/",
         method: "POST",
         withCredentials: true,
         data: {

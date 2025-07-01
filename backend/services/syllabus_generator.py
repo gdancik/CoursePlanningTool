@@ -145,12 +145,11 @@ def add_table_to_doc(doc, table_list:list, merge: list = None, header = True):
     if merge:
         logging.debug('Merging Cells')
         #iterate through list
-        for row in merge:
+        for i in merge:
             #for each list the first val is the row num and the other 2 are the cells to combine
-            row = table.rows[merge[0]-1]
-            cell1= row.cells[merge[1]-1]
-            cell2= row.cells[merge[2]-1]
-            #call cell.[val2].merge(val3)
+            row = table.rows[i[0]-1]
+            cell1= row.cells[i[1]-1]
+            cell2= row.cells[i[2]-1]
             cell1.merge(cell2)
 
     for i, row in enumerate(table_list):

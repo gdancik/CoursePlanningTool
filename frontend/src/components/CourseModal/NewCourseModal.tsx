@@ -12,18 +12,25 @@ interface CourseField {
     placeholder: string;
     required: boolean;
     options?: (string | number)[];
+
 }
 
 interface CourseModalProps {
     isOpen: boolean;
     onClose: () => void;
     onCreate: (data: Record<string, string>) => void;
+    modalTitle: string;
+    modalMessage: string;
+    modalStatus: "loading" | "success";
 }
 
 const CourseModal: React.FC <CourseModalProps> = ({
-    isOpen,
-    onClose,
-    onCreate
+                                                      isOpen,
+                                                      onClose,
+                                                      onCreate,
+                                                      modalTitle,
+                                                      modalMessage,
+                                                      modalStatus
 }) => {
 
     const navigate = useNavigate()
@@ -89,6 +96,12 @@ const CourseModal: React.FC <CourseModalProps> = ({
                     <button className="close-btn" onClick={onClose}>
                         &times;
                     </button>
+                    {(modalTitle || modalMessage) && (
+                        <div className={`modal-status ${modalStatus}`}>
+                            <h3>{modalTitle}</h3>
+                            <p>{modalMessage}</p>
+                        </div>
+                    )}
                     <form onSubmit={handleSubmit}>
                         <div className="form-grid">
                             {courseFields.map((field: CourseField, idx: number) => (

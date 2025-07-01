@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { createCourseHandler} from "../../utils/handlers/courseHandler";
 import StandardHeader from "../../components/Header/standardHeader";
 import ReusableButton from "../../components/Button/ReusableButton";
 import { FaPlus } from "react-icons/fa";
@@ -13,21 +14,25 @@ const CoursePage = () =>{
     const[isModalOpen, setModalOpen] = useState(false);
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
+    const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
 
-    useEffect(() => {
-        fetchCourses()
-            .then(setCourses)
-            .catch((err) => console.error("Error loading courses:", err))
-            .finally(() => setLoading(false));
-    }, []);
 
     const handleCreateCourse = (data: Record<string, string>) => {
-        console.log("CourseData submitted form modal :", data);
-        localStorage.setItem("newCourseData", JSON.stringify(data));
+        const handler = createCourseHandler(
+            data,
+            {
+                setVisible: setModalOpen,
+                setStatus: setModalStatus,
+                setTitle: setModalTitle,
+                setMessage: setModalMessage,
+            },
+            () => {}
+        );
+        handler();
+    };
 
-
-        //TODO: Set up backend or save local
-    }
     return(
         <div>
             <StandardHeader/>
@@ -64,12 +69,14 @@ const CoursePage = () =>{
                             )))}
                 </div>
         </div>
-    <CourseModal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        onCreate={handleCreateCourse}
-    />
-
+            <CourseModal
+                isOpen={isModalOpen}
+                onClose={() => setModalOpen(false)}
+                onCreate={handleCreateCourse}
+                modalTitle={modalTitle}
+                modalMessage={modalMessage}
+                modalStatus={modalStatus}
+            />
 </div>
 )
     ;

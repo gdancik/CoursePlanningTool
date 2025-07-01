@@ -19,7 +19,7 @@ import GradeTable from "../components/gradeTable"
 import Overview from "../screens/SyllabusView/Overview/Overview";
 import Assessment from "../screens/SyllabusView/Assessment";
 import BasicInfo from "../screens/SyllabusView/BasicInformation/BasicInfo";
-import Description from "../screens/SyllabusView/Description";
+import Description from "../screens/SyllabusView/Description/Description";
 import LearningOutcomes from "../screens/SyllabusView/LearningOutcomes";
 import HIPs from "../screens/SyllabusView/HIPs";
 import CourseSchedule from "../screens/SyllabusView/CourseSchedule";

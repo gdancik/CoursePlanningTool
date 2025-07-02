@@ -67,7 +67,7 @@ const CourseModal: React.FC <CourseModalProps> = ({
 
         if (existingCourses[courseId]) {
             alert("Course already exists. Redirecting to existing course.");
-            localStorage.setItem("selectedCourse", courseId);
+            localStorage.setItem("newCourseData", courseId);
             navigate("/overview");
             return;
         }
@@ -75,7 +75,7 @@ const CourseModal: React.FC <CourseModalProps> = ({
         // Save new course
         existingCourses[courseId] = formData;
         localStorage.setItem("allCourses", JSON.stringify(existingCourses));
-        localStorage.setItem("selectedCourse", courseId);
+        localStorage.setItem("newCourseData", courseId);
 
         console.log("New course created:", formData);
         onCreate(formData);

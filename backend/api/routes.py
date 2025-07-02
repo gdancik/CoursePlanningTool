@@ -176,8 +176,8 @@ def updateValue():
 
         # Call the updateValue function
         logging.info("Updating a value in the google sheet")
-        course_id = gs.createNewCourse(columns)
-        return jsonify({"course_id": course_id})
+        gs.updateValue(course_id, columns)
+        return jsonify('Function called successfully')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

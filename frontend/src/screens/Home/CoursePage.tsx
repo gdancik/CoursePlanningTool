@@ -4,7 +4,7 @@ import StandardHeader from "../../components/Header/standardHeader";
 import ReusableButton from "../../components/Button/ReusableButton";
 import { FaPlus } from "react-icons/fa";
 import SafeIcon from "../../utils/ComponentWrapper";
-import {fetchCourses, Course} from "../../services/course/courseService";
+import {getCourses, Course} from "../../services/course/courseService";
 import CourseModal from "../../components/CourseModal/NewCourseModal";
 import CourseCard from "./CourseCard"
 
@@ -21,7 +21,7 @@ const CoursePage = () =>{
     useEffect(() => {
         const loadCourses = async () => {
             try {
-                const result = await fetchCourses();
+                const result = await getCourses();
                 setCourses(result ?? []);
             } catch (error) {
                 console.error("Failed to fetch courses:", error);

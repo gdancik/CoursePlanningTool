@@ -10,12 +10,53 @@ export interface Course {
     [key: string]: string;
 }
 
-export const fetchCourses = createApiCaller<Course[]>({
-    url: "getSheet/",
-    method: "POST",
-    withCredentials: true,
-});
-export const createNewCourse = (data: Record<string, string>): Promise<{ course_id: string } | null> => {
+export const getNewCourseId = (): Promise<{ course_id: string } | null> => {
+    return createApiCaller<{ course_id: string }>({
+        url: "getNewCourseId",
+        method: "GET",
+        withCredentials: true,
+    })();
+};
+
+
+export const updateValue = (
+    course_id: string,
+    values: Record<string, string>
+): Promise<void | null> => {
+    return createApiCaller<void>({
+        url: "updateValue/",
+        method: "POST",
+        withCredentials: true,
+        data: {
+            course_id,
+            dict_of_columns_and_vals: values,
+        },
+    })();
+};
+
+//  Get all user courses (different from getSheet)
+export const getCourses = (): Promise<Course[] | null> => {
+    return createApiCaller<Course[]>({
+        url: "getSheet/",
+        method: "POST",
+        withCredentials: true,
+    })();
+};
+
+export const getValue = (
+    course_id: string
+): Promise<Record<string, string> | null> => {
+    return createApiCaller<Record<string, string>>({
+        url: "getValue",
+        method: "POST",
+        withCredentials: true,
+        data: { course_id },
+    })();
+};
+
+export const createNewCourse = (
+    data: Record<string, string>
+): Promise<{ course_id: string } | null> => {
     return createApiCaller<{ course_id: string }>({
         url: "createNewCourse/",
         method: "POST",

@@ -37,7 +37,7 @@ const BasicInfo = () =>{
         loadBasicInfoFields("/data/basic_info_fields.csv").then(setFields);
         // Load the course modal data JSON
 
-        const storedData = localStorage.getItem("newCourseData");
+        const storedData = localStorage.getItem("allCourses");
         if (storedData) {
             const parsed = JSON.parse(storedData);
             console.log("Loaded course ID:", parsed.course_id); // Must not be undefined

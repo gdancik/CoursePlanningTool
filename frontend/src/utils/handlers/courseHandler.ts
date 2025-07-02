@@ -1,6 +1,9 @@
 import { jsonFieldsMapper } from "../jsonFieldsMapper";
-import { createNewCourse as apiCreateNewCourse, fetchCourses as apiFetchCourses } from "../../services/course/courseService";
-import { Course } from "../../services/course/courseService";
+import {
+    createNewCourse as apiCreateNewCourse,
+    getCourses as apiFetchCourses,
+    Course
+} from "../../services/course/courseService";
 
 type ModalControls = {
     setVisible: (visible: boolean) => void;
@@ -22,21 +25,46 @@ export const createCourseHandler = (
 
         const mappedData = jsonFieldsMapper(formData);
 
+        //  Call the backend to create the course (writes to sheet)
         const result = await apiCreateNewCourse(mappedData);
-        //  Inject course_id into mappedData and localStorage
-        if (result !== null) {
-            const updatedCourses = await apiFetchCourses();
-            if (updatedCourses) {
-                onSuccess(updatedCourses);
-                modal.setStatus("success");
-                modal.setTitle("Course Created");
-                modal.setMessage("Your course was created successfully!");
-                setTimeout(() => modal.setVisible(false), 1500);
-            } else {
-                modal.setVisible(false);
-            }
-        } else {
+        if (!result) {
             modal.setVisible(false);
+            return;
         }
+
+        //  Fetch all current courses (sheet rows)
+        const allCourses = await apiFetchCourses();
+        if (!allCourses) {
+            modal.setVisible(false);
+            return;
+        }
+
+        //  Match the course we just created
+        const newCourse = allCourses.find(course =>
+            course.course_title_syllabus === mappedData.course_title_syllabus &&
+            course.instructor_name_syllabus === mappedData.instructor_name_syllabus &&
+            course.term_syllabus === mappedData.term_syllabus
+        );
+
+        if (!newCourse?.course_id) {
+            console.error("Could not find created course in sheet.");
+            modal.setVisible(false);
+            return;
+        }
+
+        //  Add course_id and store for use in future saves
+        const dataToSave = {
+            ...mappedData,
+            course_id: newCourse.course_id
+        };
+
+        localStorage.setItem("newCourseData", JSON.stringify(dataToSave));
+
+        //  Notify and return
+        onSuccess(allCourses);
+        modal.setStatus("success");
+        modal.setTitle("Course Created");
+        modal.setMessage("Your course was created successfully!");
+        setTimeout(() => modal.setVisible(false), 1500);
     };
 };

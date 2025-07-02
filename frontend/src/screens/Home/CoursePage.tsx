@@ -36,15 +36,7 @@ const CoursePage = () =>{
     return(
         <div>
             <StandardHeader/>
-            <div className="course-page"
-                 style={{
-                     backgroundImage: `url(${bgImage})`,
-                     backgroundSize: 'cover',
-                     backgroundPosition: 'center',
-                     backgroundRepeat: 'no-repeat',
-                     backgroundAttachment: 'fixed',
-                     minHeight: '100vh',
-                 }}>
+            <div className="course-page">
                 <div className="overlay"/>
                 <h1 className="course-tool-head">Course Planning Tool</h1>
 

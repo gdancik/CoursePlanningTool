@@ -24,7 +24,6 @@ const SyllabusFormField: React.FC<Props> = ({field, value, onChange}) => {
             </div>
         );
     }
-    if (field.type === 'syllabus-text')
     return(
         <div>
 

@@ -22,6 +22,11 @@ const BasicInfo = () =>{
     //Tracks user-entered form data
     const[formData, setFormData] = useState<Record<string, string>>({})
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
+
     // React Router navigation and location objects
     const navigate = useNavigate();
     const location = useLocation();
@@ -46,10 +51,6 @@ const BasicInfo = () =>{
         setFormData((prev) => ({...prev, [label]: value}));
     };
 
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
-    const [modalTitle, setModalTitle] = useState("");
-    const [modalMessage, setModalMessage] = useState("");
 
     const modalControls = {
         setVisible: setModalVisible,

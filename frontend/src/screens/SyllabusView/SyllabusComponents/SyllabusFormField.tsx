@@ -15,7 +15,7 @@ const SyllabusFormField: React.FC<Props> = ({field, value, onChange}) => {
     if (field.type === 'text-area') {
         return (
             <div>
-                <p className="helper-text">{field.content}</p>
+                <p>{field.content}</p>
                 <textarea
                     value={value}                      // Current value
                     onChange={handleInputChange}      // Handle changes
@@ -24,5 +24,11 @@ const SyllabusFormField: React.FC<Props> = ({field, value, onChange}) => {
             </div>
         );
     }
+    if (field.type === 'syllabus-text')
+    return(
+        <div>
+
+        </div>
+    )
 
 }

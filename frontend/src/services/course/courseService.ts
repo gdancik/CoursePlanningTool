@@ -1,5 +1,4 @@
-import {createApiCaller} from "../../utils/apiFactory";
-
+import { createApiCaller } from "../../utils/apiFactory";
 
 export interface Course {
     course_id: string;
@@ -10,11 +9,14 @@ export interface Course {
     [key: string]: string;
 }
 
+// Fetch all courses
 export const fetchCourses = createApiCaller<Course[]>({
     url: "/getSheet",
     method: "POST",
     withCredentials: true,
 });
+
+// Create a new course and get back the new course_id
 export const createNewCourse = (data: Record<string, string>) =>
     createApiCaller<{ course_id: string }>({
         url: "/createNewCourse/",

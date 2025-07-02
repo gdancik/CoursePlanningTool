@@ -6,7 +6,7 @@ export const saveToBackend = async (
 ) => {
     return await createApiCaller<void>({
         method: "POST",
-        url: "updateValue/",
+        url: "/updateValue/",
         data: {
             course_id,
             dict_of_columns_and_vals: values,
@@ -30,10 +30,3 @@ export const logoutUser = async () => {
     })();
 };
 
-export const getNewCourseId = async (): Promise<string | null> => {
-    return await createApiCaller<{ course_id: string }>({
-        method: "POST",
-        url: "/getNewCourseId/",
-        data: { user: "annie" }, // replace with actual user ID if you have it
-    })().then(res => res?.course_id ?? null);
-};

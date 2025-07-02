@@ -455,6 +455,7 @@ class gsEditor:
         logging.info('Creating new course')
         logging.debug('Opening sheet ')
         # Create a Google Sheets client
+
         client = self.client
         # Open the spreadsheet by name
         self.increase_api_count('API call: open')
@@ -462,7 +463,7 @@ class gsEditor:
 
         # Select the first sheet
         self.increase_api_count('API call: get_worksheet')
-        sheet = spreadsheet.get_worksheet(0) 
+        sheet = spreadsheet.get_worksheet(0)
 
         # Get all records to check for existing course_id and column headers
         self.increase_api_count('API call: get all records')
@@ -470,50 +471,39 @@ class gsEditor:
         df = pd.DataFrame(data)
 
         # Get the current column headers from the sheet
-        sheet_headers = sheet.row_values(1) 
+        sheet_headers = sheet.row_values(1)
 
         # Initialize new row with None for all *known* sheet headers
-        new_row_values = {}  
+        new_row_values = {col: None for col in sheet_headers}
         for col in sheet_headers:
             new_row_values[col] = None
 
         logging.debug(f'Getting last course id and incrementing')
-        # Generate new course id by incrementing from last course_id
-        if df.empty or len(df) == 1 and df["course_id"].iloc[0] == df.columns[0]:
-            # If the DataFrame is empty or only has headers, start with a default course_id
-            new_num = 1  
-        else:
-            last_course_id = df["course_id"].iloc[-1]
-            new_num = int(last_course_id[1:])+1
+
+        try:
+            last_course_id = str(df["course_id"].iloc[-1])
+            if last_course_id.startswith('c') and last_course_id[1:].isdigit():
+                new_num = int(last_course_id[1:]) + 1
+            elif last_course_id.isdigit():
+                new_num = int(last_course_id) + 1
+            else:
+                raise ValueError("Unexpected course_id format")
+        except (KeyError, IndexError, ValueError):
+                new_num = 1
         new_course_id = f'c{new_num}'
-        
-
-        # Set the course_id in the new row
-        new_row_values['course_id'] = new_course_id
-
-        logging.debug(f'Update time create and edited columns')
-        #Update created and edited columns
+        new_row_values ['course_id'] = new_course_id
+        logging.debug('Update time create and edited columns')
         formatted_current_time = self._fetch_current_time()
         values_dict['created_at'] = formatted_current_time
         values_dict['last_edited'] = formatted_current_time
-
-        logging.debug(f'Add new row')
-        # Add the provided values from values_dict
+        logging.debug('Add new row')
         for column, new_val in values_dict.items():
             if column in sheet_headers:
                 new_row_values[column] = new_val
             else:
                 logging.warn(f"Warning: Column '{column}' not found in sheet '{self.sheet_name}'.")
+        ordered_new_row = [new_row_values.get(header, None) for header in sheet_headers]
 
-        # Ensure values are in the correct order for appending
-        ordered_new_row = []  # Initialize an empty list to store the ordered values
-        for header in sheet_headers:
-            # Append the value from new_row_values or None if not present
-            # This ensures that the new row matches the order of the headers
-            value = new_row_values.get(header, None)
-            ordered_new_row.append(value)
-        # Append the new row to the sheet
         sheet.append_row(ordered_new_row)
         logging.debug(f"Successfully processed values for course ID '{new_course_id}'.")
         return new_course_id
-        

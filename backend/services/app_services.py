@@ -15,7 +15,7 @@ def get_gs_editor() :
     try:
         if not gs.sheet_exists():
 
-            gs.create_sheet(email="christowindow@gmail.com")  # ← CHANGE THIS TO YOUR EMAIL
+            gs.create_sheet(email="christowindow@gmail.com")  #
             logging.info(f"Created and shared new sheet for {username}")
         else:
             logging.info(f"Sheet for {username} already exists")

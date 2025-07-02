@@ -1,6 +1,7 @@
 // This file takes the dictionary data structure from fieldMappings and assigns them accordingly.
 
 import { fieldMappings } from "./fieldMappings"; // Import the mapping dictionary
+import {allowedBackendKeys} from './allowableCalls'
 
 /**
  * Maps frontend field labels to backend field keys based on the fieldMappings.
@@ -14,9 +15,12 @@ export function jsonFieldsMapper(input: Record<string, string>): Record<string, 
 
     // Iterate over each field in the input object
     for (const [frontendLabel, value] of Object.entries(input)) {
+        if(value === "Choose One") continue;
         // Get the corresponding backend key from fieldMappings, or use the original label
         const backendKey = fieldMappings[frontendLabel] || frontendLabel;
-        output[backendKey] = value; // Assign the value to the new (or same) key
+        if (allowedBackendKeys.has(backendKey)) {
+            output[backendKey] = value;
+        }
     }
 
     return output; // Return the new object with mapped keys

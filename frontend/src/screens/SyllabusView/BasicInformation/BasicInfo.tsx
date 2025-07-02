@@ -5,6 +5,7 @@ import {createSaveHandler, createSaveAndExitHandler, createPreviewHandler} from 
 import {useNavigate, useLocation} from "react-router-dom";
 import {FaExclamationTriangle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
+import { mapBackendDataToFormFields } from "../../../utils/backendToFormMapper";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import {handleBack, handleNext,} from "../../../components/Button/ButtonLogic";
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
@@ -35,13 +36,19 @@ const BasicInfo = () =>{
     // Load the basic info fields from CSV when the component mounts
     useEffect(() => {
         loadBasicInfoFields("/data/basic_info_fields.csv").then(setFields);
-        // Load the course modal data JSON
 
-        const storedData = localStorage.getItem("allCourses");
+        const storedData = localStorage.getItem("newCourseData");
         if (storedData) {
-            const parsed = JSON.parse(storedData);
-            console.log("Loaded course ID:", parsed.course_id); // Must not be undefined
-            setFormData(parsed);
+            try {
+                const parsed = JSON.parse(storedData);
+                console.log("Loaded course ID:", parsed.course_id);
+
+                const remapped = mapBackendDataToFormFields(parsed);
+                setFormData(remapped);
+            } catch (err) {
+                console.error("Invalid JSON in newCourseData:", storedData);
+                localStorage.removeItem("newCourseData");
+            }
         }
     }, []);
 

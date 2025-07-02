@@ -33,8 +33,8 @@ export const createSaveHandler = (
         }
 
         let course_id = mappedData["course_id"];
+        const { course_id: _, ...fieldsOnly } = mappedData; // Exclude from fieldsOnly
 
-        //  Only create a new course if no course_id exists
         if (!course_id) {
             const result = await createNewCourse(mappedData);
             if (!result?.course_id) {

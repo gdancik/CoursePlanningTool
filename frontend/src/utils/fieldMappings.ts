@@ -1,5 +1,6 @@
-//This file holds all mappings for backend definitions to be sent via JSON and process user information
+// src/utils/fieldMappings.ts
 
+// FRONTEND → BACKEND
 export const fieldMappings: Record<string, string> = {
     "Subject Code": "subj_code_syllabus",
     "Course Number": "crse_number_syllabus",
@@ -19,3 +20,8 @@ export const fieldMappings: Record<string, string> = {
     "Office Hours": "office_hours_syllabus",
     "Additional Information (optional)": "additional_contact_info_syllabus",
 };
+
+// BACKEND → FRONTEND
+export const reverseFieldMappings: Record<string, string> = Object.fromEntries(
+    Object.entries(fieldMappings).map(([front, back]) => [back, front])
+);

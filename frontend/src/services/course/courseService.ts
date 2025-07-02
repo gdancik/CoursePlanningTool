@@ -35,12 +35,29 @@ export const updateValue = (
 };
 
 //  Get all user courses (different from getSheet)
-export const getCourses = (): Promise<Course[] | null> => {
-    return createApiCaller<Course[]>({
+export const getCourses = async (): Promise<Course[] | null> => {
+    const raw = await createApiCaller<Record<string, Record<string, string>>>({
         url: "getSheet/",
         method: "POST",
         withCredentials: true,
+        data: {}, // needed for POST with JSON
+        headers: {
+            "Content-Type": "application/json"
+        }
     })();
+
+    if (!raw) return null;
+
+    const transformed = Object.entries(raw).map(([course_id, courseData]) => ({
+        course_id,
+        course_title_syllabus: courseData["Course Title"] || "",
+        instructor_name_syllabus: courseData["Instructor Name"] || "",
+        term_syllabus: `${courseData["Year"] ?? ""}-${courseData["Semester"] ?? ""}`,
+        last_edited: courseData["Last Edited"] || "",
+        ...courseData
+    }));
+
+    return transformed;
 };
 
 export const getValue = (

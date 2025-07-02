@@ -41,9 +41,10 @@ export const createCourseHandler = (
 
         //  Match the course we just created
         const newCourse = allCourses.find(course =>
-            course.course_title_syllabus === mappedData.course_title_syllabus &&
-            course.instructor_name_syllabus === mappedData.instructor_name_syllabus &&
-            course.term_syllabus === mappedData.term_syllabus
+            course["Course Title"] === formData["Course Title"] &&
+            course["Subject Code"] === formData["Subject Code"] &&
+            course["Semester"] === formData["Semester"] &&
+            course["Year"] === formData["Year"]
         );
 
         if (!newCourse?.course_id) {

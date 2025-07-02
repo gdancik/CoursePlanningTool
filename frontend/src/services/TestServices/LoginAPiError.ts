@@ -1,12 +1,11 @@
-import api from "../axios"; // Use your Axios instance
+import api from "../axios"; //  Your pre-configured axios instance
 
-// /src/services/loginApiError.ts
 export const login = async (user: string, password: string): Promise<{ user: string }> => {
     try {
         const response = await api.get(
             `/test_login/?user=${encodeURIComponent(user)}&password=${encodeURIComponent(password)}`
         );
-        return response.data;
+        return response.data; //  axios uses `.data`, not `.json()`
     } catch (err: any) {
         if (err.response?.status === 401) {
             throw new Error("Invalid password");
@@ -20,16 +19,9 @@ export const login = async (user: string, password: string): Promise<{ user: str
 
 export const logout = async (): Promise<void> => {
     try {
-        const response = await fetch(
-            "https://gdancik.pythonanywhere.com/test_logout/",
-            {
-                method: "GET",
-                credentials: "include",
-            }
-            );
-        if (!response.ok) {
+        const response = await api.get("/test_logout/");
+        if (!response.data || response.status !== 200) {
             throw new Error("Failed to log out");
-
         }
     } catch (err) {
         console.error("Logout error:", err);

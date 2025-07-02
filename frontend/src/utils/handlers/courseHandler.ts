@@ -23,12 +23,8 @@ export const createCourseHandler = (
         const mappedData = jsonFieldsMapper(formData);
 
         const result = await apiCreateNewCourse(mappedData);
-
         //  Inject course_id into mappedData and localStorage
-        if (result?.course_id) {
-            mappedData["course_id"] = result.course_id;
-            localStorage.setItem("newCourseData", JSON.stringify(mappedData));
-
+        if (result !== null) {
             const updatedCourses = await apiFetchCourses();
             if (updatedCourses) {
                 onSuccess(updatedCourses);

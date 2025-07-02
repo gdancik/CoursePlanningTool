@@ -11,12 +11,12 @@ export interface Course {
 }
 
 export const fetchCourses = createApiCaller<Course[]>({
-    url: "/getSheet",
+    url: "getSheet/",
     method: "POST",
     withCredentials: true,
 });
-export const createNewCourse = (data: Record<string, string>) =>
-    createApiCaller<void>({
+export const createNewCourse = (data: Record<string, string>): Promise<{ course_id: string } | null> => {
+    return createApiCaller<{ course_id: string }>({
         url: "createNewCourse/",
         method: "POST",
         withCredentials: true,
@@ -24,3 +24,4 @@ export const createNewCourse = (data: Record<string, string>) =>
             dict_of_columns_and_vals: data,
         },
     })();
+};

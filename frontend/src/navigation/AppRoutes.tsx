@@ -47,7 +47,6 @@ const AppRoutes = () => {
             )}
             <Routes>
                 {/*TEST API ENDPOINTS*/}
-                <Route path="/" element={<LoginScreen />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
                 <Route path = "/test-page" element={<TestPage/>}/>
@@ -71,6 +70,7 @@ const AppRoutes = () => {
 
 
                 {/*Application EndPoints*/}
+                <Route path="/" element={<LoginScreen />} />
                 <Route path  ="course-page" element={<CoursePage/>}/>
                 <Route path = "overview" element={<Overview/>}/>
                 <Route path = "basic-info" element={<BasicInfo/>}/>

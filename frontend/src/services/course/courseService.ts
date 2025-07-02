@@ -11,9 +11,10 @@ export interface Course {
 
 // Fetch all courses
 export const fetchCourses = createApiCaller<Course[]>({
-    url: "/getSheet",
+    url: "https://gdancik.pythonanywhere.com/api/getSheet/",
     method: "POST",
     withCredentials: true,
+    transformResponse: (data) => data ?? [],
 });
 
 // Create a new course and get back the new course_id

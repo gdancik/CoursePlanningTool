@@ -7,7 +7,7 @@ import SafeIcon from "../../utils/ComponentWrapper";
 import {fetchCourses, Course} from "../../services/course/courseService";
 import CourseModal from "../../components/CourseModal/NewCourseModal";
 import CourseCard from "./CourseCard"
-import bgImage from '../../assets/images/bookstack-bg.png'
+
 import './CoursePage.css'
 
 const CoursePage = () =>{
@@ -17,6 +17,21 @@ const CoursePage = () =>{
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
     const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
+
+    useEffect(() => {
+        const loadCourses = async () => {
+            try {
+                const result = await fetchCourses();
+                setCourses(result ?? []);
+            } catch (error) {
+                console.error("Failed to fetch courses:", error);
+                setCourses([])
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadCourses();
+    }, []);
 
 
     const handleCreateCourse = (data: Record<string, string>) => {

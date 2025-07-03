@@ -20,21 +20,23 @@ export const createSaveHandler = (
         modal.setStatus("loading");
         modal.setVisible(true);
 
-        //  Always map current form data
-        const mappedData = jsonFieldsMapper(formData);
-
-        //  Reuse saved course_id if present
+        //  Extract saved course_id first
         const saved = localStorage.getItem("newCourseData");
+        let course_id: string | undefined;
+
         if (saved) {
-            const savedData = JSON.parse(saved);
-            if (savedData.course_id) {
-                mappedData["course_id"] = savedData.course_id;
+            try {
+                const savedData = JSON.parse(saved);
+                course_id = savedData.course_id;
+            } catch (err) {
+                console.warn("Invalid saved course data");
             }
         }
 
-        let course_id = mappedData["course_id"];
-        const { course_id: _, ...fieldsOnly } = mappedData; // Exclude from fieldsOnly
+        //  Map form data (without course_id)
+        const mappedData = jsonFieldsMapper(formData);
 
+        //  Use or create course_id
         if (!course_id) {
             const result = await createNewCourse(mappedData);
             if (!result?.course_id) {
@@ -42,12 +44,15 @@ export const createSaveHandler = (
                 return;
             }
             course_id = result.course_id;
-            mappedData["course_id"] = course_id;
         }
 
-        //  Always persist updated mapped data
-        localStorage.setItem("newCourseData", JSON.stringify(mappedData));
+        //  Always set it on mappedData for saving
+        mappedData["course_id"] = course_id;
 
+        //  Save locally
+        localStorage.setItem("newCourseData", JSON.stringify({ ...mappedData, course_id }));
+
+        //  Save to backend
         const result = await saveToBackend(course_id, mappedData);
         if (result !== null) {
             saveJsonFile(mappedData, "form_data.json");

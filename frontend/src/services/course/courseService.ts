@@ -1,5 +1,4 @@
-import {createApiCaller} from "../../utils/apiFactory";
-
+import { createApiCaller } from "../../utils/apiFactory";
 
 export interface Course {
     course_id: string;
@@ -10,16 +9,25 @@ export interface Course {
     [key: string]: string;
 }
 
-export const getNewCourseId = (): Promise<{ course_id: string } | null> => {
+/**
+ * Fetches a new course_id for the given user.
+ */
+export const getNewCourseId = (
+    userId: string
+): Promise<{ course_id: string } | null> => {
     return createApiCaller<{ course_id: string }>({
-        url: "getNewCourseId",
-        method: "GET",
+        url: "getNewCourseId/",
+        method: "POST",
         withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+        data: { user: userId },
     })();
 };
 
-
-export const updateValue = (
+/**
+ * Updates (or creates) the values for a given course_id.
+ */
+export const updateCourseValues = (
     course_id: string,
     values: Record<string, string>
 ): Promise<void | null> => {
@@ -34,43 +42,48 @@ export const updateValue = (
     })();
 };
 
-//  Get all user courses (different from getSheet)
+/**
+ * Loads all courses for the current user.
+ */
 export const getCourses = async (): Promise<Course[] | null> => {
     const raw = await createApiCaller<Record<string, Record<string, string>>>({
         url: "getSheet/",
         method: "POST",
         withCredentials: true,
-        data: {}, // needed for POST with JSON
-        headers: {
-            "Content-Type": "application/json"
-        }
+        headers: { "Content-Type": "application/json" },
+        data: {}, // empty body for POST
     })();
 
     if (!raw) return null;
 
-    const transformed = Object.entries(raw).map(([course_id, courseData]) => ({
+    return Object.entries(raw).map(([course_id, courseData]) => ({
         course_id,
         course_title_syllabus: courseData["Course Title"] || "",
         instructor_name_syllabus: courseData["Instructor Name"] || "",
         term_syllabus: `${courseData["Year"] ?? ""}-${courseData["Semester"] ?? ""}`,
         last_edited: courseData["Last Edited"] || "",
-        ...courseData
+        ...courseData,
     }));
-
-    return transformed;
 };
 
-export const getValue = (
+/**
+ * Fetches the full data object for a single course row.
+ */
+export const getCourseData = (
     course_id: string
 ): Promise<Record<string, string> | null> => {
     return createApiCaller<Record<string, string>>({
-        url: "getValue",
+        url: "getValue/",
         method: "POST",
         withCredentials: true,
         data: { course_id },
     })();
 };
 
+/**
+ * (Alternative path) Creates a new course row and returns its ID.
+ * If you end up switching to this on the backend, you can call it instead of getNewCourseId.
+ */
 export const createNewCourse = (
     data: Record<string, string>
 ): Promise<{ course_id: string } | null> => {
@@ -78,8 +91,6 @@ export const createNewCourse = (
         url: "createNewCourse/",
         method: "POST",
         withCredentials: true,
-        data: {
-            dict_of_columns_and_vals: data,
-        },
+        data: { dict_of_columns_and_vals: data },
     })();
 };

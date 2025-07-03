@@ -1,81 +1,92 @@
-import React, {useEffect, useState} from 'react';
-import { createCourseHandler} from "../../utils/handlers/courseHandler";
-import StandardHeader from "../../components/Header/standardHeader";
-import ReusableButton from "../../components/Button/ReusableButton";
-import { FaPlus } from "react-icons/fa";
-import SafeIcon from "../../utils/ComponentWrapper";
-import {getCourses, Course} from "../../services/course/courseService";
-import CourseModal from "../../components/CourseModal/NewCourseModal";
-import CourseCard from "./CourseCard"
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { createCourseHandler } from '../../utils/handlers/courseHandler';
+import { getCourses, Course } from '../../services/course/courseService';
+import StandardHeader from '../../components/Header/standardHeader';
+import ReusableButton from '../../components/Button/ReusableButton';
+import SafeIcon from '../../utils/ComponentWrapper';
+import { FaPlus } from 'react-icons/fa';
+import CourseModal from '../../components/CourseModal/NewCourseModal';
+import CourseCard from './CourseCard';
+import './CoursePage.css';
 
-import './CoursePage.css'
-
-const CoursePage = () =>{
-    const[isModalOpen, setModalOpen] = useState(false);
+const CoursePage: React.FC = () => {
+    // Always call hooks at the top-level
+    const { user } = useAuth(); // user: string | null
+    const [isModalOpen, setModalOpen] = useState(false);
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
-    const [modalTitle, setModalTitle] = useState("");
-    const [modalMessage, setModalMessage] = useState("");
-    const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalMessage, setModalMessage] = useState('');
+    const [modalStatus, setModalStatus] = useState<'loading' | 'success' | 'error'>('loading');
 
+    // Load existing courses on mount
     useEffect(() => {
-        const loadCourses = async () => {
+        (async () => {
             try {
                 const result = await getCourses();
                 setCourses(result ?? []);
-            } catch (error) {
-                console.error("Failed to fetch courses:", error);
-                setCourses([])
+            } catch (err) {
+                console.error('Failed to fetch courses:', err);
+                setCourses([]);
             } finally {
                 setLoading(false);
             }
-        };
-        loadCourses();
+        })();
     }, []);
 
-
-    const handleCreateCourse = (data: Record<string, string>) => {
-        const handler = createCourseHandler(
-            data,
-            {
-                setVisible: setModalOpen,
-                setStatus: setModalStatus,
-                setTitle: setModalTitle,
-                setMessage: setModalMessage,
-            },
-            () => {}
-        );
-        handler();
+    // Setup modal control callbacks
+    const modalControls = {
+        setVisible: setModalOpen,
+        setStatus: setModalStatus,
+        setTitle: setModalTitle,
+        setMessage: setModalMessage,
     };
 
-    return(
+    // Create course handler using user ID
+    const handleCreateCourse = createCourseHandler(
+        user!,      // assert non-null since we guard below
+        modalControls,
+        setCourses
+    );
+
+    // Guard: redirect if not logged in (after hooks)
+    if (!user) {
+        return <Navigate to="/" replace />;
+    }
+
+    return (
         <div>
-            <StandardHeader/>
+            <StandardHeader />
             <div className="course-page">
-                <div className="overlay"/>
+                <div className="overlay" />
                 <h1 className="course-tool-head">Course Planning Tool</h1>
 
                 <ReusableButton
                     label="New Course"
-                    icon={<SafeIcon Icon={FaPlus}/>}
+                    icon={<SafeIcon Icon={FaPlus} />}
                     variant="primary"
                     onClick={() => setModalOpen(true)}
                     className="course-page-button"
                 />
 
                 <div className="course-list">
-                    <h1> My Courses</h1>
-                    {loading ? (<p>Loading...</p>):
-                        (
-                            courses.map((course) => (
-                                <CourseCard
-                                key ={course.course_id}
-                                course = {course}
-                                onEdit={(id) => console.log("Edit", id)}
-                                />
-                            )))}
+                    <h2>My Courses</h2>
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        courses.map((course) => (
+                            <CourseCard
+                                key={course.course_id}
+                                course={course}
+                                onEdit={(id) => console.log('Edit', id)}
+                            />
+                        ))
+                    )}
                 </div>
-        </div>
+            </div>
+
             <CourseModal
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}
@@ -84,8 +95,8 @@ const CoursePage = () =>{
                 modalMessage={modalMessage}
                 modalStatus={modalStatus}
             />
-</div>
-)
-    ;
+        </div>
+    );
 };
+
 export default CoursePage;

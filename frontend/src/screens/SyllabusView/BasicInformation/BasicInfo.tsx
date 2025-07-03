@@ -1,6 +1,7 @@
 // Imports layout, React, routing, icons, utility functions, and components
 import AppLayout from "../../../ApplicationLayout/Applayout";
 import React, {useEffect, useState} from "react";
+import {getCourseData} from "../../../services/course/courseService"
 import {createSaveHandler, createSaveAndExitHandler, createPreviewHandler} from "../../../utils/handlers/formHandlersFactory";
 import {useNavigate, useLocation} from "react-router-dom";
 import {FaExclamationTriangle } from 'react-icons/fa'
@@ -35,21 +36,23 @@ const BasicInfo = () =>{
 
     // Load the basic info fields from CSV when the component mounts
     useEffect(() => {
-        loadBasicInfoFields("/data/basic_info_fields.csv").then(setFields);
+        const loadCourseData = async () => {
+            // 1. Grab just the ID
+            const course_id = localStorage.getItem("currentCourseId");
+            if (!course_id) return;
 
-        const storedData = localStorage.getItem("newCourseData");
-        if (storedData) {
-            try {
-                const parsed = JSON.parse(storedData);
-                console.log("Loaded course ID:", parsed.course_id);
+            console.log("Loaded course ID:", course_id);
 
-                const remapped = mapBackendDataToFormFields(parsed);
+            // 2. Fetch backend data
+            const backendData = await getCourseData(course_id);
+            if (backendData) {
+                const remapped = mapBackendDataToFormFields(backendData);
                 setFormData(remapped);
-            } catch (err) {
-                console.error("Invalid JSON in newCourseData:", storedData);
-                localStorage.removeItem("newCourseData");
             }
-        }
+        };
+
+        loadBasicInfoFields("/data/basic_info_fields.csv").then(setFields);
+        loadCourseData();
     }, []);
 
 

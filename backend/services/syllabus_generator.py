@@ -321,6 +321,7 @@ def generate_syllabus(doc, course_id):
         doc (Document): The Word document object to be modified.
         course_id (str): The ID of the course for which the syllabus is generated.
     """
+    syllabus_statment_webpage_url = 'https://www.easternct.edu/center-for-teaching-learning-and-assessment/syllabus-statements/index.html'
     def table_placeholder_replacement(doc, paragraph, placeholder_text, table_list):
         if placeholder_text in paragraph.text:
             table = add_styled_table(doc, table_list)
@@ -342,9 +343,17 @@ def generate_syllabus(doc, course_id):
     # Process dictionary to handle table placeholders
     tables_col = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_list')}
     logging.debug('Processing table placeholders')
-    policy = fr_dict.get('policy_statements',None)
-    # Iterate through paragraphs and replace table placeholders
+    policies = fr_dict.get('policy_statements',None)
+    syllabus_statment_page = Document()
+    create_syllabus_statment_page(syllabus_statment_page,syllabus_statment_webpage_url,policies) 
+    # Iterate through paragraphs and replace placeholders
     for paragraph in doc.paragraphs:
+        
+        if 'policy_statements'in paragraph.text: 
+            logging.debug('Policy Placeholder found') #debug
+            for source_paragraph in syllabus_statment_page.paragraphs:
+                de.copy_paragraph_before(source_paragraph,paragraph)
+        # Go through table placeholders
         for key, value in tables_col.items():
             logging.debug(f'placeholder name: {key}')
             if value:

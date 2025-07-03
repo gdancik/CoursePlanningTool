@@ -129,4 +129,46 @@ def getTable(doc, i):
     df = pd.DataFrame(rows)
     return df
 
+from docx.shared import Pt, RGBColor
+from docx.oxml.ns import qn
+from docx.oxml import OxmlElement
+def copy_paragraph_before(source_paragraph,target_paragraph):
+    # Extract text from the source paragraph
+    text = source_paragraph.text
+    link_index = None
+
+    # Insert a new paragraph before the target paragraph in the target document
+    new_paragraph = target_paragraph.insert_paragraph_before(text)
+    if source_paragraph.style:
+        new_paragraph.style = source_paragraph.style
+    target_paragraph.clear()
+    # Copy formatting from the source paragraph to the new paragraph
+    if source_paragraph.runs:
+        # Clear existing runs in the new paragraph
+        new_paragraph.clear()
+        for child in source_paragraph._element.iterchildren():
+            if child.tag.endswith('hyperlink'):
+                # Create a new hyperlink in the new paragraph
+                logging.debug('Found link') #debug
+                link_index= source_paragraph._element.index(child)
+                link_text = source_paragraph._element.getchildren()[link_index].text
+                logging.debug(f'link text:{link_text}')
+
+        # Copy each run from the source paragraph to the new paragraph
+        for i, run in enumerate(source_paragraph.runs):
+            new_run = new_paragraph.add_run(run.text)
+            new_run.bold = run.bold
+            new_run.italic = run.italic
+            new_run.underline = run.underline
+
+            if i+1 == link_index:
+                new_run.text += link_text
+      
+            # Check if the run is part of a hyperlink
+            from lxml import etree
+            current_run = run._element
+            logging.debug(f'current_run:{current_run},run:{i}')#debug
+           
+                    
+                
 

@@ -275,7 +275,7 @@ def createNewCourse():
 
         # Call the createNewCourse function
         logging.info('Calling createNewCourse function')
-        gs.createNewCourse(columns)
-        return jsonify('Function called successfully')
+        courseId = gs.createNewCourse(columns)
+        return jsonify({'courseId:': courseId})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

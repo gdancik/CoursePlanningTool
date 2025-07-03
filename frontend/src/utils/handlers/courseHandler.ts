@@ -26,14 +26,14 @@ export const createCourseHandler = (
     setCourses: (courses: Course[]) => void
 ) => {
     return async (formData: Record<string, string>) => {
-        // 1) Show loading
+        //  Show loading
         modal.setTitle("Creating Course");
         modal.setMessage("Please wait while we create your course...");
         modal.setStatus("loading");
         modal.setVisible(true);
 
         try {
-            // 2) Create & get back the exact new ID
+            //  Create & get back the exact new ID
             const mapped = jsonFieldsMapper(formData);
             const result = await createNewCourse(mapped);
             if (!result?.course_id) {
@@ -42,13 +42,13 @@ export const createCourseHandler = (
             const newId = result.course_id;
             localStorage.setItem("currentCourseId", newId);
 
-            // 3) Fetch *that* row’s data
+            //  Fetch *that* row’s data
             const raw = await getCourseData(newId);
             if (!raw) {
                 throw new Error(`Could not fetch data for course ${newId}`);
             }
 
-            // 4) Shape it into your Course interface
+            //  Shape it into your Course interface
             const newCourse: Course = {
                 course_id: newId,
                 course_title_syllabus: raw["Course Title"]    || "",
@@ -58,10 +58,10 @@ export const createCourseHandler = (
                 ...raw,
             };
 
-            // 5) Persist it for your form/UI
+            //  Persist it for your form/UI
             localStorage.setItem("currentCourseData", JSON.stringify(newCourse));
 
-            // 6) Refresh the full list if you need it
+            //  Refresh the full list if you need it
             const all = (await apiFetchCourses()) || [];
             setCourses(all);
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { showErrorModal } from "../utils/errorHandler";
 import RedirectingModal from './../components/RedirectingModal/RedirectingModal';
+import {CompetencyTable1, CompetencyTable2} from './../components/competencyTable';
 import {
     createSaveHandler,
     createSaveAndExitHandler,
@@ -93,7 +94,13 @@ const TestPage: React.FC = () => {
                 title={modalTitle}
                 message={modalMessage}
             />
+	
+	    <div style = {{ marginTop: "2rem" }}>
+		<CompetencyTable2/>
+	    </div>
         </div>
+
+
     );
 };
 

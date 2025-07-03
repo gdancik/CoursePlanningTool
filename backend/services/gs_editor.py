@@ -35,7 +35,7 @@ def exponential_backoff(request_func):
                 logging.debug('request successful...returning')
                 return r
             except Exception as err :
-                logging.error('Error:', err)
+                logging.error(f'Error: {err}')
                 if ntries == self.api_config['max_tries'] - 1 :
                    logging.debug('reached limit, raise error')
                    raise err
@@ -46,6 +46,9 @@ def exponential_backoff(request_func):
                     wait = wait * 2    
                     if wait > self.api_config['maximum_backoff'] :
                         wait = self.api_config['maximum_backoff']
+                else : 
+                    logging.debug(f'Unhandled error in exponential backoff')
+                    raise err
         return Exception('Error in return from exponential_backoff') 
     return f
 
@@ -85,8 +88,8 @@ class gsEditor:
         '''
         logging.info('Creating GS client')
         # Define the scope
-        scope = ['https://spreadsheets.google.com/feeds',
-                'https://www.googleapis.com/auth/drive']
+        scope = ['https://spreadsheets.google.com/feeds'],
+                #'https://www.googleapis.com/auth/drive']
 
     # Get the JSON string from the environment variable
         json_str = os.getenv('GS_CREDENTIALS_JSON')
@@ -143,28 +146,26 @@ class gsEditor:
             str: The ID of the created Google Sheet.
         '''
        
-        # Create a Google Sheets client
-        client = self.client
 
         if not self.sheet_exists() :
             logging.info(f'Creating sheet')
             # Create a new spreadsheet
             self.increase_api_count('API call: create')
-            spreadsheet = client.create(self.sheet_name)            
+            spreadsheet = self.client.create(self.sheet_name)            
             
             # Print the name and ID of the created spreadsheet
             logging.debug(f'Created Spreadsheet with name: {spreadsheet.title} and ID: {spreadsheet.id}')
 
         
         self.increase_api_count('API call: open')
-        spreadsheet = client.open(self.sheet_name)
+        spreadsheet = self.client.open(self.sheet_name)
         logging.debug(f'Spreadsheet {spreadsheet.title} already exists and will not be created')
 
 
         # Add course id columns to the spreadsheet -- we do this here in case we exceed rate limit after creating the sheet
         df  = self.read_sheet()
         if df.shape[0] == 0 :
-            self.add_headers(spreadsheet.id)
+            self.add_headers(spreadsheet)
        
         if email:
             logging.debug(f'Sharing sheet with {email}')
@@ -178,22 +179,17 @@ class gsEditor:
         return spreadsheet.id
 
     @exponential_backoff
-    def add_headers(self, spreadsheet_id):
+    def add_headers(self, spreadsheet):
         '''
         Adds headers to the first row of the specified Google Sheet.
         Args:
-            spreadsheet_id (str): The ID of the Google Sheet to add headers to.
+            spreadsheet: spreadsheet object from client.open()
         Returns:
             None
         '''
         logging.debug('Adding headers to sheet')
         # Create a Google Sheets client
-        client = self.client
-
-        # Open the spreadsheet by ID
-        self.increase_api_count('API call: open by key')
-        spreadsheet = client.open_by_key(spreadsheet_id)
-
+        
         # Select the first sheet
         self.increase_api_count('API call: get worksheet')
         sheet = spreadsheet.get_worksheet(0)
@@ -205,7 +201,7 @@ class gsEditor:
         self.increase_api_count('API call: update')
         sheet.update([values], 'A1')
 
-        logging.debug(f'Headers added to the spreadsheet with ID: {spreadsheet_id}')
+        logging.debug(f'Headers added to the spreadsheet with ID: {spreadsheet.id}')
 
     @exponential_backoff
     def getValue(self, course_id: str,columns: str) -> str:
@@ -259,7 +255,7 @@ class gsEditor:
                 if column in row.columns:
                     cells_dict[column] = row[column].values[0]
                 else:
-                    logging.warn(f"Warning: Column '{column}' not found in the sheet.")
+                    #logging.warn(f"Warning: Column '{column}' not found in the sheet.")
                     cells_dict[column] = None
             return self._convert_numpy_int64_to_int(cells_dict)
         #else we will return a single cell
@@ -332,12 +328,12 @@ class gsEditor:
             pd.DataFrame: A DataFrame containing all records from the Google Sheet.
         '''
         # Create a Google Sheets client
-        client = self.create_gs_client()
+        #client = self.create_gs_client()
         
         logging.debug(f'Opening spreadsheet')
         # Open the spreadsheet by name
         self.increase_api_count('API call: open')
-        spreadsheet = client.open(self.sheet_name)
+        spreadsheet = self.client.open(self.sheet_name)
 
         logging.debug('API call: get worksheet')
         sheet = spreadsheet.get_worksheet(0)
@@ -361,11 +357,11 @@ class gsEditor:
 
         logging.debug(f'Opening Sheet')
     # Create a Google Sheets client
-        client = self.create_gs_client()
+        #client = self.create_gs_client()
         
         # Open the spreadsheet by name
         self.increase_api_count('API call: open')
-        spreadsheet = client.open(self.sheet_name)
+        spreadsheet = self.client.open(self.sheet_name)
 
         #save spreadsheet id
         spreadsheet_id = spreadsheet.id
@@ -443,7 +439,8 @@ class gsEditor:
         current_time = datetime.now()
         formatted_current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
         return formatted_current_time
-       
+    
+    @exponential_backoff
     def createNewCourse(self, values_dict: Dict[str, Any]):
         '''
         Creates a new course in the Google Sheet with the specified values.

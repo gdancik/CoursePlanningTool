@@ -4,6 +4,7 @@ import {
     createNewCourse,
     getCourseData,
     getCourses as apiFetchCourses,
+    getNewCourseId,
     Course,
 } from "../../services/course/courseService";
 import { Dispatch, SetStateAction } from "react";
@@ -17,8 +18,9 @@ export type ModalControls = {
 
 /**
  * Creates a new course (which also populates the sheet),
- * then fetches that row back, maps it into your Course interface,
- * stores it in localStorage, and finally refreshes the full list.
+ * then retrieves the new ID from the backend, fetches that row,
+ * maps it into your Course interface, stores it in localStorage,
+ * and finally refreshes the full list.
  */
 export const createCourseHandler = (
     userId: string,
@@ -26,56 +28,62 @@ export const createCourseHandler = (
     setCourses: (courses: Course[]) => void
 ) => {
     return async (formData: Record<string, string>) => {
-        //  Show loading
+        // Show loading state
         modal.setTitle("Creating Course");
         modal.setMessage("Please wait while we create your course...");
         modal.setStatus("loading");
         modal.setVisible(true);
 
         try {
-            //  Create & get back the exact new ID
+            //  Create the row in one go
             const mapped = jsonFieldsMapper(formData);
-            const result = await createNewCourse(mapped);
-            if (!result?.course_id) {
+            const createResult = await createNewCourse(mapped);
+            if (!createResult?.course_id) {
                 throw new Error("No course_id returned from createNewCourse");
             }
-            const newId = result.course_id;
+
+            //  Retrieve the fresh ID from the backend
+            const idResp = await getNewCourseId(userId);
+            if (!idResp?.course_id) {
+                throw new Error("No course_id returned from getNewCourseId");
+            }
+            const newId: string = idResp.course_id;
             localStorage.setItem("currentCourseId", newId);
 
-            //  Fetch *that* row’s data
+            //  Fetch the newly created row
             const raw = await getCourseData(newId);
             if (!raw) {
                 throw new Error(`Could not fetch data for course ${newId}`);
             }
 
-            //  Shape it into your Course interface
+            //  Map into the Course interface
             const newCourse: Course = {
                 course_id: newId,
-                course_title_syllabus: raw["Course Title"]    || "",
+                course_title_syllabus: raw["Course Title"] || "",
                 instructor_name_syllabus: raw["Instructor Name"] || "",
                 term_syllabus: `${raw["Year"] ?? ""}-${raw["Semester"] ?? ""}`,
-                last_edited: raw["Last Edited"]             || "",
+                last_edited: raw["Last Edited"] || "",
                 ...raw,
             };
 
-            //  Persist it for your form/UI
-            localStorage.setItem("currentCourseData", JSON.stringify(newCourse));
+            localStorage.setItem(
+                "currentCourseData",
+                JSON.stringify(newCourse)
+            );
 
-            //  Refresh the full list if you need it
             const all = (await apiFetchCourses()) || [];
             setCourses(all);
-
-            // 7) Success UI
+            
             modal.setStatus("success");
             modal.setTitle("Course Created");
             modal.setMessage(`Course ${newId} created!`);
-            setTimeout(() => modal.setVisible(false), 1500);
         } catch (err: any) {
             console.error("Course creation failed:", err);
             modal.setStatus("error");
             modal.setTitle("Error Creating Course");
             modal.setMessage(err.message || "An unexpected error occurred.");
-            setTimeout(() => modal.setVisible(false), 3000);
+        } finally {
+            setTimeout(() => modal.setVisible(false), 1500);
         }
     };
 };

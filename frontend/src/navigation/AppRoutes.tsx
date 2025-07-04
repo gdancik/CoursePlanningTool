@@ -13,7 +13,7 @@ import Hello from '../screens/testAPI/Hello';
 import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
 import TestPage from "../screens/TestPage"
 import ScheduleTest from "../components/courseSchedule"
-import GradeTable from "../components/gradeTable"
+import GradeTable from "../components/Tables/gradeTable"
 
 //Application Endpoints
 import Overview from "../screens/SyllabusView/Overview/Overview";

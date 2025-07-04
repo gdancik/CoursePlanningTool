@@ -77,7 +77,7 @@ def getStatements(url,selected_statements:list = None):
                     statments[key] = val
     #return selected statements
     return statments
-
+#TODO Make no longer case sensitive
 def create_syllabus_statment_page(doc,url: str,selected_statements=None):
     '''
     Creates a syllabus statement page in the given Word document by fetching statements from a the syllabus statement website and adding them to the document.

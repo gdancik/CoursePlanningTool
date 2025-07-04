@@ -23,7 +23,7 @@ import Description from "../screens/SyllabusView/Description/Description";
 import LearningOutcomes from "../screens/SyllabusView/LearningOutcomes";
 import HIPs from "../screens/SyllabusView/HIPs";
 import CourseSchedule from "../screens/SyllabusView/CourseSchedule";
-import LearningResources from "../screens/SyllabusView/LearningResources";
+import LearningResources from "../screens/SyllabusView/LearningResources/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";
 import CoursePage from "../screens/Home/CoursePage";
 import NotFoundPage from "../screens/NotFoundPage";

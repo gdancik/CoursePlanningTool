@@ -10,9 +10,11 @@ import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
 import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
 import SyllabusSectionAccordion from "../SyllabusComponents/SyllabusAccordian";
-import "./Description.css";
+import SafeIcon from "../../../utils/ComponentWrapper";
+import { FaExclamationTriangle } from "react-icons/fa";
+import "./LearningResources.css";
 
-const Description = () => {
+const LearningResources = () => {
     const [fields, setFields] = useState<SyllabusContent[]>([]);
     const [formData, setFormData] = useState<Record<string, string>>({});
 
@@ -27,7 +29,7 @@ const Description = () => {
     // Load syllabus fields on mount
     useEffect(() => {
         const loadFields = async () => {
-            const data = await loadSyllabusContent("/data/description_info.csv");
+            const data = await loadSyllabusContent("/data/learning_resources_info.csv");
             setFields(data);
 
             // Load saved form data (if any)
@@ -84,7 +86,7 @@ const Description = () => {
                 onPreview={handlePreviewClick}
             />
 
-            <form className="description-form-container">
+            <form className="learning-resources-container">
 
                 {Object.entries(groupedSections).map(([section, sectionFields]) => (
                     <SyllabusSectionAccordion
@@ -107,4 +109,4 @@ const Description = () => {
     );
 };
 
-export default Description;
+export default LearningResources;

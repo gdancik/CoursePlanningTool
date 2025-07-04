@@ -259,22 +259,23 @@ def generateSchedule():
         return jsonify({"error": str(e)}), 500
 
 '''Calls the createNewCourse function from the gs_editor.py module'''
-import traceback
-
 @api_bp.route('createNewCourse/', methods=['POST'])
 @login_required
 def createNewCourse():
     gs = get_gs_editor()
+    logging.debug(f'Created gs_editor object')
     try:
+        logging.debug(f'Fetching data')
         data = request.get_json()
         columns = data.get('dict_of_columns_and_vals')
+        logging.debug(f'Fetched dict_of_columns_and_vals: {columns}')
+
         if not columns:
-            return jsonify({"error": "Missing course data"}), 400
+            return jsonify({"error": "Missing one or more required fields"}), 400
 
-        new_id = gs.createNewCourse(columns)
-        return jsonify({"message": "Course created", "course_id": new_id})
-
+        # Call the createNewCourse function
+        logging.info('Calling createNewCourse function')
+        courseId = gs.createNewCourse(columns)
+        return jsonify({'courseId:': courseId})
     except Exception as e:
-        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
-

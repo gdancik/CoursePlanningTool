@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./gradeTable.css";
+import "./Tables/gradeTable.css";
 
 function CourseSchedule() {
   const [scheduleRows, setScheduleRows] = useState([

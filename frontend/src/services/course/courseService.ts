@@ -1,4 +1,5 @@
 import { createApiCaller } from "../../utils/apiFactory";
+import {SHEET_COLUMNS} from "../../utils/handlers/sheetColumns";
 
 export interface Course {
     course_id: string;
@@ -76,7 +77,10 @@ export const getCourseData = (
         url: "getValue/",
         method: "POST",
         withCredentials: true,
-        data: { course_id },
+        data: {
+            course_id,
+            list_of_columns: SHEET_COLUMNS,  // ← now imported
+        },
     })();
 };
 
@@ -84,13 +88,27 @@ export const getCourseData = (
  * (Alternative path) Creates a new course row and returns its ID.
  * If you end up switching to this on the backend, you can call it instead of getNewCourseId.
  */
+
+export interface CreateCourseResponse {
+    course_id: string;
+}
+
 export const createNewCourse = (
     data: Record<string, string>
-): Promise<{ course_id: string } | null> => {
-    return createApiCaller<{ course_id: string }>({
+): Promise<CreateCourseResponse | null> => {
+    return createApiCaller<Record<string, any>>({
         url: "createNewCourse/",
         method: "POST",
         withCredentials: true,
         data: { dict_of_columns_and_vals: data },
-    })();
+    })().then(raw => {
+        if (!raw) return null;
+        // Normalize whatever key the backend gives us:
+        const id =
+            (raw as any).course_id ||
+            (raw as any).courseId ||
+            (raw as any)["courseId:"];
+        if (!id) return null;
+        return { course_id: id };
+    });
 };

@@ -46,7 +46,6 @@ const CoursePage: React.FC = () => {
 
     // Create course handler using user ID
     const handleCreateCourse = createCourseHandler(
-        user!,      // assert non-null since we guard below
         modalControls,
         setCourses
     );

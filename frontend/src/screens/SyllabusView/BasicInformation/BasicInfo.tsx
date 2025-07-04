@@ -37,13 +37,23 @@ const BasicInfo = () =>{
     // Load the basic info fields from CSV when the component mounts
     useEffect(() => {
         const loadCourseData = async () => {
-            // 1. Grab just the ID
-            const course_id = localStorage.getItem("currentCourseId");
-            if (!course_id) return;
+            // 1) Pull the full JSON blob
+            const saved = localStorage.getItem("currentCourseData");
+            if (!saved) return;
+
+            // 2) Parse and extract the ID
+            let course_id: string;
+            try {
+                const parsed = JSON.parse(saved) as { course_id: string };
+                course_id = parsed.course_id;
+            } catch {
+                console.warn("Could not parse currentCourseData");
+                return;
+            }
 
             console.log("Loaded course ID:", course_id);
 
-            // 2. Fetch backend data
+            // 3) Now fetch the row
             const backendData = await getCourseData(course_id);
             if (backendData) {
                 const remapped = mapBackendDataToFormFields(backendData);

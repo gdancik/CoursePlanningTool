@@ -1,64 +1,112 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate, useLocation} from "react-router-dom";
-import {handleBack,handleNext} from "../../../components/Button/ButtonLogic";
-import {loadSyllabusContent, SyllabusContent }from "../../../utils/loadSyllabusContent"
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import AppLayout from "../../../ApplicationLayout/Applayout";
 import {
     createPreviewHandler,
     createSaveAndExitHandler,
     createSaveHandler
 } from "../../../utils/handlers/formHandlersFactory";
-
+import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
+import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
+import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
+import SyllabusSectionAccordion from "../SyllabusComponents/SyllabusAccordian";
+import SafeIcon from "../../../utils/ComponentWrapper";
+import { FaExclamationTriangle } from "react-icons/fa";
+import "./Description.css"; // optional, for consistent styling like BasicInfo.css
 
 const Description = () => {
-
     const [fields, setFields] = useState<SyllabusContent[]>([]);
-
-    const[DescrptionData, setDescriptionData] = useState<Record<string, string>>({})
+    const [formData, setFormData] = useState<Record<string, string>>({});
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
 
-
-    //Page Navigation for Buttons
     const navigate = useNavigate();
     const location = useLocation();
 
+    // Load syllabus fields on mount
+    useEffect(() => {
+        const loadFields = async () => {
+            const data = await loadSyllabusContent("/data/description_info.csv");
+            setFields(data);
+
+            // Load saved form data (if any)
+            const saved = localStorage.getItem("currentCourseData");
+            if (!saved) return;
+
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.course_id && parsed.savedData) {
+                    setFormData(parsed.savedData);
+                }
+            } catch (err) {
+                console.warn("Failed to parse saved course data:", err);
+            }
+        };
+
+        loadFields();
+    }, []);
+
+    // Group fields by section
+    const groupedSections: Record<string, SyllabusContent[]> = fields.reduce((acc, field) => {
+        if (!acc[field.section]) acc[field.section] = [];
+        acc[field.section].push(field);
+        return acc;
+    }, {} as Record<string, SyllabusContent[]>);
+
+    // Handle field input changes
+    const handleFieldChange = (label: string, value: string) => {
+        setFormData((prev) => ({ ...prev, [label]: value }));
+    };
+
+    // Modal config for save/preview
     const modalControls = {
         setVisible: setModalVisible,
         setStatus: setModalStatus,
         setTitle: setModalTitle,
-        setMessage: setModalMessage,
+        setMessage: setModalMessage
     };
 
-
+    // Navigation + actions
+    const handleSave = createSaveHandler(formData, modalControls, fields);
+    const handleSaveAndExit = createSaveAndExitHandler(formData, navigate, modalControls,fields);
+    const handlePreviewClick = createPreviewHandler(formData, modalControls,fields);
     const handleBackClick = () => handleBack(navigate, location.pathname);
     const handleNextClick = () => handleNext(navigate, location.pathname);
-
-    //Load Syllabus Content Data
-    useEffect(() => {
-        loadSyllabusContent("/data/description_info.csv").then(setFields);
-    }, []);
-
-    //Button Action Handlers
-    const handleSave = createSaveHandler(DescrptionData, modalControls);
-    const handleSaveAndExit = createSaveAndExitHandler(DescrptionData,navigate, modalControls);
-    const handlePreviewClick = createPreviewHandler(DescrptionData, modalControls);
-
 
     return (
         <div>
             <AppLayout
                 onBack={handleBackClick}
                 onNext={handleNextClick}
-                onSave = {handleSave}
+                onSave={handleSave}
                 onSaveAndExit={handleSaveAndExit}
                 onPreview={handlePreviewClick}
             />
-            <h1>Description Page</h1>
+
+            <form className="description-form-container">
+
+                {Object.entries(groupedSections).map(([section, sectionFields]) => (
+                    <SyllabusSectionAccordion
+                        key={section}
+                        sectionName={section}
+                        fields={sectionFields}
+                        formData={formData}
+                        onFieldChange={handleFieldChange}
+                    />
+                ))}
+            </form>
+
+            <RedirectingModal
+                visible={modalVisible}
+                status={modalStatus}
+                title={modalTitle}
+                message={modalMessage}
+            />
         </div>
     );
 };
+
 export default Description;

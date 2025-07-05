@@ -1,11 +1,10 @@
-.course-page{
-    font-family: inter, sans-serif;
+.course-page {
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
     align-items: center;
-    padding: 2rem 2rem;
-    margin: 0;
+    padding: 1rem 2rem; /* Reduced top/bottom padding */
+    margin: 0 auto;
+    font-family: inter, sans-serif;
 }
 
 
@@ -25,9 +24,13 @@
     border-radius: 8px;
 }
 .course-list {
+    background-color: white;
+    border-radius: 20px;
     max-width: 1200px;
     margin: 2rem auto;
-    padding: 0;
+    padding: 2.5rem 4rem; /* Changed from 100px */
+    display: flex;
+    flex-direction: column;
 }
 
 .course-list > h2 {
@@ -43,7 +46,10 @@
 }
 
 .course-wrapper {
+    width: 100%;
+    max-width: 1000px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin: 0 auto;
 }

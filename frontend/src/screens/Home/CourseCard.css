@@ -3,7 +3,8 @@
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
-    padding: 16px 24px;
+    max-width: 950px;
+    padding: 12px 20px;
     border: 2px solid #ccc;
     border-radius: 10px;
     background-color: #fff;
@@ -13,11 +14,12 @@
 .course-left {
     display: flex;
     gap: 16px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .course-icon {
     font-size: 4rem;
+    margin-top: 4px;
     color: #002e5d;
     flex-shrink: 0;
 }
@@ -58,7 +60,6 @@
 
 /* course type (green) */
 .course-type {
-    margin-top: 0px;
     font-size: 1.5rem;
     font-weight: 600;
     color: #00a854;

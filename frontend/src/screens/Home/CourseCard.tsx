@@ -3,13 +3,22 @@ import { Course } from "../../services/course/courseService";
 import './CourseCard.css';
 import { FaFileAlt } from 'react-icons/fa';
 import SafeIcon from "../../utils/ComponentWrapper";
+import CourseButtonBar from "./CourseButtonBar";
 
 interface CourseCardProps {
     course: Course;
-    onEdit?: (id: string) => void;
+    onEdit?:() => void;
+    onDuplicate?: () => void;
+    onDelete?: () => void;
+    onDownload?: () => void;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit }) => {
+const CourseCard: React.FC<CourseCardProps> = ({
+                                                   course,
+                                                   onEdit,
+                                                   onDuplicate,
+                                                   onDelete,
+                                                   onDownload}) => {
     return (
         <div className="course-card">
             <div className="course-left">
@@ -37,7 +46,12 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit }) => {
             </div>
             <div className="course-right">
                 <div className="button-group"></div>
-                <button className="btn btn-edit" onClick={() => onEdit?.(course.course_id)}>Edit</button>
+                <CourseButtonBar
+                    onEdit={onEdit}
+                    onDuplicate={onDuplicate}
+                    onDelete={onDelete}
+                    onDownload={onDownload}
+                    />
             </div>
         </div>
     );

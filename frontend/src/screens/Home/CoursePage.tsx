@@ -7,6 +7,7 @@ import StandardHeader from '../../components/Header/standardHeader';
 import ReusableButton from '../../components/Button/ReusableButton';
 import SafeIcon from '../../utils/ComponentWrapper';
 import { FaPlus } from 'react-icons/fa';
+import bgImage from '../../assets/images/bookstack-bg.png'
 import CourseModal from '../../components/CourseModal/NewCourseModal';
 import CourseCard from './CourseCard';
 import './CoursePage.css';
@@ -57,48 +58,61 @@ const CoursePage: React.FC = () => {
 
     return (
         <div>
-            <StandardHeader />
-            <div className="course-page">
-                <div className="overlay" />
-                <h1 className="course-tool-head">Course Planning Tool</h1>
+            <StandardHeader/>
+                <div className="course-page"
+                     style = {{
+                         backgroundImage: `url(${bgImage})`,
+                         backgroundSize: 'cover',
+                         backgroundPosition: 'center',
+                         backgroundRepeat: 'no-repeat',
+                         backgroundAttachment: 'fixed',
+                         minHeight: '100vh',
+                     }}>
 
-                <ReusableButton
-                    label="New Course"
-                    icon={<SafeIcon Icon={FaPlus} />}
-                    variant="primary"
-                    onClick={() => setModalOpen(true)}
-                    className="course-page-button"
-                />
+                    <div className="overlay"/>
+                    <h1 className="course-tool-head">Course Planning Tool</h1>
 
-                <div className="course-list">
-                    <h2>My Courses</h2>
-                    <p>Please Note: You can store up to 15 courses at a time. If you want to create more courses, you will need to delete another course.</p>
-                    {loading ? (
-                        <p>Loading...</p>
-                    ) : (
-                        <div className="course-wrapper">
-                            {courses.map((course) => (
-                                <CourseCard
-                                    key={course.course_id}
-                                    course={course}
-                                    onEdit={(id) => console.log('Edit', id)}
-                                />
-                            ))}
-                        </div>
-                    )}
+                    <ReusableButton
+                        label="New Course"
+                        icon={<SafeIcon Icon={FaPlus}/>}
+                        variant="primary"
+                        onClick={() => setModalOpen(true)}
+                        className="course-page-button"
+                    />
+
+                    <div className="course-list">
+                        <h2>My Courses</h2>
+                        <p>Please Note: You can store up to 15 courses at a time. If you want to create more courses,
+                            you will need to delete another course.</p>
+                        {loading ? (
+                            <p>Loading...</p>
+                        ) : (
+                            <div className="course-wrapper">
+                                {courses.map((course) => (
+                                    <CourseCard
+                                        key={course.course_id}
+                                        course={course}
+                                        onEdit={() => console.log('Edit', course.course_id)}
+                                        onDuplicate={() => console.log('Duplicate', course.course_id)}
+                                        onDelete={() => console.log('Delete', course.course_id)}
+                                        onDownload={() => console.log('Download', course.course_id)}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
+
+                <CourseModal
+                    isOpen={isModalOpen}
+                    onClose={() => setModalOpen(false)}
+                    onCreate={handleCreateCourse}
+                    modalTitle={modalTitle}
+                    modalMessage={modalMessage}
+                    modalStatus={modalStatus}
+                />
             </div>
+            );
+            };
 
-            <CourseModal
-                isOpen={isModalOpen}
-                onClose={() => setModalOpen(false)}
-                onCreate={handleCreateCourse}
-                modalTitle={modalTitle}
-                modalMessage={modalMessage}
-                modalStatus={modalStatus}
-            />
-        </div>
-    );
-};
-
-export default CoursePage;
+            export default CoursePage;

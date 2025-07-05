@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { showErrorModal } from "../utils/errorHandler";
 import RedirectingModal from './../components/RedirectingModal/RedirectingModal';
-import {CompetencyTable1, CompetencyTable2} from './../components/competencyTable';
+import {CompetencyTable1, CompetencyTable2} from './../components/Tables/competencyTable';
 import {
     createSaveHandler,
     createSaveAndExitHandler,

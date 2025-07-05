@@ -74,10 +74,16 @@ class gsEditor:
         self.api_count = 0
         
         self.api_config = {}
-        self.set_api_config()
+
+        try :
+          from backend.config import Config 
+          self.set_api_config(Config.MAX_TRIES, Config.MAXIMUM_BACKOFF)
+        except ModuleNotFoundError:
+          self.set_api_config()
 
     def set_api_config(self, max_tries = 10, maximum_backoff = 32) :
         '''Setter for api_config max_tries and maximum_backoff'''
+        logging.debug(f'setting api_config, max_tries = {max_tries}, maximum_backoff = {maximum_backoff}')
         self.api_config['max_tries'] = max_tries
         self.api_config['maximum_backoff'] = maximum_backoff
 

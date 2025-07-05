@@ -4,8 +4,11 @@ import {SHEET_COLUMNS} from "../../utils/handlers/sheetColumns";
 export interface Course {
     course_id: string;
     course_title_syllabus: string;
+    subj_code_syllabus: string;
+    crse_number_syllabus: string;
     instructor_name_syllabus: string;
     term_syllabus: string;
+    year_syllabus: string;
     last_edited: string;
     [key: string]: string;
 }
@@ -60,9 +63,12 @@ export const getCourses = async (): Promise<Course[] | null> => {
     return Object.entries(raw).map(([course_id, courseData]) => ({
         course_id,
         course_title_syllabus: courseData["Course Title"] || "",
+        subj_code_syllabus:   courseData["Course Code"]  || "",
+        crse_number_syllabus: courseData["Course Number"]|| "",
         instructor_name_syllabus: courseData["Instructor Name"] || "",
-        term_syllabus: `${courseData["Year"] ?? ""}-${courseData["Semester"] ?? ""}`,
-        last_edited: courseData["Last Edited"] || "",
+        term_syllabus: courseData["Semester"] || "",
+        year_syllabus: courseData["Year"]     || "",
+        last_edited:   courseData["Last Edited"] || "",
         ...courseData,
     }));
 };

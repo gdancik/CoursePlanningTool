@@ -2,85 +2,80 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    border: 1px solid #ccc;
-    padding: 2rem;
-    border-radius: 8px;
-    background-color: white;
     width: 100%;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
+    padding: 16px 24px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: none;
 }
-
 
 .course-left {
     display: flex;
-    flex-grow: 1;
-    align-items: flex-start;
     gap: 16px;
-}
-.course-icon{
-    font-size: 36px;
-    color: #003366;
-    margin-right: 16px;
+    align-items: center;
 }
 
-.course-details{
-    display:flex;
+.course-icon {
+    font-size: 4rem;
+    color: #002e5d;
+    flex-shrink: 0;
+}
+
+.course-details {
+    display: flex;
     flex-direction: column;
 }
-.course-code{
+
+/* Make code and title identical in size & weight */
+.course-code,
+.course-title {
     margin: 0;
-    font-weight: bold;
-    font-size: 18px;
-    color: #003366;
+    font-size: 1.5rem;            /* 20px */
+    font-weight: 700;
+    color: #002e5d;
+    line-height: 1.2;
 }
 
-.course-title{
-    margin: 0;
-    font-size: 16px;
-}
-.course-term {
-    color: #007bff;
-    font-weight: 500;
+/* small gap between code & title */
+.course-title {
     margin-top: 4px;
 }
 
-.course-type {
-    color: green;
+/* term text: Spring, Fall, etc. */
+.course-term {
+    margin-top: 8px;
+    font-size: 1.3rem;               /* 16px */
     font-weight: 600;
-    margin-top: 2px;
+    color: #007bff;
+}
+.instructor-name {
+    margin-top: 0px;
+    font-size: 1.3rem;               /* 16px */
+    font-weight: 600;
+    color: #555555;
 }
 
+/* course type (green) */
+.course-type {
+    margin-top: 0px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #00a854;
+}
+
+/* Created / Last Edited line */
 .course-meta {
-    margin-top: 8px;
-    font-size: 12px;
-    color: #777;
+    margin-top: 0px;
+    font-size: 0.85rem;            /* ~14px */
+    color: #555;
     display: flex;
     gap: 24px;
 }
 
+/* Right‐hand side container for the button(s) */
 .course-right {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: space-between;
-    min-width: 180px;
-}
-
-.button-group {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-.btn {
-    padding: 6px 14px;
-    border: none;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.btn-edit {
-    background-color: #004080;
-    color: white;
+    justify-content: flex-end;
+    align-items: flex-start;       /* keep button at the top */
 }

@@ -72,16 +72,19 @@ const CoursePage: React.FC = () => {
 
                 <div className="course-list">
                     <h2>My Courses</h2>
+                    <p>Please Note: You can store up to 15 courses at a time. If you want to create more courses, you will need to delete another course.</p>
                     {loading ? (
                         <p>Loading...</p>
                     ) : (
-                        courses.map((course) => (
-                            <CourseCard
-                                key={course.course_id}
-                                course={course}
-                                onEdit={(id) => console.log('Edit', id)}
-                            />
-                        ))
+                        <div className="course-wrapper">
+                            {courses.map((course) => (
+                                <CourseCard
+                                    key={course.course_id}
+                                    course={course}
+                                    onEdit={(id) => console.log('Edit', id)}
+                                />
+                            ))}
+                        </div>
                     )}
                 </div>
             </div>

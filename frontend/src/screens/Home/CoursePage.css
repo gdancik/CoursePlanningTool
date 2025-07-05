@@ -25,20 +25,25 @@
     border-radius: 8px;
 }
 .course-list {
-    margin-top: 30px;
     max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 2rem auto;
+    padding: 0;
 }
 
 .course-list > h2 {
     font-size: 1.8rem;
     margin-bottom: 10px;
     text-align: left;
+    color: #002e5d;
+}
+.course-list > p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0 0 1.5rem;
 }
 
 .course-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }

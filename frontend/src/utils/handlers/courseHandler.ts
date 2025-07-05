@@ -45,11 +45,14 @@ export const createCourseHandler = (
 
             // 4) Build Course object
             const newCourse: Course = {
-                course_id:               newId,
-                course_title_syllabus:   raw["Course Title"]    || "",
-                instructor_name_syllabus:raw["Instructor Name"] || "",
-                term_syllabus:           `${raw["Year"]}-${raw["Semester"]}`,
-                last_edited:             raw["Last Edited"]     || "",
+                course_id: newId,
+                course_title_syllabus: raw["Course Title"]    || "",
+                subj_code_syllabus:     raw["Course Code"]     || "",
+                crse_number_syllabus:   raw["Course Number"]   || "",
+                instructor_name_syllabus: raw["Instructor Name"] || "",
+                term_syllabus:          raw["Semester"]        || "",
+                year_syllabus:          raw["Year"]            || "",
+                last_edited:            raw["Last Edited"]     || "",
                 ...raw,
             };
 

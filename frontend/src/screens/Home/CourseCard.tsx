@@ -16,10 +16,18 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit }) => {
                 <SafeIcon Icon={FaFileAlt} className="course-icon" />
 
                 <div className="course-details">
-                    <h2 className="course-code">{course.course_id}</h2>
+                    {(course.subj_code_syllabus || course.crse_number_syllabus) && (
+                        <h2 className="course-code">
+                            {course.subj_code_syllabus}
+                            {course.subj_code_syllabus && course.crse_number_syllabus && " "}
+                            {course.crse_number_syllabus}
+                        </h2>
+                    )}
                     <h3 className="course-title">{course.course_title_syllabus || 'Untitled Course'}</h3>
-                    <p className="course-term">{course.term_syllabus || 'Unknown Term'}</p>
-                    <p><strong>Instructor: </strong>{course.instructor_name_syllabus}</p>
+                    <p className="course-term">
+                        {course.term_syllabus}
+                        {course.year_syllabus && ` ${course.year_syllabus}`}
+                    </p>
                     <p className="course-type">{course.course_type || 'General Education'}</p>
                     <div className="course-meta">
                         <span>Created: {course.created_at ? new Date(course.created_at).toLocaleDateString() : 'N/A'}</span>

@@ -30,8 +30,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit }) => {
                     </p>
                     <p className="course-type">{course.course_type || 'General Education'}</p>
                     <div className="course-meta">
-                        <span>Created: {course.created_at ? new Date(course.created_at).toLocaleDateString() : 'N/A'}</span>
-                        <span>Last Edited: {course.last_edited ? new Date(course.last_edited).toLocaleDateString() : 'N/A'}</span>
+                        <span>Created: {course.created_at}</span>
+                        <span>Last Edited: {course.last_edited}</span>
                     </div>
                 </div>
             </div>

@@ -1,3 +1,5 @@
+// src/components/CourseModal/NewCourseModal.tsx
+
 import React, { useState, useEffect } from 'react';
 import courseFields from '../../courseFields.json';
 import './CourseModal.css';
@@ -17,7 +19,6 @@ interface CourseModalProps {
     modalTitle: string;
     modalMessage: string;
     modalStatus: 'loading' | 'success' | 'error';
-
 }
 
 const CourseModal: React.FC<CourseModalProps> = ({
@@ -30,6 +31,8 @@ const CourseModal: React.FC<CourseModalProps> = ({
                                                  }) => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState<Record<string, string>>({});
+    // NEW:
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const yearOptions = Array.from(
         { length: 2 },
@@ -48,28 +51,20 @@ const CourseModal: React.FC<CourseModalProps> = ({
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
-        setFormData((prev) => {
-            const next = { ...prev, [name]: value };
-            console.log('️ [CourseModal] field change:', name, '→', value);
-            console.log(' [CourseModal] formData now:', next);
-            return next;
-        });
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        console.log(' [CourseModal] Submitting formData:', formData);
+        setIsSubmitting(true);               // start spinner
         try {
             await onCreate(formData);
-            console.log(
-                ' [CourseModal] After onCreate, currentCourseId:',
-                localStorage.getItem('currentCourseId')
-            );
             onClose();
             navigate('/overview');
         } catch (err) {
-            console.error(' Course creation failed:', err);
+            console.error('Course creation failed:', err);
+        } finally {
+            setIsSubmitting(false);            // stop spinner
         }
     };
 
@@ -97,18 +92,16 @@ const CourseModal: React.FC<CourseModalProps> = ({
                             {courseFields.map((field: CourseField, idx: number) => (
                                 <div key={idx} className="form-group">
                                     {field.placeholder === 'Choose One' ? (
-                                        <>
-                                            <label className="elac-label">
-                                                Is this an ELAC course? <br />
-                                                <a
-                                                    href="https://www.easternct.edu/academic-affairs/student-resources/hands-on-learning/elac.html"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    Learn more about ELAC ↗
-                                                </a>
-                                            </label>
-                                        </>
+                                        <label className="elac-label">
+                                            Is this an ELAC course? <br />
+                                            <a
+                                                href="https://www.easternct.edu/academic-affairs/student-resources/hands-on-learning/elac.html"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Learn more about ELAC ↗
+                                            </a>
+                                        </label>
                                     ) : (
                                         <label>{field.placeholder}</label>
                                     )}
@@ -140,8 +133,15 @@ const CourseModal: React.FC<CourseModalProps> = ({
                                 </div>
                             ))}
                         </div>
-                        <button type="submit" className="create-button">
-                            Create Course
+
+                        <button
+                            type="submit"
+                            className="create-button"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting
+                                ? <div className="button-spinner" />
+                                : 'Create Course'}
                         </button>
                     </form>
                 </div>

@@ -7,7 +7,7 @@ import CourseButtonBar from "./CourseButtonBar";
 
 interface CourseCardProps {
     course: Course;
-    onEdit?:() => void;
+    onEdit?:(id: string) => void;
     onDuplicate?: () => void;
     onDelete?: () => void;
     onDownload?: () => void;
@@ -19,6 +19,15 @@ const CourseCard: React.FC<CourseCardProps> = ({
                                                    onDuplicate,
                                                    onDelete,
                                                    onDownload}) => {
+
+    const handleEdit = () => {
+        if (onEdit) onEdit(course.course_id);
+    };
+
+    const handleDownload = () => {
+        if (onDownload) onDownload();
+    };
+
     return (
         <div className="course-card">
             <div className="course-left">
@@ -47,10 +56,10 @@ const CourseCard: React.FC<CourseCardProps> = ({
             <div className="course-right">
                 <div className="button-group"></div>
                 <CourseButtonBar
-                    onEdit={onEdit}
+                    onEdit={handleEdit}
                     onDuplicate={onDuplicate}
                     onDelete={onDelete}
-                    onDownload={onDownload}
+                    onDownload={handleDownload}
                     />
             </div>
         </div>

@@ -20,9 +20,6 @@ export const createCourseHandler = (
     setCourses: (courses: Course[]) => void
 ) => {
     return async (formData: Record<string, string>) => {
-        modal.setTitle("Creating Course");
-        modal.setMessage("Please wait while we create your course...");
-        modal.setStatus("loading");
         modal.setVisible(true);
 
         try {

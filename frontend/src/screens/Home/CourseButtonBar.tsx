@@ -18,6 +18,7 @@ const CourseButtonBar: React.FC<ButtonBarProps> = ({
                                                  onDelete,
                                                  onDownload,
                                              }) => {
+
     return (
         <div className="course-button-bar">
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
 import { useAuth } from '../../context/AuthContext';
 import { createCourseHandler } from '../../utils/handlers/courseHandler';
+import {createEditHandler, createPreviewHandler} from "../../utils/handlers/courseButtonHandler";
 import { getCourses, Course } from '../../services/course/courseService';
 import StandardHeader from '../../components/Header/standardHeader';
 import ReusableButton from '../../components/Button/ReusableButton';
@@ -10,17 +11,30 @@ import { FaPlus } from 'react-icons/fa';
 import bgImage from '../../assets/images/bookstack-bg.png'
 import CourseModal from '../../components/CourseModal/NewCourseModal';
 import CourseCard from './CourseCard';
+import { Navigate, useNavigate } from 'react-router-dom';
 import './CoursePage.css';
 
 const CoursePage: React.FC = () => {
     // Always call hooks at the top-level
     const { user } = useAuth(); // user: string | null
-    const [isModalOpen, setModalOpen] = useState(false);
+    const navigate = useNavigate();
+
+
+    const [isCreateOpen, setCreateOpen] = useState(false);
+    const [createTitle, setCreateTitle] = useState('');
+    const [createMessage, setCreateMessage] = useState('');
+    const [createStatus, setCreateStatus] = useState<'loading' | 'success' | 'error'>('loading');
+
+    const [isRedirectOpen, setRedirectOpen] = useState(false);
+    const [redirectStatus, setRedirectStatus] = useState<'loading' | 'success' | 'error'>('loading');
+
+    const [redirectTitle, setRedirectTitle] = useState('');
+    const [redirectMessage, setRedirectMessage] = useState('');
+
+
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
-    const [modalTitle, setModalTitle] = useState('');
-    const [modalMessage, setModalMessage] = useState('');
-    const [modalStatus, setModalStatus] = useState<'loading' | 'success' | 'error'>('loading');
+
 
     // Load existing courses on mount
     useEffect(() => {
@@ -38,18 +52,27 @@ const CoursePage: React.FC = () => {
     }, []);
 
     // Setup modal control callbacks
-    const modalControls = {
-        setVisible: setModalOpen,
-        setStatus: setModalStatus,
-        setTitle: setModalTitle,
-        setMessage: setModalMessage,
+    const createModalControls = {
+        setVisible: setCreateOpen,
+        setStatus: setCreateStatus,
+        setTitle: setCreateTitle,
+        setMessage: setCreateMessage,
     };
 
+    const redirectModalControls = {
+        setVisible: setRedirectOpen,
+        setStatus: setRedirectStatus,
+        setTitle: setRedirectTitle,
+        setMessage: setRedirectMessage,
+    };;
+
     // Create course handler using user ID
-    const handleCreateCourse = createCourseHandler(
-        modalControls,
-        setCourses
-    );
+    const handleCreateCourse = createCourseHandler(createModalControls, setCourses);
+
+    const handleEditCourse = createEditHandler(redirectModalControls, setCourses, navigate)
+
+    const handlePreviewCourse = (courseId: string, courseTitle: string) => createPreviewHandler(redirectModalControls, courseId, courseTitle)();
+
 
     // Guard: redirect if not logged in (after hooks)
     if (!user) {
@@ -76,7 +99,7 @@ const CoursePage: React.FC = () => {
                         label="New Course"
                         icon={<SafeIcon Icon={FaPlus}/>}
                         variant="primary"
-                        onClick={() => setModalOpen(true)}
+                        onClick={() => setCreateOpen(true)}
                         className="course-page-button"
                     />
 
@@ -92,10 +115,10 @@ const CoursePage: React.FC = () => {
                                     <CourseCard
                                         key={course.course_id}
                                         course={course}
-                                        onEdit={() => console.log('Edit', course.course_id)}
+                                        onEdit={() => handleEditCourse(course.course_id)}
                                         onDuplicate={() => console.log('Duplicate', course.course_id)}
                                         onDelete={() => console.log('Delete', course.course_id)}
-                                        onDownload={() => console.log('Download', course.course_id)}
+                                        onDownload={() => handlePreviewCourse(course.course_id, course.course_title_syllabus)}
                                     />
                                 ))}
                             </div>
@@ -103,16 +126,24 @@ const CoursePage: React.FC = () => {
                     </div>
                 </div>
 
-                <CourseModal
-                    isOpen={isModalOpen}
-                    onClose={() => setModalOpen(false)}
-                    onCreate={handleCreateCourse}
-                    modalTitle={modalTitle}
-                    modalMessage={modalMessage}
-                    modalStatus={modalStatus}
-                />
-            </div>
-            );
-            };
+            <CourseModal
+                isOpen={isCreateOpen}
+                onClose={() => setCreateOpen(false)}
+                onCreate={handleCreateCourse}
+                modalTitle={createTitle}
+                modalMessage={createMessage}
+                modalStatus={createStatus}
+            />
 
-            export default CoursePage;
+            {/* Redirecting modal for edit/delete/preview */}
+            <RedirectingModal
+                visible={isRedirectOpen}
+                status={redirectStatus}
+                title={redirectTitle}
+                message={redirectMessage}
+            />
+        </div>
+    );
+};
+
+export default CoursePage;

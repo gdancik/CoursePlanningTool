@@ -2,7 +2,10 @@ from docx import Document
 import pandas as pd
 import tabulate
 from python_docx_replace import docx_replace, docx_blocks
-
+from docx.shared import Pt, RGBColor
+from docx.oxml.ns import qn
+from docx.oxml import OxmlElement
+import docx
 import logging
 
 
@@ -128,11 +131,8 @@ def getTable(doc, i):
     # Create a DataFrame from the list of rows
     df = pd.DataFrame(rows)
     return df
-
-from docx.shared import Pt, RGBColor
-from docx.oxml.ns import qn
-from docx.oxml import OxmlElement
-import docx
+#TODO ADD DOCSTRINGS
+#REMOVE DEBUG TEXT
 def copy_paragraph_before(source_paragraph, target_paragraph):
     def add_hyperlink(paragraph, text, url):
         def get_or_create_hyperlink_style(d):
@@ -209,16 +209,16 @@ def copy_paragraph_before(source_paragraph, target_paragraph):
 
         # Check if there is a hyperlink in the source paragraph and get its index and text
         for child in source_paragraph._element.iterchildren():
-            # print(f'Paragraph child: {child}')#debug
+            # logging.debug(f'Paragraph child: {child}')#debug
             # Iterate through the XML elements of the source paragraph to find hyperlinks
             if child.tag.endswith('hyperlink'):
                 # Log that a hyperlink has been found for debugging purposes
-                print('Found link')#debug
+                logging.debug('Found link')#debug
                 # Store the index of the hyperlink
                 link_index = source_paragraph._element.index(child)
                 # Extract the text of the hyperlink
                 link_text = source_paragraph._element.getchildren()[link_index].text
-                print(f'link text: {link_text}, link run: {link_index}')#debug
+                logging.debug(f'link text: {link_text}, link run: {link_index}')#debug
 
         # Copy each run from the source paragraph to the new paragraph
         for i, run in enumerate(source_paragraph.runs):
@@ -229,14 +229,16 @@ def copy_paragraph_before(source_paragraph, target_paragraph):
             new_run.bold = run.bold
             new_run.italic = run.italic
             new_run.underline = run.underline
-
+            new_run.font.color.rgb = run.font.color.rgb
+            new_run.font.size = run.font.size
+            new_run.font.name = run.font.name
             # # If the current run index matches the hyperlink index, append the hyperlink text
             if i + 1 == link_index:
                 if link_text.startswith("https://"):
-                    hyperlink = add_hyperlink(new_paragraph,link_text,link_text)
+                    add_hyperlink(new_paragraph,link_text,link_text)
                 else:
                     link_text_url = f'https://{link_text}'
-                    hyperlink = add_hyperlink(new_paragraph,link_text,link_text_url)
+                    add_hyperlink(new_paragraph,link_text,link_text_url)
                    
                 
             # if i + 1 == link_index:
@@ -244,7 +246,7 @@ def copy_paragraph_before(source_paragraph, target_paragraph):
 
             # Check if the current run is part of a hyperlink using lxml for debug
             current_run = run._element
-            print(f'current_run: {current_run}, run: {i}')  # Debugging log
+            logging.debug(f'current_run: {current_run}, run: {i}')  # Debugging log
                     
                 
 

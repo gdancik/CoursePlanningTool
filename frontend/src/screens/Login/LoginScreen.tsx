@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
 import ecsuBlack from '../../assets/images/ecsu-logo-black-stacked-alt.png';
 import "./LoginScreen.css";
+import LoginIcon from '../../assets/images/Login_Page_Icon.png'
 import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
 
 const LoginScreen: React.FC = () => {
@@ -65,6 +66,21 @@ const LoginScreen: React.FC = () => {
                     <p className="details-bottom">
                         Create an account or login to get started.
                     </p>
+
+                    <h2>How It Works:</h2>
+                    <div className="how-block">
+                        <img
+                        src = {LoginIcon}
+                        alt = "Login Icon"
+                        className="icon-login"
+                        />
+
+                        <div className="description-container">
+                            <div> Create A New Course <br/> or Edit An Existing Course.</div>
+                            <div>Develop or Edit Your Course <br/> Through Guided, Step-by-step Planning Tool</div>
+                            <div>Generate Your Course Syllabus As A <br/> Word Document</div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Right Section */}

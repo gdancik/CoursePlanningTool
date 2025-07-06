@@ -110,3 +110,7 @@ export const createPreviewHandler = (
         }
     };
 };
+
+export const deleteRowHandler{
+
+};

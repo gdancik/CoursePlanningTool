@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
-import ecsuBlack from '../../assets/images/ecsu-logo-black-stacked-alt.png';
+import ecsuWhite from '../../assets/images/ecsu-logo-white-stacked-alt.png';
 import "./LoginScreen.css";
+import bgImage from '../../assets/images/login_background.png'
 import LoginIcon from '../../assets/images/Login_Page_Icon.png'
 import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
 
@@ -45,11 +46,21 @@ const LoginScreen: React.FC = () => {
     };
 
     return (
-        <div className="login-page-wrapper">
+        <div className="login-page-wrapper"
+             style = {{
+                 backgroundImage: `url(${bgImage})`,
+                 backgroundSize: 'cover',
+                 backgroundPosition: 'center',
+                 backgroundRepeat: 'no-repeat',
+                 backgroundAttachment: 'fixed',
+                 minHeight: '100vh',
+             }}
+
+        >
             {/* Logo */}
             <div className="logo-container">
                 <img
-                    src={ecsuBlack}
+                    src={ecsuWhite}
                     alt="Eastern Connecticut State University Logo"
                     className="logo"
                 />

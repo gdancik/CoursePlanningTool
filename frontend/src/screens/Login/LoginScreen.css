@@ -19,7 +19,6 @@
 .logo {
     width: 240px;
     height: auto;
-    filter: brightness(0);
 }
 
 /* Main container: split layout */
@@ -132,7 +131,7 @@
     margin-top: 1rem;
     padding-left: 2rem;
     padding-right: 2rem;
-    
+
     grid-template-columns: repeat(3, 1fr);
     width: 90%;
     justify-content: center;

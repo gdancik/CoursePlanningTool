@@ -550,7 +550,7 @@ class gsEditor:
                 index = ids.index(course_id)
             except:
                 raise Exception(f'Error in delete_course: course_id of {course_id} not found')
-            return None                
+                return None                
 
             logging.debug(f'deleting row')        
             self.increase_api_count('API call: delete_rows')

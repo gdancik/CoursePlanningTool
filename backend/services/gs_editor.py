@@ -520,3 +520,40 @@ class gsEditor:
         logging.debug(f"Successfully processed values for course ID '{new_course_id}'.")
         return new_course_id
         
+
+    @exponential_backoff
+    def delete_course(self, course_id):
+            '''
+            Reads the entire Google Sheet and returns it as a pandas DataFrame.
+            Returns:
+                pd.DataFrame: A DataFrame containing all records from the Google Sheet.
+            '''
+            # Create a Google Sheets client
+            #client = self.create_gs_client()
+            
+            logging.debug(f'Opening spreadsheet')                    
+            self.increase_api_count('API call: open')      
+            spreadsheet = self.client.open(self.sheet_name)
+
+            logging.debug('API call: get worksheet')
+            self.increase_api_count('API call: get_worksheet')
+            sheet = spreadsheet.get_worksheet(0)
+            
+            logging.debug(f'getting all records from sheet')        
+            self.increase_api_count('API call: get_all_records')
+            df = sheet.get_all_records()
+
+            # get index
+            ids = [r['course_id'] for r in df]
+
+            try :
+                index = ids.index(course_id)
+            except:
+                raise Exception(f'Error in delete_course: course_id of {course_id} not found')
+            return None                
+
+            logging.debug(f'deleting row')        
+            self.increase_api_count('API call: delete_rows')
+            sheet.delete_rows(index +2) #index starts at 0 and we skip header row
+
+            return course_id

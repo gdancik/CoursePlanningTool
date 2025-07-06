@@ -2,6 +2,9 @@ import api from "../axios"; //  Your pre-configured axios instance
 
 export const login = async (user: string, password: string): Promise<{ user: string }> => {
     try {
+
+        console.log("BASE URL:", process.env.REACT_APP_API_URL);
+
         const response = await api.get(
             `/test_login/?user=${encodeURIComponent(user)}&password=${encodeURIComponent(password)}`
         );

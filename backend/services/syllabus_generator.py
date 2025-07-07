@@ -7,9 +7,9 @@ from docx.shared import RGBColor, Pt
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn 
 
-import doc_editor as de
-import gs_editor as gse
-import course_planning as cp
+import backend.services.doc_editor as de
+import backend.services.gs_editor as gse
+import backend.services.course_planning as cp
 import ast
 import re
 import logging
@@ -321,13 +321,17 @@ def generate_grading_policies(doc, policies:list):
                 run_description.bold = False
                 run_description.italic = False
                 
-def generate_syllabus(doc, course_id, sheet_name, syllabus_statment_webpage_url='https://www.easternct.edu/center-for-teaching-learning-and-assessment/syllabus-statements/index.html'):
+def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_statment_webpage_url:str='https://www.easternct.edu/center-for-teaching-learning-and-assessment/syllabus-statements/index.html'):
     """
     Generates a syllabus document by replacing placeholders with actual values.
 
     Args:
         doc (Document): The Word document object to be modified.
         course_id (str): The ID of the course for which the syllabus is generated.
+        sheet_name (str): The name of the Google Sheets document to retrieve course data from.
+        syllabus_statment_webpage_url (str, optional): The URL of the syllabus statement webpage. Defaults to a specific URL.
+    Returns:
+        Title(str): The title of the syllabus document, which is a combination of course information.
     """
 
     def table_placeholder_replacement(doc, paragraph, placeholder_text, table_list):
@@ -338,7 +342,6 @@ def generate_syllabus(doc, course_id, sheet_name, syllabus_statment_webpage_url=
             return True
         return False
     
-    sheet_name = 'annie' #DEBUG
     # Retrieve course data using gsEditor
     gs = gse.gsEditor(sheet_name)
     column_names = cp.columns
@@ -442,6 +445,10 @@ def generate_syllabus(doc, course_id, sheet_name, syllabus_statment_webpage_url=
     de.removeBlocks(doc,removeBlocks)
     de.removeBlockTags(doc,removeTags)
 
-    # syllabus is saved as a doc
+    title += str(syllabus_col.get('subj_code', None))
+    title += str(syllabus_col.get('crse_number',None))
+    title += "_" + str(syllabus_col.get('term',None))
+    return title
+
     
     

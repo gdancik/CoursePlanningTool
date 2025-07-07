@@ -353,13 +353,11 @@ def generate_syllabus(doc, course_id, sheet_name, syllabus_statment_webpage_url=
     json_columns = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_json')}
     logging.debug('Removing "_json" from the column names')
     
-    # generate_grading_policies_page.save('/Users/senrabel/Downloads/generate_grading_policies_page.docx')
-    # print(f'json_columns: {json_columns}')
-    # print(f'list_of_dicts: {list_of_dicts}')
-
     # Process dictionary to handle table placeholders
     tables_col = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_list')}
     logging.debug('Removing "_list" from the column names')
+
+    #policy placeholder handling
     policies = fr_dict.get('policy_statements',None)
     policies = ast.literal_eval(policies)
 
@@ -367,6 +365,17 @@ def generate_syllabus(doc, course_id, sheet_name, syllabus_statment_webpage_url=
 
     syllabus_statment_page = Document()
     create_syllabus_statment_page(syllabus_statment_page,syllabus_statment_webpage_url,policies) 
+
+    #University resources placeholder handling
+
+    resource_policies = fr_dict.get('university_resources',None)
+    resource_policies = ast.literal_eval(resource_policies)
+    print(f'resource_policies: {resource_policies}')
+    logging.debug(f'resource_policies: {resource_policies}, type:{type(resource_policies)}')#debug
+
+    resource_policies_page = Document()
+    create_syllabus_statment_page(resource_policies_page,syllabus_statment_webpage_url,resource_policies) 
+
     # Iterate through paragraphs and replace placeholders
     for paragraph in doc.paragraphs:
         #Add policies
@@ -375,6 +384,12 @@ def generate_syllabus(doc, course_id, sheet_name, syllabus_statment_webpage_url=
             for source_paragraph in syllabus_statment_page.paragraphs:
                 de.copy_paragraph_before(source_paragraph,paragraph)
         
+        if 'university_resources'in paragraph.text: 
+            logging.debug('resource_policy Placeholder found') #debug
+            for source_paragraph in resource_policies_page.paragraphs:
+                de.copy_paragraph_before(source_paragraph,paragraph)
+        
+
         for key, value in json_columns.items():
             if key in paragraph.text:
                 list_of_dicts = json_columns.get(key)
@@ -385,7 +400,7 @@ def generate_syllabus(doc, course_id, sheet_name, syllabus_statment_webpage_url=
                 for source_paragraph in generate_grading_policies_page.paragraphs:
                     de.copy_paragraph_before(source_paragraph,paragraph)
         
-            
+        
         # Go through table placeholders
         logging.debug('Processing table placeholders')
         for key, value in tables_col.items():
@@ -401,6 +416,32 @@ def generate_syllabus(doc, course_id, sheet_name, syllabus_statment_webpage_url=
                     logging.error(f"Error evaluating string for key {key}: {e}")
 
     # Blocks are removed
+    removeTags = []
+    removeBlocks = []
+
+    if fr_dict.get('times2_syllabus') == "":
+        removeBlocks.append('time2')
+    else:
+        removeTags.append('time2')
+    
+    if fr_dict.get('instructor_title_syllabus') == "":
+        removeBlocks.append('title')
+    else:
+        removeTags.append('title')
+    
+    if fr_dict.get('form_of_address_syllabus') == "":
+        removeBlocks.append('foa')
+    else:
+        removeTags.append('foa')
+
+    if fr_dict.get('phone_syllabus') == "":
+        removeBlocks.append('phone')
+    else:
+        removeTags.append('phone')
+
+    de.removeBlocks(doc,removeBlocks)
+    de.removeBlockTags(doc,removeTags)
+
     # syllabus is saved as a doc
     
     

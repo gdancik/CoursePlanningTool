@@ -33,8 +33,25 @@ def removeBlocks(doc, block_ls):
         None
     '''
     logging.info('Removing blocks from doc')
+    options = {}
     for i in block_ls:
-        options = {i: False}
+        options[i] = False
+    docx_blocks(doc, **options)
+
+def removeBlockTags(doc, block_ls):
+    '''
+    Removes specified block tags from a given document.
+
+    Args:
+        doc (Document): The document object from which block tags will be removed.
+        block_ls (list of str): A list of block tag identifiers that need to be removed from the document.
+
+    Returns:
+        None: This function does not return a value but modifies the document in place.
+    '''
+    options = {}
+    for i in block_ls:
+        options[i] =True
     docx_blocks(doc, **options)
  
 def printParagraphs(doc):

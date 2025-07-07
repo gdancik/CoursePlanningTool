@@ -4,7 +4,6 @@ import './CourseCard.css';
 import { FaFileAlt } from 'react-icons/fa';
 import SafeIcon from "../../utils/ComponentWrapper";
 import CourseButtonBar from "./CourseButtonBar";
-
 interface CourseCardProps {
     course: Course;
     onEdit?:(id: string) => void;
@@ -28,6 +27,10 @@ const CourseCard: React.FC<CourseCardProps> = ({
         if (onDownload) onDownload();
     };
 
+    const handleDelete = () => {
+        if (onDelete) onDelete();
+
+    }
     return (
         <div className="course-card">
             <div className="course-left">
@@ -58,7 +61,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 <CourseButtonBar
                     onEdit={handleEdit}
                     onDuplicate={onDuplicate}
-                    onDelete={onDelete}
+                    onDelete={handleDelete}
                     onDownload={handleDownload}
                     />
             </div>

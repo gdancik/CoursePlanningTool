@@ -2,7 +2,7 @@
 import {
     getCourseData,
     getCourses as apiFetchCourses,
-    Course,
+    Course, deleteCourseRow
 } from "../../services/course/courseService";
 import {previewSyllabus} from "../../services/TestServices/syllabusService";
 import { Dispatch, SetStateAction } from "react";
@@ -111,6 +111,34 @@ export const createPreviewHandler = (
     };
 };
 
-export const deleteRowHandler{
+export const createDeleteRowHandler = (
+    modal: ModalControls,
+    setCourses: (courses: Course[]) => void
+) => {
+    return async (courseId: string) => {
+        modal.setTitle("Deleting Course");
+        modal.setMessage("Please wait while we remove the course…")
+        modal.setStatus("loading")
+        modal.setVisible(true);
 
-};
+        try {
+            const response = await deleteCourseRow(courseId);
+            if (!response) throw new Error("Course could not be deleted");
+
+            const updatedCourses = (await apiFetchCourses() || []);
+            setCourses(updatedCourses);
+
+            modal.setStatus("success");
+            modal.setTitle("Course Deleted");
+            modal.setMessage(`Course ${courseId} has been removed.`);
+        } catch (err: any) {
+            console.error("Delete handler failed:", err);
+            modal.setStatus("error");
+            modal.setTitle("Deletion Failed");
+            modal.setMessage(err.message || "Something went wrong while deleting the course.");
+        } finally {
+            setTimeout(() => modal.setVisible(false), 1500);
+        }
+    }
+
+}

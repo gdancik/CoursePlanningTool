@@ -22,7 +22,8 @@ const BasicInfo = () =>{
 
 
     //Tracks user-entered form data
-    const[formData, setFormData] = useState<Record<string, string>>({})
+    const [formData, setFormData] = useState<Record<string, string>>({});
+    const courseID = localStorage.getItem("currentCourseId")
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
@@ -84,8 +85,8 @@ const BasicInfo = () =>{
     const handleSaveAndExit = createSaveAndExitHandler(formData,navigate, modalControls);
     const handlePreviewClick = createPreviewHandler(formData, modalControls);
 
-    const handleBackClick = () => handleBack(navigate, location.pathname);
-    const handleNextClick = () => handleNext(navigate, location.pathname);
+    const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
+    const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
 
 
     //Groups fields by section

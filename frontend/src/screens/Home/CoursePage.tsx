@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
 import { useAuth } from '../../context/AuthContext';
 import { createCourseHandler } from '../../utils/handlers/courseHandler';
-import {createEditHandler, createPreviewHandler} from "../../utils/handlers/courseButtonHandler";
+import {
+    createDeleteRowHandler,
+    createEditHandler,
+    createPreviewHandler
+} from "../../utils/handlers/courseButtonHandler";
 import { getCourses, Course } from '../../services/course/courseService';
 import StandardHeader from '../../components/Header/standardHeader';
 import ReusableButton from '../../components/Button/ReusableButton';
@@ -64,7 +68,7 @@ const CoursePage: React.FC = () => {
         setStatus: setRedirectStatus,
         setTitle: setRedirectTitle,
         setMessage: setRedirectMessage,
-    };;
+    };
 
     // Create course handler using user ID
     const handleCreateCourse = createCourseHandler(createModalControls, setCourses);
@@ -73,6 +77,7 @@ const CoursePage: React.FC = () => {
 
     const handlePreviewCourse = (courseId: string, courseTitle: string) => createPreviewHandler(redirectModalControls, courseId, courseTitle)();
 
+    const handleDeleteCourse = createDeleteRowHandler(redirectModalControls, setCourses);
 
     // Guard: redirect if not logged in (after hooks)
     if (!user) {
@@ -117,7 +122,7 @@ const CoursePage: React.FC = () => {
                                         course={course}
                                         onEdit={() => handleEditCourse(course.course_id)}
                                         onDuplicate={() => console.log('Duplicate', course.course_id)}
-                                        onDelete={() => console.log('Delete', course.course_id)}
+                                        onDelete={() => handleDeleteCourse(course.course_id)}
                                         onDownload={() => handlePreviewCourse(course.course_id, course.course_title_syllabus)}
                                     />
                                 ))}

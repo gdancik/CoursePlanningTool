@@ -51,12 +51,7 @@
     font-weight: 600;
     color: #007bff;
 }
-.instructor-name {
-    margin-top: 0px;
-    font-size: 1.3rem;               /* 16px */
-    font-weight: 600;
-    color: #555555;
-}
+
 
 /* course type (green) */
 .course-type {

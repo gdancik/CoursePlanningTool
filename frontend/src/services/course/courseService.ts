@@ -118,3 +118,14 @@ export const createNewCourse = (
         return { course_id: id };
     });
 };
+
+export const deleteCourseRow = (
+    course_id: string ): Promise <{course_id: string} | null> => {
+    return createApiCaller<{ course_id: string}> ({
+        url: "deleteCourse/",
+        method: "POST",
+        withCredentials: true,
+        headers: {"content-Type" : "application/json"},
+        data: {course_id},
+    })();
+};

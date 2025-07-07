@@ -17,6 +17,7 @@ import "./LearningResources.css";
 const LearningResources = () => {
     const [fields, setFields] = useState<SyllabusContent[]>([]);
     const [formData, setFormData] = useState<Record<string, string>>({});
+    const courseID = localStorage.getItem("currentCourseId")
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
@@ -73,8 +74,8 @@ const LearningResources = () => {
     const handleSave = createSaveHandler(formData, modalControls, fields);
     const handleSaveAndExit = createSaveAndExitHandler(formData, navigate, modalControls,fields);
     const handlePreviewClick = createPreviewHandler(formData, modalControls,fields);
-    const handleBackClick = () => handleBack(navigate, location.pathname);
-    const handleNextClick = () => handleNext(navigate, location.pathname);
+    const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
+    const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
 
     return (
         <div>

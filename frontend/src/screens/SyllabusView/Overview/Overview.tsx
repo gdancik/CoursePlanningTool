@@ -11,6 +11,7 @@ import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSect
 import AppLayout from "../../../ApplicationLayout/Applayout"
 import './Overview.css'
 import {handleBack, handleNext} from "../../../components/Button/ButtonLogic";
+import {toFormData} from "axios";
 
 // Functional component that displays the overview page.
 const Overview = () => {
@@ -21,8 +22,12 @@ const Overview = () => {
     //Page Navigation for Buttons
     const navigate = useNavigate();
     const location = useLocation();
-    const handleBackClick = () => handleBack(navigate, location.pathname);
-    const handleNextClick = () => handleNext(navigate, location.pathname);
+
+    const [formData, setFormData] = useState<Record<string, string>>({});
+    const courseID = localStorage.getItem("currentCourseId")
+
+    const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
+    const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
 
     // useEffect runs once on component mount to fetch CSV data
     // using the custom loadSyllabusSections utility function.

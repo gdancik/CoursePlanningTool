@@ -181,6 +181,29 @@ def updateValue():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+'''Calls the delete_course function from the gs_editor.py module'''
+@api_bp.route('deleteCourse/', methods=['POST'])
+@login_required
+def deleteCourse():
+    gs = get_gs_editor()
+    logging.debug(f'Created gs_editor object')
+    try:
+        logging.debug(f'Fetching data...')
+        data = request.get_json()
+        course_id = data.get('course_id')
+        logging.debug(f'Fetched course_id: {course_id}')
+
+        if not course_id:
+            return jsonify({"error": "Missing one or more required fields"}), 400
+
+        # Call the updateValue function
+        logging.info("deleting course")
+        gs.delete_course(course_id)
+        return jsonify({"course_id": course_id})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @api_bp.route('getCourses/', methods=['POST'])
 @login_required
 def getCourses():

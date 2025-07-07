@@ -458,7 +458,6 @@ class gsEditor:
         logging.info('Creating new course')
         logging.debug('Opening sheet ')
         # Create a Google Sheets client
-
         client = self.client
         # Open the spreadsheet by name
         self.increase_api_count('API call: open')
@@ -466,7 +465,7 @@ class gsEditor:
 
         # Select the first sheet
         self.increase_api_count('API call: get_worksheet')
-        sheet = spreadsheet.get_worksheet(0)
+        sheet = spreadsheet.get_worksheet(0) 
 
         # Get all records to check for existing course_id and column headers
         self.increase_api_count('API call: get all records')
@@ -474,28 +473,29 @@ class gsEditor:
         df = pd.DataFrame(data)
 
         # Get the current column headers from the sheet
-        sheet_headers = sheet.row_values(1)
+        sheet_headers = sheet.row_values(1) 
 
         # Initialize new row with None for all *known* sheet headers
-        new_row_values = {}
+        new_row_values = {}  
         for col in sheet_headers:
             new_row_values[col] = None
 
-            logging.debug(f'Getting last course id and incrementing')
-            # Generate new course id by incrementing from last course_id
+        logging.debug(f'Getting last course id and incrementing')
+        # Generate new course id by incrementing from last course_id
         if df.empty or len(df) == 1 and df["course_id"].iloc[0] == df.columns[0]:
             # If the DataFrame is empty or only has headers, start with a default course_id
-            new_num = 1
+            new_num = 1  
         else:
             last_course_id = df["course_id"].iloc[-1]
             new_num = int(last_course_id[1:])+1
         new_course_id = f'c{new_num}'
-
+        
 
         # Set the course_id in the new row
         new_row_values['course_id'] = new_course_id
+
         logging.debug(f'Update time create and edited columns')
-         #Update created and edited columns
+        #Update created and edited columns
         formatted_current_time = self._fetch_current_time()
         values_dict['created_at'] = formatted_current_time
         values_dict['last_edited'] = formatted_current_time
@@ -519,3 +519,41 @@ class gsEditor:
         sheet.append_row(ordered_new_row)
         logging.debug(f"Successfully processed values for course ID '{new_course_id}'.")
         return new_course_id
+        
+
+    @exponential_backoff
+    def delete_course(self, course_id):
+            '''
+            Reads the entire Google Sheet and returns it as a pandas DataFrame.
+            Returns:
+                pd.DataFrame: A DataFrame containing all records from the Google Sheet.
+            '''
+            # Create a Google Sheets client
+            #client = self.create_gs_client()
+            
+            logging.debug(f'Opening spreadsheet')                    
+            self.increase_api_count('API call: open')      
+            spreadsheet = self.client.open(self.sheet_name)
+
+            logging.debug('API call: get worksheet')
+            self.increase_api_count('API call: get_worksheet')
+            sheet = spreadsheet.get_worksheet(0)
+            
+            logging.debug(f'getting all records from sheet')        
+            self.increase_api_count('API call: get_all_records')
+            df = sheet.get_all_records()
+
+            # get index
+            ids = [r['course_id'] for r in df]
+
+            try :
+                index = ids.index(course_id)
+            except:
+                raise Exception(f'Error in delete_course: course_id of {course_id} not found')
+                return None                
+
+            logging.debug(f'deleting row')        
+            self.increase_api_count('API call: delete_rows')
+            sheet.delete_rows(index +2) #index starts at 0 and we skip header row
+
+            return course_id

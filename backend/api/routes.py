@@ -5,13 +5,13 @@ from datetime import datetime
 import pandas as pd
 import io
 
-from backend.services.doc_editor import replaceTextInParagraph, removeBlocks
+from backend.services.syllabus_generator import generate_syllabus
 from backend.services.course_calendar import create_schedule
 import backend.services.course_planning as cp
 
 #from backend.services.gs_editor import gsEditor
+from flask_login import current_user
 from backend.services.app_services import get_gs_editor
-
 from . import api_bp
 import logging
 
@@ -45,7 +45,7 @@ def missing_params(param_list) :
 
 ''' Preview syllabus '''
 @api_bp.route('preview/', methods=['POST'])
-#@login_required
+# @login_required
 def preview():
     gs = get_gs_editor()
     logging.debug(f'Created gs_editor object')
@@ -63,22 +63,6 @@ def preview():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     
-    
-    #Use course_id to pull values of syllabus from the googles sheet
-    try:
-        logging.debug('Pulling values of columns from the google sheet')
-        fr = gs.getValue(course_id, cp.columns)
-        logging.debug(f'Values: {fr} ')
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
-    # If the key ends is _syllabus then add it to our new dictonary
-    # then remove the _syllabus from the key
-    ns = {}
-    logging.debug('Removing "_syllabus" from the column names')
-    ns = {key[:-9]: value for key, value in fr.items() if key.endswith('_syllabus')}
-    #return jsonify({"result": "created ns"}), 200
-
     # try local file, otherwise try full path for PythonAnywhere
     try :
         path = "backend/docx/SyllabusTemplate.docx"
@@ -95,14 +79,9 @@ def preview():
 
     
     #return jsonify({"result": "created doc"}), 200
-
-    #call functions to replace
-    logging.debug(f'Replacing text in file')
-    replaceTextInParagraph(doc, ns)
-    blocks = ['time2']
-    logging.debug(f'Removing blocks: {blocks}')
-    removeBlocks(doc,['time2'])
-    
+    logging.debug(f'current_user.id: {current_user.id }')
+    sheet_name = current_user.id 
+    title = generate_syllabus(doc,course_id,sheet_name)#Can add url as parameter if syllabus webapage url changes
 
     # Save to a BytesIO stream
     logging.debug(f'Saving to BytesIO stream')
@@ -111,11 +90,6 @@ def preview():
     file_stream.seek(0)
 
     current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M")
-
-    title =""
-    title += str(ns.get('subj_code', None))
-    title += str(ns.get('crse_number',None))
-    title += "_" + str(ns.get('term',None))
     title += "_" + current_datetime
     
     logging.debug(f'Prompting to download')

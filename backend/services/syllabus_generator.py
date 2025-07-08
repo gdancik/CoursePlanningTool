@@ -373,7 +373,6 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     resource_policies = fr_dict.get('university_resources',None)
     resource_policies = ast.literal_eval(resource_policies)
-    print(f'resource_policies: {resource_policies}')
     logging.debug(f'resource_policies: {resource_policies}, type:{type(resource_policies)}')#debug
 
     resource_policies_page = Document()
@@ -444,7 +443,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     de.removeBlocks(doc,removeBlocks)
     de.removeBlockTags(doc,removeTags)
-
+    title = ""
     title += str(syllabus_col.get('subj_code', None))
     title += str(syllabus_col.get('crse_number',None))
     title += "_" + str(syllabus_col.get('term',None))

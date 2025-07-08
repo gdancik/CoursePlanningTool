@@ -451,9 +451,9 @@ class gsEditor:
         '''
         Creates a new course in the Google Sheet with the specified values.
         Args:
-        values_dict (Dict[str, Any]): A dictionary containing column names as keys and the new
+            values_dict (Dict[str, Any]): A dictionary containing column names as keys and the new data as values
         Returns:
-        str: The course ID of the newly created course.
+            new_course_id(str): The course ID of the newly created course.
         '''
         logging.info('Creating new course')
         logging.debug('Opening sheet ')
@@ -520,7 +520,6 @@ class gsEditor:
         logging.debug(f"Successfully processed values for course ID '{new_course_id}'.")
         return new_course_id
         
-
     @exponential_backoff
     def delete_course(self, course_id):
             '''
@@ -557,3 +556,27 @@ class gsEditor:
             sheet.delete_rows(index +2) #index starts at 0 and we skip header row
 
             return course_id
+
+    def duplicateCourse(self,orginal_course_id):
+        '''
+        Duplicates a course by creating a new course with the same data as the original course.
+
+        Args:
+            orginal_course_id (str): The course ID of the original course to be duplicated.
+        Returns:
+            new_course_id (str): The course ID of the newly created course.
+        '''
+        
+        columns = cp.columns
+        og_course_data = self.getValue(orginal_course_id,columns)
+        og_course_data.pop('course_id')
+        formatted_current_time = self._fetch_current_time()
+        og_course_data['created_at'] = formatted_current_time
+        og_course_data['last_edited'] = formatted_current_time
+
+        new_course_id = self.createNewCourse(og_course_data)
+
+        return new_course_id
+
+
+        

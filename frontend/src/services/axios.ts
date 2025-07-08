@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
+    baseURL: 'https://gdancik.pythonanywhere.com/api/',
     withCredentials: true, // allows sending cookies for session auth
 });
 

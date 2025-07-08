@@ -9,3 +9,4 @@ frontend/.env
 
 backend/service_account.json
 *.pyc
+GS_CREDENTIALS_JSON.json

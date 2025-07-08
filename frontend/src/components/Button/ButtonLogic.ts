@@ -24,7 +24,34 @@ const pageOrder = [
 /**
  * Navigates to the previous page in `pageOrder` based on the current path.
  */
-export const handleBack = (navigate: NavigateFunction, currentPath: string) => {
+
+function saveCurrentFormToLocalStorage (formData: Record<string, string>, courseId?: string){
+    try{
+        const existingData = localStorage.getItem("currentCourseData");
+        const parsed = existingData ? JSON.parse(existingData) : {};
+
+        const  merged = {
+            ...parsed,
+        ...formData,
+        ...(courseId ? { course_id: courseId } : {})
+        };
+        localStorage.setItem("currentCourseData", JSON.stringify(merged));
+    } catch (err) {
+        console.error("Failed to save form data:", err);
+    }
+}
+
+export const handleBack = (
+    navigate: NavigateFunction,
+    currentPath: string,
+    formData: Record<string, string>,
+    courseID?: string
+) => {
+
+    saveCurrentFormToLocalStorage(formData, courseID);
+
+
+
     const index = pageOrder.indexOf(currentPath); // Find the index of the current page
     if (index > 0) {
         navigate(pageOrder[index - 1]); // Navigate to the previous page
@@ -36,7 +63,13 @@ export const handleBack = (navigate: NavigateFunction, currentPath: string) => {
 /**
  * Navigates to the next page in `pageOrder` based on the current path.
  */
-export const handleNext = (navigate: NavigateFunction, currentPath: string) => {
+export const handleNext = (
+    navigate: NavigateFunction,
+    currentPath: string,
+    formData: Record<string, string>,
+    courseID?: string
+) => {
+    saveCurrentFormToLocalStorage(formData, courseID);
     console.log("Current Path:", currentPath);
     const index = pageOrder.indexOf(currentPath); // Find the index of the current page
     console.log("Current index:", index);

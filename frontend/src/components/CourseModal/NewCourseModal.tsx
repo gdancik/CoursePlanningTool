@@ -1,11 +1,9 @@
-//New Course Modal.tsx
+// src/components/CourseModal/NewCourseModal.tsx
 
-import React, {useState, useEffect } from 'react';
-import courseFields from '../../courseFields.json'
-import './CourseModal.css'
-import {useNavigate} from "react-router-dom";
-
-//Type Definitions for the fields
+import React, { useState, useEffect } from 'react';
+import courseFields from '../../courseFields.json';
+import './CourseModal.css';
+import { useNavigate } from 'react-router-dom';
 
 interface CourseField {
     type: string;
@@ -17,66 +15,60 @@ interface CourseField {
 interface CourseModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onCreate: (data: Record<string, string>) => void;
+    onCreate: (data: Record<string, string>) => Promise<void>;
+    modalTitle: string;
+    modalMessage: string;
+    modalStatus: 'loading' | 'success' | 'error';
 }
 
-const CourseModal: React.FC <CourseModalProps> = ({
-    isOpen,
-    onClose,
-    onCreate
-}) => {
-
-    const navigate = useNavigate()
-
+const CourseModal: React.FC<CourseModalProps> = ({
+                                                     isOpen,
+                                                     onClose,
+                                                     onCreate,
+                                                     modalTitle,
+                                                     modalMessage,
+                                                     modalStatus,
+                                                 }) => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState<Record<string, string>>({});
+    // NEW:
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    //Generate dynamic year options
     const yearOptions = Array.from(
-        {length: 2},
+        { length: 2 },
         (_, i) => new Date().getFullYear() + i
     );
 
     useEffect(() => {
         courseFields.forEach((field: CourseField) => {
-            if (field.placeholder === "Year") {
+            if (field.placeholder === 'Year') {
                 field.options = yearOptions;
             }
         });
     }, [yearOptions]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const {name, value} = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        const courseId = `${formData["Subject Code"]}-${formData["Course number"]}-${formData["Year"]}-${formData["Semester"]}-${formData["Course Title"]}`;
-        const existingCourses = JSON.parse(localStorage.getItem("allCourses") || "{}");
-
-        if (existingCourses[courseId]) {
-            alert("Course already exists. Redirecting to existing course.");
-            localStorage.setItem("selectedCourse", courseId);
-            navigate("/overview");
-            return;
+        setIsSubmitting(true);               // start spinner
+        try {
+            await onCreate(formData);
+            onClose();
+            navigate('/overview');
+        } catch (err) {
+            console.error('Course creation failed:', err);
+        } finally {
+            setIsSubmitting(false);            // stop spinner
         }
-
-        // Save new course
-        existingCourses[courseId] = formData;
-        localStorage.setItem("allCourses", JSON.stringify(existingCourses));
-        localStorage.setItem("selectedCourse", courseId);
-
-        console.log("New course created:", formData);
-        onCreate(formData);
-        onClose();
-        navigate("/overview");
     };
 
-    if(!isOpen) return null;
+    if (!isOpen) return null;
 
     return (
         <div className="modal-overlay">
@@ -89,28 +81,36 @@ const CourseModal: React.FC <CourseModalProps> = ({
                     <button className="close-btn" onClick={onClose}>
                         &times;
                     </button>
+                    {(modalTitle || modalMessage) && (
+                        <div className={`modal-status ${modalStatus}`}>
+                            <h3>{modalTitle}</h3>
+                            <p>{modalMessage}</p>
+                        </div>
+                    )}
                     <form onSubmit={handleSubmit}>
                         <div className="form-grid">
                             {courseFields.map((field: CourseField, idx: number) => (
                                 <div key={idx} className="form-group">
-                                    {field.placeholder === "Choose One" ? (
-                                        <>
-                                            <label className="elac-label">
-                                                Is this an ELAC course? <br />
-                                                <a href="https://www.easternct.edu/academic-affairs/student-resources/hands-on-learning/elac.html" target="_blank" rel="noopener noreferrer">
-                                                    Learn more about ELAC ↗
-                                                </a>
-                                            </label>
-                                        </>
+                                    {field.placeholder === 'Choose One' ? (
+                                        <label className="elac-label">
+                                            Is this an ELAC course? <br />
+                                            <a
+                                                href="https://www.easternct.edu/academic-affairs/student-resources/hands-on-learning/elac.html"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Learn more about ELAC ↗
+                                            </a>
+                                        </label>
                                     ) : (
                                         <label>{field.placeholder}</label>
                                     )}
 
-                                    {field.type === "select" ? (
+                                    {field.type === 'select' ? (
                                         <select
                                             name={field.placeholder}
                                             required={field.required}
-                                            value={formData[field.placeholder] || ""}
+                                            value={formData[field.placeholder] || ''}
                                             onChange={handleChange}
                                         >
                                             <option value="">Select</option>
@@ -126,18 +126,28 @@ const CourseModal: React.FC <CourseModalProps> = ({
                                             name={field.placeholder}
                                             placeholder={field.placeholder}
                                             required={field.required}
-                                            value={formData[field.placeholder] || ""}
+                                            value={formData[field.placeholder] || ''}
                                             onChange={handleChange}
                                         />
                                     )}
                                 </div>
                             ))}
                         </div>
-                        <button type="submit" className="create-button">Create Course</button>
+
+                        <button
+                            type="submit"
+                            className="create-button"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting
+                                ? <div className="button-spinner" />
+                                : 'Create Course'}
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     );
 };
+
 export default CourseModal;

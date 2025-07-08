@@ -1,11 +1,12 @@
 // Imports layout, React, routing, icons, utility functions, and components
-
 import AppLayout from "../../../ApplicationLayout/Applayout";
 import React, {useEffect, useState} from "react";
+import {getCourseData} from "../../../services/course/courseService"
 import {createSaveHandler, createSaveAndExitHandler, createPreviewHandler} from "../../../utils/handlers/formHandlersFactory";
 import {useNavigate, useLocation} from "react-router-dom";
 import {FaExclamationTriangle } from 'react-icons/fa'
 import {loadBasicInfoFields, BasicInfoData} from "../../../utils/loadBasicInfoFields";
+import { mapBackendDataToFormFields } from "../../../utils/backendToFormMapper";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import {handleBack, handleNext,} from "../../../components/Button/ButtonLogic";
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
@@ -21,7 +22,13 @@ const BasicInfo = () =>{
 
 
     //Tracks user-entered form data
-    const[formData, setFormData] = useState<Record<string, string>>({})
+    const [formData, setFormData] = useState<Record<string, string>>({});
+    const courseID = localStorage.getItem("currentCourseId")
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
 
     // React Router navigation and location objects
     const navigate = useNavigate();
@@ -30,18 +37,33 @@ const BasicInfo = () =>{
 
     // Load the basic info fields from CSV when the component mounts
     useEffect(() => {
-        loadBasicInfoFields("/data/basic_info_fields.csv").then(setFields);
-        // Load the course modal data JSON
+        const loadCourseData = async () => {
+            // 1) Pull the full JSON blob
+            const saved = localStorage.getItem("currentCourseData");
+            if (!saved) return;
 
-        const storedData = localStorage.getItem("newCourseData");
-        if (storedData) {
-            try{
-                const parsed = JSON.parse(storedData);
-                setFormData(parsed);
-            } catch (err) {
-                console.warn("Failed to parse saved course data:", err);
+            // 2) Parse and extract the ID
+            let course_id: string;
+            try {
+                const parsed = JSON.parse(saved) as { course_id: string };
+                course_id = parsed.course_id;
+            } catch {
+                console.warn("Could not parse currentCourseData");
+                return;
             }
-        }
+
+            console.log("Loaded course ID:", course_id);
+
+            // 3) Now fetch the row
+            const backendData = await getCourseData(course_id);
+            if (backendData) {
+                const remapped = mapBackendDataToFormFields(backendData);
+                setFormData(remapped);
+            }
+        };
+
+        loadBasicInfoFields("/data/basic_info_fields.csv").then(setFields);
+        loadCourseData();
     }, []);
 
 
@@ -50,10 +72,6 @@ const BasicInfo = () =>{
         setFormData((prev) => ({...prev, [label]: value}));
     };
 
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
-    const [modalTitle, setModalTitle] = useState("");
-    const [modalMessage, setModalMessage] = useState("");
 
     const modalControls = {
         setVisible: setModalVisible,
@@ -67,8 +85,8 @@ const BasicInfo = () =>{
     const handleSaveAndExit = createSaveAndExitHandler(formData,navigate, modalControls);
     const handlePreviewClick = createPreviewHandler(formData, modalControls);
 
-    const handleBackClick = () => handleBack(navigate, location.pathname);
-    const handleNextClick = () => handleNext(navigate, location.pathname);
+    const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
+    const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
 
 
     //Groups fields by section

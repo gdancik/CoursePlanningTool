@@ -5,4 +5,3 @@ def get_gs_editor() :
     #return gsEditor('annie')
     #return gsEditor(session['user'])
     return gsEditor(current_user.id)
-

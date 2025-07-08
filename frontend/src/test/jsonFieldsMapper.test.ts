@@ -1,7 +1,6 @@
-// Import the jsonFieldsMapper function to be tested
-import { jsonFieldsMapper } from "../utils/jsonFieldsMapper";
+// src/test/jsonFieldsMapper.test.ts
 
-// Mock the fieldMappings to ensure a controlled environment for testing
+// Mock both fieldMappings and allowedBackendKeys
 jest.mock("../utils/fieldMappings", () => ({
     fieldMappings: {
         "Subject Course": "course_subject",
@@ -9,24 +8,29 @@ jest.mock("../utils/fieldMappings", () => ({
     }
 }));
 
+jest.mock("../utils/allowableCalls", () => ({
+    allowedBackendKeys: new Set([
+        "course_subject",
+        "instructor_name",
+        "Unmapped Field"  // include any original labels you want preserved
+    ])
+}));
+
+import { jsonFieldsMapper } from "../utils/jsonFieldsMapper";
+
 test("maps frontend keys to backend keys using fieldMappings", () => {
-    // Input data containing mapped and unmapped fields
     const input = {
-        "Subject Course": "Math 101",      // Should be mapped to "course_subject"
-        "Instructor Name": "Dr. Smith",    // Should be mapped to "instructor_name"
-        "Unmapped Field": "Keep original"  // Should stay as is
+        "Subject Course": "Math 101",
+        "Instructor Name": "Dr. Smith",
+        "Unmapped Field": "Keep original"
     };
 
-    // Expected output after mapping
     const expected = {
         "course_subject": "Math 101",
         "instructor_name": "Dr. Smith",
         "Unmapped Field": "Keep original"
     };
 
-    // Run the mapping function
     const result = jsonFieldsMapper(input);
-
-    // Check that the result matches the expected output
     expect(result).toEqual(expected);
 });

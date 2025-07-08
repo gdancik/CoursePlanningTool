@@ -19,11 +19,11 @@ import GradeTable from "../components/Tables/gradeTable"
 import Overview from "../screens/SyllabusView/Overview/Overview";
 import Assessment from "../screens/SyllabusView/Assessment";
 import BasicInfo from "../screens/SyllabusView/BasicInformation/BasicInfo";
-import Description from "../screens/SyllabusView/Description";
+import Description from "../screens/SyllabusView/Description/Description";
 import LearningOutcomes from "../screens/SyllabusView/LearningOutcomes";
 import HIPs from "../screens/SyllabusView/HIPs";
 import CourseSchedule from "../screens/SyllabusView/CourseSchedule";
-import LearningResources from "../screens/SyllabusView/LearningResources";
+import LearningResources from "../screens/SyllabusView/LearningResources/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";
 import CoursePage from "../screens/Home/CoursePage";
 import NotFoundPage from "../screens/NotFoundPage";
@@ -47,7 +47,6 @@ const AppRoutes = () => {
             )}
             <Routes>
                 {/*TEST API ENDPOINTS*/}
-                <Route path="/" element={<LoginScreen />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
                 <Route path = "/test-page" element={<TestPage/>}/>
@@ -71,6 +70,7 @@ const AppRoutes = () => {
 
 
                 {/*Application EndPoints*/}
+                <Route path="/" element={<LoginScreen />} />
                 <Route path  ="course-page" element={<CoursePage/>}/>
                 <Route path = "overview" element={<Overview/>}/>
                 <Route path = "basic-info" element={<BasicInfo/>}/>

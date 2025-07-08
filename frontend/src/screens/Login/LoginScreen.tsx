@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
-import ecsuBlack from '../../assets/images/ecsu-logo-black-stacked-alt.png';
+import ecsuWhite from '../../assets/images/ecsu-logo-white-stacked-alt.png';
 import "./LoginScreen.css";
+import bgImage from '../../assets/images/login_background.png'
+import LoginIcon from '../../assets/images/Login_Page_Icon.png'
 import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
 
 const LoginScreen: React.FC = () => {
@@ -44,11 +46,21 @@ const LoginScreen: React.FC = () => {
     };
 
     return (
-        <div className="login-page-wrapper">
+        <div className="login-page-wrapper"
+             style = {{
+                 backgroundImage: `url(${bgImage})`,
+                 backgroundSize: 'cover',
+                 backgroundPosition: 'center',
+                 backgroundRepeat: 'no-repeat',
+                 backgroundAttachment: 'fixed',
+                 minHeight: '100vh',
+             }}
+
+        >
             {/* Logo */}
             <div className="logo-container">
                 <img
-                    src={ecsuBlack}
+                    src={ecsuWhite}
                     alt="Eastern Connecticut State University Logo"
                     className="logo"
                 />
@@ -65,6 +77,21 @@ const LoginScreen: React.FC = () => {
                     <p className="details-bottom">
                         Create an account or login to get started.
                     </p>
+
+                    <h2>How It Works:</h2>
+                    <div className="how-block">
+                        <img
+                        src = {LoginIcon}
+                        alt = "Login Icon"
+                        className="icon-login"
+                        />
+
+                        <div className="description-container">
+                            <div> Create A New Course <br/> or Edit An Existing Course.</div>
+                            <div>Develop or Edit Your Course <br/> Through Guided, Step-by-step Planning Tool</div>
+                            <div>Generate Your Course Syllabus As A <br/> Word Document</div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Right Section */}

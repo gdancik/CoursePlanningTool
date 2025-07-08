@@ -1,14 +1,19 @@
 import {useNavigate, useLocation} from "react-router-dom";
 import {handleBack,handleNext} from "../../components/Button/ButtonLogic";
 import AppLayout from "../../ApplicationLayout/Applayout";
+import {useState} from "react";
 
 const Assessment = () =>{
 
     //Page Navigation for Buttons
     const navigate = useNavigate();
     const location = useLocation();
-    const handleBackClick = () => handleBack(navigate, location.pathname);
-    const handleNextClick = () => handleNext(navigate, location.pathname);
+
+    const [formData, setFormData] = useState<Record<string, string>>({});
+    const courseID = localStorage.getItem("currentCourseId")
+
+    const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
+    const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
 
 
     return(

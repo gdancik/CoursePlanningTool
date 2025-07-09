@@ -5,19 +5,20 @@ import Papa from 'papaparse';
 export interface SyllabusContent {
     section: string;
     row: number;
+    layoutRow: number;
     content: string;
     type: string;
     required: boolean;
-    backendKey?: string; // NEW
+    iconPath?: string;
+    backendKey?: string;
 }
 
 /**
- * Loads syllabus content from CSV file at the provided path.
- * @param path - The path to the CSV file.
- * @returns A promise resolving to an array of Syllabus Content objects.
+ * Loads syllabus content from a CSV file.
+ * @param path - Path to the CSV file
+ * @returns Promise resolving to parsed syllabus content array
  */
 export async function loadSyllabusContent(path: string): Promise<SyllabusContent[]> {
-    // Fetch the CSV file
     const res = await fetch(path);
     const text = await res.text();
 
@@ -29,10 +30,12 @@ export async function loadSyllabusContent(path: string): Promise<SyllabusContent
                 const parsed: SyllabusContent[] = results.data.map((row: any) => ({
                     section: row.section,
                     row: row.row ? parseInt(row.row, 10) : 0,
+                    layoutRow: row.layoutRow ? parseInt(row.layoutRow, 10) : 0,
                     content: row.content,
                     type: row.type,
                     required: row.required === "true",
-                    backendKey: row.backendKey || undefined // NEW: include the backend key if present
+                    iconPath: row.iconPath || undefined,
+                    backendKey: row.backendKey || undefined
                 }));
                 resolve(parsed);
             },

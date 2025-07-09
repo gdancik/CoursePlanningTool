@@ -10,7 +10,6 @@ from docx.oxml.ns import qn
 import backend.services.doc_editor as de
 import backend.services.gs_editor as gse
 import backend.services.course_planning as cp
-import ast
 import re
 import logging
 
@@ -362,7 +361,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     #policy placeholder handling
     policies = fr_dict.get('policy_statements',None)
-    policies = ast.literal_eval(policies)
+    policies = json.loads(policies)
 
     logging.debug(f'policies: {policies}, type:{type(policies)}')#debug
 
@@ -372,7 +371,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     #University resources placeholder handling
 
     resource_policies = fr_dict.get('university_resources',None)
-    resource_policies = ast.literal_eval(resource_policies)
+    resource_policies = json.loads(resource_policies)
     logging.debug(f'resource_policies: {resource_policies}, type:{type(resource_policies)}')#debug
 
     resource_policies_page = Document()
@@ -395,7 +394,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
         for key, value in json_columns.items():
             if key in paragraph.text:
                 list_of_dicts = json_columns.get(key)
-                list_of_dicts= ast.literal_eval(list_of_dicts)
+                list_of_dicts= json.loads(list_of_dicts)
                 # print(list_of_dicts)
                 generate_grading_policies_page = Document()
                 generate_grading_policies(generate_grading_policies_page,list_of_dicts)
@@ -411,7 +410,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
                 try:
                     # Clean and evaluate the string to convert it to a list
                     cleaned_value = value.rstrip('\'')
-                    evaluated_value = ast.literal_eval(cleaned_value)
+                    evaluated_value = json.loads(cleaned_value)
                     if table_placeholder_replacement(doc, paragraph, key, evaluated_value):
                         logging.info('Table placeholder replaced')
                 except (ValueError, SyntaxError) as e:

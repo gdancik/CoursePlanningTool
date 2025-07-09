@@ -1,0 +1,44 @@
+/* Accordion container */
+.syllabus-section-accordion {
+    margin-bottom: 2rem;
+    border-radius: 6px;
+}
+
+/* Section toggle header */
+.syllabus-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* Blue section title line with underline */
+.syllabus-section-title {
+    flex: 1;
+    border-bottom: 2px solid #c5c5c5;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #002e5d;
+    padding-bottom: 0.25rem;
+}
+
+/* Icon rotates on toggle */
+.syllabus-section-arrow {
+    font-size: 1.2rem;
+    color: #002e5d;
+    transition: transform 0.3s ease;
+}
+
+details[open] .syllabus-section-arrow {
+    transform: rotate(180deg);
+}
+
+/* Inner content layout */
+.syllabus-section-content {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    gap: 1.5rem;
+}

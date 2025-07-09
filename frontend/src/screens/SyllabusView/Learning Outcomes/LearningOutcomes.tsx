@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { handleBack, handleNext } from "../../components/Button/ButtonLogic";
-import AppLayout from "../../ApplicationLayout/Applayout";
-import { loadSyllabusContent, SyllabusContent } from "../../utils/loadSyllabusContent";
-import OutcomesAccordian from "../Learning Outcomes/LearningOutcomesAccordian";
+import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
+import AppLayout from "../../../ApplicationLayout/Applayout";
+import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
+import OutcomesAccordian from "./LearningOutcomesAccordian";
 import './LearningOutcomes.css'
 const LearningOutcomes: React.FC = () => {
     const navigate = useNavigate();
@@ -27,9 +27,13 @@ const LearningOutcomes: React.FC = () => {
 
 
     return (
-        <div className="learning-outcomes-container">
-            <AppLayout onBack={handleBackClick} onNext={handleNextClick} />
+        <div>
+            <AppLayout
+                onBack={handleBackClick}
+                onNext={handleNextClick}
+            />
 
+            <form className="outcomes-container">
             {sectionNames.map(sectionName => (
                 <OutcomesAccordian
                     key={sectionName}
@@ -39,6 +43,7 @@ const LearningOutcomes: React.FC = () => {
                     onFieldChange={handleFieldChange}
                 />
             ))}
+            </form>
         </div>
     );
 };

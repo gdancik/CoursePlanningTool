@@ -1,8 +1,8 @@
 // CompetenciesAccordion.tsx (TypeScript)
 import React from "react";
 import { FaAngleUp } from "react-icons/fa";
-import { SyllabusContent } from "../../utils/loadSyllabusContent";
-import SafeIcon from "../../utils/ComponentWrapper";
+import { SyllabusContent } from "../../../utils/loadSyllabusContent";
+import SafeIcon from "../../../utils/ComponentWrapper";
 import LearningOutcomesFormRow from "./LearningOutcomesFormRow";
 import './LearningOutcomesAccordian.css'
 

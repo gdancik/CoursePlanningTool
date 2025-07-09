@@ -1,6 +1,6 @@
 // CompetenciesFormRow.tsx
 import React from "react";
-import { SyllabusContent } from "../../utils/loadSyllabusContent";
+import { SyllabusContent } from "../../../utils/loadSyllabusContent";
 import './LearningoutcomesFormRow.css'
 
 interface Props {

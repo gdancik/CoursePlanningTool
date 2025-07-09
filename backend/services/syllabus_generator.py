@@ -361,7 +361,11 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     #policy placeholder handling
     policies = fr_dict.get('policy_statements',None)
-    policies = json.loads(policies)
+    try:
+        logging.debug(f'string before conversion to literal:{policies}')
+        policies = json.loads(policies)
+    except ValueError as e:
+        logging.error(f"Error converting string to literal: {e}")
 
     logging.debug(f'policies: {policies}, type:{type(policies)}')#debug
 
@@ -371,7 +375,11 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     #University resources placeholder handling
 
     resource_policies = fr_dict.get('university_resources',None)
-    resource_policies = json.loads(resource_policies)
+    try:
+        logging.debug(f'string before conversion to literal:{resource_policies}')
+        resource_policies = json.loads(resource_policies)
+    except ValueError as e:
+            logging.error(f"Error converting string to literal: {e}")
     logging.debug(f'resource_policies: {resource_policies}, type:{type(resource_policies)}')#debug
 
     resource_policies_page = Document()
@@ -394,8 +402,13 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
         for key, value in json_columns.items():
             if key in paragraph.text:
                 list_of_dicts = json_columns.get(key)
-                list_of_dicts= json.loads(list_of_dicts)
-                # print(list_of_dicts)
+                try:
+                    logging.debug(f'string before conversion to literal:{list_of_dicts}')
+                    list_of_dicts= json.loads(list_of_dicts)
+                except ValueError as e:
+                    logging.error(f"Error converting string to literal: {e}")
+                logging.debug(f'list_of_dicts: {list_of_dicts}, type:{type(list_of_dicts)}')#debug
+
                 generate_grading_policies_page = Document()
                 generate_grading_policies(generate_grading_policies_page,list_of_dicts)
                 for source_paragraph in generate_grading_policies_page.paragraphs:
@@ -410,7 +423,11 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
                 try:
                     # Clean and evaluate the string to convert it to a list
                     cleaned_value = value.rstrip('\'')
-                    evaluated_value = json.loads(cleaned_value)
+                    try:
+                        evaluated_value = json.loads(cleaned_value)
+                    except ValueError as e:
+                        logging.error(f"Error converting string to literal: {e}")
+                    logging.debug(f'Table_value: {evaluated_value}, type:{type(evaluated_value)}')#debug
                     if table_placeholder_replacement(doc, paragraph, key, evaluated_value):
                         logging.info('Table placeholder replaced')
                 except (ValueError, SyntaxError) as e:

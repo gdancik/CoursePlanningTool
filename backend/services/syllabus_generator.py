@@ -1,4 +1,5 @@
 import requests
+import json
 from bs4 import BeautifulSoup
 from docx import Document
 from htmldocx import HtmlToDocx
@@ -6,6 +7,9 @@ from docx.shared import RGBColor, Pt
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn 
 
+import backend.services.doc_editor as de
+import backend.services.gs_editor as gse
+import backend.services.course_planning as cp
 import re
 import logging
 
@@ -68,12 +72,14 @@ def getStatements(url,selected_statements:list = None):
 
     #Filter only the statements selected (Will have to search header for string)
     statments = all_statements
+    logging.debug(f'selected_statements: {selected_statements},type:{type(selected_statements)}')#debug
     if selected_statements:
         statments = {}
         for i in selected_statements:
+            # print(f'Current statment: {i}')
             for key, val in all_statements.items():
-
-                if i in str(key):
+                if i.lower() in str(key).lower():
+                    # print('Current key: {key}')
                     statments[key] = val
     #return selected statements
     return statments
@@ -89,12 +95,15 @@ def create_syllabus_statment_page(doc,url: str,selected_statements=None):
         None
     '''
     logging.info(f'Creating statement page')
+
+    logging.debug(f'selected_statements: {selected_statements}, type:{type(selected_statements)}')#debug
+
     x = getStatements(url,selected_statements)
     for header, content in x.items():
         header_string = str(header)
         content_string = str(list(content)[0])
         html_to_word_htmldocx(doc,header_string)
-        html_to_word_htmldocx(doc,content_string)  
+        html_to_word_htmldocx(doc,content_string)
 
 def html_to_word_htmldocx(doc,html_content: str):
     '''
@@ -289,21 +298,172 @@ def generate_grading_policies(doc, policies:list):
     Returns:
         None
     '''
+   
     for i in policies:
-        title = list(i.keys())[0]
-        paragraph = doc.add_paragraph(title)
-        run_title = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
-        run_title.font.color.rgb = RGBColor(32, 44, 92)
-        run_title.font.size = Pt(13)
-        run_title.font.name = 'Calibri'
-        run_title.bold = True
-        run_title.italic = True
+        for key, value in i.items():
+            if key == 'title':
+                title = value
+                paragraph = doc.add_paragraph(title)
+                run_title = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+                run_title.font.color.rgb = RGBColor(32, 44, 92)
+                run_title.font.size = Pt(12)
+                run_title.font.name = 'Calibri'
+                run_title.bold = True
+                run_title.italic = True
+            elif key == 'description':
+                description = value
+                paragraph = doc.add_paragraph(description)
+                run_description = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+                run_description.font.color.rgb = RGBColor(0, 0, 0)
+                run_description.font.size = Pt(11)
+                run_description.font.name = 'Calibri'
+                run_description.bold = False
+                run_description.italic = False
+                
+def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_statment_webpage_url:str='https://www.easternct.edu/center-for-teaching-learning-and-assessment/syllabus-statements/index.html'):
+    """
+    Generates a syllabus document by replacing placeholders with actual values.
 
-        description = list(i.values())[0]
-        paragraph = doc.add_paragraph(description)
-        run_description = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
-        run_description.font.color.rgb = RGBColor(0, 0, 0)
-        run_description.font.size = Pt(11)
-        run_description.font.name = 'Calibri'
-        run_description.bold = False
-        run_description.italic = False
+    Args:
+        doc (Document): The Word document object to be modified.
+        course_id (str): The ID of the course for which the syllabus is generated.
+        sheet_name (str): The name of the Google Sheets document to retrieve course data from.
+        syllabus_statment_webpage_url (str, optional): The URL of the syllabus statement webpage. Defaults to a specific URL.
+    Returns:
+        Title(str): The title of the syllabus document, which is a combination of course information.
+    """
+
+    def table_placeholder_replacement(doc, paragraph, placeholder_text, table_list):
+        if placeholder_text in paragraph.text:
+            table = add_styled_table(doc, table_list)
+            paragraph.clear()
+            paragraph._p.addnext(table._tbl)
+            return True
+        return False
+    
+    # Retrieve course data using gsEditor
+    gs = gse.gsEditor(sheet_name)
+    column_names = cp.columns
+    fr_dict = gs.getValue(course_id, column_names)
+
+    # Process dictionary to remove "_syllabus" suffix from keys
+    syllabus_col = {key[:-9]: value for key, value in fr_dict.items() if key.endswith('_syllabus')}
+    logging.debug('Removing "_syllabus" from the column names')
+    de.replaceTextInParagraph(doc, syllabus_col)
+
+    # Process dictionary to remove "_json" suffix from keys
+    json_columns = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_json')}
+    logging.debug('Removing "_json" from the column names')
+    
+    # Process dictionary to handle table placeholders
+    tables_col = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_list')}
+    logging.debug('Removing "_list" from the column names')
+
+    #policy placeholder handling
+    policies = fr_dict.get('policy_statements',None)
+    try:
+        logging.debug(f'string before conversion to literal:{policies}')
+        policies = json.loads(policies)
+    except ValueError as e:
+        logging.error(f"Error converting string to literal: {e}")
+
+    logging.debug(f'policies: {policies}, type:{type(policies)}')#debug
+
+    syllabus_statment_page = Document()
+    create_syllabus_statment_page(syllabus_statment_page,syllabus_statment_webpage_url,policies) 
+
+    #University resources placeholder handling
+
+    resource_policies = fr_dict.get('university_resources',None)
+    try:
+        logging.debug(f'string before conversion to literal:{resource_policies}')
+        resource_policies = json.loads(resource_policies)
+    except ValueError as e:
+            logging.error(f"Error converting string to literal: {e}")
+    logging.debug(f'resource_policies: {resource_policies}, type:{type(resource_policies)}')#debug
+
+    resource_policies_page = Document()
+    create_syllabus_statment_page(resource_policies_page,syllabus_statment_webpage_url,resource_policies) 
+
+    # Iterate through paragraphs and replace placeholders
+    for paragraph in doc.paragraphs:
+        #Add policies
+        if 'policy_statements'in paragraph.text: 
+            logging.debug('Policy Placeholder found') #debug
+            for source_paragraph in syllabus_statment_page.paragraphs:
+                de.copy_paragraph_before(source_paragraph,paragraph)
+        
+        if 'university_resources'in paragraph.text: 
+            logging.debug('resource_policy Placeholder found') #debug
+            for source_paragraph in resource_policies_page.paragraphs:
+                de.copy_paragraph_before(source_paragraph,paragraph)
+        
+
+        for key, value in json_columns.items():
+            if key in paragraph.text:
+                list_of_dicts = json_columns.get(key)
+                try:
+                    logging.debug(f'string before conversion to literal:{list_of_dicts}')
+                    list_of_dicts= json.loads(list_of_dicts)
+                except ValueError as e:
+                    logging.error(f"Error converting string to literal: {e}")
+                logging.debug(f'list_of_dicts: {list_of_dicts}, type:{type(list_of_dicts)}')#debug
+
+                generate_grading_policies_page = Document()
+                generate_grading_policies(generate_grading_policies_page,list_of_dicts)
+                for source_paragraph in generate_grading_policies_page.paragraphs:
+                    de.copy_paragraph_before(source_paragraph,paragraph)
+        
+        
+        # Go through table placeholders
+        logging.debug('Processing table placeholders')
+        for key, value in tables_col.items():
+            logging.debug(f'placeholder name: {key}')
+            if value:
+                try:
+                    # Clean and evaluate the string to convert it to a list
+                    cleaned_value = value.rstrip('\'')
+                    try:
+                        evaluated_value = json.loads(cleaned_value)
+                    except ValueError as e:
+                        logging.error(f"Error converting string to literal: {e}")
+                    logging.debug(f'Table_value: {evaluated_value}, type:{type(evaluated_value)}')#debug
+                    if table_placeholder_replacement(doc, paragraph, key, evaluated_value):
+                        logging.info('Table placeholder replaced')
+                except (ValueError, SyntaxError) as e:
+                    logging.error(f"Error evaluating string for key {key}: {e}")
+
+    # Blocks are removed
+    removeTags = []
+    removeBlocks = []
+
+    if fr_dict.get('times2_syllabus') == "":
+        removeBlocks.append('time2')
+    else:
+        removeTags.append('time2')
+    
+    if fr_dict.get('instructor_title_syllabus') == "":
+        removeBlocks.append('title')
+    else:
+        removeTags.append('title')
+    
+    if fr_dict.get('form_of_address_syllabus') == "":
+        removeBlocks.append('foa')
+    else:
+        removeTags.append('foa')
+
+    if fr_dict.get('phone_syllabus') == "":
+        removeBlocks.append('phone')
+    else:
+        removeTags.append('phone')
+
+    de.removeBlocks(doc,removeBlocks)
+    de.removeBlockTags(doc,removeTags)
+    title = ""
+    title += str(syllabus_col.get('subj_code', None))
+    title += str(syllabus_col.get('crse_number',None))
+    title += "_" + str(syllabus_col.get('term',None))
+    return title
+
+    
+    

@@ -72,17 +72,7 @@ const CompetenciesAccordion: React.FC<Props> = ({
                         ))}
                     </div>
 
-                        {/* layoutRow >= 4: show remaining fields */}
-                        <div className="competency-image-row">
-                            {remainingFields.map((f, i) => (
-                                <LearningOutcomesFormRow
-                                    key={i}
-                                    field={f}
-                                    value={formData[f.content] || ""}
-                                    onChange={onFieldChange}
-                                />
-                            ))}
-                        </div>
+
 
                     {remainingFields.map((f, i) => (
                         <LearningOutcomesFormRow

@@ -26,12 +26,15 @@
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 10px;
-    flex: 1 1 18%;
-    padding: 1rem;
+    flex: 0 1 auto;
+    padding-top: 1rem;
+    width: 150px;
     text-align: center;
     min-width: 200px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
+
+
 
 .core-competency-card img.core-icon {
     max-width: 120px;
@@ -76,6 +79,46 @@
     font-size: 0.85rem;
     color: #666;
     margin-top: 0.25rem;
+}
+
+.competency-header {
+    font-size: 1.2rem;
+    color: #002e5d;
+    margin-top: 2rem;
+    border-bottom: 2px solid #002e5d;
+    padding-bottom: 0.5rem;
+}
+
+
+.competency-image-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.competency-table {
+    display: block;
+    max-width: 160px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+
+.competency-warning {
+    flex: 1 1 100%;
+    max-width: 500px;
+    margin: 1rem auto;
+    padding: 1.5rem;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
 }
 
 

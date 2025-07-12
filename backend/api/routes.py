@@ -276,3 +276,22 @@ def createNewCourse():
         return jsonify({'courseId:': courseId})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+'''Calls the duplicateCourse function from the gs_editor.py module'''
+@api_bp.route('duplicateCourse/', methods=['POST'])
+@login_required
+def duplicateCourse():
+    gs = get_gs_editor()
+    try:
+        logging.debug(f'Fetching data')
+        data = request.get_json()
+        course_id = data.get('course_id')
+        logging.debug(f'Fetched course_id: {course_id}')
+
+        courseId = gs.duplicateCourse(course_id)
+        return jsonify({'courseId:': courseId})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+   

@@ -16,7 +16,27 @@ const CompetenciesFormRow: React.FC<Props> = ({ field, value, onChange }) => {
         onChange(field.content, e.target.value);
     };
 
+    const isImage = /\.(png|jpe?g|gif|svg)$/i.test(field.iconPath || field.content);
+    if (field.type === "text" && isImage) {
+        let imgClass = "competency-image";
+
+        if (field.content.includes("AdditionalCompetencies")) imgClass = "competency-warning";
+        else if (field.content.includes("Knowledge")) imgClass = "competency-table knowledge";
+        else if (field.content.includes("Skill")) imgClass = "competency-table skills";
+        else if (field.content.includes("Attitudes")) imgClass = "competency-table attitudes";
+
+        return (
+            <img
+                src={field.iconPath || field.content}
+                alt="Competency Visual"
+                className={imgClass}
+            />
+        );
+    }
+
+
     if (field.type === "text") {
+
         return <p className="competency-text-row">{field.content}</p>;
     }
 

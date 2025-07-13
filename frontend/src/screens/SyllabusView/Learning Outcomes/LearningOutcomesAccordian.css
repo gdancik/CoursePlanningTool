@@ -42,3 +42,26 @@ details[open] .syllabus-section-arrow {
     padding-top: 1rem;
     gap: 1.5rem;
 }
+
+.additional-competency-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.competency-table {
+    max-width: 550px;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.competency-warning {
+    max-width: 550px;
+    display: block;
+    padding: 1rem;
+    background-color: #fffef5;
+    border-radius: 6px;
+}

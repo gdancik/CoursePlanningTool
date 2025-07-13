@@ -1,7 +1,6 @@
-// CompetenciesFormRow.tsx
 import React from "react";
 import { SyllabusContent } from "../../../utils/loadSyllabusContent";
-import './LearningoutcomesFormRow.css'
+import './LearningoutcomesFormField.css'
 
 interface Props {
     field: SyllabusContent;
@@ -9,7 +8,7 @@ interface Props {
     onChange: (label: string, value: string) => void;
 }
 
-const CompetenciesFormRow: React.FC<Props> = ({ field, value, onChange }) => {
+const LearningOutComesFormField: React.FC<Props> = ({ field, value, onChange }) => {
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
@@ -26,11 +25,13 @@ const CompetenciesFormRow: React.FC<Props> = ({ field, value, onChange }) => {
         else if (field.content.includes("Attitudes")) imgClass = "competency-table attitudes";
 
         return (
-            <img
-                src={field.iconPath || field.content}
-                alt="Competency Visual"
-                className={imgClass}
-            />
+            <div className="Additional-information">
+                <img
+                    src={field.iconPath || field.content}
+                    alt="Competency Visual"
+                    className={imgClass}
+                />
+            </div>
         );
     }
 
@@ -74,4 +75,4 @@ const CompetenciesFormRow: React.FC<Props> = ({ field, value, onChange }) => {
     return null;
 };
 
-export default CompetenciesFormRow;
+export default LearningOutComesFormField;

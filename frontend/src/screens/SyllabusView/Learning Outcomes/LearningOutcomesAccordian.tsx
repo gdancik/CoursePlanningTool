@@ -3,7 +3,7 @@ import React from "react";
 import { FaAngleUp } from "react-icons/fa";
 import { SyllabusContent } from "../../../utils/loadSyllabusContent";
 import SafeIcon from "../../../utils/ComponentWrapper";
-import LearningOutcomesFormRow from "./LearningOutcomesFormRow";
+import LearningOutcomesFormRow from "./LearningOutcomesFormField";
 import './LearningOutcomesAccordian.css'
 
 interface Props {
@@ -20,11 +20,11 @@ const CompetenciesAccordion: React.FC<Props> = ({
                                                     onFieldChange,
                                                 }) => {
     const sectionFields: SyllabusContent[] = fields.filter(
-        (f) => f.section === "Step 1: Competencies" && f.row === 1
+        (f) => f.section === sectionName
     );
 
     const title: SyllabusContent | undefined = sectionFields.find(
-        (f) => f.layoutRow === 2
+        (f) => f.layoutRow === 9
     );
 
     const cards: SyllabusContent[] = sectionFields.filter(
@@ -73,15 +73,30 @@ const CompetenciesAccordion: React.FC<Props> = ({
                     </div>
 
 
+                    <div className="additional-competency-row">
+                        {remainingFields
+                            .filter((f) => f.layoutRow === 5)
+                            .map((f, i) => (
+                                <LearningOutcomesFormRow
+                                    key={i}
+                                    field={f}
+                                    value={formData[f.content] || ""}
+                                    onChange={onFieldChange}
+                                />
+                            ))}
+                    </div>
 
-                    {remainingFields.map((f, i) => (
-                        <LearningOutcomesFormRow
-                            key={i}
-                            field={f}
-                            value={formData[f.content] || ""}
-                            onChange={onFieldChange}
-                        />
-                    ))}
+                    {/* Everything else (textboxes, headers, etc.) */}
+                    {remainingFields
+                        .filter((f) => f.layoutRow > 5)
+                        .map((f, i) => (
+                            <LearningOutcomesFormRow
+                                key={i}
+                                field={f}
+                                value={formData[f.content] || ""}
+                                onChange={onFieldChange}
+                            />
+                        ))}
                 </div>
             </details>
         </div>

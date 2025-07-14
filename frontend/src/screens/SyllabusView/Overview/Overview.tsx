@@ -11,7 +11,6 @@ import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSect
 import AppLayout from "../../../ApplicationLayout/Applayout"
 import './Overview.css'
 import {handleBack, handleNext} from "../../../components/Button/ButtonLogic";
-import {toFormData} from "axios";
 
 // Functional component that displays the overview page.
 const Overview = () => {

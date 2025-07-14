@@ -2,7 +2,8 @@ import React from "react";
 import { FaAngleUp } from "react-icons/fa";
 import { SyllabusContent } from "../../../utils/loadSyllabusContent";
 import SafeIcon from "../../../utils/ComponentWrapper";
-import "./LearningOutcomesAccordian.css";
+import SyllabusFormField from "../SyllabusComponents/SyllabusFormField";
+import "./LearningOutcomesAccordionStep1.css";
 
 import CommunicationIcon from "../../../assets/images/communication.png";
 import AdditionalCompetencies from "../../../assets/images/AdditionalCompetencies.png";
@@ -17,9 +18,11 @@ import QuantitativeIcon from "../../../assets/images/quantitative_literacy.png";
 interface Props {
     sectionName: string;
     fields: SyllabusContent[];
+    formData: Record<string, string>; //
+    onFieldChange: (label: string, value: string) => void;
 }
 
-const LearningOutcomesAccordion: React.FC<Props> = ({ sectionName, fields }) => {
+const LearningOutcomesAccordion: React.FC<Props> = ({ sectionName, fields, formData, onFieldChange }) => {
     const sectionFields = fields.filter(f => f.section === sectionName);
 
     const getText = (startsWith: string) =>
@@ -79,11 +82,22 @@ const LearningOutcomesAccordion: React.FC<Props> = ({ sectionName, fields }) => 
                         <img src={KnowledgeTable} alt="Knowledge Table" className="knowledge-table"/>
                         <img src={SkillsTable} alt="Skills Table" className="skill-table"/>
                         <img src={AttitudeTable} alt="Attitudes Table" className="attitudes-table"/>
+
+                        {sectionFields
+                            .filter((f) => f.type === "text-box")
+                            .map((f, i) => (
+                                <SyllabusFormField
+                                    key={i}
+                                    field={f}
+                                    value={formData[f.content] || ""}
+                                    onChange={onFieldChange}
+                                />
+                            ))}
                     </div>
                 </div>
             </details>
         </div>
-);
+    );
 };
 
 export default LearningOutcomesAccordion;

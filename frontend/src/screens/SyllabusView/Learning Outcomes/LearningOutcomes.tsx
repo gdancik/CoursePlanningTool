@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
 import AppLayout from "../../../ApplicationLayout/Applayout";
 import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
-import LearningOutcomesAccordion from "./LearningOutcomesAccordian";
+import LearningOutcomesAccordion from "./LearningOutcomesAccordionStep1";
 import SyllabusFormField from "../SyllabusComponents/SyllabusFormField";
 import './LearningOutcomes.css';
 
@@ -37,9 +37,12 @@ const LearningOutcomes: React.FC = () => {
             />
 
             <form className="outcomes-container">
-
-                <LearningOutcomesAccordion sectionName="Step 1: Competencies" fields={step1Fields} />
-
+                <LearningOutcomesAccordion
+                    sectionName="Step 1: Competencies"
+                    fields={step1Fields}
+                    formData={formData}
+                    onFieldChange={handleFieldChange}
+                />
 
                 <div className="syllabus-section-accordion">
                     <details open>
@@ -60,7 +63,6 @@ const LearningOutcomes: React.FC = () => {
                     </details>
                 </div>
 
-                
                 <div className="syllabus-section-accordion">
                     <details open>
                         <summary className="syllabus-section-header">

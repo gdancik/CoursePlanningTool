@@ -1,39 +1,31 @@
-// CompetenciesAccordion.tsx (TypeScript)
 import React from "react";
 import { FaAngleUp } from "react-icons/fa";
 import { SyllabusContent } from "../../../utils/loadSyllabusContent";
 import SafeIcon from "../../../utils/ComponentWrapper";
-import LearningOutcomesFormRow from "./LearningOutcomesFormField";
-import './LearningOutcomesAccordian.css'
+import "./LearningOutcomesAccordian.css";
+
+import CommunicationIcon from "../../../assets/images/communication.png";
+import AdditionalCompetencies from "../../../assets/images/AdditionalCompetencies.png";
+import KnowledgeTable from "../../../assets/images/Knowledge_table.png";
+import SkillsTable from "../../../assets/images/Skill_table.png";
+import AttitudeTable from "../../../assets/images/Attitudes_Table.png";
+import CreativityIcon from "../../../assets/images/creativity.png";
+import CriticalThinkingIcon from "../../../assets/images/critical_thinking.png";
+import EthicalReasoningIcon from "../../../assets/images/ethical_reasoning.png";
+import QuantitativeIcon from "../../../assets/images/quantitative_literacy.png";
 
 interface Props {
     sectionName: string;
     fields: SyllabusContent[];
-    formData: Record<string, string>;
-    onFieldChange: (label: string, value: string) => void;
 }
 
-const CompetenciesAccordion: React.FC<Props> = ({
-                                                    sectionName,
-                                                    fields,
-                                                    formData,
-                                                    onFieldChange,
-                                                }) => {
-    const sectionFields: SyllabusContent[] = fields.filter(
-        (f) => f.section === sectionName
-    );
+const LearningOutcomesAccordion: React.FC<Props> = ({ sectionName, fields }) => {
+    const sectionFields = fields.filter(f => f.section === sectionName);
 
-    const title: SyllabusContent | undefined = sectionFields.find(
-        (f) => f.layoutRow === 9
-    );
+    const getText = (startsWith: string) =>
+        sectionFields.find(f => f.content?.trim().startsWith(startsWith))?.content || "";
 
-    const cards: SyllabusContent[] = sectionFields.filter(
-        (f) => f.layoutRow === 3
-    );
-
-    const remainingFields: SyllabusContent[] = sectionFields.filter(
-        (f) => f.layoutRow >= 4
-    );
+    const intro = getText("If your course is in the ELAC curriculum");
 
     return (
         <div className="syllabus-section-accordion">
@@ -44,63 +36,54 @@ const CompetenciesAccordion: React.FC<Props> = ({
                 </summary>
 
                 <div className="syllabus-section-content">
-                    {/* layoutRow 1: intro */}
-                    {sectionFields
-                        .filter((f) => f.layoutRow === 1)
-                        .map((f, i) => (
-                            <p key={i} className="intro-paragraph">
-                                {f.content}
-                            </p>
-                        ))}
+                    {/* Intro paragraph */}
+                    {intro && <p className="intro-paragraph">{intro}</p>}
 
-                    {/* layoutRow 2: title */}
-                    {title && <h2 className="centered-title">{title.content}</h2>}
+                    <h2 className="core-title">Five Core Competencies</h2>
 
-                    {/* layoutRow 3: 5 competencies */}
                     <div className="core-competency-row">
-                        {cards.map((f, i) => (
-                            <div key={i} className="core-competency-card">
-                                {f.iconPath && (
-                                    <img
-                                        src={f.iconPath}
-                                        alt={f.content}
-                                        className="core-icon"
-                                    />
-                                )}
-                                <p>{f.content}</p>
-                            </div>
-                        ))}
+                        <div className="core-competency-card">
+                            <img src={CommunicationIcon} alt="Communication" className="core-icon"/>
+                            <h4 className="competency-label communication">communication</h4>
+                            <p>{getText("requires students to recognize and utilize")}</p>
+                        </div>
+
+                        <div className="core-competency-card">
+                            <img src={CreativityIcon} alt="Creativity" className="core-icon"/>
+                            <h4 className="competency-label creativity">creativity</h4>
+                            <p>{getText("is the ability to utilize skills and strategies")}</p>
+                        </div>
+
+                        <div className="core-competency-card">
+                            <img src={CriticalThinkingIcon} alt="Critical Thinking" className="core-icon"/>
+                            <h4 className="competency-label critical-thinking">critical thinking</h4>
+                            <p>{getText("is the analysis and evaluation of complex ideas")}</p>
+                        </div>
+
+                        <div className="core-competency-card">
+                            <img src={EthicalReasoningIcon} alt="Ethical Reasoning" className="core-icon"/>
+                            <h4 className="competency-label ethical-reasoning">ethical reasoning</h4>
+                            <p>{getText("requires students to recognize ethical issues")}</p>
+                        </div>
+
+                        <div className="core-competency-card">
+                            <img src={QuantitativeIcon} alt="Quantitative Literacy" className="core-icon"/>
+                            <h4 className="competency-label quantitative-literacy">quantitative literacy</h4>
+                            <p>{getText("is competency in working with numerical data")}</p>
+                        </div>
                     </div>
-
-
-                    <div className="additional-competency-row">
-                        {remainingFields
-                            .filter((f) => f.layoutRow === 5)
-                            .map((f, i) => (
-                                <LearningOutcomesFormRow
-                                    key={i}
-                                    field={f}
-                                    value={formData[f.content] || ""}
-                                    onChange={onFieldChange}
-                                />
-                            ))}
+                    <div className="addititional-competencies">
+                        <h3>Additional Competencies</h3>
+                        <img src={AdditionalCompetencies} alt="Additional Competencies"
+                             className="comptencies-alert"/>
+                        <img src={KnowledgeTable} alt="Knowledge Table" className="knowledge-table"/>
+                        <img src={SkillsTable} alt="Skills Table" className="skill-table"/>
+                        <img src={AttitudeTable} alt="Attitudes Table" className="attitudes-table"/>
                     </div>
-
-                    {/* Everything else (textboxes, headers, etc.) */}
-                    {remainingFields
-                        .filter((f) => f.layoutRow > 5)
-                        .map((f, i) => (
-                            <LearningOutcomesFormRow
-                                key={i}
-                                field={f}
-                                value={formData[f.content] || ""}
-                                onChange={onFieldChange}
-                            />
-                        ))}
                 </div>
             </details>
         </div>
-    );
+);
 };
 
-export default CompetenciesAccordion;
+export default LearningOutcomesAccordion;

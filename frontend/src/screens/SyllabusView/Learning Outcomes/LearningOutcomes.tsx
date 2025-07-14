@@ -3,8 +3,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
 import AppLayout from "../../../ApplicationLayout/Applayout";
 import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
-import OutcomesAccordian from "./LearningOutcomesAccordian";
-import './LearningOutcomes.css'
+import LearningOutcomesAccordion from "./LearningOutcomesAccordian";
+import SyllabusFormField from "../SyllabusComponents/SyllabusFormField";
+import './LearningOutcomes.css';
+
 const LearningOutcomes: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,8 +25,9 @@ const LearningOutcomes: React.FC = () => {
         setFormData(prev => ({ ...prev, [label]: value }));
     };
 
-    const sectionNames = Array.from(new Set(fields.map(f => f.section)));
-
+    const step1Fields = fields.filter(f => f.section === "Step 1: Competencies");
+    const step2Fields = fields.filter(f => f.section === "Step 2: Purpose and Application");
+    const step3Fields = fields.filter(f => f.section === "Step 3: Writing Course-specific Learning Outcomes");
 
     return (
         <div>
@@ -34,15 +37,48 @@ const LearningOutcomes: React.FC = () => {
             />
 
             <form className="outcomes-container">
-            {sectionNames.map(sectionName => (
-                <OutcomesAccordian
-                    key={sectionName}
-                    sectionName={sectionName}
-                    fields={fields.filter(f => f.section === sectionName)}
-                    formData={formData}
-                    onFieldChange={handleFieldChange}
-                />
-            ))}
+                {/* ✅ Step 1 - custom accordion */}
+                <LearningOutcomesAccordion sectionName="Step 1: Competencies" fields={step1Fields} />
+
+                {/* ✅ Step 2 - Manual rendering with SyllabusFormField */}
+                <div className="syllabus-section-accordion">
+                    <details open>
+                        <summary className="syllabus-section-header">
+                            <span className="syllabus-section-title">Step 2: Purpose and Application</span>
+                        </summary>
+
+                        <div className="syllabus-section-content">
+                            {step2Fields.map((f, i) => (
+                                <SyllabusFormField
+                                    key={i}
+                                    field={f}
+                                    value={formData[f.content] || ""}
+                                    onChange={handleFieldChange}
+                                />
+                            ))}
+                        </div>
+                    </details>
+                </div>
+
+                {/* ✅ Step 3 - Manual rendering as well */}
+                <div className="syllabus-section-accordion">
+                    <details open>
+                        <summary className="syllabus-section-header">
+                            <span className="syllabus-section-title">Step 3: Writing Course-specific Learning Outcomes</span>
+                        </summary>
+
+                        <div className="syllabus-section-content">
+                            {step3Fields.map((f, i) => (
+                                <SyllabusFormField
+                                    key={i}
+                                    field={f}
+                                    value={formData[f.content] || ""}
+                                    onChange={handleFieldChange}
+                                />
+                            ))}
+                        </div>
+                    </details>
+                </div>
             </form>
         </div>
     );

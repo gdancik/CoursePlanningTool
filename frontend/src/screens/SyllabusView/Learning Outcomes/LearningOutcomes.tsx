@@ -37,10 +37,10 @@ const LearningOutcomes: React.FC = () => {
             />
 
             <form className="outcomes-container">
-                {/* ✅ Step 1 - custom accordion */}
+
                 <LearningOutcomesAccordion sectionName="Step 1: Competencies" fields={step1Fields} />
 
-                {/* ✅ Step 2 - Manual rendering with SyllabusFormField */}
+
                 <div className="syllabus-section-accordion">
                     <details open>
                         <summary className="syllabus-section-header">
@@ -60,7 +60,7 @@ const LearningOutcomes: React.FC = () => {
                     </details>
                 </div>
 
-                {/* ✅ Step 3 - Manual rendering as well */}
+                
                 <div className="syllabus-section-accordion">
                     <details open>
                         <summary className="syllabus-section-header">

@@ -2,11 +2,13 @@
 [run]
 branch = False
 source = 
-  backend.app
-  backend.course_planning 
+  backend
 
 [report]
 show_missing = True
+omit = 
+  backend/**/__init__.py
+  backend/tests/*
 
 [html]
 directory = htmlcov

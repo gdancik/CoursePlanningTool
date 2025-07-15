@@ -73,15 +73,21 @@ const LearningOutcomesAccordionStep3: React.FC<Props> = ({ sectionName, fields, 
                     </div>
 
 
-                    <div className="content-block">
-                        <h3 className="section-heading">Connect ELAC Competencies with learning outcomes.</h3>
-                        <p className="explanation-paragraph">{sectionFields[4]?.content}</p>
-                        <div className="resource-buttons">
-                            <button className="resource-button">ELAC Competencies Examples ↗</button>
-                            <button className="resource-button">Additional Resources ↗</button>
+                    <div className="section-split">
+                        {/* LEFT SIDE: Header */}
+                        <div className="section-label">
+                            <h3 className="section-heading">Connect ELAC Competencies with learning outcomes.</h3>
+                        </div>
+
+                        {/* RIGHT SIDE: Paragraph + Buttons */}
+                        <div className="section-body">
+                            <p className="explanation-paragraph">{sectionFields[4]?.content}</p>
+                            <div className="resource-buttons">
+                                <button className="resource-button">ELAC Competencies Examples ↗</button>
+                                <button className="resource-button">Additional Resources ↗</button>
+                            </div>
                         </div>
                     </div>
-
                     {sectionFields.filter(f => f.type === "text-box").map((f, i) => (
                         <div className="content-block" key={i}>
                             <SyllabusFormField

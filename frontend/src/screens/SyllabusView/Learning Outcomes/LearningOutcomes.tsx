@@ -6,6 +6,7 @@ import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabu
 import LearningOutcomesAccordion from "./LearningOutcomesAccordionStep1";
 import Step2Accordion from "./LearningOutcomesAccordionStep2";
 import Step3Accordion from "./LearningOutcomesAccordionStep3";
+import Step4Accordion from "./LearningOutcomesAccordionStep4";
 import './LearningOutcomes.css';
 
 
@@ -30,6 +31,7 @@ const LearningOutcomes: React.FC = () => {
     const step1Fields = fields.filter(f => f.section === "Step 1: Competencies");
     const step2Fields = fields.filter(f => f.section === "Step 2: Purpose and Application");
     const step3Fields = fields.filter(f => f.section === "Step 3: Writing Course-specific Learning Outcomes");
+    const step4Fields = fields.filter(f => f.section === "Step 4: Summary")
 
     return (
         <div>
@@ -54,6 +56,12 @@ const LearningOutcomes: React.FC = () => {
                 <Step3Accordion
                     sectionName="Step 3: Writing Course-specific Learning Outcomes"
                     fields={step3Fields}
+                    formData={formData}
+                    onFieldChange={handleFieldChange}
+                />
+                <Step4Accordion
+                    sectionName="Step 4: Summary"
+                    fields={step4Fields}
                     formData={formData}
                     onFieldChange={handleFieldChange}
                 />

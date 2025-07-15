@@ -1,5 +1,5 @@
 .content-block {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 2rem 1rem;
     box-sizing: border-box;
@@ -35,49 +35,6 @@
     margin-bottom: 2rem;
 }
 
-.writing-table {
-    width: 100%;
-    max-width: 800px;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-}
-
-/* Bloom's Pyramid */
-.blooms-section {
-    text-align: center;
-    margin: 1.5rem 0 2.5rem;
-}
-
-.blooms-pyramid {
-    max-width: 400px;
-    justify-content: center;
-    width: 100%;
-}
-
-/* Resource Buttons */
-.resource-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-}
-
-.resource-button {
-    background-color: #f0f4fb;
-    color: #002e5d;
-    font-weight: 600;
-    font-size: 0.95rem;
-    padding: 0.65rem 1.25rem;
-    border: none;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: background 0.2s ease;
-    cursor: pointer;
-}
-
-.resource-button:hover {
-    background-color: #e3ecf9;
-}
 
 .blooms-layout {
     border-radius: 8px;
@@ -114,9 +71,8 @@
     margin-bottom: 2.5rem;
 }
 
-/* Left: heading column */
 .section-label {
-    flex: 0 0 280px; /* fixed width for consistent heading alignment */
+    flex: 0 0 280px;
 }
 
 .section-heading {
@@ -131,12 +87,13 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 1rem;
 }
 
 .explanation-paragraph {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 1.6;
 }
 
@@ -147,3 +104,23 @@
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
+.resource-buttons {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.resource-button {
+    background-color: #f0f4fb;
+    color: #002e5d;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.65rem 1.25rem;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s ease;
+    cursor: pointer;
+    text-align: left;
+}

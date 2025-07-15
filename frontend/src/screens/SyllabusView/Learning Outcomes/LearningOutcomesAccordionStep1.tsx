@@ -65,7 +65,6 @@ const LearningOutcomesAccordion: React.FC<Props> = ({ sectionName, fields, formD
                                 <p>{getText("requires students to recognize ethical issues")}</p>
                             </div>
 
-                            <h4 className="competency-label quantitative-literacy">quantitative literacy</h4>
                             <div className="core-competency-card">
                                 <img src={QuantitativeIcon} alt="Quantitative Literacy" className="core-icon"/>
                                 <p>{getText("is competency in working with numerical data")}</p>

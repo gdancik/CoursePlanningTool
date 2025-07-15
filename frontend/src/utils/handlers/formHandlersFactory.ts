@@ -1,7 +1,7 @@
 // src/utils/handlers/formHandlersFactory.ts
 
 import { saveToBackend, logoutUser, previewSyllabus } from "../../services/TestServices/syllabusService";
-import { saveJsonFile } from "../../components/Button/ButtonLogic";
+
 import { jsonFieldsMapper } from "../jsonFieldsMapper";
 import { createNewCourse } from "../../services/course/courseService";
 

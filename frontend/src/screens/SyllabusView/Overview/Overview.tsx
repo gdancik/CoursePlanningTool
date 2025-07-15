@@ -4,18 +4,26 @@
 // The card components are defined in components/OverviewCard.
 // A linker map for navigation buttons is handled in AppNavigation (not shown here).
 
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate, useLocation} from "react-router-dom";
 import OverviewCard from "./OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSections";
 import AppLayout from "../../../ApplicationLayout/Applayout"
+import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
 import './Overview.css'
 import {handleBack, handleNext} from "../../../components/Button/ButtonLogic";
+import {createPreviewHandler} from "../../../utils/handlers/formHandlersFactory";
 
 // Functional component that displays the overview page.
 const Overview = () => {
     // State to hold the array of section data loaded from the CSV file.
     const [sections, setSections] = useState<SectionData[]>([]);
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
+
 
 
     //Page Navigation for Buttons
@@ -25,8 +33,17 @@ const Overview = () => {
     const [formData, setFormData] = useState<Record<string, string>>({});
     const courseID = localStorage.getItem("currentCourseId")
 
+    const modalControls = {
+        setVisible: setModalVisible,
+        setStatus: setModalStatus,
+        setTitle: setModalTitle,
+        setMessage: setModalMessage
+    };
+
+
     const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
     const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
+    const handlePreviewClick = createPreviewHandler(formData, modalControls,);
 
     // useEffect runs once on component mount to fetch CSV data
     // using the custom loadSyllabusSections utility function.
@@ -38,6 +55,7 @@ const Overview = () => {
             <AppLayout
                 onBack={handleBackClick}
                 onNext={handleNextClick}
+                onPreview={handlePreviewClick}
             />
             <div className='overview-container'>
 
@@ -54,6 +72,13 @@ const Overview = () => {
                         <OverviewCard {...section}/>
                     </div>
                 ))}
+
+                <RedirectingModal
+                    visible={modalVisible}
+                    status={modalStatus}
+                    title={modalTitle}
+                    message={modalMessage}
+                />
             </div>
         </div>
 

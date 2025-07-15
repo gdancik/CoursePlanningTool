@@ -1,7 +1,9 @@
 import React from "react";
 import { FaAngleUp, FaArrowRight } from "react-icons/fa";
+import ContentTable from "../../../components/Tables/competencyTable"
 import { SyllabusContent } from "../../../utils/loadSyllabusContent";
 import SafeIcon from "../../../utils/ComponentWrapper";
+import './LearningOutcomesAccordionStep2.css'
 
 interface Props {
     sectionName: string;
@@ -31,6 +33,7 @@ const Step2Accordion: React.FC<Props> = ({ sectionName, fields }) => {
                     </div>
 
                     <p className="step2-description">{getByIndex(2)}</p>
+                    <ContentTable/>
                 </div>
             </details>
         </div>

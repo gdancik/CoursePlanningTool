@@ -129,6 +129,7 @@ export function CompetencyTable1() {
 
   return create_table('competency-table1', columns, rows, 6);
 }
+export default CompetencyTable1;
 
 // generate the second Competency Table
 export function CompetencyTable2() {

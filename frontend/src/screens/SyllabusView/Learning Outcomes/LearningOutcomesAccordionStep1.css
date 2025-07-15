@@ -95,7 +95,6 @@
 
 .competency-alert-container {
     padding: 1.5rem 2rem;
-    border-radius: 8px;
     margin-bottom: 2rem;
     box-sizing: border-box;
 }
@@ -120,6 +119,5 @@
 .competency-table {
     flex: 1 1 28%;
     max-width: 240px;
-    border-radius: 6px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }

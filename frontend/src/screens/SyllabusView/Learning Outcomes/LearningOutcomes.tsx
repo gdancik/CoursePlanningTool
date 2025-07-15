@@ -33,7 +33,7 @@ const LearningOutcomes: React.FC = () => {
     // Load syllabus fields on mount
     useEffect(() => {
         const loadFields = async () => {
-            const data = await loadSyllabusContent("/data/description_info.csv");
+            const data = await loadSyllabusContent("/data/learning_outcomes_.csv");
             setFields(data);
 
             // Load saved form data (if any)

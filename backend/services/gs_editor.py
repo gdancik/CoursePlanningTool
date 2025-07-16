@@ -523,9 +523,7 @@ class gsEditor:
     @exponential_backoff
     def delete_course(self, course_id):
             '''
-            Reads the entire Google Sheet and returns it as a pandas DataFrame.
-            Returns:
-                pd.DataFrame: A DataFrame containing all records from the Google Sheet.
+           
             '''
             # Create a Google Sheets client
             #client = self.create_gs_client()

@@ -18,7 +18,7 @@
 
 
 .overview-intro {
-    font-size: 1.15rem;
+    font-size: 1rem;
     margin-bottom: 1.5rem;
     line-height: 1.6;
     font-weight: bold;
@@ -28,4 +28,14 @@
 .green-text {
     color: #33975f;
     font-weight: bold;
+}
+
+.grey-text{
+    color: #7A7A7A;
+    font-weight: bold;
+}
+
+.Syllabus-green-box, .Syllabus-grey-box{
+    width: 75rem;
+    height:4.5rem;
 }

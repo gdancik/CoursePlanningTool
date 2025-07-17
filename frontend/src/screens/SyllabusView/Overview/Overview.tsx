@@ -13,6 +13,8 @@ import RedirectingModal from "../../../components/RedirectingModal/RedirectingMo
 import './Overview.css'
 import {handleBack, handleNext} from "../../../components/Button/ButtonLogic";
 import {createPreviewHandler} from "../../../utils/handlers/formHandlersFactory";
+import SyllabusGreen from "../../../assets/images/SyllabusGreen.png"
+import SyllabusGrey from "../../../assets/images/SyllabusGrey.png"
 
 // Functional component that displays the overview page.
 const Overview = () => {
@@ -60,16 +62,38 @@ const Overview = () => {
             <div className='overview-container'>
 
                 {/* Introduction message to help users understand the tool */}
-                <p className="overview-intro"> This tool will guide you through each section of the syllabus. Text entered in the
-                    <span className="green-text"> green</span> boxes will appear in the final syllabus exactly as written.
-                Below, you'll find a summary of the contents and brainstorming tools for each section. You can save progress at anytime and navigate freely
-                between sections.
+                <p className="overview-intro"> This course planning tool will walk you through the steps of building
+                    evidence-based courses and produces a downloadable, editable syllabus in Word. The creators of this
+                    tool recognize that course planning is not is not always a linear process and so you can navigate
+                    through the steps in a way that works for your course planning approach.
+                    You can:
+                    <ul>
+                        <li>Skip and come back to sections</li>
+                        <li>Save over previous answers</li>
+                        <li>Complete the course planning over multiple sittings.</li>
+                    </ul>
+                    <p>
+                        The tool itself will support you in providing the content of your course syllabus, some of the
+                        questions present in the tool are geared to help you build your course and do not appear in the
+                        syllabus itself.</p>
+                    <p>The fields that show up on your syllabus are in <span
+                        className="green-text">green</span> throughout the tool</p>
+                    <img src ={SyllabusGreen} alt="SyllabusGreen" className="Syllabus-green-box"/>
+                    <p>The fields that are brainstorming and do not show up on your syllabus are in gray.</p>
+                    <img src={SyllabusGrey} alt="SyllabusGrey" className="Syllabus-grey-box"/>
+                    <p>If you would like to add images or figures to your syllabus, you should do so AFTER you have downloaded the syllabus into word.</p>
+                    <p>You can store up to 15 syllabi in the course planning tool at a time.</p>
                 </p>
 
                 {/* Render one OverviewCard per section from the CSV */}
                 {sections.map(section => (
                     <div className="overview-card-margin" key={section.id}>
-                        <OverviewCard {...section}/>
+                        <OverviewCard   title={section.title}
+                                        description={section.description}
+                                        completed={section.completed}
+                                        link={section.link}
+                                        imageSrc={section.imageSrc}
+                        />
                     </div>
                 ))}
 

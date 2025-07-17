@@ -11,6 +11,7 @@ export interface SectionData{
     description: string; // Brief description or guidance for the section
     completed: boolean; // Whether the section is marked as completed
     link: string;
+    imageSrc?: string;
 }
 
 // Asynchronous function to fetch and parse CSV data.
@@ -36,6 +37,7 @@ export async function loadSyllabusSections(path: string): Promise<SectionData[]>
                     description: row.description,
                     completed: row.completed === "true",
                     link: row.link || '',
+                    imageSrc: row.imageSrc || '',
                 }));
                 resolve(parsed); //Returns processed Data
             },

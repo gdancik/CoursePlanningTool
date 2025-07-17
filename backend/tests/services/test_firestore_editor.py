@@ -22,7 +22,7 @@ def fs(firebase_app):
 def testCreateGetUpdateDelete(fs) :
 
     # test name
-    assert fs.sheet_name == 'test_fs_editor'
+    assert fs.collection_name == 'test_fs_editor'
 
     # create sheet
     if fs.collection_exists():

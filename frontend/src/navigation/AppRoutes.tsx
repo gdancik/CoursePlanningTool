@@ -21,7 +21,7 @@ import Assessment from "../screens/SyllabusView/Assessment";
 import BasicInfo from "../screens/SyllabusView/BasicInformation/BasicInfo";
 import Description from "../screens/SyllabusView/Description/Description";
 import LearningOutcomes from "../screens/SyllabusView/Learning Outcomes/LearningOutcomes";
-import HIPs from "../screens/SyllabusView/HIPs";
+import HIPs from "../screens/SyllabusView/HIPS/HIPs";
 import CourseSchedule from "../screens/SyllabusView/CourseSchedule";
 import LearningResources from "../screens/SyllabusView/LearningResources/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";

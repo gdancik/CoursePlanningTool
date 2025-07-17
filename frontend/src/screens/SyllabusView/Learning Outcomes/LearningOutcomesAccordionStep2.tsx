@@ -33,7 +33,6 @@ const Step2Accordion: React.FC<Props> = ({ sectionName, fields }) => {
                     </div>
 
                     <p className="step2-description">{getByIndex(2)}</p>
-                    <ContentTable/>
                 </div>
             </details>
         </div>

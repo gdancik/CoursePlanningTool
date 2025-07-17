@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
+import {useNavigate, useLocation} from "react-router-dom";
+import {handleBack,handleNext} from "../../../components/Button/ButtonLogic";
 import AppLayout from "../../../ApplicationLayout/Applayout";
-import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
-import LearningOutcomesAccordion from "./LearningOutcomesAccordionStep1";
-import Step2Accordion from "./LearningOutcomesAccordionStep2";
-import Step3Accordion from "./LearningOutcomesAccordionStep3";
-import Step4Accordion from "./LearningOutcomesAccordionStep4";
-import './LearningOutcomes.css';
+import React, {useEffect, useState} from "react";
+import {loadSyllabusContent, SyllabusContent} from "../../../utils/loadSyllabusContent";
 import {
     createPreviewHandler,
     createSaveAndExitHandler,
     createSaveHandler
 } from "../../../utils/handlers/formHandlersFactory";
-import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
-import ContentTable from "../../../components/Tables/competencyTable";
+import HIPSAccordion from "./HIPSAccordion";
+import SyllabusSectionAccordion from "../SyllabusComponents/SyllabusAccordion";
+import './HIPS.css'
 
 
-const LearningOutcomes: React.FC = () => {
+const HIPs = () => {
+    //Page Navigation for Buttons
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -31,10 +28,10 @@ const LearningOutcomes: React.FC = () => {
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
 
-    // Load syllabus fields on mount
+
     useEffect(() => {
         const loadFields = async () => {
-            const data = await loadSyllabusContent("/data/learning_outcomes_.csv");
+            const data = await loadSyllabusContent("/data/HIPS.csv");
             setFields(data);
 
             // Load saved form data (if any)
@@ -54,8 +51,6 @@ const LearningOutcomes: React.FC = () => {
         loadFields();
     }, []);
 
-
-
     const groupedSections: Record<string, SyllabusContent[]> = fields.reduce((acc, field) => {
         if (!acc[field.section]) acc[field.section] = [];
         acc[field.section].push(field);
@@ -66,11 +61,7 @@ const LearningOutcomes: React.FC = () => {
     const handleFieldChange = (label: string, value: string) => {
         setFormData(prev => ({ ...prev, [label]: value }));
     };
-
-    const step1Fields = fields.filter(f => f.section === "Step 1: Competencies");
-    const step2Fields = fields.filter(f => f.section === "Step 2: Purpose and Application");
-    const step3Fields = fields.filter(f => f.section === "Step 3: Writing Course-specific Learning Outcomes");
-    const step4Fields = fields.filter(f => f.section === "Step 4: Summary")
+    const HIPSAccordionFields = fields.filter(f => f.section === "Step 1: Understanding High Impact Practices");
 
     const modalControls = {
         setVisible: setModalVisible,
@@ -86,6 +77,8 @@ const LearningOutcomes: React.FC = () => {
     const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
 
 
+
+
     return (
         <div>
             <AppLayout
@@ -95,43 +88,24 @@ const LearningOutcomes: React.FC = () => {
                 onSaveAndExit={handleSaveAndExit}
                 onPreview={handlePreviewClick}
             />
-
-            <form className="outcomes-container">
-                <LearningOutcomesAccordion
-                    sectionName="Step 1: Competencies"
-                    fields={step1Fields}
-                    formData={formData}
-                    onFieldChange={handleFieldChange}
+            <form className="HIPS-container">
+                <HIPSAccordion
+                    sectionName="Step 1: Understanding High Impact Practices"
+                    fields={HIPSAccordionFields}
                 />
-
-                <Step2Accordion
-                    sectionName="Step 2: Purpose and Application"
-                    fields={step2Fields}
-                />
-                <ContentTable/>
-
-                <Step3Accordion
-                    sectionName="Step 3: Writing Course-specific Learning Outcomes"
-                    fields={step3Fields}
-                    formData={formData}
-                    onFieldChange={handleFieldChange}
-                />
-                <Step4Accordion
-                    sectionName="Step 4: Summary"
-                    fields={step4Fields}
-                    formData={formData}
-                    onFieldChange={handleFieldChange}
-                />
+                {Object.entries(groupedSections).map(([section, sectionFields]) => (
+                    section !== "Step 1: Understanding High Impact Practices" && (
+                    <SyllabusSectionAccordion
+                        key = {section}
+                        sectionName={section}
+                        fields={sectionFields}
+                        formData={formData}
+                        onFieldChange={handleFieldChange}
+                    />
+                    )
+                ))}
             </form>
-
-            <RedirectingModal
-                visible={modalVisible}
-                status={modalStatus}
-                title={modalTitle}
-                message={modalMessage}
-            />
         </div>
     );
 };
-
-export default LearningOutcomes;
+export default HIPs;

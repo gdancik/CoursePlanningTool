@@ -1,0 +1,75 @@
+.competency-table-wrapper {
+    border: 4px solid #b3d7f5;
+    border-radius: 12px;
+    background-color: #f6fbff;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.competency-table1 {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.competency-table1 th {
+    background-color: #b3d7f5;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.competency-table1 td {
+    border-bottom: 1px solid #b3d7f5;
+    padding: 10px;
+    font-size: 14px;
+    height: 40px;
+    vertical-align: top;
+}
+
+.competency-table1 td[contenteditable="true"] {
+    background-color: #fff;
+    outline: none;
+}
+
+.competency-table-button {
+    background-color: white;
+    border: 2px solid #66afe9;
+    color: #333;
+    padding: 4px 8px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 2px;
+    transition: background-color 0.2s ease;
+}
+
+.competency-table-button:hover {
+    background-color: #eaf4fc;
+}
+
+/* Specific adjustments per table */
+.table1 .competency-table1 th,
+.table1 .competency-table1 td {
+    text-align: left;
+}
+
+.table2 .competency-table2 th {
+    text-align: center;
+}
+
+.table2 .competency-table2 td {
+    vertical-align: top;
+    text-align: left;
+}
+
+/* Button cell styles */
+.action-header {
+    background-color: #b3d7f5;
+}
+
+.action-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

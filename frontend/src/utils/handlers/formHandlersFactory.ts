@@ -123,8 +123,6 @@ export const createSaveAndExitHandler = (
 
         const saveResult = await saveToBackend(course_id, mappedData);
         if (saveResult !== null) {
-            const logoutResult = await logoutUser();
-            if (logoutResult !== null) {
                 modal.setStatus("success");
                 modal.setTitle("Saved & Exiting");
                 modal.setMessage("Redirecting you to My Courses Home Page...");
@@ -135,9 +133,6 @@ export const createSaveAndExitHandler = (
             } else {
                 modal.setVisible(false);
             }
-        } else {
-            modal.setVisible(false);
-        }
     };
 };
 

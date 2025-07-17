@@ -14,7 +14,6 @@ import {
     createSaveHandler
 } from "../../../utils/handlers/formHandlersFactory";
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
-import ContentTable from "../../../components/Tables/competencyTable";
 
 
 const LearningOutcomes: React.FC = () => {
@@ -108,7 +107,6 @@ const LearningOutcomes: React.FC = () => {
                     sectionName="Step 2: Purpose and Application"
                     fields={step2Fields}
                 />
-                <ContentTable/>
 
                 <Step3Accordion
                     sectionName="Step 3: Writing Course-specific Learning Outcomes"

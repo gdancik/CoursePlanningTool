@@ -7,6 +7,7 @@ import AlertImage from "../../../assets/images/Writing_Alert.png"
 import BloomsImage from "../../../assets/images/blooms_taxonomy.png";
 import WritingTable from "../../../assets/images/WritingTable.png"
 import "./LearningOutcomesAccordionStep3.css"
+import CompetencyTable2 from "../../../components/Tables/CompetencyTable2";
 
 interface Props {
     sectionName: string;
@@ -33,8 +34,8 @@ const LearningOutcomesAccordionStep3: React.FC<Props> = ({ sectionName, fields, 
                 <div className="syllabus-section-content">
                     <div className="section-split">
                         {/* Left column: heading only */}
-                        <div className="section-label">
-                            <h3 className="section-heading">Write clear and measurable learning outcomes.</h3>
+                        <div className="section-label-LO">
+                            <h3 className="section-heading-LO-top">Write clear and measurable learning outcomes.</h3>
                         </div>
 
                         {/* Right column: text + image/table */}
@@ -45,8 +46,8 @@ const LearningOutcomesAccordionStep3: React.FC<Props> = ({ sectionName, fields, 
                     </div>
 
                     <div className="section-split">
-                        <div className="section-label">
-                            <h3 className="section-heading">Consider who is doing the learning in your course.</h3>
+                        <div className="section-label-LO">
+                            <h3 className="section-heading-LO">Consider who is doing the learning in your course.</h3>
                         </div>
 
                         <div className="section-body">
@@ -76,7 +77,7 @@ const LearningOutcomesAccordionStep3: React.FC<Props> = ({ sectionName, fields, 
                     <div className="section-split">
                         {/* LEFT SIDE: Header */}
                         <div className="section-label">
-                            <h3 className="section-heading">Connect ELAC Competencies with learning outcomes.</h3>
+                            <h3 className="section-heading-LO">Connect ELAC Competencies with learning outcomes.</h3>
                         </div>
 
                         {/* RIGHT SIDE: Paragraph + Buttons */}
@@ -88,6 +89,7 @@ const LearningOutcomesAccordionStep3: React.FC<Props> = ({ sectionName, fields, 
                             </div>
                         </div>
                     </div>
+                    <CompetencyTable2/>
                     {sectionFields.filter(f => f.type === "text-box").map((f, i) => (
                         <div className="content-block" key={i}>
                             <SyllabusFormField

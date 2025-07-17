@@ -66,20 +66,31 @@
 
 .section-split {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 2rem;
     margin-bottom: 2.5rem;
 }
 
-.section-label {
+.section-label-LO {
     flex: 0 0 280px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-right: 12px;
 }
 
-.section-heading {
+.section-heading-LO {
     font-size: 1.2rem;
     font-weight: bold;
     color: #003366;
-    margin-top: 0;
+    margin-bottom: 10rem;
+}
+
+.section-heading-LO-top {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #003366;
+    margin-bottom: 20rem;
 }
 
 /* Right: text and images */
@@ -112,7 +123,7 @@
 }
 
 .resource-button {
-    background-color: #f0f4fb;
+    background-color: #f5f5f5;
     color: #002e5d;
     font-weight: 600;
     font-size: 1rem;
@@ -123,4 +134,5 @@
     transition: background 0.2s ease;
     cursor: pointer;
     text-align: left;
+    text-decoration: none
 }

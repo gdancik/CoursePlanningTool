@@ -30,7 +30,14 @@ const HIPSAccordion: React.FC<Props> = ({sectionName, fields}) => {
                 <div className="section-split">
                     <div className="section-label">
                         <h3 className="section-heading">Write clear and measurable learning outcomes.</h3>
-                        <button className="resource-button">Link to CTLA↗</button>
+                        <a
+                            href="https://www.easternct.edu/center-for-teaching-learning-and-assessment/teaching-resources/high-impact-practices.html"
+                            className="resource-button"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Link to CTLA↗
+                        </a>
                     </div>
 
                     <div className="section-body">
@@ -38,7 +45,7 @@ const HIPSAccordion: React.FC<Props> = ({sectionName, fields}) => {
                     </div>
                 </div>
 
-                    <img src={HIPS_Table} alt="HIPSTable" className="hips-table"/>
+                <img src={HIPS_Table} alt="HIPSTable" className="hips-table"/>
 
             </details>
         </div>

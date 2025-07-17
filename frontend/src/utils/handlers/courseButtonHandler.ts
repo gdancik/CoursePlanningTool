@@ -2,7 +2,7 @@
 import {
     getCourseData,
     getCourses as apiFetchCourses,
-    Course, deleteCourseRow
+    Course, deleteCourseRow, duplicateCourse
 } from "../../services/course/courseService";
 import {previewSyllabus} from "../../services/TestServices/syllabusService";
 import { Dispatch, SetStateAction } from "react";
@@ -142,3 +142,46 @@ export const createDeleteRowHandler = (
     }
 
 }
+
+export const createDuplicateRowHandler = (
+    modal: ModalControls,
+    setCourses: (courses: Course[]) => void
+) => {
+    return async (courseId: string) => {
+        modal.setTitle("Duplicating Course");
+        modal.setMessage("Please wait while we duplicate the course…");
+        modal.setStatus("loading");
+        modal.setVisible(true);
+
+        try {
+            const response = await duplicateCourse(courseId);
+
+            // Log response for debugging
+            console.log("Duplicate course API response:", response);
+
+            // TEMP: Support current backend response key with colon
+            const newId =
+                response?.course_id ||
+                response?.courseId ||
+                response?.["courseId:"];
+
+            if (!newId) {
+                throw new Error("Course could not be duplicated");
+            }
+
+            const updatedCourses = (await apiFetchCourses()) || [];
+            setCourses(updatedCourses);
+
+            modal.setStatus("success");
+            modal.setTitle("Course Duplicated");
+            modal.setMessage(`Course has been duplicated with ID: ${newId}`);
+        } catch (err: any) {
+            console.error("Duplicate handler failed:", err);
+            modal.setStatus("error");
+            modal.setTitle("Duplication Failed");
+            modal.setMessage(err.message || "Something went wrong while duplicating the course.");
+        } finally {
+            setTimeout(() => modal.setVisible(false), 1500);
+        }
+    };
+};

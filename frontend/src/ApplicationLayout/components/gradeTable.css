@@ -7,10 +7,17 @@ table {
   border-collapse: collapse;
 }
 
+textarea {
+  white-space: pre-wrap;
+  width: 95%;
+  padding: 1%;
+  resize: none;
+}
+
 th,
 td {
   border: none;
-  padding: 5px;
+  padding: 2px;
   text-align: left;
   border-bottom: 1px solid black;
   border-right: 1px solid black;

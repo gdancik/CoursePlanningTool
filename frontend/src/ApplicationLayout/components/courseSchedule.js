@@ -88,7 +88,7 @@ function CourseSchedule({ term, year, days }) {
   return (
     <div>
       <h3>Course Schedule</h3>
-      <table id="course-schedule-table">
+      <table id="course-schedule-table" style = {{margin: "2%"}}>
         <thead>
           <tr>
             <th>Date</th>
@@ -103,8 +103,7 @@ function CourseSchedule({ term, year, days }) {
           {scheduleRows.map((row, index) => (
             <tr key={index}>
               <td>
-                <input
-                  type="text"
+                <textarea
                   value={row.date}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];
@@ -114,8 +113,7 @@ function CourseSchedule({ term, year, days }) {
                 />
               </td>
               <td>
-                <input
-                  type="text"
+                <textarea
                   value={row.day}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];
@@ -125,8 +123,7 @@ function CourseSchedule({ term, year, days }) {
                 />
               </td>
               <td>
-                <input
-                  type="text"
+                <textarea
                   value={row.unit}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];
@@ -136,8 +133,7 @@ function CourseSchedule({ term, year, days }) {
                 />
               </td>
               <td>
-                <input
-                  type="text"
+                <textarea
                   value={row.learningOutcomes}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];
@@ -147,8 +143,7 @@ function CourseSchedule({ term, year, days }) {
                 />
               </td>
               <td>
-                <input
-                  type="text"
+                <textarea
                   value={row.readingAssignments}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];

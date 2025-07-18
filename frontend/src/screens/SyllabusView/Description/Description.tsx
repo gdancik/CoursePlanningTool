@@ -9,7 +9,7 @@ import {
 import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
 import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
-import SyllabusSectionAccordion from "../SyllabusComponents/SyllabusAccordian";
+import SyllabusSectionAccordion from "../SyllabusComponents/SyllabusAccordion";
 import "./Description.css";
 
 const Description = () => {

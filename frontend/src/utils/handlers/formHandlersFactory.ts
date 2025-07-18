@@ -1,7 +1,7 @@
 // src/utils/handlers/formHandlersFactory.ts
 
 import { saveToBackend, logoutUser, previewSyllabus } from "../../services/TestServices/syllabusService";
-import { saveJsonFile } from "../../components/Button/ButtonLogic";
+
 import { jsonFieldsMapper } from "../jsonFieldsMapper";
 import { createNewCourse } from "../../services/course/courseService";
 
@@ -66,7 +66,6 @@ export const createSaveHandler = (
 
         const result = await saveToBackend(course_id, mappedData);
         if (result !== null) {
-            saveJsonFile(mappedData, "form_data.json");
             modal.setStatus("success");
             modal.setTitle("Saved!");
             modal.setMessage("Your changes were saved successfully.");
@@ -86,7 +85,7 @@ export const createSaveAndExitHandler = (
 ) => {
     return async () => {
         modal.setTitle("Saving & Exiting");
-        modal.setMessage("Hold on, we're saving and logging you out...");
+        modal.setMessage("Hold on, we're saving and redirecting you...");
         modal.setStatus("loading");
         modal.setVisible(true);
 
@@ -124,22 +123,16 @@ export const createSaveAndExitHandler = (
 
         const saveResult = await saveToBackend(course_id, mappedData);
         if (saveResult !== null) {
-            saveJsonFile(mappedData, "form_data_exit.json");
-            const logoutResult = await logoutUser();
-            if (logoutResult !== null) {
                 modal.setStatus("success");
-                modal.setTitle("Saved & Logged Out");
-                modal.setMessage("Redirecting you to login...");
+                modal.setTitle("Saved & Exiting");
+                modal.setMessage("Redirecting you to My Courses Home Page...");
                 setTimeout(() => {
                     modal.setVisible(false);
-                    navigate("/");
+                    navigate("/course-page");
                 }, 1500);
             } else {
                 modal.setVisible(false);
             }
-        } else {
-            modal.setVisible(false);
-        }
     };
 };
 

@@ -20,4 +20,7 @@
     color: #ffffff;
     background-color: #3a8ef6;
     border-bottom: 1px  solid transparent;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
 }

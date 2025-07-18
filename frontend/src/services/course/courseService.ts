@@ -129,3 +129,15 @@ export const deleteCourseRow = (
         data: {course_id},
     })();
 };
+
+export const duplicateCourse = (
+    course_id: string
+): Promise <any> => {
+    return createApiCaller<{ course_id: string}> ({
+        url: "duplicateCourse/",
+        method: "POST",
+        withCredentials: true,
+        headers: {"content-Type" : "application/json"},
+        data: {course_id},
+    })();
+};

@@ -2,6 +2,7 @@ import React from 'react';
 import { FaPen, FaRegSquare } from 'react-icons/fa';
 import {Link} from 'react-router-dom';
 import SafeIcon from '../../../utils/ComponentWrapper'
+import EditIcon from "../../../assets/images/EditIcon.png"
 import './OverviewCard.css';
 
 
@@ -14,17 +15,20 @@ interface Props {
     description: string;
     completed: boolean;
     link: string;
+    imageSrc?: string;
 }
 
 //Functional component that renders a syllabus overview card
 //Displays the section title, description, and action icons.
 //The "Completed" status is conditionally shown based on props.
 
-const OverviewCard: React.FC<Props> = ({ title, description, completed, link }) => {
+const OverviewCard: React.FC<Props> = ({ title, description, completed, link,imageSrc }) => {
     return (
         <div className="overview-card">
             {/*Section Title*/}
             <div className="card-title-area">{title}</div>
+
+            <img src={imageSrc} alt ="Section Icon" className="section-icons"/>
 
             {/* Section Description*/}
             <div className="card-description-area">{description}</div>
@@ -32,7 +36,7 @@ const OverviewCard: React.FC<Props> = ({ title, description, completed, link }) 
             {/* Action icons and completed status */}
             <div className="card-icons">
                 <Link to={link}>
-                    <SafeIcon Icon={FaPen} className="icon"/>
+                    <img src = {EditIcon} alt="EditIcon" className="Editicon"/>
                 </Link>
                 <SafeIcon Icon={FaRegSquare} className="icon"/>
                 {completed && <span className="status">Completed</span>}

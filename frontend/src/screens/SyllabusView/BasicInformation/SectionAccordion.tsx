@@ -3,7 +3,7 @@
 import React from 'react';
 import FormRow from './FormRow';                       // Component for rendering individual form rows
 import { BasicInfoData } from '../../../utils/loadBasicInfoFields'; // Type for field data
-import './SectionAccordian.css';
+import './SectionAccordion.css';
 import { FaAngleUp } from "react-icons/fa";           // Icon for the accordion toggle
 import SafeIcon from "../../../utils/ComponentWrapper"; // Wrapper for safe icon rendering
 

@@ -15,6 +15,10 @@ from firebase_admin import firestore
 import logging
 from typing import Dict, Any
 import backend.services.course_planning as cp
+import backend.services.firestore_stats as fs_stats
+
+# create stat tables
+fs_stats.create_tables()
 
 class fsEditor:
     '''
@@ -93,6 +97,7 @@ class fsEditor:
             else:
                 logging.warning(f'Column: {key} not a valid column, skipping this column')
 
+        fs_stats.increase_number_writes(1)
         course_ref = self.client.collection(self.collection_name).add(validated_dict)
         return course_ref[1].id
 
@@ -105,6 +110,7 @@ class fsEditor:
         docs = self.client.collection(self.collection_name).stream()
         sheet = [{**doc.to_dict()} for doc in docs]
         df = pd.DataFrame(sheet)
+        fs_stats.increase_number_reads(df.shape[0])
         return df
 
     def getValue(self, course_id: str,columns: str) -> str:
@@ -114,6 +120,7 @@ class fsEditor:
             course_id (str): The course ID of the document to be accessed.
             columns (str or list): The specific column(s) to retrieve from the document.
         '''
+        fs_stats.increase_number_reads(1)
         course_ref = self.client.collection(self.collection_name).document(course_id)
         course = course_ref.get()
         if course.exists:
@@ -141,6 +148,7 @@ class fsEditor:
             values_dict (Dict[str, Any]): A dictionary containing the new values to be updated in the document.
         '''
         
+        fs_stats.increase_number_reads(1)
         course_ref = self.client.collection(self.collection_name).document(course_id)
         values_dict['last_edited'] = firestore.SERVER_TIMESTAMP
 
@@ -154,6 +162,7 @@ class fsEditor:
             else:
                 logging.warning(f'Column: {key} not a valid column, skipping this column')
 
+        fs_stats.increase_number_writes(1)
         course_ref.update(validated_dict)
        
     def duplicateCourse(self,orginal_course_id):
@@ -165,6 +174,7 @@ class fsEditor:
         Returns:
             new_course_id (str): The course ID of the newly created course.
         '''
+        fs_stats.increase_number_reads(1)
         course_ref = self.client.collection(self.collection_name).document(orginal_course_id)
         course = course_ref.get()
 
@@ -179,6 +189,8 @@ class fsEditor:
         Args:
             course_id (str): The course ID of the document to be deleted.
         '''
+
+        fs_stats.increase_number_deletes(1)
         course_ref = self.client.collection(self.collection_name).document(course_id)
         course_ref.delete()
 
@@ -213,6 +225,7 @@ class fsEditor:
         docs = collection_ref.stream()
         
         for doc in docs:
+            fs_stats.increase_number_deletes(1)
             doc.reference.delete()
         
         logging.info(f'Collection {self.collection_name} deleted successfully.')

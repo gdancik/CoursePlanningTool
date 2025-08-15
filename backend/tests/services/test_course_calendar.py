@@ -15,10 +15,9 @@ def testFall() :
     soup = cc.get_target_webpage(url, target)
     df = cc.get_dates(soup, target)
 
-def testSpring() :
-    url = 'https://www.easternct.edu/academics/academic-calendar/index.html'
-    today = datetime.today()
-    target = 'Spring ' + str(today.year)
+def testSpring2026() :
+    url = 'https://www.easternct.edu/academics/academic-calendar/index.html'    
+    target = 'Spring 2026'
 
     soup = cc.get_target_webpage(url, target)
     df = cc.get_dates(soup, target)
@@ -32,7 +31,7 @@ def testInvalidYear() :
         df = cc.get_dates(soup, target)
     except Exception as err :
         print(err)
-        assert str(err) == 'Term FFFF 2025 not found in current or upcoming urls'
+        assert str(err) == 'Calendar for FFFF 2025 not found'
 
 def testGenerateSchedule() :
     start_date = datetime.strptime('08/02/2014', "%m/%d/%Y").date()

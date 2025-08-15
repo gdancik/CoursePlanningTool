@@ -18,17 +18,9 @@ The repository includes a *backend* consisting of a Flask application, a *fronte
 ###  Running the backend (flask) server 
 
 ```
-cd backend && flask run
+flask --app=backend:create_app run
 ```
 Flask is now running on localhost:5000
-
-The test flask application includes the following endpoints:
-- / - homepage
-- /login/ - logs in user
-- /logout/ - logs out user
-- /api/hello/ - returns greeting (login required)
-- /api/hi/ - returns greeting (login not required)
-- /generate/ - generates a word document
 
 ## Running the frontend (node/react) server 
 

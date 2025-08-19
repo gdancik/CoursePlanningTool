@@ -49,6 +49,7 @@ jobs:
     - name: Test code and show coverage
       env:
         GS_CREDENTIALS_JSON: ${{ secrets.GS_CREDENTIALS_JSON }}
+        GS_AUTH_JSON: ${{ secrets.GS_AUTH_JSON }}
       run: |
         pytest --cov=backend/services --cov-report=term-missing backend/tests/services/      
         # pytest --cov --cov-config=.coveragerc --cov-branch --cov-report=html --cov-report=term-missing tests_python 

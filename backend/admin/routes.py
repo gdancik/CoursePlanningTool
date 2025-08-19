@@ -5,11 +5,20 @@ from flask_login import current_user
 '''Admin page'''
 @admin_bp.route('/')
 def admin():
+    
+    header = '<h2> Admin Page </h2> <h3> Current user </h3>'
 
-    '''
-    if not current_user.is_authenticated :
-      return '<h2>Please login by clicking <a href = "/api/test_login/?user=annie&password=password">here</a></h2>'
-    '''
+    user = '<div>Not logged in</div><hr>'
+
+    if current_user.is_authenticated :
+       user = f'''
+       <div>
+              <ul>
+              <li> id: {current_user.id} </li>            
+              <ul>
+        </div>
+        <hr>
+              '''
 
     sheet = fs_stats.summarize_tables()
     
@@ -31,12 +40,11 @@ def admin():
           }}
     </style>
 
-    <h2> Admin Page </h2>
     <div class = 'firestore_table'>
+    <h3> Firestore stats </h3>
     {table_html}
     </div>
     </br>
     '''
-   
- 
-    return page
+
+    return header + user + page

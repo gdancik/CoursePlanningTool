@@ -29,13 +29,13 @@ def test_login() :
     if password != 'password' : 
         return 'invalid password', 401
         
-    user = User(username, username)
+    user = User(username)
     login_user(user)
 
     gs = get_gs_editor()
     gs.create_sheet()
 
-    return jsonify(user = username)    
+    return jsonify(id = username)    
 
 @test_api_bp.route('/test_data/', methods = ['GET'])
 @login_required

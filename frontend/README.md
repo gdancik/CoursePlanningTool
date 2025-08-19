@@ -1,3 +1,18 @@
+# Program Structure and Logic
+
+Important directories:
+- /public/data/*.csv -- csv file defining layout of various pages
+- /src/components -- individual components (e.g., modals, header, etc)
+- /src/navigation -- defines application endpoints
+- /src/screens -- individual pages
+
+
+
+
+***
+
+The code below was auto-generated.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

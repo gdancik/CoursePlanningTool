@@ -17,7 +17,7 @@ export default function GoogleLogin() {
     // Check if already logged in (after callback redirect)
     const checkLogin = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:5000/api/profile", {
+        const res = await fetch("http://127.0.0.1:5000/api/profile/", {
           credentials: "include",
         });
         if (res.ok) {

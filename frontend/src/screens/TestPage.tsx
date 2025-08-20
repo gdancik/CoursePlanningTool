@@ -4,6 +4,9 @@ import { showErrorModal } from "../utils/errorHandler";
 import RedirectingModal from './../components/RedirectingModal/RedirectingModal';
 import CompetencyTable from '../components/Tables/CompetencyTable1';
 import CompetencyTable2 from '../components/Tables/CompetencyTable2';
+
+import GoogleLogin from '../components/google_login.js'
+
 import {
     createSaveHandler,
     createSaveAndExitHandler,
@@ -72,6 +75,12 @@ const TestPage: React.FC = () => {
                 <li><Link to="/courseSchedule">Course Schedule Page</Link></li>
                 <li><Link to="/grade-table">Grade Table Page</Link></li>
             </ul>
+
+            <hr />
+            <h2>Google Login</h2>
+
+            <GoogleLogin></GoogleLogin>
+            <hr />
 
             <div style={{ marginTop: "2rem" }}>
                 <h2>Trigger Error Modals</h2>

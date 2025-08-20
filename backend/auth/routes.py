@@ -64,7 +64,7 @@ def oauth2callback():
     return redirect(url_for('auth.profile', _external = True))
 
 @login_required
-@auth_bp.route('profile') 
+@auth_bp.route('profile/') 
 def profile() :
     if not session['access_token']:
         return redirect(url_for('auth.google_login', _external = True))

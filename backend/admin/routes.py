@@ -20,9 +20,13 @@ def admin():
         <hr>
               '''
 
-    sheet = fs_stats.summarize_tables()
+    sheet_all = fs_stats.summarize_tables()
+    sheet_by_user = fs_stats.summarize_tables(byUser = True)
     
-    table_html = sheet.to_html(classes="data", index=False, border=1)
+    
+
+    sheet_all_html = sheet_all.to_html(classes="data", index=False, border=1)
+    sheet_by_user_html = sheet_by_user.to_html(classes="data", index=False, border=1)
     
     page = f'''
     <style>
@@ -41,10 +45,14 @@ def admin():
     </style>
 
     <div class = 'firestore_table'>
-    <h3> Firestore stats </h3>
-    {table_html}
+    <h3> Firestore stats (summary)</h3>
+    {sheet_all_html}
     </div>
     </br>
+    <div class = 'firestore_table'>
+    <h3> Firestore stats (by user)</h3>
+    {sheet_by_user_html}
+    </div>
     '''
 
     return header + user + page

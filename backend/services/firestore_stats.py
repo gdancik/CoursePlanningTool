@@ -1,5 +1,6 @@
 import sqlite3
 import pandas as pd
+from datetime import datetime
 
 '''
 Provides functionality for creating/updating/displaying tables to keep track of 
@@ -68,13 +69,27 @@ def increase_number_deletes(user_id, amount) :
 
 
 # TO DO: limit to current date?
-def get_table(table):
+def get_table(table, user_id = None, today = False):
     '''Returns a pandas data frame of all rows of 'table' '''
     conn = sqlite3.connect("firestore_stats.db")
     cursor = conn.cursor()
 
-    # Fetch all rows
-    cursor.execute(f"SELECT * FROM {table}")
+    qry = f"SELECT * FROM {table}"
+
+    if today :
+
+        t = datetime.now() - datetime(1970,1,1)    # calculate date_id
+
+        if user_id :
+            qry += f""" WHERE user_id = '{user_id}' AND date_id = {t.days}"""
+        
+        else :
+            qry += f""" WHERE date_id = {t.days}"""
+
+    elif user_id :
+        qry += f""" WHERE user_id = '{user_id}'"""
+
+    cursor.execute(qry)
     rows = cursor.fetchall()
 
     # Get column names from the cursor
@@ -88,14 +103,14 @@ def get_table(table):
     df['date_id'] = pd.to_datetime(df['date_id'], origin='1970-01-01', unit='D')
     return df
 
-def get_reads() :
-    return get_table('reads')
+def get_reads(user_id = None, today = False) :
+    return get_table('reads', user_id, today)
 
-def get_writes() :
-    return get_table('writes')
+def get_writes(user_id = None, today = False) :
+    return get_table('writes', user_id, today)
 
-def get_deletes() :
-    return get_table('deletes')
+def get_deletes(user_id = None, today = False) :
+    return get_table('deletes', user_id, today)
 
 
 def delete_all_tables():
@@ -138,7 +153,7 @@ def summarize_tables(byUser = False):
     final = final.dropna(how = 'all').fillna(0)
 
     if not byUser :
-        return final.drop('user_id', axis = 1).groupby('date_id').sum()
+        return final.drop('user_id', axis = 1).groupby('date_id', as_index = False).sum()
 
     return final
 

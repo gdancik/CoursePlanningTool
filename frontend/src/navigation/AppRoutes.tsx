@@ -12,6 +12,7 @@ import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
 import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
 import TestPage from "../screens/TestPage"
+import TestPage2 from "../screens/TestPage2"
 import ScheduleTest from "../components/courseSchedule"
 import GradeTable from "../components/Tables/gradeTable"
 
@@ -50,6 +51,7 @@ const AppRoutes = () => {
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
                 <Route path = "/test-page" element={<TestPage/>}/>
+                <Route path = "/test-page2" element={<TestPage2/>}/>
                 <Route path ="/courseSchedule" element={<ScheduleTest/>}/>
                 <Route path= "grade-table" element={<GradeTable/>} />
 

@@ -1,7 +1,7 @@
 import React from "react";
 import "./gradeTable.css";
 
-function GradeTable() {
+function GradeTable(props) {
   const gradeLetter = [
     "A",
     "A-",
@@ -33,7 +33,7 @@ function GradeTable() {
   return (
     <div>
       <h1>Grade Table</h1>
-      <table>
+      <table id = {props.id}>
         <tr>
           <th>Grade</th>
           <th>Percentage Interval</th>

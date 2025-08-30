@@ -26,18 +26,33 @@ function get_table_records(mytable, ignore_last_two = false) {
     return result;
 };
 
+// returns a list of all checked checkboxes from element 'x',
+// or returns a string if 'x' has data-type set to "string" 
+function get_checkboxes(x) {
+        let res = {};
+        let val = [...x.querySelectorAll('input[type="checkbox"]')].filter((x)=>x.checked).map(
+          y => y.value
+        );
+        if (x.dataset.type == "string") {
+          val = val.join('');
+        }
+        res[x.id] = val;
+        return res;
+}
 
 // ref is a useRef to the relevant component
 const saveData = async(ref) => {
 
-   // we assume ids end with either:
-   //    - list -- use get_table_records()
-   //    - json -- TO DO -- not clear yet how to handle this
-   //    - everything else --  extract value
+   // we process the following:
+   //    - input[type = "text"] -- saves text
+   //    - select -- saves the selected value
+   //    - table[id$="_list"] -- saves table as a nested list
+   //    - div[id$="_checkboxes"] -- saves a list of all checked values, or a string
+   //                 if data-type = "string"
       
     // process plain text
     let res_text = 
-        [... ref.current.querySelectorAll('input:not([id$="_list"]):not([id$="_json"])')].map(
+        [... ref.current.querySelectorAll('input[type = "text"]')].map(
           x => {
             let res = {};
             res[x.id] = x.value;
@@ -45,22 +60,35 @@ const saveData = async(ref) => {
          }
     );
   
+    // process dropdowns
+    let res_select = 
+        [... ref.current.querySelectorAll('select')].map(
+          x => {
+            let res = {};
+            res[x.id] = x.value;
+            return res;
+         }
+    );
+
+
     // process tables as nested lists
-    let res_list = [... ref.current.querySelectorAll('table[id$="_list"]')].map(
-      // TO DO need to set true/false appropriately
+    let res_list = [...ref.current.querySelectorAll('table[id$="_list"]')].map(
+      // TO DO: we can check x.dataset.ignore_last_two to ignore the last two columns
       x => get_table_records(x,false)   
+    );
+
+    // process tables as nested lists
+    let res_checkboxes = [...ref.current.querySelectorAll('div[id$="_checkboxes"]')].map(
+      x => get_checkboxes(x)      
     );
 
     // TO DO: values ending in '_json' need to be handled; are there others?
 
     let result = []
-    if (res_text.length > 0) {
-      result.push(res_text);
-    }
-
-    if (res_list.length > 0) {
-      result.push(res_list);
-    }
+    result.push(...res_text);  
+    result.push(...res_select)
+    result.push(...res_list);
+    result.push(...res_checkboxes);
 
     alert(JSON.stringify(result));
 

@@ -11,7 +11,12 @@ def admin():
       return '<h2>Please login by clicking <a href = "/api/test_login/?user=annie&password=password">here</a></h2>'
     '''
 
-    sheet = fs_stats.summarize_tables()
+    # Create database tables if they don't exist
+    try:
+        fs_stats.create_tables()
+        sheet = fs_stats.summarize_tables()
+    except Exception as e:
+        return f'<h2>Database Error: {str(e)}</h2><p>Please check the database setup.</p>'
     
     table_html = sheet.to_html(classes="data", index=False, border=1)
     

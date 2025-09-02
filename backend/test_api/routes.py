@@ -32,8 +32,14 @@ def test_login() :
     user = User(username, username)
     login_user(user)
 
-    gs = get_gs_editor()
-    gs.create_sheet()
+    # Try to create Google Sheet, but don't fail if credentials are missing
+    try:
+        gs = get_gs_editor()
+        gs.create_sheet()
+    except Exception as e:
+        # Log the error but continue with login
+        import logging
+        logging.warning(f"Could not create Google Sheet (missing credentials): {e}")
 
     return jsonify(user = username)    
 

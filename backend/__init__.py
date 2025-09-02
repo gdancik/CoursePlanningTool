@@ -66,4 +66,7 @@ def create_app(config = Config):
         
     return app
 
+# Create a default app instance for Flask CLI
+app = create_app()
+
 

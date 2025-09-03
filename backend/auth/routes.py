@@ -2,7 +2,7 @@ from flask import request, session, jsonify
 from flask_login import UserMixin, login_user, login_required, logout_user, current_user
 
 #from backend.services.gs_editor import gsEditor
-from backend.services.app_services import get_gs_editor
+from backend.services.app_services import get_fs_editor
 
 from . import auth_bp
 import logging

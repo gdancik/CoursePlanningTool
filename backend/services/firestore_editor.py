@@ -42,22 +42,22 @@ class fsEditor:
             firestore.client: The Firestore client used to interact with the database.
         '''
         logging.info('Creating FS client')
-        # Access the environmental variable
-        service_account_info = os.getenv('GS_CREDENTIALS_JSON')
+          # Check if a Firebase app is already initialized
+        if not firebase_admin._apps:
+            # Access the environmental variable
+            service_account_info = os.getenv('GS_CREDENTIALS_JSON')
+            if service_account_info:
+                # Parse the JSON string into a dictionary
+                service_account = json.loads(service_account_info)
+                # Initialize Firebase Admin SDK
+                cred = credentials.Certificate(service_account)
+                # Initialize the Firebase app
+                firebase_admin.initialize_app(cred)
+            else:
+                # If the environmental variable is not set, handle it accordingly
+                raise ValueError("No service account credentials found in environmental variables.")
 
-        if service_account_info:
-            # Parse the JSON string into a dictionary
-            service_account = json.loads(service_account_info)
-
-            # Initialize Firebase Admin SDK
-            cred = credentials.Certificate(service_account)
-        
-        else:
-            # If the environmental variable is not set, you can handle it accordingly
-            raise ValueError("No service account credentials found in environmental variables.")
-
-        app = firebase_admin.initialize_app(cred)
-
+        # Get the default Firestore client
         client = firestore.client()
         return client
 

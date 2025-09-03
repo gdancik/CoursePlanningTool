@@ -7,7 +7,7 @@ import io
 
 from backend.models.login import User
 import backend.services.course_planning as cp
-from backend.services.app_services import get_gs_editor
+from backend.services.app_services import get_fs_editor
 
 from . import test_api_bp
 
@@ -32,8 +32,8 @@ def test_login() :
     user = User(username, username)
     login_user(user)
 
-    gs = get_gs_editor()
-    gs.create_sheet()
+    fs = get_fs_editor()
+    
 
     return jsonify(user = username)    
 
@@ -46,14 +46,14 @@ def test_data() :
     '''
 
     try :
-        gs = get_gs_editor()
-        gs.create_sheet()
+        fs = get_fs_editor()
+        fs.set_collection_name()
 
         course_id = 'test'
 
         d = {col: col + '1' for col in cp.columns if col != 'course_id'}
 
-        gs.updateValue(course_id, d)
+        fs.updateValue(course_id, d)
     
     except Exception as e :
         return jsonify({"error": str(e)}), 400
@@ -113,7 +113,7 @@ def generate():
 @test_api_bp.route('shareSheet/', methods=['POST'])
 @login_required
 def shareSheet():
-    gs = get_gs_editor()
+    fs = get_fs_editor()
     try:
         data = request.get_json()                
         email = data.get('email')
@@ -121,7 +121,7 @@ def shareSheet():
             return jsonify({"error": "email is required"}), 400
 
         # Call the create_sheet method        
-        id = gs.create_sheet(email = email)
+        id = fs.set_collection_name(email = email)
         url = 'https://docs.google.com/spreadsheets/d/' + id
         # Return the result as JSON
         return jsonify({'id': id, 'url': url})

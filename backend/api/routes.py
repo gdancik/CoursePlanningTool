@@ -11,7 +11,7 @@ import backend.services.course_planning as cp
 
 #from backend.services.gs_editor import gsEditor
 from flask_login import current_user
-from backend.services.app_services import get_gs_editor
+from backend.services.app_services import get_fs_editor
 from . import api_bp
 import logging
 
@@ -47,8 +47,8 @@ def missing_params(param_list) :
 @api_bp.route('preview/', methods=['POST'])
 # @login_required
 def preview():
-    gs = get_gs_editor()
-    logging.debug(f'Created gs_editor object')
+    fs = get_fs_editor()
+    logging.debug(f'Created fs_editor object')
 
     logging.info('Attempting syllabus download')
 
@@ -81,7 +81,7 @@ def preview():
     #return jsonify({"result": "created doc"}), 200
     logging.debug(f'current_user.id: {current_user.id }')
     sheet_name = current_user.id 
-    title = generate_syllabus(doc,course_id,sheet_name)#Can add url as parameter if syllabus webapage url changes
+    title = generate_syllabus(doc,course_id,sheet_name) #Can add url as parameter if syllabus webapage url changes
 
     # Save to a BytesIO stream
     logging.debug(f'Saving to BytesIO stream')
@@ -100,12 +100,12 @@ def preview():
         mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
 
-'''Calls the getValue function from the gs_editor.py module'''
+'''Calls the getValue function from the fs_editor.py module'''
 @api_bp.route('getValue/', methods=['POST'])
 @login_required
 def getValue():
-    gs = get_gs_editor()
-    logging.debug(f'Created gs_editor object')
+    fs = get_fs_editor()
+    logging.debug(f'Created fs_editor object')
     try:
         logging.debug('Fetching data...')
         data = request.get_json()
@@ -118,7 +118,7 @@ def getValue():
 
         # Call the getValue function
         logging.info("Retrieving Value from Sheet")
-        sheet = gs.getValue(course_id, columns)
+        sheet = fs.getValue(course_id, columns)
         
         # Check if sheet is None
         if sheet is None:
@@ -130,12 +130,12 @@ def getValue():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-'''Calls the updateValue function from the gs_editor.py module'''
+'''Calls the updateValue function from the fs_editor.py module'''
 @api_bp.route('updateValue/', methods=['POST'])
 @login_required
 def updateValue():
-    gs = get_gs_editor()
-    logging.debug(f'Created gs_editor object')
+    fs = get_fs_editor()
+    logging.debug(f'Created fs_editor object')
     try:
         logging.debug(f'Fetching data...')
         data = request.get_json()
@@ -150,18 +150,18 @@ def updateValue():
 
         # Call the updateValue function
         logging.info("Updating a value in the google sheet")
-        gs.updateValue(course_id, columns)
+        fs.updateValue(course_id, columns)
         return jsonify('Function called successfully')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
-'''Calls the delete_course function from the gs_editor.py module'''
+'''Calls the delete_course function from the fs_editor.py module'''
 @api_bp.route('deleteCourse/', methods=['POST'])
 @login_required
 def deleteCourse():
-    gs = get_gs_editor()
-    logging.debug(f'Created gs_editor object')
+    fs = get_fs_editor()
+    logging.debug(f'Created fs_editor object')
     try:
         logging.debug(f'Fetching data...')
         data = request.get_json()
@@ -173,7 +173,7 @@ def deleteCourse():
 
         # Call the updateValue function
         logging.info("deleting course")
-        gs.delete_course(course_id)
+        fs.delete_course(course_id)
         return jsonify({"course_id": course_id})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -204,17 +204,17 @@ def getNewCourseId():
 
         return jsonify(course_id = '4')
 
-'''Calls the read_sheet function from the gs_editor.py module'''
+'''Calls the read_sheet function from the fs_editor.py module'''
 @api_bp.route('getSheet/', methods=['POST'])
 @login_required
 def getSheet():
-    gs = get_gs_editor()
-    logging.debug(f'Created gs_editor object')
+    fs = get_fs_editor()
+    logging.debug(f'Created fs_editor object')
     try:
 
         # Call the read_sheet function
         logging.info('Reading the google sheet')
-        sheet = gs.read_sheet()
+        sheet = fs.read_sheet()
 
         # Check if sheet is None
         if sheet is None:
@@ -255,11 +255,11 @@ def generateSchedule():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-'''Calls the createNewCourse function from the gs_editor.py module'''
+'''Calls the createNewCourse function from the fs_editor.py module'''
 @api_bp.route('createNewCourse/', methods=['POST'])
 @login_required
 def createNewCourse():
-    gs = get_gs_editor()
+    fs = get_fs_editor()
     logging.debug(f'Created gs_editor object')
     try:
         logging.debug(f'Fetching data')
@@ -272,24 +272,24 @@ def createNewCourse():
 
         # Call the createNewCourse function
         logging.info('Calling createNewCourse function')
-        courseId = gs.createNewCourse(columns)
+        courseId = fs.createNewCourse(columns)
         return jsonify({'courseId:': courseId})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 
-'''Calls the duplicateCourse function from the gs_editor.py module'''
+'''Calls the duplicateCourse function from the fs_editor.py module'''
 @api_bp.route('duplicateCourse/', methods=['POST'])
 @login_required
 def duplicateCourse():
-    gs = get_gs_editor()
+    fs = get_fs_editor()
     try:
         logging.debug(f'Fetching data')
         data = request.get_json()
         course_id = data.get('course_id')
         logging.debug(f'Fetched course_id: {course_id}')
 
-        courseId = gs.duplicateCourse(course_id)
+        courseId = fs.duplicateCourse(course_id)
         return jsonify({'courseId:': courseId})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -12,6 +12,8 @@ def admin():
 
     fs = get_fs_editor()
     fs.set_collection_name()
+    fs = get_fs_editor()
+    fs.set_collection_name()
 
     sheet = fs.read_sheet()
     url = f'https://docs.google.com/spreadsheets/d/{fs.id}'

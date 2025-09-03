@@ -356,6 +356,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     # Process dictionary to remove "_json" suffix from keys
     json_columns = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_json')}
     logging.debug('Removing "_json" from the column names')
+    logging.debug(f'json_columns:{json_columns}')
     
     # Process dictionary to handle table placeholders
     tables_col = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_list')}

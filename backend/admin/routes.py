@@ -1,10 +1,22 @@
 from . import  admin_bp
 from backend.services import firestore_stats as fs_stats
+from backend.services.app_services import get_fs_editor
 from flask_login import current_user
 
 '''Admin page'''
 @admin_bp.route('/')
 def admin():
+
+    if not current_user.is_authenticated :
+      return '<h2>Please login by clicking <a href = "/api/test_login/?user=annie&password=password">here</a></h2>'
+
+    fs = get_fs_editor()
+    fs.set_collection_name()
+    fs = get_fs_editor()
+    fs.set_collection_name()
+
+    sheet = fs.read_sheet()
+    url = f'https://docs.google.com/spreadsheets/d/{fs.id}'
     
     header = '<h2> Admin Page </h2> <h3> Current user </h3>'
 

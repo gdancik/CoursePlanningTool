@@ -1,8 +1,9 @@
 from flask import request, redirect, session, jsonify, url_for
 from flask_login import UserMixin, login_user, login_required, logout_user, current_user
 
-from backend.services.app_services import get_gs_editor
 from backend.models.login import User
+#from backend.services.gs_editor import gsEditor
+from backend.services.app_services import get_fs_editor
 
 import google_auth_oauthlib.flow
 import logging, json, os, requests

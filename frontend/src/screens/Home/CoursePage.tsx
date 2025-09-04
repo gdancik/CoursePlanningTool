@@ -5,7 +5,8 @@ import { createCourseHandler } from '../../utils/handlers/courseHandler';
 import {
     createDeleteRowHandler,
     createEditHandler,
-    createPreviewHandler
+    createPreviewHandler,
+    createDuplicateRowHandler
 } from "../../utils/handlers/courseButtonHandler";
 import { getCourses, Course } from '../../services/course/courseService';
 import StandardHeader from '../../components/Header/standardHeader';
@@ -79,6 +80,9 @@ const CoursePage: React.FC = () => {
 
     const handleDeleteCourse = createDeleteRowHandler(redirectModalControls, setCourses);
 
+    const handleDuplicateCourse = createDuplicateRowHandler(redirectModalControls, setCourses);
+
+
     // Guard: redirect if not logged in (after hooks)
     if (!user) {
         return <Navigate to="/" replace />;
@@ -121,7 +125,7 @@ const CoursePage: React.FC = () => {
                                         key={course.course_id}
                                         course={course}
                                         onEdit={() => handleEditCourse(course.course_id)}
-                                        onDuplicate={() => console.log('Duplicate', course.course_id)}
+                                        onDuplicate={() => handleDuplicateCourse(course.course_id)}
                                         onDelete={() => handleDeleteCourse(course.course_id)}
                                         onDownload={() => handlePreviewCourse(course.course_id, course.course_title_syllabus)}
                                     />

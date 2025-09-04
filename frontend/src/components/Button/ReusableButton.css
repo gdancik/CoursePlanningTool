@@ -1,4 +1,5 @@
 .reusable-button {
+    font-size: 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -9,7 +10,7 @@
     cursor: pointer;
 }
 .reusable-button.primary{
-    background: #00a859;
+    background: #034BA6;
     color: #ffffff;
 }
 .reusable-button.secondary {
@@ -18,18 +19,14 @@
 
 }
 
-.reusable-button.secondary{
-    background: #f5f5f5;
-    color: #002e5d;
-}
 
 .reusable-button.green {
-    background: #034BA6;
+    background: #03A65D;
     color: #fff;
 }
 
 .reusable-button.exit{
-    background: #cf0a2c;
+    background: #012460;
     color: #ffffff;
 }
 
@@ -40,4 +37,9 @@
 .button-icon {
     display: flex;
     align-items: center;
+}
+.Home {
+    width: 4rem;
+    height: 1.2rem;
+
 }

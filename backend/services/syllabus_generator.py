@@ -8,7 +8,7 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn 
 
 import backend.services.doc_editor as de
-import backend.services.gs_editor as gse
+import backend.services.firestore_editor as fse
 import backend.services.course_planning as cp
 import re
 import logging
@@ -321,13 +321,13 @@ def generate_grading_policies(doc, policies:list):
                 run_description.italic = False
                 
 def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_statment_webpage_url:str='https://www.easternct.edu/center-for-teaching-learning-and-assessment/syllabus-statements/index.html'):
-    """
+    """ 
     Generates a syllabus document by replacing placeholders with actual values.
 
     Args:
         doc (Document): The Word document object to be modified.
         course_id (str): The ID of the course for which the syllabus is generated.
-        sheet_name (str): The name of the Google Sheets document to retrieve course data from.
+        sheet_name (str): The name of the document to retrieve course data from.
         syllabus_statment_webpage_url (str, optional): The URL of the syllabus statement webpage. Defaults to a specific URL.
     Returns:
         Title(str): The title of the syllabus document, which is a combination of course information.
@@ -341,10 +341,12 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
             return True
         return False
     
-    # Retrieve course data using gsEditor
-    gs = gse.gsEditor(sheet_name)
+    # Retrieve course data using fsEditor
+    fs = fse.fsEditor(sheet_name)
     column_names = cp.columns
-    fr_dict = gs.getValue(course_id, column_names)
+
+    fr_dict = fs.getValue(course_id, column_names)
+
 
     # Process dictionary to remove "_syllabus" suffix from keys
     syllabus_col = {key[:-9]: value for key, value in fr_dict.items() if key.endswith('_syllabus')}
@@ -354,6 +356,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     # Process dictionary to remove "_json" suffix from keys
     json_columns = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_json')}
     logging.debug('Removing "_json" from the column names')
+    logging.debug(f'json_columns:{json_columns}')
     
     # Process dictionary to handle table placeholders
     tables_col = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_list')}
@@ -363,9 +366,13 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     policies = fr_dict.get('policy_statements',None)
     try:
         logging.debug(f'string before conversion to literal:{policies}')
-        policies = json.loads(policies)
+        if policies == None:
+            pass    
+        else:
+            policies = json.loads(policies)
     except ValueError as e:
         logging.error(f"Error converting string to literal: {e}")
+        
 
     logging.debug(f'policies: {policies}, type:{type(policies)}')#debug
 
@@ -377,7 +384,10 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     resource_policies = fr_dict.get('university_resources',None)
     try:
         logging.debug(f'string before conversion to literal:{resource_policies}')
-        resource_policies = json.loads(resource_policies)
+        if resource_policies == None:
+            pass
+        else:
+            resource_policies = json.loads(resource_policies)
     except ValueError as e:
             logging.error(f"Error converting string to literal: {e}")
     logging.debug(f'resource_policies: {resource_policies}, type:{type(resource_policies)}')#debug
@@ -403,7 +413,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
             if key in paragraph.text:
                 list_of_dicts = json_columns.get(key)
                 try:
-                    logging.debug(f'string before conversion to literal:{list_of_dicts}')
+                    logging.debug(f'string before conversion to literal list_of_dicts:{list_of_dicts}')
                     list_of_dicts= json.loads(list_of_dicts)
                 except ValueError as e:
                     logging.error(f"Error converting string to literal: {e}")

@@ -98,7 +98,7 @@ def get_target_webpage(url, target):
         a = soup.find(lambda element: element.name =='a' and 'Upcoming Academic Calendar' in element.text.strip())
 
         if not a :
-            raise Exception('Upcoming calendar not found')
+            raise Exception(f'Calendar for {target} not found')
 
         i = url.rfind('/')
         url = url[:i] + '/' + a['href']

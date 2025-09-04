@@ -7,6 +7,8 @@
     align-items: center;
     border: 2px solid #c5c5c5;
     border-radius: 8px;
+    margin-left: 1.5rem;
+    margin-right: 0.5rem;
     padding: 1.25rem 1.5rem;
     margin-bottom: 1.2rem;
     background-color: white;
@@ -14,6 +16,7 @@
 }
 
 .card-title-area {
+
     flex: 0 0 25%;
     font-size: 1.8rem;
     font-weight: 700;
@@ -40,7 +43,7 @@
 }
 
 .icon {
-    font-size: 1.7rem;
+    font-size: 2.3rem;
     color: #002e5d;
 }
 
@@ -48,4 +51,17 @@
     font-size: 0.75rem;
     font-weight: 500;
     color: #002e5d;
+}
+.Editicon{
+    width: 2.3rem;
+    height: 2.3rem;
+}
+
+.section-icons {
+    width: 5rem;
+    height: 5rem;
+    object-fit: contain;
+    justify-content: center;
+    align-items: center;
+    margin-right: 4rem;
 }

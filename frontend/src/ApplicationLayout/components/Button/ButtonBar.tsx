@@ -2,6 +2,7 @@ import React from "react";
 import ReusableButton from "../../../components/Button/ReusableButton";
 import {FaArrowLeft, FaArrowRight, FaEye, FaRegSave, FaRegWindowClose} from "react-icons/fa";
 import SafeIcon from "../../../utils/ComponentWrapper";
+import HomeButton from "../../../assets/images/HomeButton.png"
 import "./ButtonBar.css";
 
 interface ButtonBarProps {
@@ -49,8 +50,8 @@ const ButtonBar: React.FC<ButtonBarProps> = ({
 
             {/* Save & Exit Button */}
             <ReusableButton
-                label="Save & Exit"
-                icon={<SafeIcon Icon={FaRegWindowClose} />} // Close icon
+                label=""
+                icon={<img src = {HomeButton} alt = "Home" className="Home"/>} // Close icon
                 variant="exit"                               // Exit styling variant
                 onClick={onSaveAndExit}                      // Call the onSaveAndExit callback if provided
             />

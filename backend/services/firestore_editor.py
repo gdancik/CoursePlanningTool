@@ -14,7 +14,6 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import logging
 from typing import Dict, Any
-import backend.services.course_planning as cp
 import backend.services.firestore_stats as fs_stats
 
 # create stat tables
@@ -65,7 +64,7 @@ class fsEditor:
         client = firestore.client()
         return client
 
-    def set_collection_name(self, collection_name: str="CPT_Data"):
+    def set_collection_name(self, collection_name: str):
         '''
         Sets the name of the firestore collection to be used.
         Args:
@@ -75,7 +74,7 @@ class fsEditor:
         if collection_name != self.collection_name :
             self.collection_name = collection_name
 
-    def createNewCourse(self, values_dict: Dict[str, Any],course_id: str = None):
+    def createNewCourse(self, values_dict: Dict[str, Any]):
         '''
         Creates a new course in the Firestore database with the provided values.
         Args:
@@ -87,31 +86,41 @@ class fsEditor:
         logging.debug(f'Update time create and edited columns')
         values_dict['created_at'] = firestore.SERVER_TIMESTAMP
         values_dict['last_edited'] = firestore.SERVER_TIMESTAMP
-        validated_dict =  {}
-        valid_col = cp.columns
        
-       #check if cols are valid
-        for key, val in values_dict.items():
-            if key in valid_col:
-                validated_dict[key] = val
-            else:
-                logging.warning(f'Column: {key} not a valid column, skipping this column')
-
         fs_stats.increase_number_writes(self.collection_name, 1)
-        course_ref = self.client.collection(self.collection_name).add(validated_dict)
+        course_ref = self.client.collection(self.collection_name).add(values_dict)
         return course_ref[1].id
 
-    def read_collection(self):
+    def read_collection(self, id_only = False):
         '''
-        Reads the entire sheet from the Firestore database and returns it as a pandas DataFrame.
-        Returns:
+        Reads the entire sheet from the Firestore database and returns it as a pandas 
+        DataFrame, or if 'id_only' is True, returns a list of ids
+        Returns one of the following:
             pd.DataFrame: A DataFrame containing all the documents in the specified Firestore collection.
+            list: A list of ids corresponding to all documents in the collection
         '''
         docs = self.client.collection(self.collection_name).stream()
-        sheet = [{**doc.to_dict()} for doc in docs]
-        df = pd.DataFrame(sheet)
+        
+        if id_only:
+           return [doc.id for doc in docs]
+        
+       	docs = [(doc.id, doc) for doc in docs]
+        
+        sheet = [{'_course_id': id, **doc.to_dict()} for id, doc in docs]
+        df = pd.DataFrame(sheet).set_index('_course_id', drop = True)
         fs_stats.increase_number_reads(self.collection_name, df.shape[0])
         return df
+
+    
+    def getCourse(self, course_id) :
+        ''''
+        Returns a dictionary of values for the document with id of 'course_id'
+        '''
+        fs_stats.increase_number_reads(self.collection_name, 1)
+        course_ref = self.client.collection(self.collection_name).document(course_id)
+        course = course_ref.get()
+        return course.to_dict()
+
 
     def getValue(self, course_id: str,columns: str) -> str:
         '''
@@ -123,6 +132,7 @@ class fsEditor:
         fs_stats.increase_number_reads(self.collection_name, 1)
         course_ref = self.client.collection(self.collection_name).document(course_id)
         course = course_ref.get()
+
         if course.exists:
             doc_data = course.to_dict()
         else:
@@ -151,21 +161,11 @@ class fsEditor:
         fs_stats.increase_number_reads(self.collection_name, 1)
         course_ref = self.client.collection(self.collection_name).document(course_id)
         values_dict['last_edited'] = firestore.SERVER_TIMESTAMP
-
-        validated_dict =  {}
-        valid_col = cp.columns
-       
-       #check if cols are valid
-        for key, val in values_dict.items():
-            if key in valid_col:
-                validated_dict[key] = val
-            else:
-                logging.warning(f'Column: {key} not a valid column, skipping this column')
-
+ 
         fs_stats.increase_number_writes(self.collection_name, 1)
-        course_ref.update(validated_dict)
+        course_ref.update(values_dict)
        
-    def duplicateCourse(self,orginal_course_id):
+    def duplicateCourse(self,original_course_id):
         '''
         Duplicates a course by creating a new course with the same data as the original course.
 
@@ -175,26 +175,45 @@ class fsEditor:
             new_course_id (str): The course ID of the newly created course.
         '''
         fs_stats.increase_number_reads(self.collection_name, 1)
-        course_ref = self.client.collection(self.collection_name).document(orginal_course_id)
+        course_ref = self.client.collection(self.collection_name).document(original_course_id)
         course = course_ref.get()
-
-        if course.exists:
-            doc_data = course.to_dict()
-
-        self.createNewCourse(doc_data)
+        
+        if not course.exists:
+            raise Exception(f'Error: course does not exist: {original_course_id}')
+        
+        doc_data = course.to_dict()
+        return self.createNewCourse(doc_data)
+        
 
     def delete_course(self, course_id):
         '''
         Deletes a course document from the Firestore database.
         Args:
             course_id (str): The course ID of the document to be deleted.
+        
+        Note: firestore does not throw an error if the document doesn't exist!
         '''
 
-        fs_stats.increase_number_deletes(1)
+        fs_stats.increase_number_deletes(self.collection_name, 1)
         course_ref = self.client.collection(self.collection_name).document(course_id)
         course_ref.delete()
 
         pass
+
+    def delete_field(self, id, field) :
+        '''
+        Deletes 'field' from record with given 'id'. If 'id' is None,
+        then the 'field' from all records in the collection are deleted
+        '''
+        if id :
+            ref = self.client.collection(self.collection_name).document(id)
+            fs_stats.increase_number_deletes(self.collection_name, 1)
+            ref.update({field: firestore.DELETE_FIELD})
+        else :
+            ids = self.read_collection(id_only = True)
+            for id in ids :
+                self.delete_field(id, field)
+
 
     def collection_exists(self,):
         '''
@@ -208,6 +227,7 @@ class fsEditor:
             collection_ref = self.client.collection(self.collection_name)
 
             # Attempt to retrieve one document
+            fs_stats.increase_number_reads(self.collection_name, 1)
             docs = collection_ref.limit(1).stream()
 
             # Check if any document exists

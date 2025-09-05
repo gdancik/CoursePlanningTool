@@ -8,7 +8,7 @@ import json
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
 
 from backend import create_app 
-from backend.services.app_services import get_gs_editor
+from backend.services.app_services import get_fs_editor
 
 # fixture sets up client once for all tests in this file
 @pytest.fixture(scope="module")

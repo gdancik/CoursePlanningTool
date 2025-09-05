@@ -1,22 +1,20 @@
 from . import  admin_bp
 from backend.services import firestore_stats as fs_stats
 from backend.services.app_services import get_fs_editor
+from backend.services.firestore_editor import fsEditor
 from flask_login import current_user
 
 '''Admin page'''
 @admin_bp.route('/')
 def admin():
 
+    
     if not current_user.is_authenticated :
-      return '<h2>Please login by clicking <a href = "/api/test_login/?user=annie&password=password">here</a></h2>'
-
-    fs = get_fs_editor()
-    fs.set_collection_name()
-    fs = get_fs_editor()
-    fs.set_collection_name()
-
-    sheet = fs.read_sheet()
-    url = f'https://docs.google.com/spreadsheets/d/{fs.id}'
+        fs = fsEditor('NO USER')
+    else :
+        fs = get_fs_editor()  
+    
+    #sheet = fs.read_collection()
     
     header = '<h2> Admin Page </h2> <h3> Current user </h3>'
 
@@ -31,12 +29,10 @@ def admin():
         </div>
         <hr>
               '''
-
+       
     sheet_all = fs_stats.summarize_tables()
     sheet_by_user = fs_stats.summarize_tables(byUser = True)
     
-    
-
     sheet_all_html = sheet_all.to_html(classes="data", index=False, border=1)
     sheet_by_user_html = sheet_by_user.to_html(classes="data", index=False, border=1)
     

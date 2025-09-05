@@ -4,7 +4,8 @@ from flask_cors import CORS
 from backend.models.login import login_manager 
 
 from backend.main import main_bp
-from backend.api import api_bp
+from backend.api_firestore import api_firestore_bp
+from backend.api_misc import api_misc_bp
 from backend.auth import auth_bp
 from backend.admin import admin_bp
 
@@ -40,7 +41,8 @@ def create_app(config = Config):
 
     app.register_blueprint(main_bp)
     app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(api_firestore_bp, url_prefix='/api')
+    app.register_blueprint(api_misc_bp, url_prefix='/api')
     app.register_blueprint(auth_bp, url_prefix='/api')
 
     if app.config['DEBUG'] :

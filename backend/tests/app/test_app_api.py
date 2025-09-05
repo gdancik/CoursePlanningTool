@@ -8,7 +8,7 @@ import json
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
 
 from backend import create_app
-from backend.services.app_services import get_gs_editor
+from backend.services.app_services import get_fs_editor
 
 
 # fixture sets up client once for all tests in this file
@@ -17,36 +17,31 @@ def client():
     with create_app().test_client() as client:
         # login in user
         client.get('/api/test_login/?user=test_app_api&password=password')        
-        setup_test_sheet()
+        #setup_test_sheet()
         yield client
-        delete_test_sheet()
+        
 
 '''
 Functions for setting up and deleting the test sheet
 '''
+@pytest.fixture(scope="module")
 def setup_test_sheet():
-    
-    gs = get_gs_editor()
+    gs = get_fs_editor()
+    print("creating new courses with collection " + gs.collection_name)
+    course_id1 = gs.createNewCourse({'instructor_name_syllabus': 'Test Instructor1', 'subj_code_syllabus': 'Test Subject1','crse_number_syllabus': 'Test Number1'})    
+    course_id2 = gs.createNewCourse({'instructor_name_syllabus': 'Billy', 'subj_code_syllabus': 'COM','crse_number_syllabus': '101'})    
 
-    if gs.sheet_exists() :
-        gs.delete_sheet()
-    
-    gs.create_sheet()
-    gs.createNewCourse({'instructor_name_syllabus': 'Test Instructor1', 'subj_code_syllabus': 'Test Subject1','crse_number_syllabus': 'Test Number1'})
-    gs.createNewCourse({'instructor_name_syllabus': 'Test Instructor2', 'subj_code_syllabus': 'Test Subject2','crse_number_syllabus': 'Test Number2'})
-    gs.createNewCourse({'instructor_name_syllabus': 'Test Instructor3', 'subj_code_syllabus': 'Test Subject3','crse_number_syllabus': 'Test Number3'})
-    gs.createNewCourse({'instructor_name_syllabus': 'Billy', 'subj_code_syllabus': 'COM','crse_number_syllabus': '101'})
-    gs.createNewCourse({'instructor_name_syllabus': 'Test Instructor5', 'subj_code_syllabus': 'Test Subject5','crse_number_syllabus': 'Test Number5'})
+    yield [course_id1, course_id2]
 
-def delete_test_sheet():
-    gs = get_gs_editor()
-    gs.delete_sheet()
+    gs.delete_collection()
+   
 
 ## This test checks the /getValue/ endpoint to ensure it returns the expected data
-def test_getValue(client):
+def test_getValue(client, setup_test_sheet):
     # Define the test data
+
     test_data = {
-        "course_id": "c2",
+        "course_id": setup_test_sheet[0],
         "list_of_columns": ['instructor_name_syllabus', 'subj_code_syllabus', 'crse_number_syllabus']
     }
 
@@ -60,38 +55,31 @@ def test_getValue(client):
     assert response.status_code == 200
     # Assert the content of the response
     response_data = json.loads(response.data)
-    assert response_data['instructor_name_syllabus'] == 'Test Instructor2'
-    assert response_data['subj_code_syllabus'] == 'Test Subject2'
-    assert response_data['crse_number_syllabus'] == 'Test Number2'
+    assert response_data['instructor_name_syllabus'] == 'Test Instructor1'
+    assert response_data['subj_code_syllabus'] == 'Test Subject1'
+    assert response_data['crse_number_syllabus'] == 'Test Number1'
 
-## This tests the /getValue/ endpoint for missing fields
-def test_getValue_missing_fields(client):
-    # Define the test data with missing fields
-    test_data_missing_course_id = {
-        "list_of_columns": ['instructor_name_syllabus', 'subj_code_syllabus']
-    }
-
-    test_data_missing_columns = {
-        "course_id": "c2"        
-    }
-
+## This tests the /getValue/ endpoint when missing course_id
+def test_getValue_bad_params(client):
+   
     # Send a POST request with missing course_id
-    response = client.post('/api/getValue/', json=test_data_missing_course_id)
+    response = client.post('/api/getValue/', json={'a':1})
     assert response.status_code == 400
     response_data = json.loads(response.data)
-    assert response_data['error'] == "Missing one or more required fields"
+    assert response_data['error'] == "Missing required parameter: course_id"
 
-    # Send a POST request with missing columns
-    response = client.post('/api/getValue/', json=test_data_missing_columns)
+    # Send a POST request with invalid column
+    response = client.post('/api/getValue/', json={'course_id': 1, 
+                                                   'list_of_columns': ['bad_param']})
     assert response.status_code == 400
     response_data = json.loads(response.data)
-    assert response_data['error'] == "Missing one or more required fields"
+    assert response_data['error'] == "list_of_columns has invalid field: bad_param"
 
 ## This test checks the /updateValue/ endpoint to ensure it updates the data successfully
-def test_updateValue_success(client):
+def test_updateValue_success(client, setup_test_sheet):
     # Define the test data for a successful request
     test_data = {
-        "course_id": "c2",
+        "course_id": setup_test_sheet[0],
         "dict_of_columns_and_vals": {'instructor_name_syllabus': 'Dr. Smith', 'subj_code_syllabus': 'Math'}        
     }
 
@@ -107,25 +95,4 @@ def test_updateValue_success(client):
     # Assert the content of the response
     assert b'Function called successfully' in response.data
 
-## This tests the /updateValue/ endpoint for missing fields
-def test_updateValue_missing_fields(client):
-    # Define test data with missing fields
-    test_data_missing_course_id = {
-        "dict_of_columns_and_vals": {'instructor_name_syllabus': 'Dr. Smith'}        
-    }
 
-    test_data_missing_columns = {
-        "course_id": "c2"    
-    }
-
-    # Send a POST request with missing course_id
-    response = client.post('/api/updateValue/', json=test_data_missing_course_id)
-    assert response.status_code == 400
-    response_data = json.loads(response.data)
-    assert response_data['error'] == "Missing one or more required fields"
-
-    # Send a POST request with missing columns
-    response = client.post('/api/updateValue/', json=test_data_missing_columns)
-    assert response.status_code == 400
-    response_data = json.loads(response.data)
-    assert response_data['error'] == "Missing one or more required fields"

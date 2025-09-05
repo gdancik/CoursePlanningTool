@@ -149,7 +149,7 @@ def summarize_tables(byUser = False):
     # merge results
     tmp = a.merge(b, how = 'outer', on = ['user_id', 'date_id'])
     final = tmp.merge(c, how = 'outer', on = ['user_id', 'date_id'])
-    final = final.reindex(columns = ['user_id', 'date_id', 'user_id', 'num_reads', 'num_writes' ,'num_deletes'])
+    final = final.reindex(columns = ['user_id', 'date_id', 'num_reads', 'num_writes' ,'num_deletes'])
     final = final.dropna(how = 'all').fillna(0)
 
     if not byUser :

@@ -35,7 +35,7 @@ def test_login() :
     fs = get_fs_editor()
     
 
-    return jsonify(id = username)    
+    return jsonify(user = username, name = username)    
 
 @test_api_bp.route('/test_data/', methods = ['GET'])
 @login_required

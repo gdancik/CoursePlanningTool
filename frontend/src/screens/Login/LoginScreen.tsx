@@ -6,11 +6,13 @@ import "./LoginScreen.css";
 import bgImage from '../../assets/images/login_background.png'
 import LoginIcon from '../../assets/images/Login_Page_Icon.png'
 import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
+import GoogleLogin from "../../components/google_login.js";
 
 const LoginScreen: React.FC = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const { error, handleLogin } = useLogin();
+    const [username, setUsername] = useState("annie");
+    const [password, setPassword] = useState("password");
+    const { error, handleLogin} = useLogin();
+    
     const navigate = useNavigate();
 
     // New modal states
@@ -21,24 +23,26 @@ const LoginScreen: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+ 
         try {
+            
             // Show modal in loading state
             setModalTitle("Logging In");
             setModalMessage("Please wait while we verify your credentials...");
             setModalStatus("loading");
             setModalVisible(true);
-
             await handleLogin(username, password);
-
+            
             // On success
             setModalStatus("success");
             setModalTitle("Login Successful");
             setModalMessage("Welcome! Redirecting to your course page...");
 
-            setTimeout(() => {
-                setModalVisible(false);
+            setTimeout(() => {                  
+                setModalVisible(false);                    
                 navigate("/course-page");
             }, 1500);
+        
         } catch (err) {
             console.error(err);
             setModalVisible(false);
@@ -96,7 +100,19 @@ const LoginScreen: React.FC = () => {
 
                 {/* Right Section */}
                 <div className="right-section">
-                    <form onSubmit={handleSubmit} className="login-form">
+                     <h3> Google login </h3>
+                    <form id = "form-google-login" 
+                        onSubmit = { (e)=> {e.preventDefault();}} 
+                        className="login-form"> 
+                    <GoogleLogin></GoogleLogin>  
+                                  
+                    </form>
+
+                    <p></p>
+            
+                     <hr style={{ height: "1px", width: "90%", backgroundColor: "darkblue", fontWeight: "bold" }}/>
+                     <h3> Test login </h3>
+                    <form id = "form-test-login" onSubmit={handleSubmit} className="login-form">
                         <input
                             type="text"
                             placeholder="Username"
@@ -111,11 +127,12 @@ const LoginScreen: React.FC = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-                        <button type="submit">Login</button>
+                        <button id = "btn-test-login" type="submit">Login</button>
                     </form>
 
                     {error && <p className="error-message">{error}</p>}
                 </div>
+                
             </div>
 
             {/* Reusable modal with props */}

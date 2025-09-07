@@ -106,6 +106,9 @@ class fsEditor:
         
        	docs = [(doc.id, doc) for doc in docs]
         
+        if len(docs) == 0 :          
+            return pd.DataFrame(docs)
+        
         sheet = [{'_course_id': id, **doc.to_dict()} for id, doc in docs]
         df = pd.DataFrame(sheet).set_index('_course_id', drop = True)
         fs_stats.increase_number_reads(self.collection_name, df.shape[0])

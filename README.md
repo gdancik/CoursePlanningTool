@@ -16,8 +16,8 @@ The repository includes a *backend* consisting of a Flask application, a *fronte
 
 ### Setup for developers
 
-- Google authentication requires GS_AUTH_JSON environmental variable for OAuth 2.0 Client (https://console.cloud.google.com/auth/clients)
-- Saving data requires a google service account with firebase enabled (https://console.cloud.google.com/iam-admin/serviceaccounts)
+- Google authentication requires a GS_AUTH_JSON environmental variable for OAuth 2.0 Client credentials (https://console.cloud.google.com/auth/clients)
+- Saving data requires a google GS_CREDENTIALS_JSON environmental variable with credentials for a Google service account with firebase enabled (https://console.cloud.google.com/iam-admin/serviceaccounts)
 
 ###  Running the backend (flask) server 
 

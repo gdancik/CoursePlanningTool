@@ -20,9 +20,8 @@ export default function GoogleLogin({
                          auto_navigate = false, 
                          display_modal = false}){
 
-  const [user, setLocalUser] = useState(null);
-
-  const {setUser} = useAuth();
+  
+  const {user, setUser} = useAuth();
 
   const navigate = useNavigate();
 
@@ -46,8 +45,7 @@ export default function GoogleLogin({
           console.log("status is ok");
           const data = await res.data;
           console.log("got data");          
-          setUser(data.user);  
-          setLocalUser(data);  
+          setUser({user: data.user, name: data.name});            
 
           if (display_modal) {
             setModalStatus("success");
@@ -83,7 +81,7 @@ const logout = async () => {
         const res = await api.get('logout/');
 
         if (res.status == 200) {               
-          setLocalUser('');
+          setUser(null);
         }
       } catch (err) {
         alert("Error: Unable to logout");
@@ -108,6 +106,10 @@ const gButton = `
   </div>
 </button>
 `
+//useEffect(() => {
+//  setUser({ user: 'my_user', name: 'my_name' });
+//}, [setUser]);
+
   return (
     <>
   
@@ -135,7 +137,7 @@ const gButton = `
       }
      
 
-     
+  
            {/* Reusable modal with props */}
             <RedirectingModal
                 visible={modalVisible}

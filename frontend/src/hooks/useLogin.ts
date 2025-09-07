@@ -16,7 +16,7 @@ export const useLogin = () =>{
         setMessage(null);
         try {
             const data = await login(user, password);
-            setUser(data.user);
+            setUser({user: data.user, name: data.user});
             setMessage(`Welcome, ${data.user}!`);
             return data;
         } catch (err: any) {

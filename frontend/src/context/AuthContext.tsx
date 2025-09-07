@@ -1,15 +1,20 @@
 // src/context/AuthContext.tsx
 import React, { createContext, useContext, useState } from "react";
 
+interface User {
+    user: string;   // this is the id (e-mail address)
+    name: string;   // users name
+}
+
 interface AuthContextType {
-    user: string | null;
-    setUser: (user: string | null) => void;
+    user: User | null    
+    setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<string | null>(null);
+    const [user, setUser] = useState<User | null>(null);    
     return (
         <AuthContext.Provider value={{ user, setUser }}>
             {children}

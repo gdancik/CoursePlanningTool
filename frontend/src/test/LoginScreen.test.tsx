@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import LoginScreen from "../screens/Login/LoginScreen";
+import {AuthProvider} from "../context/AuthContext";
 
 // Mock useNavigate
 const mockedNavigate = jest.fn();
@@ -44,9 +45,11 @@ jest.mock("../hooks/useLogin", () => {
 
     it("should display error and not redirect if password is incorrect", async () => {
         render(
+            <AuthProvider>
             <BrowserRouter>
                 <LoginScreen />
             </BrowserRouter>
+            </AuthProvider>
         );
 
         fireEvent.change(screen.getByPlaceholderText("Username"), {

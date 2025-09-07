@@ -104,19 +104,24 @@ def getCourse():
 @login_required
 def getSheet():
     fs = get_fs_editor()
-    logging.debug(f'Created fs_editor object')
+    logging.debug(f'Created fs_editor object for {fs.collection_name}')
     try:
 
         # Call the read_sheet function
         logging.info('Reading the google sheet')
         sheet = fs.read_collection()
-
+       
         # Check if sheet is None
-        if sheet is None:
-            return jsonify({"error": "No data returned from getSheet"}), 500
+	# If sheet does not exist we will get an empty data frame, which is
+	# valid for a first time user
+        #if sheet is None:
+        #    return jsonify({"error": "No data returned from getSheet"}), 500
 
         # Return the result as JSON
         return jsonify(sheet.to_dict(orient='index'))
+        
+        #sheet['course_id'] = sheet.index
+        #return jsonify(sheet.to_dict(orient='records'))
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

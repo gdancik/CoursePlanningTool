@@ -50,6 +50,7 @@ export const updateCourseValues = (
  * Loads all courses for the current user.
  */
 export const getCourses = async (): Promise<Course[] | null> => {
+    //const raw = await createApiCaller<any>({
     const raw = await createApiCaller<Record<string, Record<string, string>>>({
         url: "getSheet/",
         method: "POST",
@@ -60,18 +61,21 @@ export const getCourses = async (): Promise<Course[] | null> => {
 
     if (!raw) return null;
 
-    return Object.entries(raw).map(([course_id, courseData]) => ({
-        course_id,
-        course_title_syllabus: courseData["Course Title"] || "",
-        subj_code_syllabus:   courseData["Course Code"]  || "",
-        crse_number_syllabus: courseData["Course Number"]|| "",
-        instructor_name_syllabus: courseData["Instructor Name"] || "",
-        term_syllabus: courseData["Semester"] || "",
-        year_syllabus: courseData["Year"]     || "",
-        last_edited:   courseData["Last Edited"] || "",
-        ...courseData,
+    const course_list = Object.keys(raw).map((key) => ({
+        course_id: key,
+        course_title_syllabus: raw[key]["Course Title"] || "",
+        subj_code_syllabus:   raw[key]["Course Code"]  || "",
+        crse_number_syllabus: raw[key]["Course Number"]|| "",
+        instructor_name_syllabus: raw[key]["Instructor Name"] || "",
+        term_syllabus: raw[key]["Semester"] || "",
+        year_syllabus: raw[key]["Year"]     || "",
+        last_edited:   raw[key]["Last Edited"] || "",
+        ...raw[key],
     }));
+
+    return course_list;
 };
+
 
 /**
  * Fetches the full data object for a single course row.

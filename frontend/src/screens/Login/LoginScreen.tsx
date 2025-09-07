@@ -100,7 +100,7 @@ const LoginScreen: React.FC = () => {
 
                 {/* Right Section */}
                 <div className="right-section">
-                     <h3> Login using Google </h3>
+                     <h3> Google login </h3>
                     <form id = "form-google-login" 
                         onSubmit = { (e)=> {e.preventDefault();}} 
                         className="login-form"> 

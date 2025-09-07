@@ -14,6 +14,10 @@ This is the repository for a forthcoming Course Planning Tool developed by stude
 
 The repository includes a *backend* consisting of a Flask application, a *frontend* consisting of a *react* application, and a *nb* folder for working using Jupyter Notebooks to aid in development.
 
+### Setup for developers
+
+- Google authentication requires GS_AUTH_JSON environmental variable for OAuth 2.0 Client (https://console.cloud.google.com/auth/clients)
+- Saving data requires a google service account with firebase enabled (https://console.cloud.google.com/iam-admin/serviceaccounts)
 
 ###  Running the backend (flask) server 
 

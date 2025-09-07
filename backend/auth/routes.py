@@ -69,7 +69,8 @@ def oauth2callback():
 def profile() :
 
     if not 'access_token' in session :
-       return 'No access token -- did you try /api/google_login?'
+        # Must return none since frontend considers any response ok 
+        return None
     
     if not session['access_token']:
         return redirect(url_for('auth.google_login', _external = True))

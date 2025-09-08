@@ -2,7 +2,7 @@ import React from "react";
 import { FaAngleUp } from "react-icons/fa";
 import { SyllabusContent } from "../../../utils/loadSyllabusContent";
 import SafeIcon from "../../../utils/ComponentWrapper";
-import SyllabusFormField from "../SyllabusComponents/SyllabusFormField";
+import SyllabusFormField from "../../../components/SyllabusComponents/SyllabusFormField";
 import AlertImage from "../../../assets/images/Writing_Alert.png"
 import BloomsImage from "../../../assets/images/blooms_taxonomy.png";
 import WritingTable from "../../../assets/images/WritingTable.png"

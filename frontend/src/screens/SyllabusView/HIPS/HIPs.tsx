@@ -9,7 +9,7 @@ import {
     createSaveHandler
 } from "../../../utils/handlers/formHandlersFactory";
 import HIPSAccordion from "./HIPSAccordion";
-import SyllabusSectionAccordion from "../SyllabusComponents/SyllabusAccordion";
+import SyllabusSectionAccordion from "../../../components/SyllabusComponents/SyllabusAccordion";
 import './HIPS.css'
 
 

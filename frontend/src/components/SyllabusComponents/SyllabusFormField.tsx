@@ -1,5 +1,5 @@
 import React from "react";
-import { SyllabusContent } from "../../../utils/loadSyllabusContent";
+import { SyllabusContent } from "../../utils/loadSyllabusContent";
 import "./SyllabusFormField.css";
 
 interface Props {

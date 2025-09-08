@@ -1,9 +1,9 @@
 import React from "react";
 import SyllabusFormRow from "./SyllabusFormRow";
-import { SyllabusContent } from "../../../utils/loadSyllabusContent";
+import { SyllabusContent } from "../../utils/loadSyllabusContent";
 import { FaAngleUp } from "react-icons/fa";
 import "./SyllabusAccordion.css";
-import SafeIcon from "../../../utils/ComponentWrapper";
+import SafeIcon from "../../utils/ComponentWrapper";
 
 interface Props {
     sectionName: string;

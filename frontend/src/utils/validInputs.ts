@@ -1,7 +1,7 @@
-// src/utils/fieldMappings.ts
+// src/utils/validInputs.ts
 
 // FRONTEND → BACKEND
-export const fieldMappings: Record<string, string> = {
+export const validInputs: Record<string, string> = {
     "Subject Code": "subj_code_syllabus",
     "Course Number": "crse_number_syllabus",
     "Course Title": "course_title_syllabus",
@@ -23,5 +23,5 @@ export const fieldMappings: Record<string, string> = {
 
 // BACKEND → FRONTEND
 export const reverseFieldMappings: Record<string, string> = Object.fromEntries(
-    Object.entries(fieldMappings).map(([front, back]) => [back, front])
+    Object.entries(validInputs).map(([front, back]) => [back, front])
 );

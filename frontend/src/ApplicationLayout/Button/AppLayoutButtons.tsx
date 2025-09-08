@@ -1,9 +1,9 @@
 import React from "react";
-import ReusableButton from "../../../components/Button/ReusableButton";
+import ReusableButton from "../../components/Button/ReusableButton";
 import {FaArrowLeft, FaArrowRight, FaEye, FaRegSave, FaRegWindowClose} from "react-icons/fa";
-import SafeIcon from "../../../utils/ComponentWrapper";
-import HomeButton from "../../../assets/images/HomeButton.png"
-import "./ButtonBar.css";
+import SafeIcon from "../../utils/ComponentWrapper";
+import HomeButton from "../../assets/images/HomeButton.png"
+import "./AppLayoutButtons.css";
 
 interface ButtonBarProps {
     onBack?: () => void;
@@ -15,7 +15,7 @@ interface ButtonBarProps {
 }
 
 // Functional component that renders a button bar
-const ButtonBar: React.FC<ButtonBarProps> = ({
+const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                                                  onBack,
                                                  onNext,
                                                  onSave,
@@ -68,4 +68,4 @@ const ButtonBar: React.FC<ButtonBarProps> = ({
 };
 
 
-export default ButtonBar;
+export default AppLayoutButtons;

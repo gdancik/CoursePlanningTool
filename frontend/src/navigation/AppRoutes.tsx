@@ -26,7 +26,7 @@ import HIPs from "../screens/SyllabusView/HIPS/HIPs";
 import CourseSchedule from "../screens/SyllabusView/CourseSchedule";
 import LearningResources from "../screens/SyllabusView/LearningResources/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";
-import CoursePage from "../screens/Home/CoursePage";
+import CoursePage from "../screens/CoursePage/CoursePage";
 import NotFoundPage from "../screens/NotFoundPage";
 
 const AppRoutes = () => {

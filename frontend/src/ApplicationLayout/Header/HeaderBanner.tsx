@@ -1,5 +1,5 @@
 import React from 'react';
-import ecsuLogoWhite from '../../../assets/images/ecsu-logo-white.png';
+import ecsuLogoWhite from '../../assets/images/ecsu-logo-white.png';
 import './HeaderBanner.css';
 
 const HeaderBanner = () => {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {useAuth} from "../context/AuthContext";
+import {useAuth} from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import RedirectingModal from "./RedirectingModal/RedirectingModal";
-import api from "../services/axios";
+import RedirectingModal from "../RedirectingModal/RedirectingModal";
+import api from "../../services/axios";
 import './google_login.css';
 
 /*************************************************************************

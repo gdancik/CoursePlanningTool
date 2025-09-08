@@ -6,7 +6,7 @@ import "./LoginScreen.css";
 import bgImage from '../../assets/images/login_background.png'
 import LoginIcon from '../../assets/images/Login_Page_Icon.png'
 import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
-import GoogleLogin from "../../components/google_login.js";
+import GoogleLogin from "../../components/GoogleLogin/google_login.js";
 
 const LoginScreen: React.FC = () => {
     const [username, setUsername] = useState("annie");

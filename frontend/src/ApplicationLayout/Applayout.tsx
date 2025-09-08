@@ -1,7 +1,7 @@
 import React from "react";
-import HeaderBanner from "./components/Header/HeaderBanner";
-import SyllabusNav from "./components/Navigation/SyllabusNav";
-import ButtonBar from "./components/Button/ButtonBar";
+import HeaderBanner from "./Header/HeaderBanner";
+import SyllabusNav from "./Navigation/SyllabusNav";
+import AppLayoutButtons from "./Button/AppLayoutButtons";
 
 
 interface AppLayoutProps {
@@ -27,7 +27,7 @@ const Applayout: React.FC<AppLayoutProps> = ({
             <HeaderBanner />
 
             {/* Buttons below the header banner */}
-            <ButtonBar
+            <AppLayoutButtons
                 onBack={onBack}
                 onNext={onNext}
                 onSave={onSave}

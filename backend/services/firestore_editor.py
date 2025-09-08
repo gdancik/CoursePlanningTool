@@ -102,11 +102,14 @@ class fsEditor:
         docs = self.client.collection(self.collection_name).stream()
         
         if id_only:
-           return [doc.id for doc in docs]
+           docs = [doc.id for doc in docs]
+           fs_stats.increase_number_reads(self.collection_name, len(docs))
+           return 
         
-       	docs = [(doc.id, doc) for doc in docs]
+        docs = [(doc.id, doc) for doc in docs]
         
         if len(docs) == 0 :          
+            fs_stats.increase_number_reads(self.collection_name, 1)
             return pd.DataFrame(docs)
         
         sheet = [{'_course_id': id, **doc.to_dict()} for id, doc in docs]

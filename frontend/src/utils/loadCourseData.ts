@@ -5,7 +5,7 @@ export async function loadCourseData(): Promise<{
     courseId: string | null;
     formData: Record<string,string>;
 }> {
-    const saved = localStorage.getitem("currentCourseData");
+    const saved = localStorage.getItem("currentCourseData");
     if (!saved) return {courseId: null, formData: {}};
 
     try {

@@ -109,7 +109,7 @@ def getSheet():
 
         # Call the read_sheet function
         logging.info('Reading the google sheet')
-        sheet = fs.read_collection()
+        sheet = fs.read_collection(return_json = True)
        
         # Check if sheet is None
 	# If sheet does not exist we will get an empty data frame, which is
@@ -118,7 +118,8 @@ def getSheet():
         #    return jsonify({"error": "No data returned from getSheet"}), 500
 
         # Return the result as JSON
-        return jsonify(sheet.to_dict(orient='index'))
+        return jsonify(sheet)
+        #return jsonify(sheet.to_dict(orient='index'))
         
         #sheet['course_id'] = sheet.index
         #return jsonify(sheet.to_dict(orient='records'))
@@ -131,7 +132,7 @@ def getSheet():
 @api_firestore_bp.route('createNewCourse/', methods=['POST'])
 @require_post_params('dict_of_columns_and_vals')
 @login_required
-def createNewCourse():
+def createNewCourse():    
     fs = get_fs_editor()
     logging.debug(f'Created gs_editor object')
     try:

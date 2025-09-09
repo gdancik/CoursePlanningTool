@@ -32,7 +32,7 @@ def test_create_syllabus_statment_page():
     selected_statements= ['Academic Success Center']
     
     sf.create_syllabus_statment_page(doc,syllabus_webpage,selected_statements)
-    expected_text = 'The Academic Success Center (ASC) is located on the ground floor of the library and assists Eastern students in realizing their highest level of achievement possible. We encourage all students to take advantage of the many resources offered through the following ASC offices: Advising Center, Global Learning, Opportunity Programs, Career Services, Writing Center, Math Achievement Center, and Tutoring & Learning Strategies. (Rev. 7/24)' 
+    expected_text = 'The Academic Success Center (ASC) is located on the ground floor of the library and assists Eastern students in realizing their highest level of achievement possible. We encourage all students to take advantage of the many resources offered through the following ASC offices: Advising Center, Global Learning, Opportunity Programs, Career Services, Writing Center, Math Achievement Center, and Tutoring & Learning Strategies.' 
     paragraphs = []
     for paragraph in doc.paragraphs:
         paragraphs.append(paragraph.text)

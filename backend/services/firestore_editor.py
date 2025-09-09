@@ -263,3 +263,40 @@ class fsEditor:
             doc.reference.delete()
         
         logging.info(f'Collection {self.collection_name} deleted successfully.')
+
+    @staticmethod
+    def get_all_collections() :
+        client = fsEditor.create_fs_client()
+        collections = client.collections()
+
+        res = [collection.id for collection in collections]
+        fs_stats.increase_number_reads('none', len(res))
+
+        return res
+        
+    @staticmethod
+    def delete_all_collections(collections) :
+        '''static method to delete one or more collections
+            - collections: name of single collection or a list
+        '''
+        if type(collections) != list :
+            collections = list(collections)
+
+        for collection in collections :
+            client = fsEditor(collection)
+            client.delete_collection()
+          
+    @staticmethod
+    def read_all_collections() :
+        '''
+        Static method to read all collections
+        Returns a dictionary in form
+            collection_name: {collection data frame}
+        '''
+
+        res = {}
+        collections = fsEditor.get_all_collections()
+        for collection in collections :
+            client = fsEditor(collection)
+            res[collection] = client.read_collection()
+        return res

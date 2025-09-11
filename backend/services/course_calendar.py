@@ -72,7 +72,6 @@ def create_schedule(term, year, days, class_time, url = 'https://www.easternct.e
     integrated with the academic calendar, for the
     given term (e.g., 'Fall'), year (e.g., '2025') and days (e.g., 'MWF')
     '''
-
     logging.info('Creating Schedule')
     target = term + ' ' + year
 

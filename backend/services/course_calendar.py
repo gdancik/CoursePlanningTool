@@ -50,10 +50,10 @@ import numpy as np
 import logging
 
 # Add option to toggle on/off in UI
-include_year = False
+include_year = True
 abbreviate_days = False
 include_final_exam = True
-by_week = False
+by_week = True
 
 # Day abbreviations
 DAY_ABBREVIATIONS = {
@@ -120,16 +120,46 @@ def create_schedule(term, year, days, class_time, url = 'https://www.easternct.e
                 days_since_first_monday = (exam_date - first_monday).days
                 exam_week_number = (days_since_first_monday // 7) + 1
                 
+                # Format the date based on include_year setting
+                if include_year:
+                    week_of_date = exam_date.strftime('%m/%d/%Y')
+                    description_date = exam_date.strftime('%m/%d/%Y')
+                else:
+                    week_of_date = exam_date.strftime('%m/%d')
+                    description_date = exam_date.strftime('%m/%d')
+                
                 final_exam_row = pd.DataFrame([{
                     'Week #': exam_week_number,
-                    'Week of': exam_date.strftime('%m/%d'),
-                    'Description': f"FINAL EXAM - {final_exam_info['day']} {exam_date.strftime('%m/%d')} - {final_exam_info['test_period_info']}"
+                    'Week of': week_of_date,
+                    'Description': f"FINAL EXAM - {final_exam_info['day']} {description_date} - {final_exam_info['test_period_info']}"
                 }])
             else:
-                # Regular format
+                # Regular format - convert month to numeric format (MM/DD)
+                date_parts = final_exam_info['date'].split()
+                if len(date_parts) >= 3:
+                    # Format: "Tuesday December 9" -> "12/09"
+                    try:
+                        exam_date_str = f"{date_parts[1]} {date_parts[2]}, {year}"
+                        exam_date = pd.to_datetime(exam_date_str)
+                        exam_date_display = exam_date.strftime('%m/%d')
+                    except:
+                        # Fallback if date parsing fails
+                        exam_date_display = f"{date_parts[1]} {date_parts[2]}"
+                else:
+                    # Fallback to full date if format is unexpected
+                    exam_date_display = final_exam_info['date']
+                if include_year:
+                    exam_date_display = exam_date_display + '/' + year
+
+                # Use abbreviated day name if abbreviate_days is True
+                if abbreviate_days:
+                    day_display = DAY_ABBREVIATIONS.get(final_exam_info['day'], final_exam_info['day'])
+                else:
+                    day_display = final_exam_info['day']
+                
                 final_exam_row = pd.DataFrame([{
-                    'Day': final_exam_info['day'],
-                    'Date': final_exam_info['date'].split()[-1],  # Get just the date part
+                    'Day': day_display,
+                    'Date': exam_date_display,
                     'Description': f"FINAL EXAM - {final_exam_info['test_period_info']}"
                 }])
             
@@ -231,6 +261,7 @@ def get_final_exam_date(url, target_semester, days, class_time):
                         return {
                             'day': day_name,
                             'date': date_text.replace('\n', ' '),
+                            'year': curr_semester[-1].text.strip(),
                             'test_period_info': test_period_info,
                             'exam_info': cell_text,
                             'full_text': f'{day_name} {date_text.replace(chr(10), " ")} - {test_period_info}: {cell_text}'

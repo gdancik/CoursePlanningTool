@@ -78,8 +78,7 @@ class fsEditor:
         '''
         Creates a new course in the Firestore database with the provided values.
         Args:
-            values_dict (Dict[str, Any]): A dictionary containing the course data to be added.
-            course_id (str, optional): The course ID to be used for the new course. If not provided, a new document will be created with a generated ID.
+            values_dict (Dict[str, Any]): A dictionary containing the course data to be added.            
         '''
 
         logging.info('Creating new course')
@@ -91,12 +90,14 @@ class fsEditor:
         course_ref = self.client.collection(self.collection_name).add(values_dict)
         return course_ref[1].id
 
-    def read_collection(self, id_only = False):
+    def read_collection(self, return_json = False, id_only = False):
         '''
         Reads the entire sheet from the Firestore database and returns it as a pandas 
-        DataFrame, or if 'id_only' is True, returns a list of ids
+        DataFrame or dictionary if return_json is True; or if 'id_only' is True, 
+        returns a list of ids
         Returns one of the following:
-            pd.DataFrame: A DataFrame containing all the documents in the specified Firestore collection.
+            Dict | pd.DataFrame: A Dict or DataFrame containing all the documents in the
+                                 specified Firestore collection.
             list: A list of ids corresponding to all documents in the collection
         '''
         docs = self.client.collection(self.collection_name).stream()
@@ -104,17 +105,24 @@ class fsEditor:
         if id_only:
            docs = [doc.id for doc in docs]
            fs_stats.increase_number_reads(self.collection_name, len(docs))
-           return 
+           return docs
         
         docs = [(doc.id, doc) for doc in docs]
         
+        fs_stats.increase_number_reads(self.collection_name, max(1,len(docs)))
+
         if len(docs) == 0 :          
-            fs_stats.increase_number_reads(self.collection_name, 1)
+            if return_json :
+                return {}
             return pd.DataFrame(docs)
         
         sheet = [{'_course_id': id, **doc.to_dict()} for id, doc in docs]
+
+        if return_json: 
+            j = {r['_course_id']: {k:v for (k,v) in r.items() if k != '_course_id'} for r in sheet }
+            return j
+        
         df = pd.DataFrame(sheet).set_index('_course_id', drop = True)
-        fs_stats.increase_number_reads(self.collection_name, df.shape[0])
         return df
 
     
@@ -255,3 +263,40 @@ class fsEditor:
             doc.reference.delete()
         
         logging.info(f'Collection {self.collection_name} deleted successfully.')
+
+    @staticmethod
+    def get_all_collections() :
+        client = fsEditor.create_fs_client()
+        collections = client.collections()
+
+        res = [collection.id for collection in collections]
+        fs_stats.increase_number_reads('none', len(res))
+
+        return res
+        
+    @staticmethod
+    def delete_all_collections(collections) :
+        '''static method to delete one or more collections
+            - collections: name of single collection or a list
+        '''
+        if type(collections) != list :
+            collections = list(collections)
+
+        for collection in collections :
+            client = fsEditor(collection)
+            client.delete_collection()
+          
+    @staticmethod
+    def read_all_collections() :
+        '''
+        Static method to read all collections
+        Returns a dictionary in form
+            collection_name: {collection data frame}
+        '''
+
+        res = {}
+        collections = fsEditor.get_all_collections()
+        for collection in collections :
+            client = fsEditor(collection)
+            res[collection] = client.read_collection()
+        return res

@@ -1,0 +1,84 @@
+h1,
+table {
+  font-family: sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+textarea {
+  white-space: pre-wrap;
+  width: 95%;
+  padding: 1%;
+  resize: none;
+}
+
+th,
+td {
+  border: none;
+  padding: 2px;
+  text-align: left;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+}
+
+th:last-child,
+td:last-child {
+  border-right: none;
+}
+
+th {
+  color: rgb(28, 82, 181);
+  padding-right: 75px;
+}
+
+/* Course schedule button styling */
+#course-schedule-table td:nth-last-child(2),
+#course-schedule-table td:last-child {
+  padding: 2px;
+  text-align: center;
+}
+
+#course-schedule-table td.add-btn,
+#course-schedule-table td.delete-btn {
+  padding-left: 0;
+  padding-right: 0;
+  border-right: none;
+  width: 1%;
+  text-align: center;
+}
+
+#course-schedule-table td.add-btn {
+  padding-right: 2px;
+}
+#course-schedule-table td.delete-btn {
+  padding-left: 2px;
+}
+
+#course-schedule-table button {
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+#course-schedule-table button:hover {
+  background-color: #e9ecef;
+}
+
+#course-schedule-table td.action-btns {
+  padding: 0 2px;
+  text-align: center;
+}
+
+#course-schedule-table td.action-btns button {
+  margin-right: 4px;
+  padding: 4px 10px;
+}
+
+#course-schedule-table td.action-btns button:last-child {
+  margin-right: 0;
+}

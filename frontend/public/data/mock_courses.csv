@@ -1,0 +1,4 @@
+course_id,course_title_syllabus,instructor_name_syllabus,term_syllabus,course_type,created_at,last_edited
+LAC 100,Intro to JavaScript,Dr. Jane Doe,Fall,ELAC Seminar,2025-06-17 16:35:00,2025-06-15 10:22:00
+ENG 100,Advanced Python,Dr. Smith,Spring 2026,ELAC - Disciplinary,2025-06-17 19:35:00,2025-06-12 09:01:00
+CSC 232,Web Design Basics,Dr. Taylor,Fall 2025,No Elac,2025-06-17 13:35:00,2025-06-18 15:35:00

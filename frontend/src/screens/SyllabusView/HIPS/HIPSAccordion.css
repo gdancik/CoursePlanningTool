@@ -1,0 +1,32 @@
+.section-split {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.section-label {
+    flex: 0 0 280px;
+}
+
+.section-heading {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #003366;
+    margin-top: 0;
+}
+
+/* Right: text and images */
+.section-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.explanation-paragraph {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}

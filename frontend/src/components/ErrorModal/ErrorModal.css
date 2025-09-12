@@ -1,0 +1,57 @@
+/* ErrorModal.css */
+
+.error-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.error-modal {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+}
+
+.error-icon {
+    width: 200px;
+    height: auto;
+
+}
+
+.error-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: black;
+}
+
+.error-message {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.error-code {
+    font-size: 0.8rem;
+    color: #777;
+    margin-top: 0.25rem;
+}

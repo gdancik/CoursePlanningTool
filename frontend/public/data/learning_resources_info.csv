@@ -1,0 +1,8 @@
+section,row,content,type,required,backendKey
+Step 1: Brainstorming,1,"Using the learning outcomes to plan your course creates a logic to the course that students can easily follow. The course should be designed in a way that allows students to achieve the goals in the learning outcomes. The following exercise will help you to plan your course with your learning outcomes adn practical considerations in mind:",text,false
+Step 1: Brainstorming,1,"What course materials are required from your discipline for your students to achieve the course learning outcomes? Are there other disciplines that engage with this issue? Can you provide perspectives on your topic from other scholars?",text-box,false,lr_materials
+Step 1: Brainstorming,1,"What inequalities exist in the disciplines that inform your course? What ways might you address those inequities and discourage singular viewpoints?",text-box,false,lr_inequities
+Step 1: Brainstorming,1,"Is there an order that is required? Do you need to take a developmental approach and scaffold the information adn skill expected in your learning outcomes?",text-box,false,lr_order
+Step 2: Summary,2,"Based on the information you compiled above, what course materials will be required for your course (textbooks, readings, software, lab equipment, etc.)",text,false,
+Step 2: Summary,2,"Information entered below will appear int eh final syllabus exactly as written.",alert,false,
+Step 2: Summary,2,,syllabus-text,true,course_materials_syllabus

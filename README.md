@@ -1,24 +1,30 @@
-# Course Planning Tool  [![frontend](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml/badge.svg)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml) [![backend](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend.yml/badge.svg)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend.yml) [![nb](https://github.com/gdancik/CoursePlanningTool/actions/workflows/notebooks.yml/badge.svg)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/notebooks.yml)
+
+# Course Planning Tool  
+
+| Version  | Frontend App | Backend App | Service Modules |
+| ------------- | ------------- | ------------- | ------------- |
+| main |[![frontend](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml/badge.svg?branch=main)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml)  |  [![backend-app](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-app.yml/badge.svg?branch=main)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-app.yml)| [![backend-services](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-services.yml/badge.svg?branch=main)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-services.yml)|
+| dev |[![frontend](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml/badge.svg?branch=dev)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/frontend.yml)  |  [![backend-app](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-app.yml/badge.svg?branch=dev)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-app.yml)| [![backend-services](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-services.yml/badge.svg?branch=dev)](https://github.com/gdancik/CoursePlanningTool/actions/workflows/backend-services.yml)|
+
+
+
+
 
 This is the repository for a forthcoming Course Planning Tool developed by students from [Eastern Connecticut State University](https://www.easternct.edu).
 
 The repository includes a *backend* consisting of a Flask application, a *frontend* consisting of a *react* application, and a *nb* folder for working using Jupyter Notebooks to aid in development.
 
+### Setup for developers
+
+- Google authentication requires a GS_AUTH_JSON environmental variable for OAuth 2.0 Client credentials (https://console.cloud.google.com/auth/clients)
+- Saving data requires a google GS_CREDENTIALS_JSON environmental variable with credentials for a Google service account with firebase enabled (https://console.cloud.google.com/iam-admin/serviceaccounts)
 
 ###  Running the backend (flask) server 
 
 ```
-cd backend && flask run
+flask --app=backend:create_app run
 ```
 Flask is now running on localhost:5000
-
-The test flask application includes the following endpoints:
-- / - homepage
-- /login/ - logs in user
-- /logout/ - logs out user
-- /api/hello/ - returns greeting (login required)
-- /api/hi/ - returns greeting (login not required)
-- /generate/ - generates a word document
 
 ## Running the frontend (node/react) server 
 
@@ -48,3 +54,4 @@ pip install -r requirements.txt
 ### Issues
 
 See [issues](/issues.md) for known issues.
+

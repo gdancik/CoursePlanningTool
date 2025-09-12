@@ -24,6 +24,7 @@ soup = get_target_webpage(url, target)
 df_calendar = get_dates(soup, target)
 df_calendar = process_academic_calendar(df_calendar, target, year, start_date)
 
+
 start, end = get_start_and_end_dates(df_calendar)
 
 df_schedule = generate_schedule(start, end, 'MWF')
@@ -49,6 +50,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import logging
 
+
 # Add option to toggle on/off in UI
 include_year = True
 abbreviate_days = False
@@ -67,6 +69,7 @@ DAY_ABBREVIATIONS = {
 }
 
 def create_schedule(term, year, days, class_time, url = 'https://www.easternct.edu/academics/academic-calendar/index.html') :
+
     '''
     Creates a table for the course schedule, 
     integrated with the academic calendar, for the
@@ -96,6 +99,7 @@ def create_schedule(term, year, days, class_time, url = 'https://www.easternct.e
         
         # Set the week numbers
         df_calendar['Day'] = df_calendar['Date'].apply(calculate_week_number)
+
 
     df_schedule = generate_schedule(start, end, days)
 
@@ -166,6 +170,7 @@ def create_schedule(term, year, days, class_time, url = 'https://www.easternct.e
             # Add the final exam row to the schedule
             schedule = pd.concat([schedule, final_exam_row], ignore_index=True)
     
+
     return schedule
 
 
@@ -193,6 +198,7 @@ def get_target_webpage(url, target):
 
         if not a :
             raise Exception('Upcoming calendar not found')
+
 
         i = url.rfind('/')
         url = url[:i] + '/' + a['href']
@@ -269,6 +275,7 @@ def get_final_exam_date(url, target_semester, days, class_time):
         
         print('Test period not found in any day column')
         return None
+
 
 def get_dates(soup, target_semester):
     '''Returns the target table as a data frame'''
@@ -368,6 +375,7 @@ def combine_date_dfs(df1, df2, start, end) :
 
     # combine columns
     combined = pd.concat([df1_formatted, df2])
+
     
     # sort by date
     combined = combined.sort_values('Date')
@@ -456,6 +464,7 @@ def generate_schedule(start_date, end_date, days):
         df = pd.DataFrame(dates_list, columns = ['Day', 'Date', 'Description'])
     else:
         df = pd.DataFrame(dates_list, columns = ['Week #', 'Week of', 'Description'])
+
     return(df)
 
 def format_date_string(s) :
@@ -551,6 +560,7 @@ def process_academic_calendar(df, target, year):
       - 'Day' corresponding day of the week, possibly hyphenated
       - 'Description (unchanged)
     '''
+
     df = filter_non_relevant_dates(df)
     dates = df[target]
 
@@ -573,11 +583,13 @@ def process_academic_calendar(df, target, year):
     else:
         dates_df[['Day','Day2']] = dates_df.map(lambda x: x.strftime('%A') if x != '' else x)
 
+
     # combine days, e.g., Monday - Wednesday
     dates_df['Day'] = dates_df[['Day','Day2']].apply(hyphenate, axis = 1)
 
     dates_df['Description'] = list(df['Description'])
     return dates_df.drop('Day2', axis = 1)
+
 
 if __name__ == "__main__":
     term = "Fall"
@@ -589,3 +601,5 @@ if __name__ == "__main__":
     
     print("=== COMPLETE SCHEDULE WITH FINAL EXAM ===")
     print(schedule.tail(10))  # Show last 10 entries to see the final exam
+
+

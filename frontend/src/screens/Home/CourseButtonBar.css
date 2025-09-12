@@ -1,0 +1,29 @@
+.course-button-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Right align */
+    gap: 25px;
+    padding: 1.5rem;
+    background-color: #fff;
+}
+
+/* Buttons inside the card only */
+.course-button-bar .reusable-button {
+    padding: 0.85rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+}
+
+/* Top row of action buttons */
+.top-button-row {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+/* Bottom row: download + completed badge */
+.bottom-button-row {
+    display: flex;
+    align-items: start;
+    gap: 30px;
+}

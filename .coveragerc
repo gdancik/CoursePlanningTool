@@ -1,0 +1,15 @@
+# coverage.ini
+[run]
+branch = False
+source = 
+  backend
+
+[report]
+show_missing = True
+omit = 
+  backend/**/__init__.py
+  backend/tests/*
+
+[html]
+directory = htmlcov
+title = Backend Coverage Report

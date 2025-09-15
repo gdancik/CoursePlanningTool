@@ -12,6 +12,7 @@ interface Props {
     fields: BasicInfoData[];                          // Array of fields in this section
     formData: Record<string, string>;                 // Current form data (keyed by field label)
     onFieldChange: (label: string, value: string) => void; // Callback to handle changes in fields
+    children?: React.ReactNode;
 }
 
 const SectionAccordion: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const SectionAccordion: React.FC<Props> = ({
                                                fields,
                                                formData,
                                                onFieldChange,
+                                               children,
                                            }) => {
 
 
@@ -45,31 +47,33 @@ const SectionAccordion: React.FC<Props> = ({
 
                 {/* Content of the accordion section */}
                 <div className="section-content">
-                    {Object.entries(groupedRows).map(([rowKey, rowFields]) => (
-                        <div key={rowKey} className="form-row">
-
-                            {/* Render each field in the row */}
-                            {rowFields
-                                .filter((field) => {
-                                    const isConditional = field.row === 1 && field.layoutRow === 3;
-                                    const valueTrigger = formData["Additional Meeting Times"] || "";
-                                    return !isConditional || valueTrigger.includes("Yes");
-                                })
-                                .map((field, index) => (
-                                <FormRow
-                                    key={index}                             // Unique key for the row
-                                    field={field}                           // Field data
-                                    value={formData[field.label] || ''}     // Current field value
-                                    onChange={onFieldChange}                // Change handler
-                                    className={
-                                        field.label.includes('Additional Information')
-                                            ? 'full-width'
-                                            : ''
-                                    } // Extra class for full-width styling if applicable
-                                />
-                            ))}
-                        </div>
-                    ))}
+                    {children ? (
+                        children
+                    ) : (
+                        Object.entries(groupedRows).map(([rowKey, rowFields]) => (
+                            <div key={rowKey} className="form-row">
+                                {rowFields
+                                    .filter((field) => {
+                                        const isConditional = field.row === 1 && field.layoutRow === 3;
+                                        const valueTrigger = formData["Additional Meeting Times"] || "";
+                                        return !isConditional || valueTrigger.includes("Yes");
+                                    })
+                                    .map((field, index) => (
+                                        <FormRow
+                                            key={index}
+                                            field={field}
+                                            value={formData[field.label] || ""}
+                                            onChange={onFieldChange}
+                                            className={
+                                                field.label.includes("Additional Information")
+                                                    ? "full-width"
+                                                    : ""
+                                            }
+                                        />
+                                    ))}
+                            </div>
+                        ))
+                    )}
                 </div>
             </details>
         </div>

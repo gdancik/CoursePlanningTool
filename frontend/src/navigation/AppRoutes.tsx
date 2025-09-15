@@ -15,6 +15,7 @@ import TestPage from "../screens/TestPage"
 import TestPage2 from "../screens/TestPage2"
 import ScheduleTest from "../components/courseSchedule"
 import GradeTable from "../components/Tables/gradeTable"
+import JSONRenderTest from "../screens/JSONRenderTest"
 
 //Application Endpoints
 import Overview from "../screens/SyllabusView/Overview/Overview";
@@ -54,6 +55,7 @@ const AppRoutes = () => {
                 <Route path = "/test-page2" element={<TestPage2/>}/>
                 <Route path ="/courseSchedule" element={<ScheduleTest/>}/>
                 <Route path= "grade-table" element={<GradeTable/>} />
+                <Route path = "/json-render" element={<JSONRenderTest/>} />
 
                 <Route path="/auto_login"
                        element = {<AutoTestLogin

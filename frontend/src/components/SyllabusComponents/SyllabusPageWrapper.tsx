@@ -1,4 +1,4 @@
-import AppLayout from "../../ApplicationLayout/Applayout";
+import AppLayout from "../../SyllabusLayout/SyllabusLayout";
 import {useSyllabusWrapperLogic} from "../../hooks/useSyllabusWrapperLogic";
 import React, { useEffect, useState } from "react";
 import SafeIcon from "../../utils/ComponentWrapper";

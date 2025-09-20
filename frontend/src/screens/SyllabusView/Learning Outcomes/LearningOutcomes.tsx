@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
-import AppLayout from "../../../ApplicationLayout/Applayout";
+import AppLayout from "../../../SyllabusLayout/SyllabusLayout";
 import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
 import LearningOutcomesAccordion from "./LearningOutcomesAccordionStep1";
 import Step2Accordion from "./LearningOutcomesAccordionStep2";

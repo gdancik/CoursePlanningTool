@@ -1,6 +1,6 @@
 import {useNavigate, useLocation} from "react-router-dom";
 import {handleBack,handleNext} from "../../../components/Button/ButtonLogic";
-import AppLayout from "../../../ApplicationLayout/Applayout";
+import AppLayout from "../../../SyllabusLayout/SyllabusLayout";
 import React, {useEffect, useState} from "react";
 import {loadSyllabusContent, SyllabusContent} from "../../../utils/loadSyllabusContent";
 import {

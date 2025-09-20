@@ -1,5 +1,5 @@
 import React from "react";
-import HeaderBanner from "./Header/HeaderBanner";
+import SyllabusHeader from "./Header/SyllabusHeader";
 import SyllabusNav from "./Navigation/SyllabusNav";
 import AppLayoutButtons from "./Button/AppLayoutButtons";
 
@@ -14,7 +14,7 @@ interface AppLayoutProps {
 
 }
 
-const Applayout: React.FC<AppLayoutProps> = ({
+const SyllabusLayout: React.FC<AppLayoutProps> = ({
                                                  onBack,
                                                  onNext,
                                                  onSave,
@@ -24,7 +24,7 @@ const Applayout: React.FC<AppLayoutProps> = ({
                                              }) => {
     return (
         <div>
-            <HeaderBanner />
+            <SyllabusHeader />
 
             {/* Buttons below the header banner */}
             <AppLayoutButtons
@@ -44,4 +44,4 @@ const Applayout: React.FC<AppLayoutProps> = ({
     );
 };
 
-export default Applayout;
+export default SyllabusLayout;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { jsonRenderComponent } from "../components/SyllabusComponents/jsonRendererComponent"
-import Applayout from "../ApplicationLayout/Applayout";
+import SyllabusLayout from "../SyllabusLayout/SyllabusLayout";
 import jsonSchema from "./SyllabusView/Data/basic-info-test.json"
 
 export default function JsonSyllabusPage() {
@@ -10,7 +10,7 @@ export default function JsonSyllabusPage() {
 
     return (
     <div>
-        <Applayout/>
+        <SyllabusLayout/>
         <div className="course-info-container">
         <form>
             {jsonSchema.content.map((c, i) => (

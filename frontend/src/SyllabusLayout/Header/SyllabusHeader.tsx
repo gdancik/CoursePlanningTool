@@ -2,7 +2,7 @@ import React from 'react';
 import ecsuLogoWhite from '../../assets/images/ecsu-logo-white.png';
 import './HeaderBanner.css';
 
-const HeaderBanner = () => {
+const SyllabusHeader = () => {
     return (
         <header className="header-banner">
             <img
@@ -15,4 +15,4 @@ const HeaderBanner = () => {
     );
 };
 
-export default HeaderBanner;
+export default SyllabusHeader;

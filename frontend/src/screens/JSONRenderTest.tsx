@@ -11,11 +11,13 @@ export default function JsonSyllabusPage() {
     return (
     <div>
         <Applayout/>
+        <div className="course-info-container">
         <form>
             {jsonSchema.content.map((c, i) => (
                 <div key={i}>{jsonRenderComponent(c, formData, handleChange)}</div>
             ))}
         </form>
+        </div>
     </div>
 );
 }

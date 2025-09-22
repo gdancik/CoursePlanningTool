@@ -77,7 +77,6 @@ class fsEditor:
             elif num_deletes > 500:
                 raise Exception('Number of deletes exceeded')
             
-            
             return f(self, *args, **kwargs)
         
         return wrapper

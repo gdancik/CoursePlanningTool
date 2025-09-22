@@ -1,7 +1,6 @@
 import sqlite3
 import pandas as pd
-from datetime import datetime
-
+from datetime import datetime, timedelta
 '''
 Provides functionality for creating/updating/displaying tables to keep track of 
 firestore stats using sqlite3
@@ -129,6 +128,27 @@ def delete_all_tables():
     conn.commit()
     conn.close()
 
+def delete_specifed_days_old(days):
+    '''Deletes all records older than 'days' days old '''
+    conn = sqlite3.connect('firestore_stats.db')
+    cur = conn.cursor()
+
+    threshold_date_id = (datetime.now() - datetime(1970,1,1)).days - days
+    for table in ['reads', 'writes', 'deletes']:
+        cur.execute(f"DELETE FROM {table} WHERE date_id <= ?", (threshold_date_id,))
+
+    conn.commit()
+    conn.close()
+
+
+def delete_user_records(user_id):
+    conn = sqlite3.connect('firestore_stats.db')
+    cur = conn.cursor()
+    
+    for table in ['reads', 'writes', 'deletes']:
+        cur.execute(f"DELETE FROM {table} WHERE user_id = ?", (user_id,))
+    conn.commit()
+    conn.close()
 
 def summarize_tables(byUser = False):
     '''
@@ -156,4 +176,17 @@ def summarize_tables(byUser = False):
         return final.drop('user_id', axis = 1).groupby('date_id', as_index = False).sum()
 
     return final
+
+def summarize_specifed_days_old(days, byUser = False):
+    df = summarize_tables(byUser = byUser)
+    df['date_id'] = pd.to_datetime(df['date_id'])
+
+    # Define the cutoff date (e.g., 1 year ago from today)
+    cutoff_date = datetime.now() - timedelta(days)
+
+    # Filter the DataFrame
+    filtered_df = df[df['date_id'] >= cutoff_date]
+    return filtered_df
+
+
 

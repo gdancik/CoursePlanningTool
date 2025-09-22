@@ -1,5 +1,5 @@
 import React from "react";
-import GeneratePageWrapper from "../../../components/SyllabusComponents/GeneratePageWrapper";
+import GeneratePageWrapper from "../../../components/SyllabusComponents/SyllabusPageComponents/GeneratePageWrapper";
 import basicInfoLayout from "../Data/basic-info-test.json";
 
 const BasicInfo: React.FC = () => {

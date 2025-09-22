@@ -1,7 +1,7 @@
 import React from "react";
-import {jsonRenderComponent} from "./jsonRendererComponent";
-import { JsonComponent } from "./jsonRendererComponent";
-import '../../screens/SyllabusView/BasicInformation/BasicInfo.css'
+import {jsonRenderComponent} from "../../../utils/jsonRenderer";
+import { JsonComponent } from "../../../utils/jsonRenderer";
+import '../../../screens/SyllabusView/BasicInformation/BasicInfo.css'
 
 interface GeneratePageContentProps {
     json: { content: JsonComponent[] };

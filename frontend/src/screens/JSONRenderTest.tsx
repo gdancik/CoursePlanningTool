@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { jsonRenderComponent } from "../components/SyllabusComponents/jsonRendererComponent"
+import { jsonRenderComponent } from "../utils/jsonRenderer"
 import SyllabusLayout from "../SyllabusLayout/SyllabusPageHeader";
 import jsonSchema from "./SyllabusView/Data/basic-info-test.json"
 

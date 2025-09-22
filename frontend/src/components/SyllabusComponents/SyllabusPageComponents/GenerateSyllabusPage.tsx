@@ -1,6 +1,6 @@
-import SyllabusLayout from "../../SyllabusLayout/SyllabusPageHeader";
+import SyllabusLayout from "../../../SyllabusLayout/SyllabusPageHeader";
 import GeneratePageContent from "./GeneratePageContent"
-import { JsonComponent} from "./jsonRendererComponent";
+import { JsonComponent} from "../../../utils/jsonRenderer";
 
 interface GenerateSyllabusPageProps {
     json: JsonComponent[];

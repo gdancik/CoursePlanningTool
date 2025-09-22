@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import RedirectingModal from "../RedirectingModal/RedirectingModal";
-import { useSyllabusWrapperLogic } from "../../hooks/useSyllabusWrapperLogic";
-import { loadCourseData } from "../../utils/loadCourseData";
+import RedirectingModal from "../../RedirectingModal/RedirectingModal";
+import { useSyllabusWrapperLogic } from "../../../hooks/useSyllabusWrapperLogic";
+import { loadCourseData } from "../../../utils/loadCourseData";
 import GenerateSyllabusPage from "./GenerateSyllabusPage";
-import { JsonComponent } from "./jsonRendererComponent"; // adjust path if needed
+import { JsonComponent } from "../../../utils/jsonRenderer"; // adjust path if needed
 
 // Define props for this wrapper
 interface GeneratePageWrapperProps {
-    json: JsonComponent[]; // 
+    json: JsonComponent[]; //
 }
 
 const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {

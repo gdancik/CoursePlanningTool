@@ -1,7 +1,7 @@
 import React from "react";
-import FormField from "../../screens/SyllabusView/BasicInformation/FormField";
-import { BasicInfoData } from "../../utils/loadBasicInfoFields";
-import SectionAccordion from "../../screens/SyllabusView/BasicInformation/SectionAccordion";
+import FormField from "../screens/SyllabusView/BasicInformation/FormField";
+import { BasicInfoData } from "./loadBasicInfoFields";
+import SectionAccordion from "../screens/SyllabusView/BasicInformation/SectionAccordion";
 
 // Type guard for form fields vs container components
 export type JsonComponent = {

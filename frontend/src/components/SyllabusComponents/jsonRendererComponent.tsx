@@ -4,7 +4,7 @@ import { BasicInfoData } from "../../utils/loadBasicInfoFields";
 import SectionAccordion from "../../screens/SyllabusView/BasicInformation/SectionAccordion";
 
 // Type guard for form fields vs container components
-type JsonComponent = {
+export type JsonComponent = {
     type: string;
     title?: string;
     id?: string;

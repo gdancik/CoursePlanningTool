@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import AppLayout from "../../../SyllabusLayout/SyllabusLayout";
+import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader";
 import {
     createPreviewHandler,
     createSaveAndExitHandler,

@@ -1,13 +1,9 @@
 import React from "react";
-import SyllabusPageWrapper from "../../../components/SyllabusComponents/SyllabusPageWrapper";
+import GeneratePageWrapper from "../../../components/SyllabusComponents/GeneratePageWrapper";
+import basicInfoLayout from "../Data/basic-info-test.json";
 
-const BasicInfo:React.FC = () => {
-    return (
-        <SyllabusPageWrapper
-            csvPath="data/basic_info_fields.csv"
-            title="Basic Information"
-        />
-    );
+const BasicInfo: React.FC = () => {
+    return <GeneratePageWrapper json={basicInfoLayout.content} />;
 };
 
 export default BasicInfo;

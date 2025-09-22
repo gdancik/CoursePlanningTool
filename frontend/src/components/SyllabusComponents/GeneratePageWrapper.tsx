@@ -8,7 +8,7 @@ import { JsonComponent } from "./jsonRendererComponent"; // adjust path if neede
 
 // Define props for this wrapper
 interface GeneratePageWrapperProps {
-    json: JsonComponent[]; // or `{ content: JsonComponent[] }` depending on how you're passing it
+    json: JsonComponent[]; // 
 }
 
 const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {

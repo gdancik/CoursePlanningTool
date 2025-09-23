@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
-const testPage = process.argv[2] || 'myComponents';
+const testPage = process.argv[2] || 'components';
 
 // Backup original index.js
 const indexPath = path.join(__dirname, 'src', 'index.js');

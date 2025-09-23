@@ -1,44 +1,91 @@
 import React from "react";
+import { FaExclamationCircle } from "react-icons/fa";
 
-// Alert component styled to match the yellowish message with shadow and icon
 function Alert({ text }) {
   return (
     <div
       style={{
         position: "relative",
-        background: "#fcf6e3",
-        border: "4px solid #e6b800",
-        borderRadius: 0,
-        boxShadow: "6px 6px 0 0 #e6b800, 0 2px 8px 0 rgba(0,0,0,0.10)",
-        padding: "1.5rem 2rem 1.5rem 4.5rem",
-        color: "#222",
-        fontSize: "1.25rem",
-        fontWeight: 500,
-        margin: "2rem 0 1rem 0",
-        maxWidth: 1200,
+        margin: "1rem 0",
+        maxWidth: "100%",
       }}
     >
-      {/* Icon in hexagon */}
-      <span
+      {/* Stack of paper layers - back to front */}
+      <div
         style={{
           position: "absolute",
-          left: "1.25rem",
-          top: "50%",
-          transform: "translateY(-50%)",
+          top: "8px",
+          left: "8px",
+          right: "-8px",
+          bottom: "-8px",
+          background: "#fff3cd",
+          border: "2px solid #ffc107",
+          // borderRadius: "8px",
+          opacity: "0.3",
+          zIndex: 1,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "4px",
+          left: "4px",
+          right: "-4px",
+          bottom: "-4px",
+          background: "#fff3cd",
+          border: "2px solid #ffc107",
+          // borderRadius: "8px",
+          opacity: "0.6",
+          zIndex: 2,
+        }}
+      />
+      
+      {/* Main content layer */}
+      <div
+        style={{
+          position: "relative",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
-          width: "2.5rem",
-          height: "2.5rem",
-          background: "#fff",
-          clipPath: "polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%)",
-          border: "4px solid #e6b800",
+          background: "#fff3cd",
+          border: "2px solid #ffc107",
+          // borderRadius: "8px",
+          padding: "16px 20px 16px 16px",
+          fontSize: "16px",
+          fontWeight: "400",
+          color: "#856404",
+          lineHeight: "1.4",
           boxSizing: "border-box",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05)",
+          zIndex: 3,
         }}
       >
-        <i className="fa-solid fa-circle-exclamation" style={{ color: "#c30052", fontSize: "1.5rem" }} aria-hidden="true"></i>
-      </span>
-      <span>{text}</span>
+        {/* Octagonal Icon Container */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "40px",
+            height: "40px",
+            backgroundColor: "#dc3545",
+            clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
+            marginRight: "16px",
+            flexShrink: 0,
+          }}
+        >
+          <FaExclamationCircle 
+            style={{ 
+              color: "#fff", 
+              fontSize: "20px" 
+            }}
+          />
+        </div>
+        
+        {/* Text content */}
+        <span style={{ flex: 1 }}>
+          {text}
+        </span>
+      </div>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import os
 import json
 import firebase_admin
 import pandas as pd
+import functools
 
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -19,6 +20,51 @@ import backend.services.firestore_stats as fs_stats
 # create stat tables
 fs_stats.create_tables()
 
+
+def check_stat(f):
+    ''''''
+    @functools.wraps(f)
+    def wrapper(self, *args, **kwargs):
+        reads = fs_stats.get_reads(user_id = self.collection_name, today = True)
+        writes = fs_stats.get_writes(user_id = self.collection_name, today = True)
+        deletes = fs_stats.get_deletes(user_id = self.collection_name, today = True)
+        if reads.empty == False:
+            num_reads = reads['number'][0]
+        else:
+            num_reads = 0    
+
+        if writes.empty == False:
+            num_writes = writes['number'][0]
+        else:
+            num_writes = 0
+
+        if deletes.empty == False:
+            num_deletes = deletes['number'][0]
+        else:
+            num_deletes = 0
+
+        logging.debug(f'Num of reads:{num_reads}')
+        logging.debug(f'Num of writes:{num_writes}')
+        logging.debug(f'Num of deletes:{num_deletes}')
+
+        if num_reads <= 0:
+            pass
+        elif num_reads > 500:
+            raise Exception('Number of reads exceeded')
+        
+        if num_writes <= 0:
+            pass
+        elif num_writes > 500:
+            raise Exception('Number of writes exceeded')
+    
+        if num_deletes <= 0:
+            pass
+        elif num_deletes > 500:
+            raise Exception('Number of deletes exceeded')
+        
+        return f(self, *args, **kwargs)
+    
+    return wrapper
 class fsEditor:
     '''
     A class to interact with a Firestore database, specifically for managing course data.
@@ -36,6 +82,50 @@ class fsEditor:
         self.collection_name = collection_name
         self.client = self.create_fs_client()
 
+    def check_stat(f):
+        ''''''
+        def wrapper(self, *args, **kwargs):
+            reads = fs_stats.get_reads(user_id = self.collection_name, today = True)
+            writes = fs_stats.get_writes(user_id = self.collection_name, today = True)
+            deletes = fs_stats.get_deletes(user_id = self.collection_name, today = True)
+            if reads.empty == False:
+                num_reads = reads['number'][0]
+            else:
+                num_reads = 0
+
+            if writes.empty == False:
+                num_writes = writes['number'][0]
+            else:
+                num_writes = 0
+
+            if deletes.empty == False:
+                num_deletes = deletes['number'][0]
+            else:
+                num_deletes = 0
+
+         
+            logging.debug(f'Num of reads:{num_reads}')
+            logging.debug(f'Num of writes:{num_writes}')
+            logging.debug(f'Num of deletes:{num_deletes}')
+
+            if num_reads <= 0:
+                pass
+            elif num_reads > 500:
+                raise Exception('Number of reads exceeded')
+            
+            if num_writes <= 0:
+                pass
+            elif num_writes > 500:
+                raise Exception('Number of writes exceeded')
+        
+            if num_deletes <= 0:
+                pass
+            elif num_deletes > 500:
+                raise Exception('Number of deletes exceeded')
+            
+            return f(self, *args, **kwargs)
+        
+        return wrapper
 
     @staticmethod
     def create_fs_client():
@@ -63,7 +153,8 @@ class fsEditor:
         # Get the default Firestore client
         client = firestore.client()
         return client
-
+    
+    @check_stat
     def set_collection_name(self, collection_name: str):
         '''
         Sets the name of the firestore collection to be used.
@@ -74,6 +165,7 @@ class fsEditor:
         if collection_name != self.collection_name :
             self.collection_name = collection_name
 
+    @check_stat
     def createNewCourse(self, values_dict: Dict[str, Any]):
         '''
         Creates a new course in the Firestore database with the provided values.
@@ -89,7 +181,8 @@ class fsEditor:
         fs_stats.increase_number_writes(self.collection_name, 1)
         course_ref = self.client.collection(self.collection_name).add(values_dict)
         return course_ref[1].id
-
+    
+    @check_stat
     def read_collection(self, return_json = False, id_only = False):
         '''
         Reads the entire sheet from the Firestore database and returns it as a pandas 
@@ -125,7 +218,7 @@ class fsEditor:
         df = pd.DataFrame(sheet).set_index('_course_id', drop = True)
         return df
 
-    
+    @check_stat
     def getCourse(self, course_id) :
         ''''
         Returns a dictionary of values for the document with id of 'course_id'
@@ -135,7 +228,7 @@ class fsEditor:
         course = course_ref.get()
         return course.to_dict()
 
-
+    @check_stat
     def getValue(self, course_id: str,columns: str) -> str:
         '''
         Retrieves a specific value or values from a course document in the Firestore database.
@@ -163,7 +256,8 @@ class fsEditor:
         else:
             cell = doc_data.get(columns)
             return cell
-
+        
+    @check_stat
     def updateValue(self, course_id: str, values_dict: Dict[str, Any]):
         '''
         Updates a specific course document in the Firestore database with new values.
@@ -179,6 +273,7 @@ class fsEditor:
         fs_stats.increase_number_writes(self.collection_name, 1)
         course_ref.update(values_dict)
        
+    @check_stat
     def duplicateCourse(self,original_course_id):
         '''
         Duplicates a course by creating a new course with the same data as the original course.
@@ -198,7 +293,7 @@ class fsEditor:
         doc_data = course.to_dict()
         return self.createNewCourse(doc_data)
         
-
+    @check_stat
     def delete_course(self, course_id):
         '''
         Deletes a course document from the Firestore database.
@@ -214,6 +309,7 @@ class fsEditor:
 
         pass
 
+    @check_stat
     def delete_field(self, id, field) :
         '''
         Deletes 'field' from record with given 'id'. If 'id' is None,
@@ -228,7 +324,7 @@ class fsEditor:
             for id in ids :
                 self.delete_field(id, field)
 
-
+    @check_stat
     def collection_exists(self,):
         '''
         Checks if specified collection exist in the firestore database by attempting to retrieve one document.
@@ -250,6 +346,7 @@ class fsEditor:
             print(f"An error occurred: {e}")
             return False
 
+    @check_stat
     def delete_collection(self):
         '''
         Deletes the entire collection from the Firestore database.
@@ -265,6 +362,7 @@ class fsEditor:
         logging.info(f'Collection {self.collection_name} deleted successfully.')
 
     @staticmethod
+    @check_stat
     def get_all_collections() :
         client = fsEditor.create_fs_client()
         collections = client.collections()
@@ -275,6 +373,7 @@ class fsEditor:
         return res
         
     @staticmethod
+    @check_stat
     def delete_all_collections(collections) :
         '''static method to delete one or more collections
             - collections: name of single collection or a list
@@ -287,6 +386,7 @@ class fsEditor:
             client.delete_collection()
           
     @staticmethod
+    @check_stat
     def read_all_collections() :
         '''
         Static method to read all collections
@@ -300,3 +400,4 @@ class fsEditor:
             client = fsEditor(collection)
             res[collection] = client.read_collection()
         return res
+    

@@ -142,6 +142,11 @@ def delete_specifed_days_old(days):
 
 
 def delete_user_records(user_id):
+    '''Deletes all records for a specific user_id
+     Args:
+        user_id: the user_id to delete records fors
+    '''
+
     conn = sqlite3.connect('firestore_stats.db')
     cur = conn.cursor()
     
@@ -178,10 +183,15 @@ def summarize_tables(byUser = False):
     return final
 
 def summarize_specifed_days_old(days, byUser = False):
+    '''Returns pandas data frame of number of reads, writes, and deletes
+    Args:
+        days: number of days old to include
+        byUser: if True, then show stats for each user
+    '''
     df = summarize_tables(byUser = byUser)
     df['date_id'] = pd.to_datetime(df['date_id'])
 
-    # Define the cutoff date (e.g., 1 year ago from today)
+    # Define the cutoff date 
     cutoff_date = datetime.now() - timedelta(days)
 
     # Filter the DataFrame

@@ -58,7 +58,7 @@ def admin():
 </style>
 
 <!-- Time filter controls -->
-<input type="number" id="daysInput" placeholder="Enter days" value="7">
+<input type="number" id="daysInput" placeholder="Enter days">
 <button id="filterButton">Filter</button>
 
 <!-- User dropdown -->

@@ -1,6 +1,6 @@
 import {useNavigate, useLocation} from "react-router-dom";
 import {handleBack,handleNext} from "../../../components/Button/ButtonLogic";
-import AppLayout from "../../../ApplicationLayout/Applayout";
+import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader";
 import React, {useEffect, useState} from "react";
 import {loadSyllabusContent, SyllabusContent} from "../../../utils/loadSyllabusContent";
 import {
@@ -9,7 +9,7 @@ import {
     createSaveHandler
 } from "../../../utils/handlers/formHandlersFactory";
 import HIPSAccordion from "./HIPSAccordion";
-import SyllabusSectionAccordion from "../SyllabusComponents/SyllabusAccordion";
+import SyllabusSectionAccordion from "../../../components/SyllabusComponents/SyllabusAccordion";
 import './HIPS.css'
 
 

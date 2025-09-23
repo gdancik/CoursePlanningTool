@@ -1,0 +1,201 @@
+{
+  "content": [
+    {
+      "type": "Accordion",
+      "title": "Course Information",
+      "content": [
+        {
+          "type": "Row",
+          "content": [
+            {
+              "type": "text",
+              "id": "subj_code_syllabus",
+              "label": "Subject Code",
+              "placeholder": "Enter subject code",
+              "required": true,
+              "className": "syllabus-text large-box"
+            },
+            {
+              "type": "text",
+              "id": "crse_number_syllabus",
+              "label": "Course Number",
+              "placeholder": "Enter course number",
+              "required": true,
+              "className": "syllabus-text medium-box"
+            },
+            {
+              "type": "text",
+              "id": "course_title_syllabus",
+              "label": "Course Title",
+              "placeholder": "Enter course title",
+              "required": true,
+              "className": "syllabus-text full-width-box"
+            }
+          ]
+        },
+        {
+          "type": "Row",
+          "content": [
+            {
+              "type": "checkbox-group",
+              "id": "days1_syllabus",
+              "label": "Meeting Days",
+              "required": true,
+              "options": ["M", "T", "W", "R", "F"],
+              "className": "syllabus-text large-box"
+            },
+            {
+              "type": "text",
+              "id": "times1_syllabus",
+              "label": "Meeting Time",
+              "placeholder": "Enter meeting time",
+              "required": true,
+              "className": "syllabus-text medium-box"
+            },
+            {
+              "type": "text",
+              "id": "location1_syllabus",
+              "label": "Classroom Location",
+              "placeholder": "Enter classroom location",
+              "required": true,
+              "className": "syllabus-text medium-box"
+            },
+            {
+              "type": "checkbox-group",
+              "id": "extra_meeting_syllabus",
+              "label": "Additional Meeting Times",
+              "required": false,
+              "options": ["Yes"],
+              "className": "syllabus-text medium-box"
+            }
+          ]
+        },
+        {
+          "type": "Row",
+          "content": [
+            {
+              "type": "checkbox-group",
+              "id": "extra_days_syllabus",
+              "label": "Additional Meeting Days",
+              "required": true,
+              "options": ["M", "T", "W", "R", "F", "S"],
+              "className": "syllabus-text large-box"
+            },
+            {
+              "type": "text",
+              "id": "extra_time_syllabus",
+              "label": "Additional Meeting Time",
+              "placeholder": "Enter meeting time",
+              "required": true,
+              "className": "syllabus-text medium-box"
+            }
+          ]
+        },
+        {
+          "type": "Row",
+          "content": [
+            {
+              "type": "select",
+              "id": "semester_syllabus",
+              "label": "Semester",
+              "required": true,
+              "options": ["Fall", "Winter", "Spring", "Summer"],
+              "className": "syllabus-text medium-box"
+            },
+            {
+              "type": "text",
+              "id": "year_syllabus",
+              "label": "Year",
+              "placeholder": "",
+              "required": true,
+              "options": ["2025", "2026"],
+              "className": "syllabus-text medium-box"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Accordion",
+      "title": "Instructor Information",
+      "content": [
+        {
+          "type": "Row",
+          "content": [
+            {
+              "type": "text",
+              "id": "instructor_name_syllabus",
+              "label": "Instructor Name",
+              "placeholder": "Enter instructor name",
+              "required": true,
+              "className": "syllabus-text large-box"
+            },
+            {
+              "type": "text",
+              "id": "instructor_title_syllabus",
+              "label": "Instructor Title",
+              "placeholder": "Enter instructor title",
+              "required": true,
+              "className": "syllabus-text medium-box"
+            }
+          ]
+        },
+        {
+          "type": "Row",
+          "content": [
+            {
+              "type": "email",
+              "id": "email_syllabus",
+              "label": "Email",
+              "placeholder": "Enter email",
+              "required": true,
+              "className": "syllabus-text large-box"
+            },
+            {
+              "type": "text",
+              "id": "office_location_syllabus",
+              "label": "Office Location",
+              "placeholder": "Enter office location",
+              "required": true,
+              "className": "syllabus-text medium-box"
+            },
+            {
+              "type": "tel",
+              "id": "phone_syllabus",
+              "label": "Phone (optional)",
+              "placeholder": "Enter phone",
+              "required": false,
+              "className": "syllabus-text medium-box"
+            }
+          ]
+        },
+        {
+          "type": "Row",
+          "content": [
+            {
+              "type": "text",
+              "id": "office_hours_syllabus",
+              "label": "Office Hours",
+              "placeholder": "Enter office hours",
+              "required": true,
+              "className": "syllabus-text medium-box"
+            }
+          ]
+        },
+        {
+          "type": "Row",
+          "content": [
+            {
+              "type": "textarea",
+              "id": "additional_info_syllabus",
+              "label": "Additional Information (optional)",
+              "placeholder": "Enter additional information about making appointments and how to best contact you (e.g., via email, phone, etc.).",
+              "required": false,
+              "className": "form-row additional-information-optional full-width"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

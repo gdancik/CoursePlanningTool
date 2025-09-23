@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import AppLayout from "../../../ApplicationLayout/Applayout";
+import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader";
 import {
     createPreviewHandler,
     createSaveAndExitHandler,
@@ -9,7 +9,7 @@ import {
 import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
 import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
-import SyllabusSectionAccordion from "../SyllabusComponents/SyllabusAccordion";
+import SyllabusSectionAccordion from "../../../components/SyllabusComponents/SyllabusAccordion";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import { FaExclamationTriangle } from "react-icons/fa";
 import "./LearningResources.css";

@@ -1,7 +1,7 @@
 import React from "react";
 import { FaAngleUp } from "react-icons/fa";
 import { SyllabusContent } from "../../../utils/loadSyllabusContent";
-import SyllabusFormField from "../SyllabusComponents/SyllabusFormField";
+import SyllabusFormField from "../../../components/SyllabusComponents/SyllabusFormField";
 import SafeIcon from "../../../utils/ComponentWrapper";
 
 interface Props {

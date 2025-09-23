@@ -1,7 +1,7 @@
 // src/test/jsonFieldsMapper.test.ts
 
-// Mock both fieldMappings and allowedBackendKeys
-jest.mock("../utils/fieldMappings", () => ({
+// Mock both validInputs and allowedBackendKeys
+jest.mock("../utils/validInputs", () => ({
     fieldMappings: {
         "Subject Course": "course_subject",
         "Instructor Name": "instructor_name"
@@ -18,7 +18,7 @@ jest.mock("../utils/allowableCalls", () => ({
 
 import { jsonFieldsMapper } from "../utils/jsonFieldsMapper";
 
-test("maps frontend keys to backend keys using fieldMappings", () => {
+test("maps frontend keys to backend keys using validInputs", () => {
     const input = {
         "Subject Course": "Math 101",
         "Instructor Name": "Dr. Smith",

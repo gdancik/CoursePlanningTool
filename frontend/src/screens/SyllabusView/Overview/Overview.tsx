@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useLocation} from "react-router-dom";
 import OverviewCard from "./OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSections";
-import AppLayout from "../../../ApplicationLayout/Applayout"
+import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader"
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
 import './Overview.css'
 import {handleBack, handleNext} from "../../../components/Button/ButtonLogic";

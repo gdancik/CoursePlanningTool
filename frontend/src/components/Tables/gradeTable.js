@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import "./gradeTable.css";
 
 function GradeTable(props) {

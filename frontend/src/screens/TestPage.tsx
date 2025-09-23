@@ -5,7 +5,7 @@ import RedirectingModal from './../components/RedirectingModal/RedirectingModal'
 import CompetencyTable from '../components/Tables/CompetencyTable1';
 import CompetencyTable2 from '../components/Tables/CompetencyTable2';
 
-import GoogleLogin from '../components/google_login.js'
+import GoogleLogin from '../components/GoogleLogin/google_login.js'
 
 import {
     createSaveHandler,

@@ -82,6 +82,50 @@ class fsEditor:
         self.collection_name = collection_name
         self.client = self.create_fs_client()
 
+    def check_stat(f):
+        ''''''
+        def wrapper(self, *args, **kwargs):
+            reads = fs_stats.get_reads(user_id = self.collection_name, today = True)
+            writes = fs_stats.get_writes(user_id = self.collection_name, today = True)
+            deletes = fs_stats.get_deletes(user_id = self.collection_name, today = True)
+            if reads.empty == False:
+                num_reads = reads['number'][0]
+            else:
+                num_reads = 0
+
+            if writes.empty == False:
+                num_writes = writes['number'][0]
+            else:
+                num_writes = 0
+
+            if deletes.empty == False:
+                num_deletes = deletes['number'][0]
+            else:
+                num_deletes = 0
+
+         
+            logging.debug(f'Num of reads:{num_reads}')
+            logging.debug(f'Num of writes:{num_writes}')
+            logging.debug(f'Num of deletes:{num_deletes}')
+
+            if num_reads <= 0:
+                pass
+            elif num_reads > 500:
+                raise Exception('Number of reads exceeded')
+            
+            if num_writes <= 0:
+                pass
+            elif num_writes > 500:
+                raise Exception('Number of writes exceeded')
+        
+            if num_deletes <= 0:
+                pass
+            elif num_deletes > 500:
+                raise Exception('Number of deletes exceeded')
+            
+            return f(self, *args, **kwargs)
+        
+        return wrapper
 
     @staticmethod
     def create_fs_client():

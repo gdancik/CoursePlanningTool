@@ -29,7 +29,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "cross-env CI=false react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "myComponents": "node test-runner.js myComponents",
+    "checkboxes": "node test-runner.js checkboxes",
+    "alerts": "node test-runner.js alerts",
+    "all": "node test-runner.js all"
   },
   "eslintConfig": {
     "extends": [

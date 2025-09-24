@@ -23,14 +23,15 @@ def create_app(config = Config):
     app.secret_key = "my secret key"
     app.config.from_object(Config)
 
-    CORS(app, resources = {r"/api/*": 
-    {"origins": [
-        "http://127.0.0.1:3000",
-        "http://localhost:3000",
-        "need to add domain here"
-    ]}},
-    supports_credentials = True
-    )
+    CORS(app, supports_credentials = True)
+    #CORS(app, resources = {r"/api/*": 
+    #{"origins": [
+    #    "http://127.0.0.1:3000",
+    #    "http://localhost:3000",
+    #    "need to add domain here"
+    #]}},
+    #supports_credentials = True
+    #)
 
     app.config.update(
       SESSION_COOKIE_SAMESITE="None",

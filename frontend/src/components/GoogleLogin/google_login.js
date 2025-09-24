@@ -44,6 +44,10 @@ export default function GoogleLogin({
         if (res.status === 200) {
           console.log("status is ok");
           const data = await res.data;
+          if (data.user === undefined) {
+            alert('not logged in!');
+            return;
+          }
           console.log("got data");          
           setUser({user: data.user, name: data.name});            
 

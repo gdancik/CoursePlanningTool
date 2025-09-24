@@ -13,6 +13,7 @@ import Hello from '../screens/testAPI/Hello';
 import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
 import TestPage from "../screens/TestPage"
 import TestPage2 from "../screens/TestPage2"
+import TestPage3 from "../screens/TestPage3"
 import ScheduleTest from "../components/courseSchedule"
 import GradeTable from "../components/Tables/gradeTable"
 import JSONRenderTest from "../screens/JSONRenderTest"
@@ -53,6 +54,7 @@ const AppRoutes = () => {
                 <Route path="/api/hello/" element={<Hello />} />
                 <Route path = "/test-page" element={<TestPage/>}/>
                 <Route path = "/test-page2" element={<TestPage2/>}/>
+                <Route path = "/test-page3" element={<TestPage3/>}/>
                 <Route path ="/courseSchedule" element={<ScheduleTest/>}/>
                 <Route path= "grade-table" element={<GradeTable/>} />
                 <Route path = "/json-render" element={<JSONRenderTest/>} />

@@ -4,7 +4,7 @@ import { showErrorModal } from "../utils/errorHandler";
 import RedirectingModal from './../components/RedirectingModal/RedirectingModal';
 import CompetencyTable from '../components/Tables/CompetencyTable1';
 import CompetencyTable2 from '../components/Tables/CompetencyTable2';
-
+import api from "../services/axios";
 import GoogleLogin from '../components/GoogleLogin/google_login.js'
 
 import {
@@ -14,6 +14,59 @@ import {
 } from "../utils/handlers/formHandlersFactory";
 
 const TestPage: React.FC = () => {
+
+    const c1 = async () => {
+
+        window.location.href = api.defaults.baseURL + "profile";
+        return;
+        
+        try {
+            const res = await api.get("profile/");
+            if (res.status === 200) {                      
+                const data = await res.data;
+                alert(JSON.stringify(data));           
+            } else {
+                alert('error');
+            }
+        }
+        catch(err) {
+            alert(err);
+        }
+    }
+
+ const c2 = async () => {
+
+        try {
+            const res = await api.get("p2/");
+            if (res.status === 200) {                      
+                const data = await res.data;
+                alert(JSON.stringify(data))           
+            } else {
+                alert('error');
+            }
+        }
+        catch(err) {
+            alert(err);
+        }
+    }
+
+    const c3 = () => {
+        api.get('clear');
+    }
+
+ return <>
+ <div>
+    <button onClick = {c1}>Click 1</button>
+</div>
+ <div>
+    <button onClick = {c2}>Click 2</button>
+</div>
+ <div>
+    <button onClick = {c3}>Clear</button>
+</div>
+    </>
+
+
     // Modal state
     const [modalVisible, setModalVisible] = useState(false);
     const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");

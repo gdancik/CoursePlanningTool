@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { showErrorModal } from "../utils/errorHandler";
-import RedirectingModal from './../components/RedirectingModal/RedirectingModal';
-import CompetencyTable from '../components/Tables/CompetencyTable1';
-import CompetencyTable2 from '../components/Tables/CompetencyTable2';
+import { showErrorModal } from "../../utils/errorHandler";
+import RedirectingModal from '../../components/RedirectingModal/RedirectingModal';
+import CompetencyTable from '../../components/Tables/CompetencyTable1';
+import CompetencyTable2 from '../../components/Tables/CompetencyTable2';
 
-import GoogleLogin from '../components/GoogleLogin/google_login.js'
+import GoogleLogin from '../../components/GoogleLogin/google_login.js'
 
 import {
     createSaveHandler,
     createSaveAndExitHandler,
     createPreviewHandler
-} from "../utils/handlers/formHandlersFactory";
+} from "../../utils/handlers/formHandlersFactory";
 
 const TestPage: React.FC = () => {
     // Modal state

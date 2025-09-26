@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 
-from backend.models.login import login_manager 
+from backend.models.login import login_manager
 
 from backend.main import main_bp
 from backend.api_firestore import api_firestore_bp
@@ -23,15 +23,16 @@ def create_app(config = Config):
     app.secret_key = "my secret key"
     app.config.from_object(Config)
 
-    CORS(app, supports_credentials = True)
-    #CORS(app, resources = {r"/api/*": 
-    #{"origins": [
-    #    "http://127.0.0.1:3000",
-    #    "http://localhost:3000",
-    #    "need to add domain here"
-    #]}},
-    #supports_credentials = True
-    #)
+    #CORS(app, supports_credentials = True)
+    CORS(app, resources = {r"/api/*":
+    {"origins": [
+        "http://127.0.0.1:3000",
+        "http://localhost:3000",
+        "https://127.0.0.1:3000",
+        "need to add domain here"
+    ]}},
+    supports_credentials = True
+    )
 
     app.config.update(
       SESSION_COOKIE_SAMESITE="None",
@@ -49,8 +50,8 @@ def create_app(config = Config):
     if app.config['DEBUG'] :
         from backend.test_api import test_api_bp
         app.register_blueprint(test_api_bp, url_prefix='/api')
-    
-  
+
+
     import logging
     if app.config['LOGGING'] == 'DEBUG':
         logging.basicConfig(level=logging.DEBUG,format="%(levelname)s from %(funcName)s: %(message)s")
@@ -65,8 +66,8 @@ def create_app(config = Config):
     elif app.config['LOGGING'] == 'NONE':
         logger = logging.getLogger()
         logging.disable(logging.CRITICAL)
-    
-        
+
+
     return app
 
 

@@ -1,12 +1,10 @@
 import React from "react";
-import FormField from "../screens/SyllabusView/BasicInformation/FormField";
-import { BasicInfoData } from "./loadBasicInfoFields";
 import SectionAccordion from "../screens/SyllabusView/BasicInformation/SectionAccordion";
 import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
 import Alert from "../components/SyllabusComponents/Alert";
 import Information from "../components/SyllabusComponents/Information";
 
-// Type guard for form fields vs container components
+// Type for JSON-driven UI
 export type JsonComponent = {
     type: string;
     title?: string;
@@ -18,8 +16,8 @@ export type JsonComponent = {
     className?: string;
     content?: JsonComponent[];
     text?: string;
-    data?:string[];
-    horizontal?:boolean;
+    data?: string[];
+    horizontal?: boolean;
 };
 
 // Recursive renderer
@@ -33,7 +31,6 @@ export function jsonRenderComponent(
             return (
                 <SectionAccordion
                     sectionName={component.title || ""}
-                    fields={[]}
                     formData={formData}
                     onFieldChange={onChange}
                 >
@@ -53,42 +50,73 @@ export function jsonRenderComponent(
             );
 
         case "CheckboxGroup":
-            return(
+            return (
                 <CheckboxGroup
                     id={component.id}
-                    data ={component.data || []}
+                    data={component.data || []}
                     horizontal={component.horizontal ?? true}
-
-                    />
-            );
-        case "Alert":
-            return <Alert text ={component.text || "" }/>;
-        case "Information":
-            return <Information text={component.text || ""}/>;
-
-        case "text":
-        case "select":
-        case "textarea":
-        case "email":
-        case "tel":
-            const field: BasicInfoData = {
-                section: component.title || "",
-                row: 0,
-                layoutRow: 0,
-                label: component.label || "",
-                type: component.type,
-                placeholder: component.placeholder || "",
-                required: component.required ?? false,
-                options: component.options || [],
-            };
-            return (
-                <FormField
-                    key={component.id}
-                    field={field}
-                    value={formData[field.label] || ""}
-                    onChange={onChange}
                 />
             );
+
+        case "Alert":
+            return <Alert text={component.text || ""} />;
+
+        case "Information":
+            return <Information text={component.text || ""} />;
+
+        // Text-like inputs
+        case "text":
+        case "email":
+        case "tel":
+            return (
+                <label key={component.id}>
+                    {component.label}
+                    <input
+                        type={component.type}
+                        placeholder={component.placeholder}
+                        value={formData[component.label || ""] || ""}
+                        onChange={(e) => onChange(component.label || "", e.target.value)}
+                        required={component.required}
+                    />
+                </label>
+            );
+
+        // Dropdown
+        case "select":
+            return (
+                <label key={component.id}>
+                    {component.label}
+                    <select
+                        value={formData[component.label || ""] || ""}
+                        onChange={(e) => onChange(component.label || "", e.target.value)}
+                        required={component.required}
+                    >
+                        <option value="">Select</option>
+                        {component.options?.map((opt, i) => (
+                            <option key={i} value={opt}>
+                                {opt}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+            );
+
+        // Textarea
+        case "textarea":
+            return (
+                <label key={component.id}>
+                    {component.label}
+                    {component.placeholder && (
+                        <p className="helper-text">{component.placeholder}</p>
+                    )}
+                    <textarea
+                        value={formData[component.label || ""] || ""}
+                        onChange={(e) => onChange(component.label || "", e.target.value)}
+                        required={component.required}
+                    />
+                </label>
+            );
+
         default:
             return null;
     }

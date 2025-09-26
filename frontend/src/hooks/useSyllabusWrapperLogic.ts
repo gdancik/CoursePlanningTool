@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useReducer, useState, useRef} from "react";
 import { handleNext, handleBack } from "../components/Button/ButtonLogic";
 import { createSaveHandler, createSaveAndExitHandler, createPreviewHandler } from "../utils/handlers/formHandlersFactory";
 import type { NavigateFunction } from "react-router-dom";
@@ -16,6 +16,7 @@ interface SyllabusWrapperLogicResult {
         setTitle: (title: string) => void;
         setMessage: (message: string) => void;
     };
+    containerRef: React.RefObject<HTMLDivElement | null>;
     handleBackClick: () => void;
     handleNextClick: () => void;
     handleSave: () => void;
@@ -32,6 +33,19 @@ export function useSyllabusWrapperLogic(
     const [modalStatus, setModalStatus] = useState<ModalStatus>("loading");
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const courseID = localStorage.getItem("currentCourseId");
+
+    const handleSave = () => {
+        if (containerRef.current) {
+            const jsonString= JSON.stringify(formData, null, 2);
+            console.log("Saved Data:", jsonString);
+
+        }
+
+    }
+
 
     const modalControls = {
         setVisible: setModalVisible,
@@ -40,7 +54,6 @@ export function useSyllabusWrapperLogic(
         setMessage: setModalMessage,
     };
 
-    const courseID = localStorage.getItem("currentCourseId");
 
     return {
         modalVisible,
@@ -48,9 +61,10 @@ export function useSyllabusWrapperLogic(
         modalTitle,
         modalMessage,
         modalControls,
+        containerRef,
         handleBackClick: () => handleBack(navigate, pathname, formData, courseID || undefined),
         handleNextClick: () => handleNext(navigate, pathname, formData, courseID || undefined),
-        handleSave: createSaveHandler(formData, modalControls),
+        handleSave,
         handleSaveAndExit: createSaveAndExitHandler(formData, navigate, modalControls),
         handlePreviewClick: createPreviewHandler(formData, modalControls),
     };

@@ -1,3 +1,4 @@
+import React from "react";
 import SyllabusLayout from "../../../SyllabusLayout/SyllabusPageHeader";
 import GeneratePageContent from "./GeneratePageContent"
 import { JsonComponent} from "../../../utils/jsonRenderer";
@@ -11,15 +12,29 @@ interface GenerateSyllabusPageProps {
     onSave: () => void;
     onSaveAndExit: () => void;
     onPreview: () => void;
+    containerRef: React.RefObject<HTMLDivElement | null>;
 }
 const GenerateSyllabusPage = ({
-                                  json, formData, onFieldChange,
-                                  onBack, onNext, onSave, onSaveAndExit, onPreview,
+                                  json,
+                                  formData,
+                                  onFieldChange,
+                                  onBack,
+                                  onNext,
+                                  onSave,
+                                  onSaveAndExit,
+                                  onPreview,
+                                  containerRef,
                               }: GenerateSyllabusPageProps) => (
-    <>
-        <SyllabusLayout {...{ onBack, onNext, onSave, onSaveAndExit, onPreview }} />
-        <GeneratePageContent json={{content: json}} formData={formData} onFieldChange={onFieldChange} />
-    </>
+    <div ref ={containerRef}>
+        <SyllabusLayout
+            {...{ onBack, onNext, onSave, onSaveAndExit, onPreview }}
+        />
+        <GeneratePageContent
+            json={{content: json}}
+            formData={formData}
+            onFieldChange={onFieldChange} />
+
+    </div>
 );
 
 

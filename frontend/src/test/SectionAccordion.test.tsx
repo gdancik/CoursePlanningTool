@@ -40,7 +40,6 @@ test("renders SectionAccordion with grouped rows and fields", () => {
     render(
         <SectionAccordion
             sectionName="Basic Info"
-            fields={mockFields}
             formData={{
                 Name: "Alice",
                 Description: "Some desc",

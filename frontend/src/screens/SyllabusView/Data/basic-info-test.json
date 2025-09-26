@@ -37,11 +37,11 @@
           "type": "Row",
           "content": [
             {
-              "type": "checkbox-group",
+              "type": "CheckboxGroup",
               "id": "days1_syllabus",
               "label": "Meeting Days",
               "required": true,
-              "options": ["M", "T", "W", "R", "F"],
+              "data": ["M", "T", "W", "R", "F", "S"],
               "className": "syllabus-text large-box"
             },
             {
@@ -61,12 +61,10 @@
               "className": "syllabus-text medium-box"
             },
             {
-              "type": "checkbox-group",
-              "id": "extra_meeting_syllabus",
-              "label": "Additional Meeting Times",
-              "required": false,
-              "options": ["Yes"],
-              "className": "syllabus-text medium-box"
+              "type": "CheckboxGroup",
+              "label": "Additional Meeting Times?",
+              "require": "false",
+              "data": ["Yes"]
             }
           ]
         },
@@ -78,7 +76,8 @@
               "id": "extra_days_syllabus",
               "label": "Additional Meeting Days",
               "required": true,
-              "options": ["M", "T", "W", "R", "F", "S"],
+              "data": ["M", "T", "W", "R", "F", "S"],
+              "horizontal": true,
               "className": "syllabus-text large-box"
             },
             {
@@ -108,7 +107,6 @@
               "label": "Year",
               "placeholder": "",
               "required": true,
-              "options": ["2025", "2026"],
               "className": "syllabus-text medium-box"
             }
           ]
@@ -191,7 +189,7 @@
               "label": "Additional Information (optional)",
               "placeholder": "Enter additional information about making appointments and how to best contact you (e.g., via email, phone, etc.).",
               "required": false,
-              "className": "form-row additional-information-optional full-width"
+              "className": "Syllabus-text medium-box"
             }
           ]
         }

@@ -19,7 +19,7 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
     const {
         modalVisible, modalStatus, modalTitle, modalMessage, modalControls,
         handleBackClick, handleNextClick, handleSave,
-        handleSaveAndExit, handlePreviewClick,
+        handleSaveAndExit, handlePreviewClick, containerRef
     } = useSyllabusWrapperLogic(formData, navigate, location.pathname);
 
     // Load initial form data
@@ -42,6 +42,7 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
                 onSave={handleSave}
                 onSaveAndExit={handleSaveAndExit}
                 onPreview={handlePreviewClick}
+                containerRef = {containerRef}
             />
             <RedirectingModal
                 visible={modalVisible}

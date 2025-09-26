@@ -42,7 +42,7 @@ export function jsonRenderComponent(
 
         case "Row":
             return (
-                <div className="form-row">
+                <div className={`form-row`}>
                     {component.content?.map((child, i) =>
                         jsonRenderComponent(child, formData, onChange)
                     )}
@@ -51,11 +51,13 @@ export function jsonRenderComponent(
 
         case "CheckboxGroup":
             return (
-                <CheckboxGroup
-                    id={component.id}
-                    data={component.data || []}
-                    horizontal={component.horizontal ?? true}
-                />
+                <div className={component.className || ""}>
+                    <CheckboxGroup
+                        id={component.id}
+                        data={component.data || []}
+                        horizontal={component.horizontal ?? true}
+                    />
+                </div>
             );
 
         case "Alert":
@@ -69,7 +71,7 @@ export function jsonRenderComponent(
         case "email":
         case "tel":
             return (
-                <label key={component.id}>
+                <label key={component.id} className={component.className || ""}>
                     {component.label}
                     <input
                         type={component.type}
@@ -77,6 +79,7 @@ export function jsonRenderComponent(
                         value={formData[component.label || ""] || ""}
                         onChange={(e) => onChange(component.label || "", e.target.value)}
                         required={component.required}
+                        className={component.className || ""}
                     />
                 </label>
             );
@@ -84,12 +87,13 @@ export function jsonRenderComponent(
         // Dropdown
         case "select":
             return (
-                <label key={component.id}>
+                <label key={component.id} className={component.className || ""}>
                     {component.label}
                     <select
                         value={formData[component.label || ""] || ""}
                         onChange={(e) => onChange(component.label || "", e.target.value)}
                         required={component.required}
+                        className={component.className || ""}
                     >
                         <option value="">Select</option>
                         {component.options?.map((opt, i) => (
@@ -104,7 +108,7 @@ export function jsonRenderComponent(
         // Textarea
         case "textarea":
             return (
-                <label key={component.id}>
+                <label key={component.id} className={component.className || ""}>
                     {component.label}
                     {component.placeholder && (
                         <p className="helper-text">{component.placeholder}</p>
@@ -113,6 +117,7 @@ export function jsonRenderComponent(
                         value={formData[component.label || ""] || ""}
                         onChange={(e) => onChange(component.label || "", e.target.value)}
                         required={component.required}
+                        className={component.className || ""}
                     />
                 </label>
             );

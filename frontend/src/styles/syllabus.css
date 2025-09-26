@@ -1,0 +1,34 @@
+/* Form row container → 2 equal columns */
+.form-row {
+    @apply grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 items-start;
+}
+
+/* Label styling */
+.form-row label {
+    @apply block text-base font-semibold mb-1;
+}
+
+/* Input, select, textarea styling */
+.form-row input,
+.form-row select,
+.form-row textarea {
+    @apply w-full border-2 border-green-600 p-2 box-border rounded-md;
+}
+
+/* Full-width rows like textarea */
+.form-row.full-width {
+    @apply col-span-full;
+}
+
+.form-row.full-width textarea {
+    @apply min-h-40 resize-y; /* 10rem, vertical resize */
+}
+
+/* Textarea variant */
+label.text-area-width {
+    @apply col-span-full;
+}
+
+label.text-area-width textarea {
+    @apply w-full h-40; /* 10rem tall */
+}

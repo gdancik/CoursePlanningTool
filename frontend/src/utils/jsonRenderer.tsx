@@ -2,6 +2,9 @@ import React from "react";
 import FormField from "../screens/SyllabusView/BasicInformation/FormField";
 import { BasicInfoData } from "./loadBasicInfoFields";
 import SectionAccordion from "../screens/SyllabusView/BasicInformation/SectionAccordion";
+import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
+import Alert from "../components/SyllabusComponents/Alert";
+import Information from "../components/SyllabusComponents/Information";
 
 // Type guard for form fields vs container components
 export type JsonComponent = {
@@ -14,6 +17,9 @@ export type JsonComponent = {
     options?: string[];
     className?: string;
     content?: JsonComponent[];
+    text?: string;
+    data?:string[];
+    horizontal?:boolean;
 };
 
 // Recursive renderer
@@ -46,10 +52,23 @@ export function jsonRenderComponent(
                 </div>
             );
 
+        case "CheckboxGroup":
+            return(
+                <CheckboxGroup
+                    id={component.id}
+                    data ={component.data || []}
+                    horizontal={component.horizontal ?? true}
+
+                    />
+            );
+        case "Alert":
+            return <Alert text ={component.text || "" }/>;
+        case "Information":
+            return <Information text={component.text || ""}/>;
+
         case "text":
         case "select":
         case "textarea":
-        case "checkbox-group":
         case "email":
         case "tel":
             const field: BasicInfoData = {
@@ -70,7 +89,6 @@ export function jsonRenderComponent(
                     onChange={onChange}
                 />
             );
-
         default:
             return null;
     }

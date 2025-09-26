@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { showErrorModal } from "../utils/errorHandler";
-import RedirectingModal from './../components/RedirectingModal/RedirectingModal';
-import CompetencyTable from '../components/Tables/CompetencyTable1';
-import CompetencyTable2 from '../components/Tables/CompetencyTable2';
-import api from "../services/axios";
-import GoogleLogin from '../components/GoogleLogin/google_login.js'
+import { showErrorModal} from "../../utils/errorHandler";
+import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
+import CompetencyTable1 from "../../components/Tables/CompetencyTable1";
+import CompetencyTable2 from "../../components/Tables/CompetencyTable2";
+import api from "../../services/axios";
+import GoogleLogin from '../../components/GoogleLogin/google_login.js'
 
 import {
     createSaveHandler,
     createSaveAndExitHandler,
     createPreviewHandler
-} from "../utils/handlers/formHandlersFactory";
+} from "../../utils/handlers/formHandlersFactory";
 
 const TestPage: React.FC = () => {
 
@@ -158,7 +158,7 @@ const TestPage: React.FC = () => {
                 message={modalMessage}
             />
 	
-	    <div style = {{ marginTop: "2rem" }}><CompetencyTable/>
+	    <div style = {{ marginTop: "2rem" }}><CompetencyTable1/>
 		<CompetencyTable2/>
 	    </div>
         </div>

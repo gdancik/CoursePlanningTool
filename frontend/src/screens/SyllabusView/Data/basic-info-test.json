@@ -74,7 +74,7 @@
           "type": "Row",
           "content": [
             {
-              "type": "checkbox-group",
+              "type": "CheckboxGroup",
               "id": "extra_days_syllabus",
               "label": "Additional Meeting Days",
               "required": true,

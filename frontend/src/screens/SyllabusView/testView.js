@@ -41,6 +41,8 @@ function TestView(props) {
 
    <GradeTable id = 'grade_table_syllabus_list'></GradeTable>
     <br/>
+
+    
    <button onClick = {() => saveData(containerRef)}>Save</button>
    </div>
   );

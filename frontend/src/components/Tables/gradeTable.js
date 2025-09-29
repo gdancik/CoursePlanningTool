@@ -1,6 +1,13 @@
 import React from "react";
 import "./gradeTable.css";
 
+/**
+ * @function GradeTable
+ * @description The GradeTable component
+ * @param props.id - the id of the table element
+ * @returns {html} a grade table with 1 column for letter grades 
+ *                 and an editable column for values.
+ */
 function GradeTable(props) {
   const gradeLetter = [
     "A",

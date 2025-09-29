@@ -11,6 +11,15 @@ import ErrorModal from "../ErrorModal/ErrorModal.tsx";
 
 // requires REACT_APP_CLIENT_ID set in .env
 
+/**
+ * @function MyGoogleLogin
+ * @description The GoogleLogin component
+ * @param autonavigate - If true, then automatically navigates
+ *              to user's course page following login (default = false)
+ * @returns {html} a container containing Google Login button, and
+ *                  Continue and Logout buttons after a successful
+ *                  login.
+ */
 export default function MyGoogleLogin ({                        
                             auto_navigate = false, 
                          } ) {
@@ -95,7 +104,7 @@ export default function MyGoogleLogin ({
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
        <GoogleLogin
-        theme="filled_black"
+        theme="filled_blue"
         shape="pill"
         onSuccess={(credentialResponse) => {
           console.log("Encoded JWT ID token:", credentialResponse.credential);

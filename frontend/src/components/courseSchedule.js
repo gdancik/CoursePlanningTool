@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import "./Tables/gradeTable.css";
 
+/**
+ * @function CourseSchedule
+ * @description The CourseSchedule component
+ * @returns {html} table with columns for Date, Unit/Theme, 
+ *      Learning Outcomes, and Reading/Assignments; and
+ *      buttons for adding/removing rows
+ */
 function CourseSchedule() {
   const [scheduleRows, setScheduleRows] = useState([
     { date: "", unit: "", learningOutcomes: "", readingAssignments: "" }

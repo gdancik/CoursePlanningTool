@@ -3,6 +3,7 @@ class Config:
     #LOGGING can be DEBUG, INFO, WARN, ERROR, CRITICAL and NONE
     LOGGING = 'DEBUG'
 
-    # gs_editor API settings
-    MAX_TRIES = 6
-    MAXIMUM_BACKOFF = 40
+    #Fire store access limits, can be set to an positive integer or None for unlimted.
+    MAX_READS = 500
+    MAX_WRITES = 500
+    MAX_DELETES = 500

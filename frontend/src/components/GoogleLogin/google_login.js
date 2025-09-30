@@ -1,156 +1,148 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import {useAuth} from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import RedirectingModal from "../RedirectingModal/RedirectingModal";
+
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import api from "../../services/axios";
-import './google_login.css';
+import ErrorModal from "../ErrorModal/ErrorModal.tsx";
 
-/*************************************************************************
- * Logic is as follows:
- * - checkLogin will wait for profile information
- * - handle login redirects to flask endpoint for google login
- *    - an optional referrer can be specified (flask redirects to this)
- *    - successful login sets user (id and name), which updates the page
- * 
- * TO DO: fetch urls should not be hardcoded here
- **************************************************************************/
+// requires REACT_APP_CLIENT_ID set in .env
 
-export default function GoogleLogin({
-                         display_logout = true, 
-                         auto_navigate = false, 
-                         display_modal = false}){
+/**
+ * @function MyGoogleLogin
+ * @description The GoogleLogin component
+ * @param autonavigate - If true, then automatically navigates
+ *              to user's course page following login (default = false)
+ * @returns {html} a container containing Google Login button, and
+ *                  Continue and Logout buttons after a successful
+ *                  login.
+ */
+export default function MyGoogleLogin ({                        
+                            auto_navigate = false, 
+                         } ) {
 
-  
-  const {user, setUser} = useAuth();
-
-  const navigate = useNavigate();
-
-  // New modal states
-  
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalStatus, setModalStatus] = useState("loading");
-    const [modalTitle, setModalTitle] = useState("");
-    const [modalMessage, setModalMessage] = useState("");
-
-  useEffect(() => {
-    // Check if already logged in (after callback redirect)
-
-    const checkLogin = async () => {
-      try {
-     
-        const res = await api.get("profile/");
-        console.log(res);
-
-        if (res.status === 200) {
-          console.log("status is ok");
-          const data = await res.data;
-          if (data.user === undefined) {
-            alert('not logged in!');
-            return;
-          }
-          console.log("got data");          
-          setUser({user: data.user, name: data.name});            
-
-          if (display_modal) {
-            setModalStatus("success");
-            setModalTitle("Login Successful");
-            setModalMessage(`Welcome ${data.name}! Redirecting to your course page...`);          
-            setModalVisible(true);
-          }
+    const {user, setUser} = useAuth();
+    const [errorModalMessage, setErrorModalMessage] = useState("")
+    const [errorModalVisible, setErrorModalVisible] = useState(false)
+    const [errorModalCode, setErrorModalCode] = useState("")
+    
+    const navigate = useNavigate();
+   
+    // confirm jwt with backend,      
+    const google_login = async (jwt) => { 
+    try {
+        const response = await api.post('google_login', {"jwt": jwt})
+        console.log("status = " + response.status);
+        
+        if (response.status !== 200) {          
+          setErrorModalCode(response.status);
+          setErrorModalMessage(response.setErrorModalMessage)
+          setErrorModalVisible(true);
+          console.log(response);          
+        }   
+        
+        console.log("confirmed...");          
+        console.log(response.data);            
+                
+        const data = response.data;
+        setUser({user: data.user, name: data.name});            
+        
           
-          if (auto_navigate) {
+        if (auto_navigate) {
             setTimeout(() => {                                      
                       navigate("/course-page");
-                  }, 1500);    
-          }  
-        }
-      } catch (err) {
-        console.error("Not logged in:", err);
-      }
-    };
-    checkLogin();
-  }, []);
+            }, 1500);    
+        }              
+    } catch(error) {
+        console.error("Error", error);
+        setErrorModalMessage("Unable to log in: " + error.message);    
+        setErrorModalCode(error.status);        
+        setErrorModalVisible(true);    
+    };    
+}
 
-  const handleLogin = () => {
-    window.location.href = api.defaults.baseURL + "google_login/?referrer=" + window.location.href;
-  };
-
-const logout = async () => {
-      try {
-
-        //const res = await fetch("http://127.0.0.1:5000/api/logout/", {
-        //  credentials: "include",
-        //});
-
+    // handles logout on backend
+    const logout = async () => {
+        try {
+    
         const res = await api.get('logout/');
 
         if (res.status == 200) {               
-          setUser(null);
+            setUser(null);
         }
-      } catch (err) {
-        alert("Error: Unable to logout");
-      }
-  };
+        } catch (err) {
+        alert("Error: Unable to logout");        
+        }
+    };
 
-const gButton = `
-<button class="gsi-material-button" style="width:100%;>
-  <div class="gsi-material-button-state"></div>
-  <div class="gsi-material-button-content-wrapper">
-    <div class="gsi-material-button-icon">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="display: block;">
-        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-        <path fill="none" d="M0 0h48v48H0z"></path>
-      </svg>
-    </div>
-    <span class="gsi-material-button-contents">Sign in with Google</span>
-    <span style="display: none;">Sign in with Google</span>
-  </div>
-</button>
-`
-//useEffect(() => {
-//  setUser({ user: 'my_user', name: 'my_name' });
-//}, [setUser]);
+    const closeModal = () => {
+      setErrorModalVisible(false);
+    }
 
   return (
+
     <>
-  
-      {!user ? (            
-        <center>
-              { <div onClick = {handleLogin} dangerouslySetInnerHTML={{ __html: (gButton) }} /> }                    
-        </center>
-      ) : ( 
 
-        <center>
-        <p>Welcome, {user.name} ({user.user}) </p>
-        </center>
-      )}
+    { errorModalVisible? (
+    <ErrorModal message = {errorModalMessage}
+                errorCode = {errorModalCode}
+                onClose = {closeModal}
+                ></ErrorModal>
+    ) : (null)
+  }
 
-      {user && !auto_navigate? (
-            <button onClick = {() => {navigate('/course-page')}}>Click to Continue</button>
+    { user? (
+        <center>
+            <p>Welcome, {user.name} ({user.user}) </p>
+        </center>
         ) : (null)
-      }
+    }
 
-      {user && display_logout? (
-            <button onClick = {logout}
-                    style = {{backgroundColor:"maroon"}}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
+       <GoogleLogin
+        theme="filled_blue"
+        shape="pill"
+        onSuccess={(credentialResponse) => {
+          console.log("Encoded JWT ID token:", credentialResponse.credential);
+          const decoded = jwtDecode(credentialResponse.credential);
+          console.log("Decoded JWT:", decoded);
+          console.log("calling fetch...");
+
+          // log on to backend
+          google_login(credentialResponse.credential);
+          
+        }}
+        onError={() => {
+          console.log("Login Failed");
+        }}
+      /> 
+    </GoogleOAuthProvider>
+    {user && !auto_navigate? (
+        <>         
+            <div style = {{marginTop: "10px"}}>
+            <button onClick = {() => {navigate('/course-page')}}
+                    style = {{backgroundColor:"lightblue",
+                                height: "30px"
+                    }}>Click to Continue</button>
+                    &nbsp;
+             <button onClick = {logout}
+                    style = {{backgroundColor:"#dc3545",
+                        height: "30px"
+                    }}
             >Logout</button>
+            </div>
+            </>
         ) : (null)
       }
-     
 
-  
-           {/* Reusable modal with props */}
-            <RedirectingModal
-                visible={modalVisible}
-                status={modalStatus}
-                title={modalTitle}
-                message={modalMessage}
-            />
+    </div>      
 
     </>
-  );
-}
 
+  );
+
+}

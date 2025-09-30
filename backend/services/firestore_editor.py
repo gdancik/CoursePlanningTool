@@ -68,17 +68,17 @@ class fsEditor:
             logging.debug(f'Num of writes:{num_writes}')
             logging.debug(f'Num of deletes:{num_deletes}')
 
-            if num_reads <= 0:
+            if num_reads <= 0 or self.max_reads is None:
                 pass
             elif num_reads > self.max_reads:
                 raise Exception('Number of reads exceeded')
             
-            if num_writes <= 0:
+            if num_writes <= 0 or self.max_writes is None:
                 pass
             elif num_writes > self.max_writes:
                 raise Exception('Number of writes exceeded')
         
-            if num_deletes <= 0:
+            if num_deletes <= 0 or self.max_deletes is None:
                 pass
             elif num_deletes > self.max_deletes:
                 raise Exception('Number of deletes exceeded')

@@ -1,6 +1,22 @@
 import React from 'react';
 
-// Styled Link Component
+/**
+ * @function SidebarLink
+ * @description A styled link component for use within SidebarLayout. 
+ * Provides consistent grey background styling for sidebar links with support for both external links and click handlers.
+ * @param {React.ReactNode} children - The link text or content to display
+ * @param {string} [href] - External URL for the link. When provided, renders as an anchor tag with target="_blank"
+ * @param {Function} [onClick] - Click handler function. Used when href is not provided to create clickable spans
+ * @param {Object} [style={}] - Additional CSS styles to override default styling
+ * @returns {JSX.Element} A styled link element (anchor or span) with consistent ELAC branding
+ * @example
+ * // External link
+ * <SidebarLink href="https://www.easternct.edu/ctla/">Link to CTLA ↗</SidebarLink>
+ * 
+ * @example  
+ * // Click handler
+ * <SidebarLink onClick={() => navigateToPage()}>Purpose and Application Examples ↗</SidebarLink>
+ */
 const SidebarLink = ({ children, href, onClick, style = {} }) => {
   const linkStyle = {
     backgroundColor: '#f5f5f5',
@@ -31,6 +47,29 @@ const SidebarLink = ({ children, href, onClick, style = {} }) => {
   );
 };
 
+/**
+ * @function SidebarLayout
+ * @description A two-column layout component with sidebar and main content area, featuring ELAC-style design.
+ * Used in the Syllabus Page Builder to create informational sections with descriptive content in the sidebar
+ * and interactive elements in the main area. Features a yellow accent bar with decorative square element.
+ * @param {string} [sidebarTitle=""] - Title text displayed at the top of the sidebar
+ * @param {string|React.ReactNode} [sidebarContent=""] - Content for the sidebar. Can be text string or React elements
+ * @param {React.ReactNode} children - Main content to display in the right column
+ * @param {string} [sidebarWidth="300px"] - Width of the sidebar column
+ * @param {string} [backgroundColor="#f8f9fa"] - Background color of the sidebar
+ * @param {string} [borderColor="#dee2e6"] - Border color for the layout elements
+ * @param {string} [accentColor="#ffc107"] - Color of the accent bar and decorative square
+ * @returns {JSX.Element} A two-column layout with styled sidebar and main content area
+ * @example
+ * <SidebarLayout
+ *   sidebarTitle="Definition of High Impact Practices"
+ *   sidebarContent="High impact practices are teaching interventions..."
+ *   accentColor="#ffc107"
+ *   sidebarWidth="350px"
+ * >
+ *   <div>Your main content goes here</div>
+ * </SidebarLayout>
+ */
 const SidebarLayout = ({ 
   sidebarTitle = "", 
   sidebarContent = "", 

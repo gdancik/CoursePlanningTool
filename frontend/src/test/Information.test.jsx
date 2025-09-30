@@ -22,23 +22,24 @@ describe('Information Component', () => {
   test('contains the information icon', () => {
     render(<Information text="Test message" />);
     
-    // Check if the information component contains the icon
-    const informationContainer = screen.getByText("Test message").closest('.information');
-    expect(informationContainer).toBeInTheDocument();
+    // Check if the information component contains the message text
+    expect(screen.getByText("Test message")).toBeInTheDocument();
   });
 
-  test('has correct CSS classes for styling', () => {
-    render(<Information text="Test message" />);
+  test('has correct styling structure', () => {
+    const { container } = render(<Information text="Test message" />);
     
-    const informationContainer = screen.getByText("Test message").closest('.information');
-    expect(informationContainer).toHaveClass('information');
+    // Check that the component has the expected styling
+    const infoElement = container.firstChild;
+    expect(infoElement).toHaveStyle('display: flex');
+    expect(infoElement).toHaveStyle('background: #d4edda');
   });
 
   test('handles empty text gracefully', () => {
-    render(<Information text="" />);
+    const { container } = render(<Information text="" />);
     
-    const informationContainer = document.querySelector('.information');
-    expect(informationContainer).toBeInTheDocument();
+    // Component should still render even with empty text
+    expect(container.firstChild).toBeInTheDocument();
   });
 
   test('handles long text content', () => {

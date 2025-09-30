@@ -47,21 +47,18 @@ const TEST_PAGES = {
       <section style={{ marginBottom: '2rem', padding: '1rem', border: '1px solid #ccc', borderRadius: '4px' }}>
         <h2>SidebarLayout Component</h2>
         
-        <h3>Example 1: High Impact Practices (matching your image)</h3>
+        <h3>This is the SidebarLayout Component</h3>
         <SidebarLayout
-          sidebarTitle="Definition of High Impact Practices"
-          sidebarContent="High impact practices are teaching interventions and approaches that have been demonstrated to improve student learning and engagement. Implementing high impact practices in your classrooms requires significant planning and a consideration of the resources you have available, the size of your course, the placement of your course within the curriculum (either your program or ELAC). Courses in Eastern's ELAC curriculum require high impact practices, if your course is not in the ELAC curriculum but is conducive to supporting the implementation of a high impact practice, the following information should help get you started.
-
-The table below includes a list of High Impact Practices, your discipline may have identified additional high impact practices (must be supported by scholarship on teaching and learning). You may include additional high impact practices in your courses if you can provide evidence that they are a high impact practice within your field."
-        >
+          sidebarTitle="This is the title of the sidebar"
+          sidebarContent="lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          >
           <div>
             <p>
               <SidebarLink href="https://www.easternct.edu/ctla/">
                 Link to CTLA ↗
               </SidebarLink>
             </p>
-            <p>This is where the main content would go - forms, tables, additional information, etc.</p>
-            <p>You can put any React component or content here.</p>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempore nobis, nemo corrupti laborum adipisci eaque iure quo, assumenda excepturi esse dolores inventore dolor debitis, ea laboriosam. Quae deserunt voluptatum, rerum velit, voluptates laudantium cupiditate dolorem similique fugit odio ex exercitationem! Neque repellat iste at, exercitationem ducimus harum, cum non quidem veniam facere accusamus ab cumque atque culpa doloribus iure, fugit esse nihil. Illum cumque vel quibusdam corporis sed eaque rem cupiditate? Tenetur eos dolore a vero culpa quia sapiente saepe quis possimus ex placeat ad cumque voluptates, omnis asperiores perferendis labore qui veniam aperiam. Ipsa, aspernatur? Laborum quaerat et odio?</p>
           </div>
         </SidebarLayout>
 

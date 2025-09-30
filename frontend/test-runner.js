@@ -13,9 +13,13 @@ const indexBackupPath = path.join(__dirname, 'src', 'index.js.backup');
 
 console.log(`🧪 Setting up test environment for: ${testPage}`);
 
-// Create backup
+// Create backup (always ensure we have a backup)
 if (fs.existsSync(indexPath)) {
   fs.copyFileSync(indexPath, indexBackupPath);
+  console.log('📁 Created backup of current index.js');
+} else if (!fs.existsSync(indexBackupPath)) {
+  console.error('❌ No index.js found and no backup exists!');
+  process.exit(1);
 }
 
 // Create test index.js with environment variable
@@ -54,11 +58,13 @@ const startProcess = spawn('npm', ['start'], { stdio: 'inherit', shell: true });
 
 // Cleanup function
 function cleanup() {
-  console.log('\n🧹 Cleaning up...');
+  console.log('\n🧹 Cleaning up test environment...');
   if (fs.existsSync(indexBackupPath)) {
     fs.copyFileSync(indexBackupPath, indexPath);
     fs.unlinkSync(indexBackupPath);
-    console.log('✅ Original index.js restored');
+    console.log('✅ Original index.js restored - main app ready for npm start');
+  } else {
+    console.log('⚠️  No backup found to restore');
   }
   process.exit(0);
 }

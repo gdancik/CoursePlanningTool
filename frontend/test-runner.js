@@ -64,7 +64,27 @@ function cleanup() {
     fs.unlinkSync(indexBackupPath);
     console.log('✅ Original index.js restored - main app ready for npm start');
   } else {
-    console.log('⚠️  No backup found to restore');
+    console.log('⚠️  No backup found to restore, creating default index.js...');
+    const defaultIndexJs = `//CSS FONTS IMPORT
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/600.css'
+import '@fontsource/inter/700.css'
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
+);
+
+reportWebVitals();`;
+    fs.writeFileSync(indexPath, defaultIndexJs);
+    console.log('✅ Default index.js created - main app ready for npm start');
   }
   process.exit(0);
 }

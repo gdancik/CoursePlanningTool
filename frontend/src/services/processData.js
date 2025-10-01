@@ -10,11 +10,11 @@ function get_table_records(mytable, ignore_last_two = false) {
   
     if (ignore_last_two) {
       var records = [...mytable.getElementsByTagName('tr')].map(
-        row => [...Array.from(row.cells).slice(0,-2)].map(cell => cell.innerHTML.trim())
+        row => [...Array.from(row.cells).slice(0,-2)].map(cell => cell.innerText.trim())
       );
     } else {
       var records = [...mytable.getElementsByTagName('tr')].map(
-        row => [...row.cells].map(cell => cell.innerHTML.trim())
+        row => [...row.cells].map(cell => cell.innerText.trim())
       );
     } 
 

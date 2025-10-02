@@ -89,7 +89,7 @@ export const getCourseData = (
         withCredentials: true,
         data: {
             course_id,
-            list_of_columns: SHEET_COLUMNS,  // ← now imported
+            list_of_columns: SHEET_COLUMNS,
         },
     })();
 };

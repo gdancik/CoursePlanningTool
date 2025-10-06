@@ -2,8 +2,9 @@ import {useReducer, useState, useRef} from "react";
 import { handleNext, handleBack } from "../components/Button/ButtonLogic";
 import { createSaveHandler, createSaveAndExitHandler, createPreviewHandler } from "../utils/handlers/formHandlersFactory";
 import type { NavigateFunction } from "react-router-dom";
+import saveData from "../services/processData";
 
-type ModalStatus = "loading" | "success";
+type ModalStatus = "loading" | "success" | "error";
 
 interface SyllabusWrapperLogicResult {
     modalVisible: boolean;
@@ -37,14 +38,6 @@ export function useSyllabusWrapperLogic(
 
     const courseID = localStorage.getItem("currentCourseId");
 
-    const handleSave = () => {
-        if (containerRef.current) {
-            const jsonString= JSON.stringify(formData, null, 2);
-            console.log("Saved Data:", jsonString);
-
-        }
-
-    }
 
 
     const modalControls = {
@@ -52,6 +45,32 @@ export function useSyllabusWrapperLogic(
         setStatus: setModalStatus,
         setTitle: setModalTitle,
         setMessage: setModalMessage,
+    };
+
+    const handleSave = async () =>  {
+        if(!containerRef.current) {
+            console.log("containerRef not attached");
+            return;
+        }
+        try {
+            setModalVisible(true);
+            setModalStatus("loading");
+            setModalTitle("Saving");
+            setModalMessage("Saving your changes...");
+
+            await saveData(containerRef);
+
+            setModalStatus("success");
+            setModalTitle("Saved");
+            setModalMessage("Your changes have been saved successfully!");
+        } catch (err: any) {
+            console.error("Error in saveData:", err);
+            setModalStatus("error");
+            setModalTitle("Save Failed");
+            setModalMessage(err.message || "An unexpected error occurred.");
+        } finally {
+            setTimeout(() => setModalVisible(false), 1500);
+        }
     };
 
 

@@ -74,9 +74,10 @@ export function jsonRenderComponent(
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
                     <input
+                        id={component.id || component.label || ""}
                         type={component.type}
                         placeholder={component.placeholder}
-                        value={formData[component.label || ""] || ""}
+                        value={formData[component.id || component.label || ""] || ""}
                         onChange={(e) => onChange(component.label || "", e.target.value)}
                         required={component.required}
                         className={component.className || ""}
@@ -90,7 +91,8 @@ export function jsonRenderComponent(
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
                     <select
-                        value={formData[component.label || ""] || ""}
+                        id={component.id || component.label || ""}
+                        value={formData[component.id || component.label || ""] || ""}
                         onChange={(e) => onChange(component.label || "", e.target.value)}
                         required={component.required}
                         className={component.className || ""}
@@ -114,7 +116,8 @@ export function jsonRenderComponent(
                         <p className="helper-text">{component.placeholder}</p>
                     )}
                     <textarea
-                        value={formData[component.label || ""] || ""}
+                        id={component.id || component.label || ""}
+                        value={formData[component.id || component.label || ""] || ""}
                         onChange={(e) => onChange(component.label || "", e.target.value)}
                         required={component.required}
                         className={component.className || ""}

@@ -1,4 +1,4 @@
-
+import {updateCourseValues} from "./course/courseService";
 // get_table_records
 //  - creates nested lists of rows from mytable, returned as 
 //      an JSON object with key = mytable.id
@@ -7,93 +7,70 @@
 //    (used to ignore add/delete buttons)
 // currently we filter out any rows that are empty
 function get_table_records(mytable, ignore_last_two = false) {
-  
-    if (ignore_last_two) {
-      var records = [...mytable.getElementsByTagName('tr')].map(
-        row => [...Array.from(row.cells).slice(0,-2)].map(cell => cell.innerHTML.trim())
-      );
-    } else {
-      var records = [...mytable.getElementsByTagName('tr')].map(
-        row => [...row.cells].map(cell => cell.innerHTML.trim())
-      );
-    } 
-
-    records = records.filter(row => row.join('') != '');
-
-    let result = {};
-    result[mytable.id] = records;
-
-    return result;
-};
+    const rows = [...mytable.getElementsByTagName("tr")];
+    const records = rows
+        .map(row => {
+            const cells = ignore_last_two
+                ? [...Array.from(row.cells).slice(0, -2)]
+                : [...row.cells];
+            return cells.map(cell => cell.innerHTML.trim());
+        })
+        .filter(row => row.join("") !== "");
+    return { [mytable.id]: records };
+}
 
 // returns a list of all checked checkboxes from element 'x',
 // or returns a string if 'x' has data-type set to "string" 
 function get_checkboxes(x) {
-        let res = {};
-        let val = [...x.querySelectorAll('input[type="checkbox"]')].filter((x)=>x.checked).map(
-          y => y.value
-        );
-        if (x.dataset.type == "string") {
-          val = val.join('');
-        }
-        res[x.id] = val;
-        return res;
+    let val = [...x.querySelectorAll('input[type="checkbox"]')]
+        .filter(el => el.checked)
+        .map(el => el.value);
+    if (x.dataset.type === "string") val = val.join("");
+    return { [x.id]: val };
 }
 
 // ref is a useRef to the relevant component
-const saveData = async(ref) => {
-
-   // we process the following:
-   //    - input[type = "text"] -- saves text
-   //    - select -- saves the selected value
-   //    - table[id$="_list"] -- saves table as a nested list
-   //    - div[id$="_checkboxes"] -- saves a list of all checked values, or a string
-   //                 if data-type = "string"
-      
-    // process plain text
-    let res_text = 
-        [... ref.current.querySelectorAll('input[type = "text"]')].map(
-          x => {
-            let res = {};
-            res[x.id] = x.value;
-            return res;
-         }
-    );
-  
-    // process dropdowns
-    let res_select = 
-        [... ref.current.querySelectorAll('select')].map(
-          x => {
-            let res = {};
-            res[x.id] = x.value;
-            return res;
-         }
-    );
-
-
-    // process tables as nested lists
-    let res_list = [...ref.current.querySelectorAll('table[id$="_list"]')].map(
-      // TO DO: we can check x.dataset.ignore_last_two to ignore the last two columns
-      x => get_table_records(x,false)   
-    );
-
-    // process tables as nested lists
-    let res_checkboxes = [...ref.current.querySelectorAll('div[id$="_checkboxes"]')].map(
-      x => get_checkboxes(x)      
-    );
-
-    // TO DO: values ending in '_json' need to be handled; are there others?
-
-    let result = []
-    result.push(...res_text);  
-    result.push(...res_select)
-    result.push(...res_list);
-    result.push(...res_checkboxes);
-
-    alert(JSON.stringify(result));
-
-    // now send val to updateValue API endpoint            
-    
+const saveData = async (ref) => {
+    if (!ref.current) {
+        console.error("saveData: ref.current is null.");
+        return;
     }
+
+    const res_text = [...ref.current.querySelectorAll('input[type="text"]')]
+        .map(x => ({ [x.id]: x.value }));
+    const res_select = [...ref.current.querySelectorAll("select")]
+        .map(x => ({ [x.id]: x.value }));
+    const res_list = [...ref.current.querySelectorAll('table[id$="_list"]')]
+        .map(x => get_table_records(x, false));
+    const res_checkboxes = [...ref.current.querySelectorAll('div[id$="_checkboxes"]')]
+        .map(x => get_checkboxes(x));
+
+    const combined = Object.assign({}, ...res_text, ...res_select, ...res_list, ...res_checkboxes);
+    console.log("📤 Payload to save:", combined);
+
+    const saved = localStorage.getItem("currentCourseData");
+    let course_id = null;
+    if (saved) {
+        try {
+            const parsed = JSON.parse(saved);
+            course_id = parsed.course_id;
+        } catch {
+            console.error("Failed to parse currentCourseData");
+        }
+    }
+
+    if (!course_id) {
+        console.error("No course_id found — cannot save.");
+        return;
+    }
+
+    try {
+        await updateCourseValues(course_id, combined);
+        console.log(" Data saved successfully via updateCourseValues");
+    } catch (error) {
+        console.error(" Failed to save data:", error);
+        throw error;
+    }
+};
 
 export default saveData;

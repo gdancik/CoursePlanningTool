@@ -2,7 +2,7 @@
 
 // Mock both validInputs and allowedBackendKeys
 jest.mock("../utils/validInputs", () => ({
-    fieldMappings: {
+    validInputs: {
         "Subject Course": "course_subject",
         "Instructor Name": "instructor_name"
     }

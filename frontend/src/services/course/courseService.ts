@@ -40,7 +40,7 @@ export const updateCourseValues = (
         method: "POST",
         withCredentials: true,
         data: {
-            course_id,
+            course_id: course_id,
             dict_of_columns_and_vals: values,
         },
     })();
@@ -84,7 +84,7 @@ export const getCourseData = (
     course_id: string
 ): Promise<Record<string, string> | null> => {
     return createApiCaller<Record<string, string>>({
-        url: "getValue/",
+        url: "getCourse/",
         method: "POST",
         withCredentials: true,
         data: {

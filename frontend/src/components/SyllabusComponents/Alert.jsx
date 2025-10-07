@@ -11,6 +11,8 @@ import { FaExclamationCircle } from "react-icons/fa";
  * @example
  * <Alert text="The ELAC requires that you implement at least two High Impact Practices into your course." />
  */
+
+
 function Alert({ text }) {
   return (
     <div

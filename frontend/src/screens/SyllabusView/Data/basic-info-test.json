@@ -73,7 +73,7 @@
           "content": [
             {
               "type": "CheckboxGroup",
-              "id": "extra_days_syllabus",
+              "id": "times2_syllabus",
               "label": "Additional Meeting Days",
               "required": true,
               "data": ["M", "T", "W", "R", "F", "S"],
@@ -82,7 +82,7 @@
             },
             {
               "type": "text",
-              "id": "extra_time_syllabus",
+              "id": "days2_syllabus",
               "label": "Additional Meeting Time",
               "placeholder": "Enter meeting time",
               "required": true,

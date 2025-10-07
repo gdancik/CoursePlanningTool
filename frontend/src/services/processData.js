@@ -46,7 +46,7 @@ const saveData = async (ref) => {
         .map(x => get_checkboxes(x));
 
     const combined = Object.assign({}, ...res_text, ...res_select, ...res_list, ...res_checkboxes);
-    console.log("📤 Payload to save:", combined);
+    console.log("Payload to save:", combined);
 
     const saved = localStorage.getItem("currentCourseData");
     let course_id = null;

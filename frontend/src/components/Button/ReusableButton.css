@@ -30,8 +30,13 @@
     color: #ffffff;
 }
 
-.reusable-button:hover {
+.reusable-button:hover:not(:disabled) {
     opacity: 0.8;
+}
+
+.reusable-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .button-icon {

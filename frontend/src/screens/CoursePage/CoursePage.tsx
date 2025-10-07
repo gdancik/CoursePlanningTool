@@ -17,6 +17,7 @@ import bgImage from '../../assets/images/bookstack-bg.png'
 import CourseModal from '../../components/CourseModal/NewCourseModal';
 import CourseCard from './CourseCard';
 import { Navigate, useNavigate } from 'react-router-dom';
+import config from '../../config.json';
 import './CoursePage.css';
 
 const CoursePage: React.FC = () => {
@@ -39,6 +40,10 @@ const CoursePage: React.FC = () => {
 
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
+    const [sortBy, setSortBy] = useState<'course_number' | 'created' | 'last_edited'>('last_edited');
+    
+    // Get max courses from config
+    const maxCourses = config.max_courses;
 
 
     // Load existing courses on mount
@@ -82,6 +87,30 @@ const CoursePage: React.FC = () => {
 
     const handleDuplicateCourse = createDuplicateRowHandler(redirectModalControls, setCourses);
 
+    // Sorting function
+    const sortCourses = (courseList: Course[], sortKey: typeof sortBy): Course[] => {
+        return [...courseList].sort((a, b) => {
+            switch (sortKey) {
+                case 'course_number':
+                    const aCode = `${a.subj_code_syllabus || ''} ${a.crse_number_syllabus || ''}`.trim();
+                    const bCode = `${b.subj_code_syllabus || ''} ${b.crse_number_syllabus || ''}`.trim();
+                    return aCode.localeCompare(bCode);
+                case 'created':
+                    // Assuming created_at exists, fallback to course_id as creation order
+                    const aCreated = a.created_at || a.course_id;
+                    const bCreated = b.created_at || b.course_id;
+                    return new Date(bCreated).getTime() - new Date(aCreated).getTime(); // Newest first
+                case 'last_edited':
+                default:
+                    return new Date(b.last_edited || '').getTime() - new Date(a.last_edited || '').getTime(); // Newest first
+            }
+        });
+    };
+
+    // Get sorted courses
+    const sortedCourses = sortCourses(courses, sortBy);
+    const isAtMaxCapacity = courses.length >= maxCourses;
+
 
     // Guard: redirect if not logged in (after hooks)
     if (!user) {
@@ -110,17 +139,37 @@ const CoursePage: React.FC = () => {
                         variant="primary"
                         onClick={() => setCreateOpen(true)}
                         className="course-page-button"
+                        disabled={isAtMaxCapacity}
                     />
 
                     <div className="course-list">
-                        <h2>My Courses</h2>
-                        <p>Please Note: You can store up to 15 courses at a time. If you want to create more courses,
-                            you will need to delete another course.</p>
+                        <div className="course-list-header">
+                            <h2>My Courses</h2>
+                            <div className="sort-dropdown">
+                                <label htmlFor="sort-by">Sort by:</label>
+                                <select 
+                                    id="sort-by"
+                                    value={sortBy} 
+                                    onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                                >
+                                    <option value="last_edited">Last Edited</option>
+                                    <option value="created">Created</option>
+                                    <option value="course_number">Course Number</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        {isAtMaxCapacity && (
+                            <div className="max-courses-message">
+                                <p>You have reached the maximum number of courses. If you would like to add another course, please delete one of the current ones.</p>
+                            </div>
+                        )}
+                        
                         {loading ? (
                             <p>Loading...</p>
                         ) : (
                             <div className="course-wrapper">
-                                {courses.map((course) => (
+                                {sortedCourses.map((course) => (
                                     <CourseCard
                                         key={course.course_id}
                                         course={course}
@@ -128,6 +177,7 @@ const CoursePage: React.FC = () => {
                                         onDuplicate={() => handleDuplicateCourse(course.course_id)}
                                         onDelete={() => handleDeleteCourse(course.course_id)}
                                         onDownload={() => handlePreviewCourse(course.course_id, course.course_title_syllabus)}
+                                        disableDuplicate={isAtMaxCapacity}
                                     />
                                 ))}
                             </div>

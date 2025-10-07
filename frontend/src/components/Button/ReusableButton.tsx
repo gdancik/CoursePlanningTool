@@ -11,6 +11,7 @@ interface ReusableButtonsProps {
     icon?: React.ReactNode;              // Optional icon to display before the label
     variant: "primary" | "secondary" | "green" | "exit"; // Styling variant
     className?: string;
+    disabled?: boolean;                  // Optional disabled state
 }
 
 // Functional component that renders a styled button
@@ -22,12 +23,14 @@ const ReusableButton: React.FC<ReusableButtonsProps> = ({
     icon,
     variant= "secondary",
     className="",
+    disabled = false,
 }) =>{
     return(
         <button
         type = {type}
         className={`reusable-button ${variant} ${className}`}
         onClick={onClick}
+        disabled={disabled}
         >
             {icon && <span className="button-icon">{icon}</span>}
             {label}

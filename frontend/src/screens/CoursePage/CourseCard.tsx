@@ -10,6 +10,7 @@ interface CourseCardProps {
     onDuplicate?: () => void;
     onDelete?: () => void;
     onDownload?: () => void;
+    disableDuplicate?: boolean;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
@@ -17,7 +18,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
                                                    onEdit,
                                                    onDuplicate,
                                                    onDelete,
-                                                   onDownload}) => {
+                                                   onDownload,
+                                                   disableDuplicate = false}) => {
 
     const handleEdit = () => {
         if (onEdit) onEdit(course.course_id);
@@ -63,6 +65,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
                     onDuplicate={onDuplicate}
                     onDelete={handleDelete}
                     onDownload={handleDownload}
+                    disableDuplicate={disableDuplicate}
                     />
             </div>
         </div>

@@ -29,6 +29,7 @@ import CourseSchedule from "../screens/SyllabusView/CourseSchedule";
 import LearningResources from "../screens/SyllabusView/LearningResources/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";
 import CoursePage from "../screens/CoursePage/CoursePage";
+import CoursePageTest from "../screens/CoursePage/CoursePageTest";
 import NotFoundPage from "../screens/NotFoundPage";
 
 const AppRoutes = () => {
@@ -78,6 +79,7 @@ const AppRoutes = () => {
                 {/*Application EndPoints*/}
                 <Route path="/" element={<LoginScreen />} />
                 <Route path  ="course-page" element={<CoursePage/>}/>
+                <Route path  ="course-test" element={<CoursePageTest/>}/>
                 <Route path = "overview" element={<Overview/>}/>
                 <Route path = "basic-info" element={<BasicInfo/>}/>
                 <Route path = "course-description" element={<Description/>}/>

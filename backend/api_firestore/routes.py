@@ -14,13 +14,15 @@ import logging
 @login_required
 def getValue():
     """
-    Get values from a course
+    Get values for specified fields for a course
     ---
     tags:
       - courses
 
     security:
       - cookieAuth: []
+
+    deprecated: true
 
     requestBody:
       required: true
@@ -46,7 +48,7 @@ def getValue():
           application/json:
             schema:
               type: object
-              example: {"column1": "value1", "column2": "value2"}
+              example: {"instructor_name_syllabus": "Eddie Walker", "phone_syllabus": "(123) 456-7890"}
       401:
         description: Unauthorized - user not logged in
       500:
@@ -158,6 +160,7 @@ def deleteCourse():
               properties:
                 course_id:
                   type: string
+                  description: the ID of the deleted course
                   example: "course123"
       401:
         description: Unauthorized - user not logged in
@@ -183,7 +186,7 @@ def deleteCourse():
 @require_post_params('course_id')
 def getCourse():
     """
-    Get a specific course
+    Get all data for a specific course
     ---
     tags:
       - courses
@@ -207,7 +210,7 @@ def getCourse():
           application/json:
             schema:
               type: object
-              example: {"course_id": "course123", "name": "Course Name", ...}
+              example: {"course_id": "course123", "name": "Course Name", "instructor": "Alice Jones"} 
       401:
         description: Unauthorized - user not logged in
       500:
@@ -225,12 +228,15 @@ def getCourse():
 @login_required
 def getSheet():
     """
-    Get the entire sheet data
+    Get all course information for the currently logged in user
     ---
     tags:
       - courses
     security:
       - cookieAuth: []
+    requestBody:
+      required: false
+    description:  This request has no body
     responses:
       200:
         description: Successfully retrieved sheet data
@@ -294,6 +300,7 @@ def createNewCourse():
               properties:
                 courseId:
                   type: string
+                  description: the ID of the new course
                   example: "new_course123"
       401:
         description: Unauthorized - user not logged in
@@ -346,6 +353,7 @@ def duplicateCourse():
               properties:
                 course_id:
                   type: string
+                  description: the ID of the duplicated course
                   example: "duplicated_course123"
       401:
         description: Unauthorized - user not logged in

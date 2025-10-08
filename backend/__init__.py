@@ -39,13 +39,13 @@ def create_app(config=Config):
 
     # Configure Swagger
     app.config['SWAGGER'] = {
-        "title": "Your API Documentation",
+        "title": "Course Planning Tool API",
         "uiversion": 3,
         "specs_route": "/api/docs/",
         "openapi": "3.0.2",
         "info": {
-            "title": "Your API",
-            "description": "API for your application",
+            "title": "Course Planning Tool API",
+            "description": "API for Course Planning Tool (<a href = 'https://github.com/gdancik/CoursePlanningTool'>View code on Github</a>)",
             "version": "1.0.0"
         },
         "doc_dir": "./docs"  # Optional: directory to store generated docs

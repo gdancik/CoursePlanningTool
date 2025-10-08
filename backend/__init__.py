@@ -25,7 +25,7 @@ def create_app(config=Config):
                  "http://127.0.0.1:3000",
                  "http://localhost:3000",
                  "https://127.0.0.1:3000",
-                 "need to add domain here"
+                 "https://courseplanningtool2.pages.dev"
              ]
          }},
          supports_credentials=True

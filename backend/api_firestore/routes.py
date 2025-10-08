@@ -3,51 +3,113 @@ from flask_login import login_required
 from datetime import datetime
 import pandas as pd
 import io
-
 from backend.services.parameter_checking import require_post_params
-
-#from backend.services.gs_editor import gsEditor
 from flask_login import current_user
 from backend.services.app_services import get_fs_editor
 from . import api_firestore_bp
 import logging
 
-
-'''Calls the getValue function from the fs_editor.py module'''
 @api_firestore_bp.route('getValue/', methods=['POST'])
 @require_post_params('course_id', 'list_of_columns')
 @login_required
 def getValue():
+    """
+    Get values from a course
+    ---
+    tags:
+      - courses
+
+    security:
+      - cookieAuth: []
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              course_id:
+                type: string
+                description: The ID of the course to retrieve values from
+                example: "c2"
+              list_of_columns:
+                type: array
+                type: string
+                description: List of columns to retrieve from the course
+                example: ["instructor_name_syllabus", "phone_syllabus"]
+
+    responses:
+      200:
+        description: Successfully retrieved course values
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {"column1": "value1", "column2": "value2"}
+      401:
+        description: Unauthorized - user not logged in
+      500:
+        description: Error retrieving values
+    """
     fs = get_fs_editor()
     logging.debug(f'Created fs_editor object')
-
     try:
         logging.debug('Fetching data...')
         data = request.get_json()
-        course_id = data.get('course_id')        
+        course_id = data.get('course_id')
         logging.debug(f'Fetched course_id: {course_id}')
         columns = data.get('list_of_columns')
         logging.debug(f'Fetched list_of_columns: {columns}')
-        
-        # Call the getValue function
+
         logging.info("Retrieving Value from Sheet")
         sheet = fs.getValue(course_id, columns)
-        
-        # Check if sheet is None
+
         if sheet is None:
             return jsonify({"error": "No data returned from getValue"}), 500
-
-        # Return the result as JSON
         return jsonify(sheet)
-
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-'''Calls the updateValue function from the fs_editor.py module'''
 @api_firestore_bp.route('updateValue/', methods=['POST'])
 @require_post_params('course_id', 'dict_of_columns_and_vals')
 @login_required
 def updateValue():
+    """
+    Update values in a course
+    ---
+    tags:
+      - courses
+    security:
+      - cookieAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              course_id:
+                type: string
+                description: The ID of the course to update
+                example: "course123"
+              dict_of_columns_and_vals:
+                type: object
+                description: Dictionary of column-value pairs to update
+                example: {"instructor_name_syllabus": "new_value1", "office_location_syllabus": "new_value2"}
+    responses:
+      200:
+        description: Successfully updated course values
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "Function called successfully"
+      401:
+        description: Unauthorized - user not logged in
+      500:
+        description: Error updating values
+    """
     fs = get_fs_editor()
     logging.debug(f'Created fs_editor object')
     try:
@@ -58,19 +120,50 @@ def updateValue():
         columns = data.get('dict_of_columns_and_vals')
         logging.debug(f'Fetched dict_of_columns_and_vals: {columns}')
 
-        # Call the updateValue function
         logging.info("Updating a value in the google sheet")
         fs.updateValue(course_id, columns)
         return jsonify('Function called successfully')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-'''Calls the delete_course function from the fs_editor.py module'''
 @api_firestore_bp.route('deleteCourse/', methods=['POST'])
 @require_post_params('course_id')
 @login_required
 def deleteCourse():
+    """
+    Delete a course
+    ---
+    tags:
+      - courses
+    security:
+      - cookieAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              course_id:
+                type: string
+                description: The ID of the course to delete
+                example: "c2"
+    responses:
+      200:
+        description: Successfully deleted course
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_id:
+                  type: string
+                  example: "course123"
+      401:
+        description: Unauthorized - user not logged in
+      500:
+        description: Error deleting course
+    """
     fs = get_fs_editor()
     logging.debug(f'Created fs_editor object')
     try:
@@ -79,60 +172,134 @@ def deleteCourse():
         course_id = data.get('course_id')
         logging.debug(f'Fetched course_id: {course_id}')
 
-        # Call the updateValue function
-        logging.info("deleting course")
+        logging.info("Deleting course")
         fs.delete_course(course_id)
         return jsonify({"course_id": course_id})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-'''Gets the course with specified course_id'''
 @api_firestore_bp.route('getCourse/', methods=['POST'])
 @login_required
 @require_post_params('course_id')
-def getCourse():       
-        data = request.get_json()
-        course_id = data.get('course_id')        
-               
-        fs = get_fs_editor()
-        res =  fs.getCourse(course_id)
-        return(jsonify(res))
+def getCourse():
+    """
+    Get a specific course
+    ---
+    tags:
+      - courses
+    security:
+      - cookieAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              course_id:
+                type: string
+                description: The ID of the course to retrieve
+                example: "course123"
+    responses:
+      200:
+        description: Successfully retrieved course
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {"course_id": "course123", "name": "Course Name", ...}
+      401:
+        description: Unauthorized - user not logged in
+      500:
+        description: Error retrieving course
+    """
+    data = request.get_json()
+    course_id = data.get('course_id')
 
-'''Calls the read_collection function from the fs_editor.py module'''
+    fs = get_fs_editor()
+    res = fs.getCourse(course_id)
+    return jsonify(res)
+
 @api_firestore_bp.route('getSheet/', methods=['POST'])
 @require_post_params()
 @login_required
 def getSheet():
+    """
+    Get the entire sheet data
+    ---
+    tags:
+      - courses
+    security:
+      - cookieAuth: []
+    responses:
+      200:
+        description: Successfully retrieved sheet data
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "course1": {"column1": "value1", ...},
+                "course2": {"column1": "value2", ...}
+              }
+      401:
+        description: Unauthorized - user not logged in
+      500:
+        description: Error retrieving sheet data
+    """
     fs = get_fs_editor()
     logging.debug(f'Created fs_editor object for {fs.collection_name}')
     try:
-
-        # Call the read_sheet function
         logging.info('Reading the google sheet')
-        sheet = fs.read_collection(return_json = True)
-       
-        # Check if sheet is None
-	# If sheet does not exist we will get an empty data frame, which is
-	# valid for a first time user
-        #if sheet is None:
-        #    return jsonify({"error": "No data returned from getSheet"}), 500
-
-        # Return the result as JSON
+        sheet = fs.read_collection(return_json=True)
         return jsonify(sheet)
-        #return jsonify(sheet.to_dict(orient='index'))
-        
-        #sheet['course_id'] = sheet.index
-        #return jsonify(sheet.to_dict(orient='records'))
-
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-'''Calls the createNewCourse function from the fs_editor.py module'''
 @api_firestore_bp.route('createNewCourse/', methods=['POST'])
 @require_post_params('dict_of_columns_and_vals')
 @login_required
-def createNewCourse():    
+def createNewCourse():
+    """
+    Create a new course
+    ---
+    tags:
+      - courses
+
+    security:
+      - cookieAuth: []
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dict_of_columns_and_vals:
+                type: object
+                description: Dictionary of column-value pairs for the new course
+                example: {
+                  "course_title_syllabus": "Intro to Mathematics",
+                  "course_description_syllabus": "A math course",
+                }
+
+    responses:
+      200:
+        description: Successfully created new course
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseId:
+                  type: string
+                  example: "new_course123"
+      401:
+        description: Unauthorized - user not logged in
+      500:
+        description: Error creating new course
+    """
     fs = get_fs_editor()
     logging.debug(f'Created gs_editor object')
     try:
@@ -141,19 +308,50 @@ def createNewCourse():
         columns = data.get('dict_of_columns_and_vals')
         logging.debug(f'Fetched dict_of_columns_and_vals: {columns}')
 
-        # Call the createNewCourse function
         logging.info('Calling createNewCourse function')
         courseId = fs.createNewCourse(columns)
-        return jsonify({'courseId:': courseId})
+        return jsonify({'courseId': courseId})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
 
-'''Calls the duplicateCourse function from the fs_editor.py module'''
 @api_firestore_bp.route('duplicateCourse/', methods=['POST'])
 @require_post_params('course_id')
 @login_required
 def duplicateCourse():
+    """
+    Duplicate an existing course
+    ---
+    tags:
+      - courses
+    security:
+      - cookieAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              course_id:
+                type: string
+                description: The ID of the course to duplicate
+                example: "c2"
+    responses:
+      200:
+        description: Successfully duplicated course
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_id:
+                  type: string
+                  example: "duplicated_course123"
+      401:
+        description: Unauthorized - user not logged in
+      500:
+        description: Error duplicating course
+    """
     fs = get_fs_editor()
     try:
         logging.debug(f'Fetching data')
@@ -162,7 +360,6 @@ def duplicateCourse():
         logging.debug(f'Fetched course_id: {course_id}')
 
         courseId = fs.duplicateCourse(course_id)
-        return jsonify({'course_id:': courseId})
+        return jsonify({'course_id': courseId})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    

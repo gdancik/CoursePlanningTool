@@ -14,6 +14,7 @@ export type JsonComponent = {
     required?: boolean;
     options?: string[];
     className?: string;
+    
     content?: JsonComponent[];
     text?: string;
     data?: string[];
@@ -74,13 +75,13 @@ export function jsonRenderComponent(
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
                     <input
-                        id={component.id || component.label || ""}
-                        type={component.type}
-                        placeholder={component.placeholder}
-                        value={formData[component.id || component.label || ""] || ""}
-                        onChange={(e) => onChange(component.label || "", e.target.value)}
-                        required={component.required}
-                        className={component.className || ""}
+                    id={component.id || component.label || ""}
+                    type={component.type}
+                    placeholder={component.placeholder}
+                    value={formData[component.id || component.label || ""] || ""}
+                    onChange={(e) => onChange(component.id || "", e.target.value)} 
+                    required={component.required}
+                    className={component.className || ""}
                     />
                 </label>
             );
@@ -93,7 +94,7 @@ export function jsonRenderComponent(
                     <select
                         id={component.id || component.label || ""}
                         value={formData[component.id || component.label || ""] || ""}
-                        onChange={(e) => onChange(component.label || "", e.target.value)}
+                        onChange={(e) => onChange(component.id || "", e.target.value)}
                         required={component.required}
                         className={component.className || ""}
                     >
@@ -118,7 +119,7 @@ export function jsonRenderComponent(
                     <textarea
                         id={component.id || component.label || ""}
                         value={formData[component.id || component.label || ""] || ""}
-                        onChange={(e) => onChange(component.label || "", e.target.value)}
+                        onChange={(e) => onChange(component.id || "", e.target.value)}
                         required={component.required}
                         className={component.className || ""}
                     />

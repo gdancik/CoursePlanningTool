@@ -12,7 +12,7 @@ import {
     createPreviewHandler,
     createSaveAndExitHandler,
     createSaveHandler
-} from "../../../utils/handlers/formHandlersFactory";
+} from "../../../utils/handlers/previewExitFactory";
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
 
 

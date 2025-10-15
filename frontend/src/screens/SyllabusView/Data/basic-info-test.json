@@ -95,7 +95,7 @@
           "content": [
             {
               "type": "select",
-              "id": "semester_syllabus",
+              "id": "term_syllabus",
               "label": "Semester",
               "required": true,
               "options": ["Fall", "Winter", "Spring", "Summer"],
@@ -185,7 +185,7 @@
           "content": [
             {
               "type": "textarea",
-              "id": "additional_info_syllabus",
+              "id": "instructor_additional_info",
               "label": "Additional Information (optional)",
               "placeholder": "Enter additional information about making appointments and how to best contact you (e.g., via email, phone, etc.).",
               "required": false,

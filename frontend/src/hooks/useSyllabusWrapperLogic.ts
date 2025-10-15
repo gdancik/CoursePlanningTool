@@ -1,8 +1,9 @@
 import {useReducer, useState, useRef} from "react";
 import { handleNext, handleBack } from "../components/Button/ButtonLogic";
-import { createSaveHandler, createSaveAndExitHandler, createPreviewHandler } from "../utils/handlers/formHandlersFactory";
+import { createSaveHandler, createSaveAndExitHandler, createPreviewHandler } from "../utils/handlers/previewExitFactory";
 import type { NavigateFunction } from "react-router-dom";
 import saveData from "../services/processData";
+import { loadCourseData } from "../utils/loadCourseData";
 
 type ModalStatus = "loading" | "success" | "error";
 
@@ -27,6 +28,7 @@ interface SyllabusWrapperLogicResult {
 
 export function useSyllabusWrapperLogic(
     formData: Record<string, string>,
+    setFormData: React.Dispatch<React.SetStateAction<Record<string, string>>>,
     navigate: NavigateFunction,
     pathname: string
 ): SyllabusWrapperLogicResult {
@@ -82,7 +84,12 @@ export function useSyllabusWrapperLogic(
         modalControls,
         containerRef,
         handleBackClick: () => handleBack(navigate, pathname, formData, courseID || undefined),
-        handleNextClick: () => handleNext(navigate, pathname, formData, courseID || undefined),
+        handleNextClick: async () => {
+            const { formData: newData} = await loadCourseData();
+            setFormData(newData);
+            handleNext(navigate, pathname, newData, courseID || undefined);
+            
+        },
         handleSave,
         handleSaveAndExit: createSaveAndExitHandler(formData, navigate, modalControls),
         handlePreviewClick: createPreviewHandler(formData, modalControls),

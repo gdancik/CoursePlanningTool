@@ -6,10 +6,17 @@ import { FaExclamationCircle } from "react-icons/fa";
  * @description A yellow warning alert component with stacked paper effect and octagonal red icon.
  * Used in the Syllabus Page Builder to display important warnings or notifications to users.
  * Features a layered background design with multiple shadow layers for visual depth.
- * @param {string} text - The warning message text to display in the alert
+ * @param {AlertProps} props - The warning message text to display in the alert
  * @returns {JSX.Element} A styled alert component with yellow background, red octagonal icon, and stacked paper visual effect
  * @example
  * <Alert text="The ELAC requires that you implement at least two High Impact Practices into your course." />
+ */
+
+/**
+ * 
+ * @typedef {Object} AlertProps
+ * @property {string} text
+ *
  */
 
 

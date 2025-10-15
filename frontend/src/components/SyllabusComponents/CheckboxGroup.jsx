@@ -5,7 +5,7 @@ import React, { useState } from "react";
  * @description A flexible checkbox group component with optional "Check All" functionality.
  * Used in the Syllabus Page Builder for selecting multiple options like meeting days, assessment types, etc.
  * Supports both horizontal and vertical layouts and includes smart "Check All" toggle behavior.
- * @param {string} [id="checkbox_group"] - Unique identifier for the checkbox group
+ * @param {CheckboxGroupProps} props - Unique identifier for the checkbox group
  * @param {Array<string>} [data=["M", "T", "W", "R", "F"]] - Array of checkbox options. Include "Check All" in array to enable check all functionality
  * @param {boolean} [horizontal=true] - Layout direction. True for horizontal layout, false for vertical
  * @returns {JSX.Element} A group of checkboxes with optional "Check All" functionality and flexible layout
@@ -25,6 +25,14 @@ import React, { useState } from "react";
  *   horizontal={false}
  * />
  */
+
+/**
+ * @typedef {Object} CheckboxGroupProps
+ * @property {string} [id]
+ * @property {string[]} [data]
+ * @property {boolean} [horizontal]
+ */
+
 function CheckboxGroup({
   id = "checkbox_group",
   data = ["M", "T", "W", "R", "F"],

@@ -6,10 +6,15 @@ import { FaExclamationCircle } from "react-icons/fa";
  * @description A green informational message component with circular icon.
  * Used in the Syllabus Page Builder to provide helpful guidance and instructions to users.
  * Features a clean oval design with green background and informational icon.
- * @param {string} text - The informational message text to display
+ * @param {InformationProps} props - The informational message text to display
  * @returns {JSX.Element} A styled information component with green background and circular info icon
  * @example
  * <Information text="Information entered on this page will appear in the final syllabus exactly as written." />
+ */
+
+/**
+ * @typedef {Object} InformationProps
+ * @property {string} text
  */
 function Information({ text }) {
   return (

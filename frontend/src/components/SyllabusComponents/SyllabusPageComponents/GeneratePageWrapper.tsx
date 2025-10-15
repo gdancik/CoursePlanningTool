@@ -23,18 +23,23 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
         modalVisible, modalStatus, modalTitle, modalMessage, modalControls,
         handleBackClick, handleNextClick, handleSave,
         handleSaveAndExit, handlePreviewClick, containerRef
-    } = useSyllabusWrapperLogic(formData, navigate, location.pathname);
+    } = useSyllabusWrapperLogic(formData,setFormData, navigate, location.pathname);
 
     //
     useEffect(() => {
         const fetchData = async () => {
             const { courseId, formData } = await loadCourseData();
+            console.log("BEFORE setFormData:", formData);
             setCourseId(courseId);
             setFormData(formData);
         };
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        console.log("Form Data Updated:", formData);
+    }, [formData]);
 
     // Handles local changes to any input fields
     const handleChange = (label: string, value: string) => {

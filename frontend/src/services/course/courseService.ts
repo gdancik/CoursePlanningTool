@@ -88,8 +88,7 @@ export const getCourseData = (
         method: "POST",
         withCredentials: true,
         data: {
-            course_id,
-            list_of_columns: SHEET_COLUMNS,
+            course_id
         },
     })();
 };

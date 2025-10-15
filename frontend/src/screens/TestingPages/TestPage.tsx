@@ -11,7 +11,7 @@ import {
     createSaveHandler,
     createSaveAndExitHandler,
     createPreviewHandler
-} from "../../utils/handlers/formHandlersFactory";
+} from "../../utils/handlers/previewExitFactory";
 
 const TestPage: React.FC = () => {
 

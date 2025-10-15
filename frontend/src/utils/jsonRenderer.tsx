@@ -14,12 +14,15 @@ export type JsonComponent = {
     required?: boolean;
     options?: string[];
     className?: string;
-    
+
     content?: JsonComponent[];
     text?: string;
     data?: string[];
     horizontal?: boolean;
-    conditionalId?: string; // ID of field that controls visibility
+    conditional?: {
+        field: string;
+        value?: string;
+    };
 };
 
 // Recursive renderer
@@ -37,53 +40,70 @@ export function jsonRenderComponent(
                     onFieldChange={onChange}
                 >
                     {component.content?.map((child, i) => (
-                        <div key={i}>{jsonRenderComponent(child, formData, onChange)}</div>
+                        <div key={i}>
+                            {jsonRenderComponent(child, formData, onChange)}
+                        </div>
                     ))}
                 </SectionAccordion>
             );
 
-      case "Row":
-    // If row has a conditionalId and it's false, hide it
-    if (component.conditionalId && !formData[component.conditionalId]) {
-        return null;
-    }
+        case "Row":
+            // Handle conditional logic for rows
+            if (component.conditional) {
+                const fieldValue = formData[component.conditional.field];
+                const requiredValue = component.conditional.value;
 
-    return (
-        <div className="form-row">
-            {component.content?.map((child, i) =>
-                jsonRenderComponent(child, formData, onChange)
-            )}
-        </div>
-    );
-case "CheckboxGroup":
-    return (
-        <div className={component.className || ""}>
-            <CheckboxGroup
-                id={component.id}
-                data={component.data || []}
-                horizontal={component.horizontal ?? true}
-                value={(formData[component.id || ""] || "").split(",").filter(Boolean)}
-                onChange={(vals: string[]) =>
-                    onChange(component.id || "", vals.join(","))
+                // If no specific value is required, just check truthiness
+                if (requiredValue === undefined) {
+                    if (!fieldValue) return null;
+                } else {
+                    if (fieldValue !== requiredValue) return null;
                 }
-            />
-        </div>
-    );
+            }
 
-case "checkbox":
-    return (
-        <label className={component.className || ""}>
-            <input
-                type="checkbox"
-                id={component.id}
-                checked={!!formData[component.id || ""]}
-                onChange={(e) =>
-                    onChange(component.id || "", e.target.checked ? "true" : "")
-                }
-            />
-            {component.label}
-        </label>
-    );
+            return (
+                <div className="form-row">
+                    {component.content?.map((child, i) =>
+                        jsonRenderComponent(child, formData, onChange)
+                    )}
+                </div>
+            );
+
+        case "CheckboxGroup":
+            return (
+                <div className={component.className || ""}>
+                    <CheckboxGroup
+                        id={component.id}
+                        data={component.data || []}
+                        horizontal={component.horizontal ?? true}
+                        value={(formData[component.id || ""] || "")
+                            .split(",")
+                            .filter(Boolean)}
+                        onChange={(vals: string[]) =>
+                            onChange(component.id || "", vals.join(","))
+                        }
+                    />
+                </div>
+            );
+
+        case "checkbox":
+            return (
+                <label className={component.className || ""}>
+                    <input
+                        type="checkbox"
+                        id={component.id}
+                        checked={!!formData[component.id || ""]}
+                        onChange={(e) =>
+                            onChange(
+                                component.id || "",
+                                e.target.checked ? "true" : ""
+                            )
+                        }
+                    />
+                    {component.label}
+                </label>
+            );
+
         case "Alert":
             return <Alert text={component.text || ""} />;
 
@@ -98,13 +118,18 @@ case "checkbox":
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
                     <input
-                    id={component.id || component.label || ""}
-                    type={component.type}
-                    placeholder={component.placeholder}
-                    value={formData[component.id || component.label || ""] || ""}
-                    onChange={(e) => onChange(component.id || "", e.target.value)} 
-                    required={component.required}
-                    className={component.className || ""}
+                        id={component.id || component.label || ""}
+                        type={component.type}
+                        placeholder={component.placeholder}
+                        value={
+                            formData[component.id || component.label || ""] ||
+                            ""
+                        }
+                        onChange={(e) =>
+                            onChange(component.id || "", e.target.value)
+                        }
+                        required={component.required}
+                        className={component.className || ""}
                     />
                 </label>
             );
@@ -116,8 +141,13 @@ case "checkbox":
                     {component.label}
                     <select
                         id={component.id || component.label || ""}
-                        value={formData[component.id || component.label || ""] || ""}
-                        onChange={(e) => onChange(component.id || "", e.target.value)}
+                        value={
+                            formData[component.id || component.label || ""] ||
+                            ""
+                        }
+                        onChange={(e) =>
+                            onChange(component.id || "", e.target.value)
+                        }
                         required={component.required}
                         className={component.className || ""}
                     >
@@ -137,12 +167,19 @@ case "checkbox":
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
                     {component.placeholder && (
-                        <p className="helper-text">{component.placeholder}</p>
+                        <p className="helper-text">
+                            {component.placeholder}
+                        </p>
                     )}
                     <textarea
                         id={component.id || component.label || ""}
-                        value={formData[component.id || component.label || ""] || ""}
-                        onChange={(e) => onChange(component.id || "", e.target.value)}
+                        value={
+                            formData[component.id || component.label || ""] ||
+                            ""
+                        }
+                        onChange={(e) =>
+                            onChange(component.id || "", e.target.value)
+                        }
                         required={component.required}
                         className={component.className || ""}
                     />
@@ -153,3 +190,4 @@ case "checkbox":
             return null;
     }
 }
+export default jsonRenderComponent;

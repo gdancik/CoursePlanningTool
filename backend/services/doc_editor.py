@@ -5,6 +5,7 @@ from python_docx_replace import docx_replace, docx_blocks
 from docx.shared import Pt, RGBColor
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
+import re
 import docx
 import logging
 
@@ -22,6 +23,33 @@ def replaceTextInParagraph(doc, fr_dict):
     '''
     logging.info('Replacing text in document')
     docx_replace(doc, **fr_dict)
+
+def replaceFormattedTextInParagraph(doc):
+    '''
+    Replaces markdown-formatted text in a Word document with formatted text (bold, italic).
+    Args:
+        doc: Word document object.
+    '''
+    for paragraph in doc.paragraphs:
+        text = paragraph.text
+        if '**' in text or '*' in text:
+            # Clear the paragraph to rebuild it with formatted runs
+            paragraph.clear()
+            # Split the text into parts for bold and italic
+            parts = re.split(r'(\*\*.*?\*\*|\*.*?\*)', text)
+            for part in parts:
+                if part.startswith('**') and part.endswith('**'):
+                    # Add bold text
+                    run = paragraph.add_run(part[2:-2])
+                    run.bold = True
+                elif part.startswith('*') and part.endswith('*'):
+                    # Add italic text
+                    run = paragraph.add_run(part[1:-1])
+                    run.italic = True
+                elif part:
+                    # Add normal text
+                    paragraph.add_run(part)
+            
         
 def removeBlocks(doc, block_ls):
     '''
@@ -148,9 +176,16 @@ def getTable(doc, i):
     # Create a DataFrame from the list of rows
     df = pd.DataFrame(rows)
     return df
-#TODO ADD DOCSTRINGS
-#REMOVE DEBUG TEXT
+
 def copy_paragraph_before(source_paragraph, target_paragraph):
+    '''
+    Copies a paragraph from one document and inserts it before a specified paragraph in another document,
+    preserving text, formatting, and hyperlinks.
+    Args:
+        source_paragraph: Paragraph object from the source document to be copied.
+        target_paragraph: Paragraph object in the target document before which the new paragraph will be inserted.
+    
+    '''
     def add_hyperlink(paragraph, text, url):
         def get_or_create_hyperlink_style(d):
             """If this document had no hyperlinks so far, the builtin

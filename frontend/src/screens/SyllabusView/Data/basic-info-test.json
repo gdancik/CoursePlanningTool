@@ -62,6 +62,7 @@
             },
             {
               "type": "CheckboxGroup",
+              "id": "show_additional_meeting",
               "label": "Additional Meeting Times?",
               "require": "false",
               "data": ["Yes"]
@@ -70,6 +71,9 @@
         },
         {
           "type": "Row",
+          "conditional": {
+            "field": "show_additional_meeting"
+          },
           "content": [
             {
               "type": "CheckboxGroup",

@@ -19,6 +19,7 @@ export type JsonComponent = {
     text?: string;
     data?: string[];
     horizontal?: boolean;
+    conditionalId?: string; // ID of field that controls visibility
 };
 
 // Recursive renderer
@@ -41,26 +42,48 @@ export function jsonRenderComponent(
                 </SectionAccordion>
             );
 
-        case "Row":
-            return (
-                <div className={`form-row`}>
-                    {component.content?.map((child, i) =>
-                        jsonRenderComponent(child, formData, onChange)
-                    )}
-                </div>
-            );
+      case "Row":
+    // If row has a conditionalId and it's false, hide it
+    if (component.conditionalId && !formData[component.conditionalId]) {
+        return null;
+    }
 
-        case "CheckboxGroup":
-            return (
-                <div className={component.className || ""}>
-                    <CheckboxGroup
-                        id={component.id}
-                        data={component.data || []}
-                        horizontal={component.horizontal ?? true}
-                    />
-                </div>
-            );
+    return (
+        <div className="form-row">
+            {component.content?.map((child, i) =>
+                jsonRenderComponent(child, formData, onChange)
+            )}
+        </div>
+    );
+case "CheckboxGroup":
+    return (
+        <div className={component.className || ""}>
+            <CheckboxGroup
+                id={component.id}
+                data={component.data || []}
+                horizontal={component.horizontal ?? true}
+                value={(formData[component.id || ""] || "").split(",").filter(Boolean)}
+                onChange={(vals: string[]) =>
+                    onChange(component.id || "", vals.join(","))
+                }
+            />
+        </div>
+    );
 
+case "checkbox":
+    return (
+        <label className={component.className || ""}>
+            <input
+                type="checkbox"
+                id={component.id}
+                checked={!!formData[component.id || ""]}
+                onChange={(e) =>
+                    onChange(component.id || "", e.target.checked ? "true" : "")
+                }
+            />
+            {component.label}
+        </label>
+    );
         case "Alert":
             return <Alert text={component.text || ""} />;
 

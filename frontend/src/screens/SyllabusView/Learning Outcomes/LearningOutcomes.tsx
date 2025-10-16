@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
+import ContentCardSet, { CardData } from '../../../components/SyllabusComponents/ContentCardSet';
 import { useNavigate, useLocation } from "react-router-dom";
 import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
 import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader";
-import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
-import LearningOutcomesAccordion from "./LearningOutcomesAccordionStep1";
-import Step2Accordion from "./LearningOutcomesAccordionStep2";
-import Step3Accordion from "./LearningOutcomesAccordionStep3";
-import Step4Accordion from "./LearningOutcomesAccordionStep4";
-import './LearningOutcomes.css';
-import {
+import { 
     createPreviewHandler,
     createSaveAndExitHandler,
     createSaveHandler
 } from "../../../utils/handlers/formHandlersFactory";
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
+import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
+import LearningOutcomesAccordion from "./LearningOutcomesAccordionStep1";
+import Step2Accordion from "./LearningOutcomesAccordionStep2";
+import LearningOutcomesAccordionStep3 from "./LearningOutcomesAccordionStep3";
+import LearningOutcomesAccordionStep4 from "./LearningOutcomesAccordionStep4";
+import './LearningOutcomes.css';
 
 
 const LearningOutcomes: React.FC = () => {
@@ -108,13 +109,13 @@ const LearningOutcomes: React.FC = () => {
                     fields={step2Fields}
                 />
 
-                <Step3Accordion
+                <LearningOutcomesAccordionStep3
                     sectionName="Step 3: Writing Course-specific Learning Outcomes"
                     fields={step3Fields}
                     formData={formData}
                     onFieldChange={handleFieldChange}
                 />
-                <Step4Accordion
+                <LearningOutcomesAccordionStep4
                     sectionName="Step 4: Summary"
                     fields={step4Fields}
                     formData={formData}

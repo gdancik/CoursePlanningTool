@@ -6,12 +6,14 @@ import React, { useState } from "react";
  * Used in the Syllabus Page Builder for selecting multiple options like meeting days, assessment types, etc.
  * Supports both horizontal and vertical layouts and includes smart "Check All" toggle behavior.
  * @param {string} [id="checkbox_group"] - Unique identifier for the checkbox group
+ * @param {string} [label] - Optional label/title displayed above the checkbox group
  * @param {Array<string>} [data=["M", "T", "W", "R", "F"]] - Array of checkbox options. Include "Check All" in array to enable check all functionality
  * @param {boolean} [horizontal=true] - Layout direction. True for horizontal layout, false for vertical
  * @returns {JSX.Element} A group of checkboxes with optional "Check All" functionality and flexible layout
  * @example
- * // Horizontal layout with Check All
+ * // Horizontal layout with Check All and label
  * <CheckboxGroup 
+ *   label="Meeting Days:"
  *   id="meeting_days"
  *   data={["Check All", "M", "T", "W", "R", "F"]}
  *   horizontal={true}
@@ -20,6 +22,7 @@ import React, { useState } from "react";
  * @example
  * // Vertical layout without Check All
  * <CheckboxGroup 
+ *   label="Assessment Types:"
  *   id="assessment_types"
  *   data={["Quizzes", "Exams", "Projects", "Presentations"]}
  *   horizontal={false}
@@ -27,6 +30,7 @@ import React, { useState } from "react";
  */
 function CheckboxGroup({
   id = "checkbox_group",
+  label,
   data = ["M", "T", "W", "R", "F"],
   horizontal = true,
 }) {
@@ -52,17 +56,32 @@ function CheckboxGroup({
   };
 
   return (
-    <div
-      id={id}
-      role="group"
-      aria-label="Checkbox group"
-      style={{
-        display: "flex",
-        flexDirection: horizontal ? "row" : "column",
-        gap: "0.5rem",
-        flexWrap: horizontal ? "wrap" : "nowrap",
-      }}
-    >
+    <div style={{ marginBottom: "1rem" }}>
+      {label && (
+        <label
+          htmlFor={id}
+          style={{
+            display: "block",
+            fontWeight: "600",
+            color: "#28a745",
+            marginBottom: "0.5rem",
+            fontSize: "1rem",
+          }}
+        >
+          {label}
+        </label>
+      )}
+      <div
+        id={id}
+        role="group"
+        aria-label={label || "Checkbox group"}
+        style={{
+          display: "flex",
+          flexDirection: horizontal ? "row" : "column",
+          gap: "0.5rem",
+          flexWrap: horizontal ? "wrap" : "nowrap",
+        }}
+      >
       {data.map((d) => (
         <label
           key={d}
@@ -94,6 +113,7 @@ function CheckboxGroup({
           {d}
         </label>
       ))}
+      </div>
     </div>
   );
 }

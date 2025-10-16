@@ -20,51 +20,6 @@ import backend.services.firestore_stats as fs_stats
 # create stat tables
 fs_stats.create_tables()
 
-
-def check_stat(f):
-    ''''''
-    @functools.wraps(f)
-    def wrapper(self, *args, **kwargs):
-        reads = fs_stats.get_reads(user_id = self.collection_name, today = True)
-        writes = fs_stats.get_writes(user_id = self.collection_name, today = True)
-        deletes = fs_stats.get_deletes(user_id = self.collection_name, today = True)
-        if reads.empty == False:
-            num_reads = reads['number'][0]
-        else:
-            num_reads = 0    
-
-        if writes.empty == False:
-            num_writes = writes['number'][0]
-        else:
-            num_writes = 0
-
-        if deletes.empty == False:
-            num_deletes = deletes['number'][0]
-        else:
-            num_deletes = 0
-
-        logging.debug(f'Num of reads:{num_reads}')
-        logging.debug(f'Num of writes:{num_writes}')
-        logging.debug(f'Num of deletes:{num_deletes}')
-
-        if num_reads <= 0:
-            pass
-        elif num_reads > 500:
-            raise Exception('Number of reads exceeded')
-        
-        if num_writes <= 0:
-            pass
-        elif num_writes > 500:
-            raise Exception('Number of writes exceeded')
-    
-        if num_deletes <= 0:
-            pass
-        elif num_deletes > 500:
-            raise Exception('Number of deletes exceeded')
-        
-        return f(self, *args, **kwargs)
-    
-    return wrapper
 class fsEditor:
     '''
     A class to interact with a Firestore database, specifically for managing course data.
@@ -73,17 +28,23 @@ class fsEditor:
         client (): The Firestore client used to interact with the database.
     '''
 
-    def __init__(self, collection_name: str):
+    def __init__(self, collection_name: str, max_reads: int = 500, max_writes: int = 500, max_deletes: int = 500):
         '''
         Initializes the fsEditor with a specified sheet name and creates a Firestore client.
         Args:
             collection_name (str): The name of the collection to be created or managed.
         '''
         self.collection_name = collection_name
+        self.max_reads = max_reads
+        self.max_writes = max_writes
+        self.max_deletes = max_deletes
         self.client = self.create_fs_client()
 
+
+    
     def check_stat(f):
         ''''''
+        @functools.wraps(f)
         def wrapper(self, *args, **kwargs):
             reads = fs_stats.get_reads(user_id = self.collection_name, today = True)
             writes = fs_stats.get_writes(user_id = self.collection_name, today = True)
@@ -91,7 +52,7 @@ class fsEditor:
             if reads.empty == False:
                 num_reads = reads['number'][0]
             else:
-                num_reads = 0
+                num_reads = 0    
 
             if writes.empty == False:
                 num_writes = writes['number'][0]
@@ -103,24 +64,23 @@ class fsEditor:
             else:
                 num_deletes = 0
 
-         
             logging.debug(f'Num of reads:{num_reads}')
             logging.debug(f'Num of writes:{num_writes}')
             logging.debug(f'Num of deletes:{num_deletes}')
 
-            if num_reads <= 0:
+            if num_reads <= 0 or self.max_reads is None:
                 pass
-            elif num_reads > 500:
+            elif num_reads > self.max_reads:
                 raise Exception('Number of reads exceeded')
             
-            if num_writes <= 0:
+            if num_writes <= 0 or self.max_writes is None:
                 pass
-            elif num_writes > 500:
+            elif num_writes > self.max_writes:
                 raise Exception('Number of writes exceeded')
         
-            if num_deletes <= 0:
+            if num_deletes <= 0 or self.max_deletes is None:
                 pass
-            elif num_deletes > 500:
+            elif num_deletes > self.max_deletes:
                 raise Exception('Number of deletes exceeded')
             
             return f(self, *args, **kwargs)

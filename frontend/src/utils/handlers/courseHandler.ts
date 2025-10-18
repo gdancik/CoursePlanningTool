@@ -1,5 +1,5 @@
 // utils/handlers/courseHandler.ts
-import { jsonFieldsMapper } from "../jsonFieldsMapper";
+
 import {
     createNewCourse,
     getCourseData,
@@ -24,7 +24,7 @@ export const createCourseHandler = (
 
         try {
             // 1) Create & get back the new ID
-            const mapped = jsonFieldsMapper(formData);
+            const mapped = formData;
             const createResult = await createNewCourse(mapped);
             const newId = createResult?.course_id;
             if (!newId) {

@@ -1,9 +1,10 @@
 import React from "react";
-import FormField from "../screens/SyllabusView/BasicInformation/FormField";
-import { BasicInfoData } from "./loadBasicInfoFields";
 import SectionAccordion from "../screens/SyllabusView/BasicInformation/SectionAccordion";
+import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
+import Alert from "../components/SyllabusComponents/Alert";
+import Information from "../components/SyllabusComponents/Information";
 
-// Type guard for form fields vs container components
+// Type for JSON-driven UI
 export type JsonComponent = {
     type: string;
     title?: string;
@@ -13,7 +14,15 @@ export type JsonComponent = {
     required?: boolean;
     options?: string[];
     className?: string;
+
     content?: JsonComponent[];
+    text?: string;
+    data?: string[];
+    horizontal?: boolean;
+    conditional?: {
+        field: string;
+        value?: string;
+    };
 };
 
 // Recursive renderer
@@ -27,17 +36,31 @@ export function jsonRenderComponent(
             return (
                 <SectionAccordion
                     sectionName={component.title || ""}
-                    fields={[]}
                     formData={formData}
                     onFieldChange={onChange}
                 >
                     {component.content?.map((child, i) => (
-                        <div key={i}>{jsonRenderComponent(child, formData, onChange)}</div>
+                        <div key={i}>
+                            {jsonRenderComponent(child, formData, onChange)}
+                        </div>
                     ))}
                 </SectionAccordion>
             );
 
         case "Row":
+            // Handle conditional logic for rows
+            if (component.conditional) {
+                const fieldValue = formData[component.conditional.field];
+                const requiredValue = component.conditional.value;
+
+                // If no specific value is required, just check truthiness
+                if (requiredValue === undefined) {
+                    if (!fieldValue) return null;
+                } else {
+                    if (fieldValue !== requiredValue) return null;
+                }
+            }
+
             return (
                 <div className="form-row">
                     {component.content?.map((child, i) =>
@@ -46,32 +69,125 @@ export function jsonRenderComponent(
                 </div>
             );
 
+        case "CheckboxGroup":
+            return (
+                <div className={component.className || ""}>
+                    <CheckboxGroup
+                        id={component.id}
+                        data={component.data || []}
+                        horizontal={component.horizontal ?? true}
+                        value={(formData[component.id || ""] || "")
+                            .split(",")
+                            .filter(Boolean)}
+                        onChange={(vals: string[]) =>
+                            onChange(component.id || "", vals.join(","))
+                        }
+                    />
+                </div>
+            );
+
+        case "checkbox":
+            return (
+                <label className={component.className || ""}>
+                    <input
+                        type="checkbox"
+                        id={component.id}
+                        checked={!!formData[component.id || ""]}
+                        onChange={(e) =>
+                            onChange(
+                                component.id || "",
+                                e.target.checked ? "true" : ""
+                            )
+                        }
+                    />
+                    {component.label}
+                </label>
+            );
+
+        case "Alert":
+            return <Alert text={component.text || ""} />;
+
+        case "Information":
+            return <Information text={component.text || ""} />;
+
+        // Text-like inputs
         case "text":
-        case "select":
-        case "textarea":
-        case "checkbox-group":
         case "email":
         case "tel":
-            const field: BasicInfoData = {
-                section: component.title || "",
-                row: 0,
-                layoutRow: 0,
-                label: component.label || "",
-                type: component.type,
-                placeholder: component.placeholder || "",
-                required: component.required ?? false,
-                options: component.options || [],
-            };
             return (
-                <FormField
-                    key={component.id}
-                    field={field}
-                    value={formData[field.label] || ""}
-                    onChange={onChange}
-                />
+                <label key={component.id} className={component.className || ""}>
+                    {component.label}
+                    <input
+                        id={component.id || component.label || ""}
+                        type={component.type}
+                        placeholder={component.placeholder}
+                        value={
+                            formData[component.id || component.label || ""] ||
+                            ""
+                        }
+                        onChange={(e) =>
+                            onChange(component.id || "", e.target.value)
+                        }
+                        required={component.required}
+                        className={component.className || ""}
+                    />
+                </label>
+            );
+
+        // Dropdown
+        case "select":
+            return (
+                <label key={component.id} className={component.className || ""}>
+                    {component.label}
+                    <select
+                        id={component.id || component.label || ""}
+                        value={
+                            formData[component.id || component.label || ""] ||
+                            ""
+                        }
+                        onChange={(e) =>
+                            onChange(component.id || "", e.target.value)
+                        }
+                        required={component.required}
+                        className={component.className || ""}
+                    >
+                        <option value="">Select</option>
+                        {component.options?.map((opt, i) => (
+                            <option key={i} value={opt}>
+                                {opt}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+            );
+
+        // Textarea
+        case "textarea":
+            return (
+                <label key={component.id} className={component.className || ""}>
+                    {component.label}
+                    {component.placeholder && (
+                        <p className="helper-text">
+                            {component.placeholder}
+                        </p>
+                    )}
+                    <textarea
+                        id={component.id || component.label || ""}
+                        value={
+                            formData[component.id || component.label || ""] ||
+                            ""
+                        }
+                        onChange={(e) =>
+                            onChange(component.id || "", e.target.value)
+                        }
+                        required={component.required}
+                        className={component.className || ""}
+                    />
+                </label>
             );
 
         default:
             return null;
     }
 }
+export default jsonRenderComponent;

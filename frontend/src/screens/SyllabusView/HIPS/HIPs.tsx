@@ -7,7 +7,7 @@ import {
     createPreviewHandler,
     createSaveAndExitHandler,
     createSaveHandler
-} from "../../../utils/handlers/formHandlersFactory";
+} from "../../../utils/handlers/previewExitFactory";
 import HIPSAccordion from "./HIPSAccordion";
 import SyllabusSectionAccordion from "../../../components/SyllabusComponents/SyllabusAccordion";
 import './HIPS.css'

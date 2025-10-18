@@ -16,7 +16,7 @@ import {
     createPreviewHandler,
     createSaveAndExitHandler,
     createSaveHandler
-} from "../../../utils/handlers/formHandlersFactory";
+} from "../../../utils/handlers/previewExitFactory";
 import SyllabusGreen from "../../../assets/images/SyllabusGreen.png"
 import SyllabusGrey from "../../../assets/images/SyllabusGrey.png"
 import MainImage from "../../../assets/images/BookShelfBackGroundMain.png";

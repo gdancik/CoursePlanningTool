@@ -1,8 +1,6 @@
-// src/utils/handlers/formHandlersFactory.ts
+// src/utils/handlers/previewExitFactory.ts
 
 import { saveToBackend, logoutUser, previewSyllabus } from "../../services/TestServices/syllabusService";
-
-import { jsonFieldsMapper } from "../jsonFieldsMapper";
 import { createNewCourse } from "../../services/course/courseService";
 
 type ModalControls = {
@@ -25,6 +23,7 @@ export const createSaveHandler = (
 
         const saved = localStorage.getItem("currentCourseData");
         let course_id: string | undefined;
+
         if (saved) {
             try {
                 const savedData = JSON.parse(saved);
@@ -34,9 +33,9 @@ export const createSaveHandler = (
             }
         }
 
-       //Smart Mappings
         let mappedData: Record<string, string>;
         if (fields) {
+
             mappedData = fields.reduce((acc, field) => {
                 if (
                     (field.type === "text-box" || field.type === "syllabus-text") &&
@@ -48,7 +47,8 @@ export const createSaveHandler = (
                 return acc;
             }, {} as Record<string, string>);
         } else {
-            mappedData = jsonFieldsMapper(formData); // fallback to BasicInfo mapping
+
+            mappedData = { ...formData };
         }
 
         if (!course_id) {
@@ -62,6 +62,7 @@ export const createSaveHandler = (
         }
 
         mappedData["course_id"] = course_id;
+
         localStorage.setItem("currentCourseData", JSON.stringify({ ...mappedData, course_id }));
 
         const result = await saveToBackend(course_id, mappedData);
@@ -91,7 +92,6 @@ export const createSaveAndExitHandler = (
 
         let mappedData: Record<string, string>;
 
-        // Use description field mapping if fields are provided
         if (fields) {
             mappedData = fields.reduce((acc, field) => {
                 if (
@@ -104,7 +104,7 @@ export const createSaveAndExitHandler = (
                 return acc;
             }, {} as Record<string, string>);
         } else {
-            mappedData = jsonFieldsMapper(formData); // Fallback to basic info logic
+            mappedData = { ...formData };
         }
 
         let course_id = mappedData["course_id"];
@@ -123,16 +123,16 @@ export const createSaveAndExitHandler = (
 
         const saveResult = await saveToBackend(course_id, mappedData);
         if (saveResult !== null) {
-                modal.setStatus("success");
-                modal.setTitle("Saved & Exiting");
-                modal.setMessage("Redirecting you to My Courses Home Page...");
-                setTimeout(() => {
-                    modal.setVisible(false);
-                    navigate("/course-page");
-                }, 1500);
-            } else {
+            modal.setStatus("success");
+            modal.setTitle("Saved & Exiting");
+            modal.setMessage("Redirecting you to My Courses Home Page...");
+            setTimeout(() => {
                 modal.setVisible(false);
-            }
+                navigate("/course-page");
+            }, 1500);
+        } else {
+            modal.setVisible(false);
+        }
     };
 };
 
@@ -150,7 +150,6 @@ export const createPreviewHandler = (
 
         let mappedData: Record<string, string>;
 
-        // Handle dynamic field mapping (for Description or other field-based pages)
         if (fields) {
             mappedData = fields.reduce((acc, field) => {
                 if (
@@ -163,10 +162,9 @@ export const createPreviewHandler = (
                 return acc;
             }, {} as Record<string, string>);
         } else {
-            mappedData = jsonFieldsMapper(formData);
+            mappedData = { ...formData };
         }
 
-        // Inject course_id if saved
         const saved = localStorage.getItem("currentCourseData");
         if (saved) {
             const savedData = JSON.parse(saved);
@@ -177,7 +175,6 @@ export const createPreviewHandler = (
 
         let course_id = mappedData["course_id"];
 
-        // If no ID yet, create one
         if (!course_id) {
             const result = await createNewCourse(mappedData);
             const newId = result?.course_id;
@@ -189,7 +186,6 @@ export const createPreviewHandler = (
             mappedData["course_id"] = course_id;
         }
 
-        // Save latest data
         localStorage.setItem("currentCourseData", JSON.stringify(mappedData));
 
         const saveResult = await saveToBackend(course_id, mappedData);

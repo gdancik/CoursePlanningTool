@@ -1,6 +1,5 @@
 // src/services/course/sheetColumns.ts
 
-// List every header from your sheet, in the exact order/spelling it appears:
 export const SHEET_COLUMNS = [
     "course_id",
     "term_syllabus",

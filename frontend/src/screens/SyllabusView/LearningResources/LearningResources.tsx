@@ -5,7 +5,7 @@ import {
     createPreviewHandler,
     createSaveAndExitHandler,
     createSaveHandler
-} from "../../../utils/handlers/formHandlersFactory";
+} from "../../../utils/handlers/previewExitFactory";
 import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
 import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
 import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";

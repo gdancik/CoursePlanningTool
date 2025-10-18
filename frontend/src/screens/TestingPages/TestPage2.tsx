@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import TestView from "./SyllabusView/testView.js"
+import TestView from "../SyllabusView/testView.js"
 
 const TestPage2: React.FC = () => {
 

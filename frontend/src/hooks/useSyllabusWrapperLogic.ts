@@ -1,9 +1,11 @@
-import { useState } from "react";
+import {useReducer, useState, useRef} from "react";
 import { handleNext, handleBack } from "../components/Button/ButtonLogic";
-import { createSaveHandler, createSaveAndExitHandler, createPreviewHandler } from "../utils/handlers/formHandlersFactory";
+import { createSaveHandler, createSaveAndExitHandler, createPreviewHandler } from "../utils/handlers/previewExitFactory";
 import type { NavigateFunction } from "react-router-dom";
+import saveData from "../services/processData";
+import { loadCourseData } from "../utils/loadCourseData";
 
-type ModalStatus = "loading" | "success";
+type ModalStatus = "loading" | "success" | "error";
 
 interface SyllabusWrapperLogicResult {
     modalVisible: boolean;
@@ -16,6 +18,7 @@ interface SyllabusWrapperLogicResult {
         setTitle: (title: string) => void;
         setMessage: (message: string) => void;
     };
+    containerRef: React.RefObject<HTMLDivElement | null>;
     handleBackClick: () => void;
     handleNextClick: () => void;
     handleSave: () => void;
@@ -25,6 +28,7 @@ interface SyllabusWrapperLogicResult {
 
 export function useSyllabusWrapperLogic(
     formData: Record<string, string>,
+    setFormData: React.Dispatch<React.SetStateAction<Record<string, string>>>,
     navigate: NavigateFunction,
     pathname: string
 ): SyllabusWrapperLogicResult {
@@ -32,6 +36,11 @@ export function useSyllabusWrapperLogic(
     const [modalStatus, setModalStatus] = useState<ModalStatus>("loading");
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const courseID = localStorage.getItem("currentCourseId");
+
+
 
     const modalControls = {
         setVisible: setModalVisible,
@@ -40,7 +49,32 @@ export function useSyllabusWrapperLogic(
         setMessage: setModalMessage,
     };
 
-    const courseID = localStorage.getItem("currentCourseId");
+    const handleSave = async () =>  {
+        if(!containerRef.current) {
+            console.log("containerRef not attached");
+            return;
+        }
+        try {
+            setModalVisible(true);
+            setModalStatus("loading");
+            setModalTitle("Saving");
+            setModalMessage("Saving your changes...");
+
+            await saveData(containerRef);
+
+            setModalStatus("success");
+            setModalTitle("Saved");
+            setModalMessage("Your changes have been saved successfully!");
+        } catch (err: any) {
+            console.error("Error in saveData:", err);
+            setModalStatus("error");
+            setModalTitle("Save Failed");
+            setModalMessage(err.message || "An unexpected error occurred.");
+        } finally {
+            setTimeout(() => setModalVisible(false), 1500);
+        }
+    };
+
 
     return {
         modalVisible,
@@ -48,9 +82,15 @@ export function useSyllabusWrapperLogic(
         modalTitle,
         modalMessage,
         modalControls,
+        containerRef,
         handleBackClick: () => handleBack(navigate, pathname, formData, courseID || undefined),
-        handleNextClick: () => handleNext(navigate, pathname, formData, courseID || undefined),
-        handleSave: createSaveHandler(formData, modalControls),
+        handleNextClick: async () => {
+            const { formData: newData} = await loadCourseData();
+            setFormData(newData);
+            handleNext(navigate, pathname, newData, courseID || undefined);
+            
+        },
+        handleSave,
         handleSaveAndExit: createSaveAndExitHandler(formData, navigate, modalControls),
         handlePreviewClick: createPreviewHandler(formData, modalControls),
     };

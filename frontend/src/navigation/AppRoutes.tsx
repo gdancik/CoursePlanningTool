@@ -11,12 +11,13 @@ import LoginScreen from '../screens/Login/LoginScreen';
 import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
 import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
-import TestPage from "../screens/TestPage"
-import TestPage2 from "../screens/TestPage2"
+import TestPage from "../screens/TestingPages/TestPage"
+import TestPage2 from "../screens/TestingPages/TestPage2"
 import TestPage3 from "../screens/TestPage3"
 import ScheduleTest from "../components/courseSchedule"
 import GradeTable from "../components/Tables/gradeTable"
-import JSONRenderTest from "../screens/JSONRenderTest"
+import JSONRenderTest from "../screens/TestingPages/JSONRenderTest"
+import TestSyllabusPage from "../screens/TestingPages/TestSyllabusPage";
 
 //Application Endpoints
 import Overview from "../screens/SyllabusView/Overview/Overview";
@@ -58,6 +59,7 @@ const AppRoutes = () => {
                 <Route path ="/courseSchedule" element={<ScheduleTest/>}/>
                 <Route path= "grade-table" element={<GradeTable/>} />
                 <Route path = "/json-render" element={<JSONRenderTest/>} />
+                <Route path = "/test-syllabus" element={<TestSyllabusPage/>}/>
 
                 <Route path="/auto_login"
                        element = {<AutoTestLogin

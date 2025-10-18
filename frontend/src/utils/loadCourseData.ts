@@ -1,5 +1,4 @@
 import {getCourseData} from "../services/course/courseService";
-import {mapBackendDataToFormFields} from "./backendToFormMapper";
 
 export async function loadCourseData(): Promise<{
     courseId: string | null;
@@ -15,10 +14,7 @@ export async function loadCourseData(): Promise<{
 
         const backendData = await getCourseData(courseId);
         if (!backendData) return {courseId: null, formData: {}};
-
-        const remapped = mapBackendDataToFormFields(backendData);
-
-        return {courseId, formData:remapped};
+        return {courseId, formData:backendData};
     }catch {
         return {courseId: null, formData: {}};
     }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { jsonRenderComponent } from "../utils/jsonRenderer"
-import SyllabusLayout from "../SyllabusLayout/SyllabusPageHeader";
-import jsonSchema from "./SyllabusView/Data/basic-info-test.json"
+import { jsonRenderComponent } from "../../utils/jsonRenderer"
+import SyllabusLayout from "../../SyllabusLayout/SyllabusPageHeader";
+import jsonSchema from "../SyllabusView/Data/basic-info-test.json"
 
 export default function JsonSyllabusPage() {
     const [formData, setFormData] = useState<Record<string, string>>({});

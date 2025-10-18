@@ -70,17 +70,23 @@ export function jsonRenderComponent(
             );
 
         case "CheckboxGroup":
+
+        const fieldId = component.id || "";
+
+
+        const currentValue = (formData[component.id || ""] || "")
+        .split(",")
+        .filter(Boolean);
             return (
-                <div className={component.className || ""}>
+                <div key={component.id } className={component.className || ""}>
                     <CheckboxGroup
                         id={component.id}
                         data={component.data || []}
                         horizontal={component.horizontal ?? true}
-                        value={(formData[component.id || ""] || "")
-                            .split(",")
-                            .filter(Boolean)}
+                        label={component.label}
+                        value={currentValue}
                         onChange={(vals: string[]) =>
-                            onChange(component.id || "", vals.join(","))
+                            onChange(fieldId, vals.join(","))
                         }
                     />
                 </div>

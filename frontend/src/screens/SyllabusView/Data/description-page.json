@@ -1,0 +1,116 @@
+{
+    "content": [
+        {
+            "type":"Accordion",
+            "title": "Step 1: Vision",
+            "content": [
+                {
+                    "type": "Column",
+                    "content": [
+                        {
+                            "type": "informationText",
+                            "placeholder": "Having an articulated vision for your course can help you maintain focus and make decisions in the course planning process. A strong vision also makes it easier to write a course description that communicates long-term goals of your course within the context of the student's education and real-world application. While you probably already have ideas about your courses vision, the following questions can help you to make them explicit and student-centered." 
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "desc_opportunities",
+                            "placeholder": "What opportunities do you hope to provide your students in terms of knowledge and experiences?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "desc_hopes",
+                            "placeholder": "How do you hope students will engage in your course?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "desc_important",
+                            "placeholder": "What are the three most important thing you want students to take away from this course?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "desc_envision",
+                            "placeholder": "How might you envision the course to elevate student voice so that a full range of ideas, approaches, and perspectives are valued and recognized?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+                        }
+                    ]
+
+                }
+            ]
+        },
+        {
+            "type":"Accordion",
+            "title": "Step 2: Context",
+            "content": [
+                {
+                "type": "Column",
+                "content": [
+                        {
+                            "type": "informationText",
+                            "placeholder": "The following questions are designed to help you reflect on the context of your course, including the goals of the overall program, the course’s role within that program, the knowledge and skills students bring with them, and any logistical limitations (such as class size, classroom, or equipment availability) that may affect how you implement your vision."
+                        },
+                        {
+                         "type": "textarea",
+                         "id": "desc_role",
+                         "placeholder": "What role does this course play in the major, minor, or general education (ELAC) curriculum (i.e., what level course is it; how do you see the course contributing to the goals of the curriculum; is it part of a minor)? How do the goals and learning outcomes of the major, minor, or general education curriculum impact the vision you have for your course?",
+                         "required": false,
+                         "className": "Syllabus-text blue-box"
+                        },
+                        {
+                         "type": "textarea",
+                         "id": "desc_expectations1",
+                         "placeholder": "What informal expectations do you have for what students in the course should know coming into the course? Is there information that program coordinators have (such as assessment results for past cohorts, shifts in the program goals, etc.) that would help you think about student’s experiences in the major, minor, or general education (ELAC) curriculum?",
+                         "required": false,
+                         "className": "Syllabus-text blue-box"
+                        },
+                        {
+                         "type": "textarea",
+                         "id": "desc_expectations2",
+                         "placeholder": "What expectations do you have for how well students write, critically think, engage in creativity, etc.?",
+                         "required": false,
+                         "className": "Syllabus-text blue-box"
+                        },
+                        {
+                         "type": "textarea",
+                         "id": "desc_limitations",
+                         "placeholder": "Are there limitations in terms of class size, how often class meets, facilities that you need to access, special equipment you need to access, etc.? (We will revisit these issues in the section on aligning course activities with learning outcomes.)",
+                         "required": false,
+                         "className": "Syllabus-text blue-box"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type":"Accordion",
+            "title": "Course Description",
+            "content": [
+                {
+                    "type": "Column",
+                    "content": [
+                        {
+                            "type":"informationText",
+                            "placeholder": "Please summarize your responses to the questions above into a clear and compelling course description. You should write this course description with students in mind. For example, use “In this course, you will…” instead of “In this course, students will…” Also, avoid disciplinary jargon or technical language that might be confusing. Aim for clear, engaging wording that helps students understand what they’ll learn and why it matters." 
+                        },
+                        {
+                            "type" : "Alert",
+                            "text": "Information entered below wil appear in the final syllabus exactly as written."
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "course_description_syllabus",
+                            "required": false,
+                            "className": "Syllabus-text green-box"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]    
+}

@@ -146,7 +146,7 @@
           "type": "Row",
           "content": [
             {
-              "type": "email",
+              "type": "text",
               "id": "email_syllabus",
               "label": "Email",
               "placeholder": "Enter email",
@@ -162,7 +162,7 @@
               "className": "syllabus-text medium-box"
             },
             {
-              "type": "tel",
+              "type": "text",
               "id": "phone_syllabus",
               "label": "Phone (optional)",
               "placeholder": "Enter phone",
@@ -186,6 +186,7 @@
         },
         {
           "type": "Row",
+          "className": "form-row full-width",
           "content": [
             {
               "type": "textarea",
@@ -193,7 +194,7 @@
               "label": "Additional Information (optional)",
               "placeholder": "Enter additional information about making appointments and how to best contact you (e.g., via email, phone, etc.).",
               "required": false,
-              "className": "Syllabus-text medium-box"
+              "className": "Syllabus-text green-box"
             }
           ]
         }

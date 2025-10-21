@@ -105,7 +105,7 @@
                         {
                             "type": "textarea",
                             "id": "course_description_syllabus",
-                            "required": false,
+                            "required": true,
                             "className": "Syllabus-text green-box"
                         }
                     ]

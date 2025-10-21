@@ -13,26 +13,52 @@
                         },
                         {
                             "type": "textarea",
-                            "id": "",
+                            "id": "lr_materials",
                             "placeholder": "What course materials are required from your discipline for your students to achieve the course learning outcomes? Are there other disciplines that engage with this issue? Can you provide perspectives on your topic from other scholars?",
                             "required": false,
                             "className": "Syllabus-text blue-box"
                         },
                         {
                             "type": "textarea",
-                            "id": "",
+                            "id": "lr_inequities",
                             "placeholder": "What inequities exist in the disciplines that inform your course? What ways might you address those inequities and discourage singular viewpoints?",
                             "required": false,
                             "className": "Syllabus-text blue-box"
                         },
                         {
                             "type": "textarea",
-                            "id": "",
+                            "id": "lr_order",
                             "placeholder": "Is there an order to the content that is required? Do you need to take a developmental approach and scaffold the information and skills expected in your learning outcomes?",
                             "required": false,
                             "className": "Syllabus-text blue-box"
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "type":"Accordion",
+            "title": "Step 2: Summary",
+            "content": [
+                {
+                    "type": "Column",
+                    "content": [
+                        {
+                          "type": "informationText",
+                          "placeholder": "Based on the information you compiled above, what course materials will be required for your course (textbooks, readings, software, lab equipment, etc.)?"   
+                        },
+                        {
+                            "type" : "Alert",
+                            "text": "Information entered below wil appear in the final syllabus exactly as written."
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "course_materials_syllabus",
+                            "required": true,
+                            "className": "Syllabus-text green-box"
+                        }
+                    ]
+
                 }
             ]
         }

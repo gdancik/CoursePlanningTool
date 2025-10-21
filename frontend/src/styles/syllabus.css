@@ -33,7 +33,7 @@
 /* Blue variant */
 .form-row textarea.blue-box,
 .form-column textarea.blue-box   {
-  @apply border-blue-600;
+  @apply border-brand;
 }
 
 /* Textarea variant */

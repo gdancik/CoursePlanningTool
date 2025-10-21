@@ -4,7 +4,8 @@ export interface CheckboxGroupProps {
   id?: string;
   data?: string[];
   horizontal?: boolean;
-  value: string[];                  
+  value: string[];           
+  label?: string;       
   onChange: (vals: string[]) => void;
 }
 
@@ -12,6 +13,7 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   id = "checkbox_group",
   data = ["M", "T", "W", "R", "F"],
   horizontal = true,
+  label,
   value = [],
   onChange,
 }) => {

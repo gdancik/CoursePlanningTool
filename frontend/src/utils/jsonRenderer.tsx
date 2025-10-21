@@ -14,6 +14,7 @@ export type JsonComponent = {
     required?: boolean;
     options?: string[];
     className?: string;
+    informationText?: string;
 
     content?: JsonComponent[];
     text?: string;
@@ -47,6 +48,30 @@ export function jsonRenderComponent(
                 </SectionAccordion>
             );
 
+        case "Column":
+            if (component.conditional) {
+                const fieldValue = formData[component.conditional.field];
+                const requiredValue = component.conditional.value;
+
+            
+                if (requiredValue === undefined) {
+                    if (!fieldValue) return null;
+                } else {
+                    if (fieldValue !== requiredValue) return null;
+                }
+            }
+
+            return (
+            <div 
+            key={component.id} 
+            className={component.className || "form-column"}
+            >
+                    {component.content?.map((child, i) =>
+                        jsonRenderComponent(child, formData, onChange)
+                    )}
+                </div>
+            );
+
         case "Row":
             // Handle conditional logic for rows
             if (component.conditional) {
@@ -62,7 +87,7 @@ export function jsonRenderComponent(
             }
 
             return (
-                <div className="form-row">
+            <div key={component.id} className={component.className || "form-row"}>
                     {component.content?.map((child, i) =>
                         jsonRenderComponent(child, formData, onChange)
                     )}
@@ -70,17 +95,23 @@ export function jsonRenderComponent(
             );
 
         case "CheckboxGroup":
+
+        const fieldId = component.id || "";
+
+
+        const currentValue = (formData[component.id || ""] || "")
+        .split(",")
+        .filter(Boolean);
             return (
-                <div className={component.className || ""}>
+                <div key={component.id } className={component.className || ""}>
                     <CheckboxGroup
                         id={component.id}
                         data={component.data || []}
                         horizontal={component.horizontal ?? true}
-                        value={(formData[component.id || ""] || "")
-                            .split(",")
-                            .filter(Boolean)}
+                        label={component.label}
+                        value={currentValue}
                         onChange={(vals: string[]) =>
-                            onChange(component.id || "", vals.join(","))
+                            onChange(fieldId, vals.join(","))
                         }
                     />
                 </div>
@@ -111,9 +142,8 @@ export function jsonRenderComponent(
             return <Information text={component.text || ""} />;
 
         // Text-like inputs
+
         case "text":
-        case "email":
-        case "tel":
             return (
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
@@ -167,7 +197,7 @@ export function jsonRenderComponent(
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
                     {component.placeholder && (
-                        <p className="helper-text">
+                        <p>
                             {component.placeholder}
                         </p>
                     )}
@@ -185,6 +215,12 @@ export function jsonRenderComponent(
                     />
                 </label>
             );
+
+            case "informationText":
+                return (
+                    <p key={component.id} >{component.placeholder}</p>
+
+                );
 
         default:
             return null;

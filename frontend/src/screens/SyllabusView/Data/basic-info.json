@@ -190,7 +190,7 @@
           "content": [
             {
               "type": "textarea",
-              "id": "instructor_additional_info",
+              "id": "instructor_additional_information",
               "label": "Additional Information (optional)",
               "placeholder": "Enter additional information about making appointments and how to best contact you (e.g., via email, phone, etc.).",
               "required": false,

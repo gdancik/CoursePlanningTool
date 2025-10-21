@@ -36,7 +36,7 @@ const saveData = async (ref) => {
         return;
     }
 
-    const res_text = [...ref.current.querySelectorAll('input[type="text"]')]
+    const res_text = [...ref.current.querySelectorAll('input[type="text"],textarea')]
         .map(x => ({ [x.id]: x.value }));
     const res_select = [...ref.current.querySelectorAll("select")]
         .map(x => ({ [x.id]: x.value }));

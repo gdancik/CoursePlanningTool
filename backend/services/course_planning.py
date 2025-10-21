@@ -13,6 +13,8 @@ columns_detailed = {
         'times1_syllabus',
         'location1_syllabus',
         'days2_syllabus_checkboxes',
+        'show_additional_meeting_checkbox',
+        'days2_syllabus',
         'times2_syllabus',
         'location2_syllabus',
         'instructor_name_syllabus',

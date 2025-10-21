@@ -38,7 +38,7 @@
           "content": [
             {
               "type": "CheckboxGroup",
-              "id": "days1_syllabus",
+              "id": "days1_syllabus_checkboxes",
               "label": "Meeting Days",
               "required": true,
               "data": ["M", "T", "W", "R", "F", "S"],
@@ -62,7 +62,7 @@
             },
             {
               "type": "CheckboxGroup",
-              "id": "show_additional_meeting",
+              "id": "show_additional_meeting_checkboxes",
               "label": "Additional Meeting Times?",
               "require": "false",
               "data": ["Yes"]
@@ -77,7 +77,7 @@
           "content": [
             {
               "type": "CheckboxGroup",
-              "id": "times2_syllabus",
+              "id": "days2_syllabus_checkboxes",
               "label": "Additional Meeting Days",
               "required": true,
               "data": ["M", "T", "W", "R", "F", "S"],
@@ -86,7 +86,7 @@
             },
             {
               "type": "text",
-              "id": "days2_syllabus",
+              "id": "times2_syllabus",
               "label": "Additional Meeting Time",
               "placeholder": "Enter meeting time",
               "required": true,

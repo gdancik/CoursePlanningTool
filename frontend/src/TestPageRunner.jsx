@@ -7,6 +7,7 @@ import Information from './components/SyllabusComponents/Information';
 import SidebarLayout, { SidebarLink } from './components/SidebarLayout';
 import ContentCard from './components/SyllabusComponents/ContentCard';
 import ContentCardSet from './components/SyllabusComponents/ContentCardSet';
+import Image from './components/SyllabusComponents/Image';
 
 // ContentCard Demo Component
 const ContentCardDemo = () => {
@@ -206,6 +207,58 @@ const TEST_PAGES = {
         <h2>Information Component</h2>
         <Information text="Information entered on this page will appear in the final syllabus exactly as written." />
         <Information text="This component provides helpful guidance and instructions to users." />
+      </section>
+
+      <section style={{ marginBottom: '2rem', padding: '1rem', border: '1px solid #ccc', borderRadius: '4px' }}>
+        <h2>Image Component</h2>
+        
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h3>Image from URL</h3>
+          <p style={{ color: '#666', fontSize: '14px', marginBottom: '1rem' }}>
+            Display an image from an external URL with error handling
+          </p>
+          <Image 
+            type="url"
+            value="https://picsum.photos/400/300"
+            alt="Sample image from Lorem Picsum"
+            maxWidth={400}
+          />
+        </div>
+
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h3>Local File Image</h3>
+          <p style={{ color: '#666', fontSize: '14px', marginBottom: '1rem' }}>
+            Display a local file (this will show error handling since the file doesn't exist)
+          </p>
+          <Image 
+            type="file"
+            value="/assets/sample-diagram.png"
+            alt="Course diagram"
+            maxWidth={300}
+          />
+        </div>
+
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h3>Error Handling - Invalid Type</h3>
+          <p style={{ color: '#666', fontSize: '14px', marginBottom: '1rem' }}>
+            Shows error message when invalid type is provided
+          </p>
+          <Image 
+            type="invalid"
+            value="https://example.com/image.jpg"
+            alt="This will show an error"
+          />
+        </div>
+
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h3>Error Handling - Missing Value</h3>
+          <p style={{ color: '#666', fontSize: '14px', marginBottom: '1rem' }}>
+            Shows error message when required props are missing
+          </p>
+          <Image 
+            type="url"
+          />
+        </div>
       </section>
 
       <section style={{ marginBottom: '2rem', padding: '1rem', border: '1px solid #ccc', borderRadius: '4px' }}>

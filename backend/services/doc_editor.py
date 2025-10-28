@@ -36,7 +36,8 @@ def replaceFormattedTextInParagraph(doc):
             # Clear the paragraph to rebuild it with formatted runs
             paragraph.clear()
             # Split the text into parts for bold and italic
-            parts = re.split(r'(\*\*\*.*?\*\*\*|\*\*.*?\*\*|\*.*?\*)', text) 
+            parts = re.split(r'(\*\*\*[^*].*?[^*]\*\*\*|\*\*[^*].*?[^*]\*\*|\*[^*].*?[^*]\*)', text)
+
             for part in parts:
                 if part.startswith('***') and part.endswith('***'):
                     # Add italic text

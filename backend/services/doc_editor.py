@@ -32,7 +32,7 @@ def replaceFormattedTextInParagraph(doc):
     '''
     for paragraph in doc.paragraphs:
         text = paragraph.text
-        if '**' in text or '*' in text:
+        if '***' in text or '**' in text or '*' in text:
             # Clear the paragraph to rebuild it with formatted runs
             paragraph.clear()
             # Split the text into parts for bold and italic

@@ -85,10 +85,29 @@ export function useSyllabusWrapperLogic(
         containerRef,
         handleBackClick: () => handleBack(navigate, pathname, formData, courseID || undefined),
         handleNextClick: async () => {
-            const { formData: newData} = await loadCourseData();
-            setFormData(newData);
-            handleNext(navigate, pathname, newData, courseID || undefined);
-            
+            try{ 
+                setModalVisible(true);
+                setModalStatus("loading");
+                setModalTitle("Loading Section");
+                setModalMessage("Please wait while we load your data...");
+                const { formData: newData} = await loadCourseData();
+                setFormData(newData);
+
+                setModalStatus("success");
+                setModalTitle("Loaded")
+                setModalMessage("Your next section has been loaded successfully");
+                setTimeout(() => {
+                    handleNext(navigate, pathname, newData, courseID || undefined);
+                    setModalVisible(false);
+                }, 1000);
+            } catch(err: any) {
+                console.error("Error loading Course Data: ",err);
+                setModalStatus("error");
+                setModalTitle("Load Failed");
+                setModalMessage(err.message || "unable to load the next section.")
+
+                setTimeout(() => setModalVisible(false),2000);
+            }
         },
         handleSave,
         handleSaveAndExit: createSaveAndExitHandler(formData, navigate, modalControls),

@@ -411,7 +411,13 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
         for key, value in json_columns.items():
             if key in paragraph.text:
+                logging.debug(f'key: {key}') #debug
+                logging.debug(f'Value: {value}') #debug
+                if value == None:
+                    logging.debug('Value is None, skipping') #debug
+                    break
                 list_of_dicts = json_columns.get(key)
+                logging.debug(f'List of dicts: {list_of_dicts}') #debug
                 try:
                     logging.debug(f'string before conversion to literal list_of_dicts:{list_of_dicts}')
                     list_of_dicts= json.loads(list_of_dicts)
@@ -469,10 +475,16 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     de.removeBlocks(doc,removeBlocks)
     de.removeBlockTags(doc,removeTags)
+    #Replace any formatted text that is in markdown
+    
+    de.replaceFormattedTextInParagraph(doc)
+    
     title = ""
     title += str(syllabus_col.get('subj_code', None))
     title += str(syllabus_col.get('crse_number',None))
     title += "_" + str(syllabus_col.get('term',None))
+
+
     return title
 
     

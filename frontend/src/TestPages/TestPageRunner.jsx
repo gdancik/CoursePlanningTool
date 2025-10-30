@@ -1,13 +1,13 @@
 import React from 'react';
 
 // Import components directly
-import CheckboxGroup from './components/SyllabusComponents/CheckboxGroup';
-import Alert from './components/SyllabusComponents/Alert';
-import Information from './components/SyllabusComponents/Information';
-import SidebarLayout, { SidebarLink } from './components/SidebarLayout';
-import ContentCard from './components/SyllabusComponents/ContentCard';
-import ContentCardSet from './components/SyllabusComponents/ContentCardSet';
-import Image from './components/SyllabusComponents/Image';
+import CheckboxGroup from '../components/SyllabusComponents/CheckboxGroup';
+import Alert from '../components/SyllabusComponents/Alert';
+import Information from '../components/SyllabusComponents/Information';
+import SidebarLayout, { SidebarLink } from '../components/SidebarLayout';
+import ContentCard from '../components/SyllabusComponents/ContentCard';
+import ContentCardSet from '../components/SyllabusComponents/ContentCardSet';
+import Image from '../components/SyllabusComponents/Image';
 
 // ContentCard Demo Component
 const ContentCardDemo = () => {

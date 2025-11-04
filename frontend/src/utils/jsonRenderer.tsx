@@ -99,18 +99,7 @@ export function jsonRenderComponent(
   
             const rawValue = formData[fieldId];
   
-            const currentValue =
-    
-            typeof rawValue === "string"
-     
-            ? rawValue.split(",").filter(Boolean)
-      
-            : Array.isArray(rawValue)
-      
-      
-            ? rawValue
-      
-            : [];
+            const currentValue = typeof rawValue === "string" ? rawValue.split(",").filter(Boolean): Array.isArray(rawValue)? rawValue: [];
 
  
             return (

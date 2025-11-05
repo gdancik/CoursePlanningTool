@@ -7,6 +7,7 @@ import bgImage from '../../assets/images/login_background.png'
 import LoginIcon from '../../assets/images/Login_Page_Icon.png'
 import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
 import MyGoogleLogin from "../../components/GoogleLogin/google_login.js";
+import StandardFooter from "../../components/Footer/Footer";
 
 const LoginScreen: React.FC = () => {
     const [username, setUsername] = useState("annie");
@@ -50,17 +51,17 @@ const LoginScreen: React.FC = () => {
     };
 
     return (
-        <div className="login-page-wrapper"
-             style = {{
-                 backgroundImage: `url(${bgImage})`,
-                 backgroundSize: 'cover',
-                 backgroundPosition: 'center',
-                 backgroundRepeat: 'no-repeat',
-                 backgroundAttachment: 'fixed',
+        <div>
+            <div className="login-page-wrapper"
+                style = {{
+                     backgroundImage: `url(${bgImage})`,
+                     backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundAttachment: 'fixed',
                  minHeight: '100vh',
              }}
-
-        >
+             >
             {/* Logo */}
             <div className="logo-container">
                 <img
@@ -134,7 +135,6 @@ const LoginScreen: React.FC = () => {
                 </div>
                 
             </div>
-
             {/* Reusable modal with props */}
             <RedirectingModal
                 visible={modalVisible}
@@ -142,6 +142,8 @@ const LoginScreen: React.FC = () => {
                 title={modalTitle}
                 message={modalMessage}
             />
+        </div>
+        <StandardFooter/>
         </div>
     );
 };

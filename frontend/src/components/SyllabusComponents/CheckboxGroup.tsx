@@ -4,8 +4,9 @@ export interface CheckboxGroupProps {
   id?: string;
   data?: string[];
   horizontal?: boolean;
-  value: string[];           
-  label?: string;       
+  value: string[];
+  label?: string;
+  className?: string;
   onChange: (vals: string[]) => void;
 }
 
@@ -15,7 +16,8 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   horizontal = true,
   label,
   value = [],
-  onChange = () => {},
+  className = "",
+  onChange,
 }) => {
   const items = data.filter((d) => d !== "Check All");
 
@@ -36,33 +38,34 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   };
 
   return (
-    <div
-      id={id}
-      role="group"
-      aria-label="Checkbox group"
-      style={{
-        display: "flex",
-        flexDirection: horizontal ? "row" : "column",
-        gap: "0.5rem",
-        flexWrap: horizontal ? "wrap" : "nowrap",
-      }}
-    >
-      {label && <span style ={{fontWeight: "bold"}}>{label}</span>}
-      {data.map((d) => (
-        <label key={d}>
-          <input
-            type="checkbox"
-            value={d}
-            checked={
-              d === "Check All"
-                ? value.length === items.length
-                : value.includes(d)
-            }
-            onChange={() => handleChange(d)}
-          />
-          {d}
-        </label>
-      ))}
+    <div id={`${id}_wrapper`} className="flex flex-col gap-2">
+      {label && (
+        <span className="font-bold mb-1">{label}</span>
+      )}
+
+      <div
+        id={id}
+        role="group"
+        aria-label="Checkbox group"
+        className={`flex ${horizontal ? "flex-row flex-wrap" : "flex-col"} gap-4`}
+      >
+        {data.map((d) => (
+          <label key={d} className="flex items-center gap-2 mx-2 my-1 cursor-pointer">
+            <input
+              type="checkbox"
+              value={d}
+              checked={
+                d === "Check All"
+                  ? value.length === items.length
+                  : value.includes(d)
+              }
+              onChange={() => handleChange(d)}
+              className={`w-5 h-5 border-2 rounded-sm focus:ring-2 ${className}`}
+            />
+            <span className="text-gray-800 font-medium">{d}</span>
+          </label>
+        ))}
+      </div>
     </div>
   );
 };

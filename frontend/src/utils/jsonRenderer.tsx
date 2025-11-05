@@ -110,11 +110,12 @@ export function jsonRenderComponent(
                 }
             }
             return (
-                <div key = {component.id}  className={component.className || ""}>
+                <div key = {component.id}>
                     <CheckboxGroup 
                     label = {component.label}
                     id = {component.id}
                     data = {component.data || []}
+                    className = {component.className}
                     horizontal = {component.horizontal ?? true}
                     value = {currentValue}
                     onChange={(vals: string[]) => onChange(fieldId, JSON.stringify(vals))}

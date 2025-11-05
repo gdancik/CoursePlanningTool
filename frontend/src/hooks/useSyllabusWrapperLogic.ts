@@ -58,7 +58,7 @@ export function useSyllabusWrapperLogic(
       modal.showRedirect("Saving", "Saving your changes...");
       await saveData(containerRef);
       modal.showRedirect("Saved", "Your changes have been saved!", "success");
-      setTimeout(() => modal.hide(), 5000);
+      setTimeout(() => modal.hide(), 2500);
     } catch (err: any) {
       console.error("Error in saveData:", err);
       modal.showError(err.message || "An unexpected error occurred.");

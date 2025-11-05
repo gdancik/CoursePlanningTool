@@ -42,7 +42,7 @@
               "label": "Meeting Days",
               "required": true,
               "data": ["M", "T", "W", "R", "F", "S"],
-              "className": "syllabus-text large-box"
+              "className": "syllabus-checkbox green"
             },
             {
               "type": "text",
@@ -59,35 +59,25 @@
               "placeholder": "Enter classroom location",
               "required": true,
               "className": "syllabus-text medium-box"
-            },
-            {
-              "type": "CheckboxGroup",
-              "id": "show_additional_meeting_checkboxes",
-              "label": "Additional Meeting Times?",
-              "require": "false",
-              "data": ["Yes"]
             }
           ]
         },
         {
           "type": "Row",
-          "conditional": {
-            "field": "show_additional_meeting"
-          },
           "content": [
             {
               "type": "CheckboxGroup",
               "id": "days2_syllabus_checkboxes",
-              "label": "Additional Meeting Days",
+              "label": "Additional Meeting Days (optional)",
               "required": true,
               "data": ["M", "T", "W", "R", "F", "S"],
               "horizontal": true,
-              "className": "syllabus-text large-box"
+              "className": "syllabus-checkbox green"
             },
             {
               "type": "text",
               "id": "times2_syllabus",
-              "label": "Additional Meeting Time",
+              "label": "Additional Meeting Time (optional)",
               "placeholder": "Enter meeting time",
               "required": true,
               "className": "syllabus-text medium-box"

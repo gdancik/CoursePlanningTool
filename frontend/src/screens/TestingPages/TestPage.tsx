@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { showErrorModal} from "../../utils/errorHandler";
-import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
+import RedirectingModal from "../../components/Modals/RedirectingModal/RedirectingModal";
 import CompetencyTable1 from "../../components/Tables/CompetencyTable1";
 import CompetencyTable2 from "../../components/Tables/CompetencyTable2";
 import api from "../../services/axios";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
+import RedirectingModal from "../../components/Modals/RedirectingModal/RedirectingModal";
 import { useAuth } from '../../context/AuthContext';
 import { createCourseHandler } from '../../utils/handlers/courseHandler';
 import {
@@ -17,6 +17,7 @@ import bgImage from '../../assets/images/bookstack-bg.png'
 import CourseModal from '../../components/CourseModal/NewCourseModal';
 import CourseCard from './CourseCard';
 import { Navigate, useNavigate } from 'react-router-dom';
+import StandardFooter from '../../components/Footer/Footer';
 import './CoursePage.css';
 
 const CoursePage: React.FC = () => {
@@ -134,6 +135,7 @@ const CoursePage: React.FC = () => {
                         )}
                     </div>
                 </div>
+            <StandardFooter/>
 
             <CourseModal
                 isOpen={isCreateOpen}

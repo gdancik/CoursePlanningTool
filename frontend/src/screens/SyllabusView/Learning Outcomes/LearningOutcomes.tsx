@@ -13,7 +13,7 @@ import {
     createSaveAndExitHandler,
     createSaveHandler
 } from "../../../utils/handlers/previewExitFactory";
-import RedirectingModal from "../../../components/RedirectingModal/RedirectingModal";
+import RedirectingModal from "../../../components/Modals/RedirectingModal/RedirectingModal";
 
 
 const LearningOutcomes: React.FC = () => {

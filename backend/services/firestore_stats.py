@@ -100,6 +100,7 @@ def get_table(table, user_id = None, today = False):
         return df
     
     df['date_id'] = pd.to_datetime(df['date_id'], origin='1970-01-01', unit='D')
+
     return df
 
 def get_reads(user_id = None, today = False) :
@@ -176,9 +177,10 @@ def summarize_tables(byUser = False):
     final = tmp.merge(c, how = 'outer', on = ['user_id', 'date_id'])
     final = final.reindex(columns = ['user_id', 'date_id', 'num_reads', 'num_writes' ,'num_deletes'])
     final = final.dropna(how = 'all').fillna(0)
+    #final = final.sort_values(by = 'date_id', ascending = False)
 
     if not byUser :
-        return final.drop('user_id', axis = 1).groupby('date_id', as_index = False).sum()
+        return final.drop('user_id', axis = 1).groupby('date_id', as_index = False).sum().sort_values(by='date_id', ascending = False)
 
     return final
 
@@ -196,7 +198,7 @@ def summarize_specifed_days_old(days, byUser = False):
 
     # Filter the DataFrame
     filtered_df = df[df['date_id'] >= cutoff_date]
-    return filtered_df
+    return filtered_df.sort_values(by = 'date_id', ascending = False)
 
 
 

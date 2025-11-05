@@ -5,7 +5,7 @@ import ecsuWhite from '../../assets/images/ecsu-logo-white-stacked-alt.png';
 import "./LoginScreen.css";
 import bgImage from '../../assets/images/login_background.png'
 import LoginIcon from '../../assets/images/Login_Page_Icon.png'
-import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
+import RedirectingModal from "../../components/Modals/RedirectingModal/RedirectingModal";
 import MyGoogleLogin from "../../components/GoogleLogin/google_login.js";
 import StandardFooter from "../../components/Footer/Footer";
 

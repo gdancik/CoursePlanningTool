@@ -1,6 +1,6 @@
 import React from "react";
-import RedirectingModal from "../RedirectingModal/RedirectingModal";
-import ErrorModal from "../ErrorModal/ErrorModal";
+import RedirectingModal from "./RedirectingModal/RedirectingModal";
+import ErrorModal from "./ErrorModal/ErrorModal";
 import CourseModal from "../CourseModal/NewCourseModal";
 import type { ModalFactory } from "../../utils/useModalFactory";
 

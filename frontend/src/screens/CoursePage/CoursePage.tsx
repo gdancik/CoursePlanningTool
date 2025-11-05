@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import RedirectingModal from "../../components/RedirectingModal/RedirectingModal";
+import RedirectingModal from "../../components/Modals/RedirectingModal/RedirectingModal";
 import { useAuth } from '../../context/AuthContext';
 import { createCourseHandler } from '../../utils/handlers/courseHandler';
 import {

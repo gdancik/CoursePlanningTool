@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import api from "../../services/axios";
-import ErrorModal from "../ErrorModal/ErrorModal.tsx";
+import ErrorModal from "../Modals/ErrorModal/ErrorModal";
 
 // requires REACT_APP_CLIENT_ID set in .env
 

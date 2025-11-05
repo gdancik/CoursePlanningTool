@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import './ErrorModal.css'
-import ErrorIcon from "../../assets/images/Error-Message.png"
+import ErrorIcon from "../../../assets/images/Error-Message.png"
 
 type Props ={
     message: string;

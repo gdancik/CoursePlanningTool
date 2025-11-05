@@ -2,7 +2,7 @@
 
 import {Routes, Route} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
-import ErrorModal from "../components/ErrorModal/ErrorModal";
+import ErrorModal from "../components/Modals/ErrorModal/ErrorModal";
 import {setErrorModalHandler as setGlobalModal} from "../utils/errorHandler";
 
 //Test Endpoint Imports

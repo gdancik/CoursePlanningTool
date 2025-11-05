@@ -15,7 +15,7 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   horizontal = true,
   label,
   value = [],
-  onChange,
+  onChange = () => {},
 }) => {
   const items = data.filter((d) => d !== "Check All");
 

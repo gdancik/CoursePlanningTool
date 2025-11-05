@@ -95,29 +95,33 @@ export function jsonRenderComponent(
             );
 
         case "CheckboxGroup":
-
-        const fieldId = component.id || "";
-
-
-        const currentValue = (formData[component.id || ""] || "")
-        .split(",")
-        .filter(Boolean);
+            const fieldId = component.id || "";
+            const rawValue = formData[fieldId];
+            let currentValue: string [] = []
+            if(Array.isArray(rawValue)) {
+                currentValue = rawValue;
+            } else if (typeof rawValue === "string") {
+                try{
+                    const parsed = JSON.parse(rawValue);
+                    if(Array.isArray (parsed)) currentValue = parsed;
+                    else currentValue = rawValue.split(",").filter(Boolean);
+                }catch {
+                    currentValue = rawValue.split(",").filter(Boolean);
+                }
+            }
             return (
-                <div key={component.id } className={component.className || ""}>
-                    <CheckboxGroup
-                        id={component.id}
-                        data={component.data || []}
-                        horizontal={component.horizontal ?? true}
-                        label={component.label}
-                        value={currentValue}
-                        onChange={(vals: string[]) =>
-                            onChange(fieldId, vals.join(","))
-                        }
+                <div key = {component.id}  className={component.className || ""}>
+                    <CheckboxGroup 
+                    label = {component.label}
+                    id = {component.id}
+                    data = {component.data || []}
+                    horizontal = {component.horizontal ?? true}
+                    value = {currentValue}
+                    onChange={(vals: string[]) => onChange(fieldId, JSON.stringify(vals))}
                     />
                 </div>
             );
-
-        case "checkbox":
+      case "checkbox":
             return (
                 <label className={component.className || ""}>
                     <input

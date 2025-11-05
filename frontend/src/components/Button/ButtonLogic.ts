@@ -69,7 +69,6 @@ export const handleNext = (
     formData: Record<string, string>,
     courseID?: string
 ) => {
-    saveCurrentFormToLocalStorage(formData, courseID);
     console.log("Current Path:", currentPath);
     const index = pageOrder.indexOf(currentPath); // Find the index of the current page
     console.log("Current index:", index);

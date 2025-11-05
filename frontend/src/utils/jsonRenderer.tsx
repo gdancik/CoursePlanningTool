@@ -96,23 +96,30 @@ export function jsonRenderComponent(
 
         case "CheckboxGroup":
             const fieldId = component.id || "";
-  
             const rawValue = formData[fieldId];
-  
-            const currentValue = typeof rawValue === "string" ? rawValue.split(",").filter(Boolean): Array.isArray(rawValue)? rawValue: [];
-
- 
+            let currentValue: string [] = []
+            if(Array.isArray(rawValue)) {
+                currentValue = rawValue;
+            } else if (typeof rawValue === "string") {
+                try{
+                    const parsed = JSON.parse(rawValue);
+                    if(Array.isArray (parsed)) currentValue = parsed;
+                    else currentValue = rawValue.split(",").filter(Boolean);
+                }catch {
+                    currentValue = rawValue.split(",").filter(Boolean);
+                }
+            }
             return (
-            <div key={component.id} className={component.className || ""}>
-                <CheckboxGroup
-                id={component.id}
-                data={component.data || []}
-                horizontal={component.horizontal ?? true}
-                label={component.label}
-                value={currentValue}
-                onChange={(vals: string[]) => onChange(fieldId, vals.join(","))}
-                  />
-                   </div>
+                <div key = {component.id}  className={component.className || ""}>
+                    <CheckboxGroup 
+                    label = {component.label}
+                    id = {component.id}
+                    data = {component.data || []}
+                    horizontal = {component.horizontal ?? true}
+                    value = {currentValue}
+                    onChange={(vals: string[]) => onChange(fieldId, JSON.stringify(vals))}
+                    />
+                </div>
             );
       case "checkbox":
             return (

@@ -11,7 +11,7 @@ export interface CheckboxGroupProps {
 
 const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   id = "checkbox_group",
-  data = ["M", "T", "W", "R", "F"],
+  data = [],
   horizontal = true,
   label,
   value = [],
@@ -47,6 +47,7 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
         flexWrap: horizontal ? "wrap" : "nowrap",
       }}
     >
+      {label && <span style ={{fontWeight: "bold"}}>{label}</span>}
       {data.map((d) => (
         <label key={d}>
           <input

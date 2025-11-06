@@ -48,6 +48,8 @@ export const createEditHandler = (
                 term_syllabus:            raw["Semester"]        || "",
                 year_syllabus:            raw["Year"]            || "",
                 last_edited:              raw["Last Edited"]     || "",
+                created_at:               raw["Created"] || raw["Created At"] || "",
+                course_type:              raw["Course Type"] || raw["Type"] || "General Education",
                 ...raw,
             };
 

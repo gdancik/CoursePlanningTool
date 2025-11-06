@@ -6,7 +6,7 @@ import '@fontsource/inter/700.css'
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import TestPageRunner from './TestPageRunner';
+import TestPageRunner from './TestPages/TestPageRunner';
 
 // Test that TestPageRunner renders without crashing
 test('TestPageRunner renders without crashing', () => {

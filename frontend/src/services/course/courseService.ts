@@ -10,7 +10,9 @@ export interface Course {
     term_syllabus: string;
     year_syllabus: string;
     last_edited: string;
-    [key: string]: string;
+    created_at?: string;
+    course_type?: string;
+    [key: string]: string | undefined;
 }
 
 /**
@@ -70,6 +72,8 @@ export const getCourses = async (): Promise<Course[] | null> => {
         term_syllabus: raw[key]["Semester"] || "",
         year_syllabus: raw[key]["Year"]     || "",
         last_edited:   raw[key]["Last Edited"] || "",
+        created_at: raw[key]["Created"] || raw[key]["Created At"] || "",
+        course_type: raw[key]["Course Type"] || raw[key]["Type"] || "General Education",
         ...raw[key],
     }));
 

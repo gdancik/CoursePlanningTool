@@ -9,6 +9,8 @@ interface ButtonBarProps {
     onDuplicate?: () => void;
     onDelete?: () => void;
     onDownload?: () => void;
+    disableNewCourse?: boolean;
+    disableDuplicate?: boolean;
 }
 
 // Functional component that renders a button bar
@@ -17,6 +19,8 @@ const CourseButtonBar: React.FC<ButtonBarProps> = ({
                                                  onDuplicate,
                                                  onDelete,
                                                  onDownload,
+                                                 disableNewCourse = false,
+                                                 disableDuplicate = false,
                                              }) => {
 
     return (
@@ -35,6 +39,7 @@ const CourseButtonBar: React.FC<ButtonBarProps> = ({
                     variant="secondary"
                     className="tight"
                     onClick={onDuplicate}
+                    disabled={disableDuplicate}
                 />
 
                 {/* Save & Exit Button */}

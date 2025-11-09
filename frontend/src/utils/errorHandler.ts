@@ -20,11 +20,12 @@ export const setErrorModalHandler = (handler: (error: ErrorModalArgs) => void) =
 
 export const handleApiError= (error: unknown):void =>{
     const axiosError = error as AxiosError;
-
+ 
     if(!axiosError.response){
         showErrorModal({message:"Network Error. Please check your internet connection."});
         return;
     }
+
     const {status} = axiosError.response;
 
     switch (status) {
@@ -37,8 +38,11 @@ export const handleApiError= (error: unknown):void =>{
         case 404:
             showErrorModal({message:"NotFound: The request resource is missing.", code: 404});
             break;
-        case 500:
-            showErrorModal({message:"Server Error: Please try again later.", code: 500});
+        case 500:               
+            showErrorModal({message:"Server Error: Please try again later", code: 500});            
+            break;
+        case 429:
+            showErrorModal({message:"Rate limit exceeded: Please try again later", code: 429});            
             break;
         default:
             showErrorModal({ message: `Unexpected error occurred.`, code: status });

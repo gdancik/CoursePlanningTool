@@ -71,6 +71,8 @@ def getValue():
             return jsonify({"error": "No data returned from getValue"}), 500
         return jsonify(sheet)
     except Exception as e:
+        if 'exceeded' in str(e) :
+          return jsonify({"error": str(e)}), 429     
         return jsonify({"error": str(e)}), 500
 
 @api_firestore_bp.route('updateValue/', methods=['POST'])
@@ -126,6 +128,8 @@ def updateValue():
         fs.updateValue(course_id, columns)
         return jsonify('Function called successfully')
     except Exception as e:
+        if 'exceeded' in str(e) :
+          return jsonify({"error": str(e)}), 429     
         return jsonify({"error": str(e)}), 500
 
 @api_firestore_bp.route('deleteCourse/', methods=['POST'])
@@ -179,6 +183,8 @@ def deleteCourse():
         fs.delete_course(course_id)
         return jsonify({"course_id": course_id})
     except Exception as e:
+        if 'exceeded' in str(e) :
+          return jsonify({"error": str(e)}), 429     
         return jsonify({"error": str(e)}), 500
 
 @api_firestore_bp.route('getCourse/', methods=['POST'])
@@ -219,9 +225,16 @@ def getCourse():
     data = request.get_json()
     course_id = data.get('course_id')
 
-    fs = get_fs_editor()
-    res = fs.getCourse(course_id)
+    try: 
+      fs = get_fs_editor()
+      res = fs.getCourse(course_id)
+    except Exception as e:        
+        if 'exceeded' in str(e) :
+          return jsonify({"error": str(e)}), 429            
+        return jsonify({"error": str(e)}), 500
+
     return jsonify(res)
+
 
 @api_firestore_bp.route('getSheet/', methods=['POST'])
 @require_post_params()
@@ -259,7 +272,8 @@ def getSheet():
         logging.info('Reading the google sheet')
         sheet = fs.read_collection(return_json=True)
         return jsonify(sheet)
-    except Exception as e:
+    
+    except Exception as e:        
         return jsonify({"error": str(e)}), 500
 
 @api_firestore_bp.route('createNewCourse/', methods=['POST'])

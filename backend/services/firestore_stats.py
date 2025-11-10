@@ -67,6 +67,14 @@ def increase_number_deletes(user_id, amount) :
     increase_number('deletes', user_id, amount)
 
 
+def today_date_id(conn = None) :
+    if not conn :
+        conn = sqlite3.connect("firestore_stats.db")
+    
+    cursor = conn.cursor()
+    cursor.execute("SELECT CAST(julianday('now') - julianday('1970-01-01') AS INTEGER);")
+    return cursor.fetchone()[0]
+
 # TO DO: limit to current date?
 def get_table(table, user_id = None, today = False):
     '''Returns a pandas data frame of all rows of 'table' '''
@@ -76,14 +84,16 @@ def get_table(table, user_id = None, today = False):
     qry = f"SELECT * FROM {table}"
 
     if today :
-
-        t = datetime.now() - datetime(1970,1,1)    # calculate date_id
+       
+        t = today_date_id(conn)
+        print(f't = {t}')
 
         if user_id :
-            qry += f""" WHERE user_id = '{user_id}' AND date_id = {t.days}"""
+            qry += f""" WHERE user_id = '{user_id}' AND date_id = {t}"""
+            print(qry)
         
         else :
-            qry += f""" WHERE date_id = {t.days}"""
+            qry += f""" WHERE date_id = {t}"""
 
     elif user_id :
         qry += f""" WHERE user_id = '{user_id}'"""
@@ -134,7 +144,7 @@ def delete_specifed_days_old(days):
     conn = sqlite3.connect('firestore_stats.db')
     cur = conn.cursor()
 
-    threshold_date_id = (datetime.now() - datetime(1970,1,1)).days - days
+    threshold_date_id = today_date_id(conn) - days
     for table in ['reads', 'writes', 'deletes']:
         cur.execute(f"DELETE FROM {table} WHERE date_id <= ?", (threshold_date_id,))
 
@@ -195,7 +205,7 @@ def summarize_specifed_days_old(days, byUser = False):
 
     # Define the cutoff date 
     cutoff_date = datetime.now() - timedelta(days)
-
+    
     # Filter the DataFrame
     filtered_df = df[df['date_id'] >= cutoff_date]
     return filtered_df.sort_values(by = 'date_id', ascending = False)

@@ -26,6 +26,15 @@ export const handleApiError= (error: unknown):void =>{
         return;
     }
 
+    // Display additional information in the console
+    if (axiosError?.response?.data) {
+        console.log("Error data is below:");
+        console.log(axiosError.response.data);
+    } else {
+        console.log("ApiError object is below:");
+        console.log(axiosError);
+    }
+
     const {status} = axiosError.response;
 
     switch (status) {
@@ -42,7 +51,7 @@ export const handleApiError= (error: unknown):void =>{
             showErrorModal({message:"Server Error: Please try again later", code: 500});            
             break;
         case 429:
-            showErrorModal({message:"Rate limit exceeded: Please try again later", code: 429});            
+            showErrorModal({message:"Rate limit error: Your daily usage limit has been reached.", code: 429});            
             break;
         default:
             showErrorModal({ message: `Unexpected error occurred.`, code: status });

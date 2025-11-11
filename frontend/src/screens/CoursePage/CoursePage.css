@@ -70,6 +70,32 @@
     color: #333;
 }
 
+.sort-direction-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+}
+
+.sort-direction-btn:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.sort-direction-btn:active {
+    background-color: #dee2e6;
+    transform: scale(0.95);
+}
+
 .max-courses-message {
     background-color: #fff3cd;
     border: 1px solid #ffeaa7;

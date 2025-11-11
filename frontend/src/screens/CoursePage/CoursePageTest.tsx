@@ -51,6 +51,7 @@ const MOCK_COURSES = [
 const CoursePageTest: React.FC = () => {
     const [courses, setCourses] = useState(MOCK_COURSES);
     const [sortBy, setSortBy] = useState<'course_number' | 'created' | 'last_edited'>('last_edited');
+    const [sortAscending, setSortAscending] = useState(false); // false = descending (newest/Z-A first)
     const [showAddModal, setShowAddModal] = useState(false);
     
     // Get max courses from config
@@ -59,19 +60,27 @@ const CoursePageTest: React.FC = () => {
     // Sorting function
     const sortCourses = (courseList: typeof courses, sortKey: typeof sortBy) => {
         return [...courseList].sort((a, b) => {
+            let comparison = 0;
+            
             switch (sortKey) {
                 case 'course_number':
                     const aCode = `${a.subj_code_syllabus || ''} ${a.crse_number_syllabus || ''}`.trim();
                     const bCode = `${b.subj_code_syllabus || ''} ${b.crse_number_syllabus || ''}`.trim();
-                    return aCode.localeCompare(bCode);
+                    comparison = aCode.localeCompare(bCode);
+                    break;
                 case 'created':
                     const aCreated = a.created_at || a.course_id;
                     const bCreated = b.created_at || b.course_id;
-                    return new Date(bCreated).getTime() - new Date(aCreated).getTime();
+                    comparison = new Date(bCreated).getTime() - new Date(aCreated).getTime();
+                    break;
                 case 'last_edited':
                 default:
-                    return new Date(b.last_edited || '').getTime() - new Date(a.last_edited || '').getTime();
+                    comparison = new Date(b.last_edited || '').getTime() - new Date(a.last_edited || '').getTime();
+                    break;
             }
+            
+            // Reverse if ascending
+            return sortAscending ? -comparison : comparison;
         });
     };
 
@@ -186,6 +195,13 @@ const CoursePageTest: React.FC = () => {
                                 <option value="created">Created</option>
                                 <option value="course_number">Course Number</option>
                             </select>
+                            <button 
+                                className="sort-direction-btn"
+                                onClick={() => setSortAscending(!sortAscending)}
+                                title={sortAscending ? "Ascending (oldest/A-Z first)" : "Descending (newest/Z-A first)"}
+                            >
+                                {sortAscending ? '↑' : '↓'}
+                            </button>
                         </div>
                     </div>
                     

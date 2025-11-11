@@ -14,11 +14,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // TEMPORARY: Auto-login for development (bypass Google OAuth)
-    const [user, setUser] = useState<User | null>({ 
-        user: "test@example.com", 
-        name: "Development User" 
-    });
+    const [user, setUser] = useState<User | null>(null);    
     return (
         <AuthContext.Provider value={{ user, setUser }}>
             {children}

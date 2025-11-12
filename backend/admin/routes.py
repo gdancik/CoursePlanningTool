@@ -2,12 +2,20 @@ from . import  admin_bp
 from backend.services import firestore_stats as fs_stats
 from backend.services.app_services import get_fs_editor
 from backend.services.firestore_editor import fsEditor
+from backend.config import Config
+
 from flask_login import current_user
+
 '''Admin page'''
+
+def hide_gmails() :
+    '''returns True if gmails should be hidden (if user is not logged in or not in the admin group)'''
+    return not current_user.is_authenticated or not current_user.id in Config.admin_users
+    
+
 @admin_bp.route('/')
 def admin():
 
-    
     if not current_user.is_authenticated :
         fs = fsEditor('NO USER')
     else :
@@ -30,12 +38,14 @@ def admin():
               '''
        
     sheet_all = fs_stats.summarize_tables()
-    sheet_by_user = fs_stats.summarize_tables(byUser = True)
+    sheet_by_user = fs_stats.summarize_tables(byUser = True, hide_gmails = hide_gmails())
     
     sheet_all_html = sheet_all.to_html(classes="data", index=False, border=1)
     sheet_by_user_html = sheet_by_user.to_html(classes="data", index=False, border=1)
 
+
     user_ids = sheet_by_user['user_id'].unique() if 'user_id' in sheet_by_user.columns else []
+
 
     # Generate dropdown options
     user_dropdown_options = ''.join(
@@ -157,7 +167,7 @@ def filter_by_days():
 
     # Get filtered data for both tables
     sheet_all = fs_stats.summarize_specifed_days_old(days, byUser=False)
-    sheet_by_user = fs_stats.summarize_specifed_days_old(days, byUser=True)
+    sheet_by_user = fs_stats.summarize_specifed_days_old(days, byUser=True, hide_gmails = hide_gmails())
 
     return jsonify({
         'sheet_all_html': sheet_all.to_html(classes="data", index=False, border=1),

@@ -166,10 +166,11 @@ def delete_user_records(user_id):
     conn.commit()
     conn.close()
 
-def summarize_tables(byUser = False):
+def summarize_tables(byUser = False, hide_gmails = False):
     '''
     Returns pandas data frame of number of reads, writes, and deletes.
     If 'byUser' is True, then show stats for each user
+    If 'hide_gmails' is True, then filter out gmail records (only applied when byUser is True)
     '''
 
     # get reads, writes, and deletes
@@ -191,14 +192,17 @@ def summarize_tables(byUser = False):
 
     if not byUser :
         return final.drop('user_id', axis = 1).groupby('date_id', as_index = False).sum().sort_values(by='date_id', ascending = False)
-
+    elif hide_gmails :
+        keep = ~final['user_id'].str.contains('gmail')
+        final = final[keep]
     return final
 
-def summarize_specifed_days_old(days, byUser = False):
+def summarize_specifed_days_old(days, byUser = False, hide_gmails = False):
     '''Returns pandas data frame of number of reads, writes, and deletes
     Args:
         days: number of days old to include
         byUser: if True, then show stats for each user
+        hide_gmails: if True (and byUser is True), filter gmail records
     '''
     df = summarize_tables(byUser = byUser)
     df['date_id'] = pd.to_datetime(df['date_id'])
@@ -208,6 +212,9 @@ def summarize_specifed_days_old(days, byUser = False):
     
     # Filter the DataFrame
     filtered_df = df[df['date_id'] >= cutoff_date]
+    if hide_gmails :
+        keep = ~filtered_df['user_id'].str.contains('gmail')
+        filtered_df = filtered_df[keep]
     return filtered_df.sort_values(by = 'date_id', ascending = False)
 
 

@@ -7,6 +7,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 import pytest
 from backend.services.firestore_editor import fsEditor
 import backend.services.course_planning as cp
+import backend.services.firestore_stats as fs_stats
 
 @pytest.fixture(scope="session")
 def firebase_app():
@@ -17,6 +18,7 @@ def firebase_app():
 # Use the session fixture in your tests
 @pytest.fixture
 def fs(firebase_app):
+    fs_stats.create_tables()
     return firebase_app
 
 def testCreateGetUpdateDelete(fs) :
@@ -58,7 +60,7 @@ def testCreateGetUpdateDelete(fs) :
 
     fs.delete_collection()
     assert fs.collection_exists() == False 
-
+    
 def testGetValueNotFound(fs) :
 
     # create sheet
@@ -67,5 +69,23 @@ def testGetValueNotFound(fs) :
     
     c1 = fs.createNewCourse({'crse_number_syllabus': 210})
     assert fs.getValue('c2', ['instructor_name_syllabus']) == None
+
+    fs.delete_collection()
+
+def test_duplicateCourse(fs):
+    assert fs.collection_name == 'test_fs_editor'
+
+    # create sheet
+    if fs.collection_exists():
+        fs.delete_collection()
+    
+    # Create courses and update sheet
+    c1 = fs.createNewCourse({'instructor_name_syllabus': 'joe', 'crse_number_syllabus': 210})
+    c2 = fs.createNewCourse({'instructor_name_syllabus': 'steve', 'crse_number_syllabus': 203})
+    new_id = fs.duplicateCourse(c1)
+
+    course_og = fs.getValue(c1, ['instructor_name_syllabus', 'crse_number_syllabus'])
+    course_dup = fs.getValue(new_id, ['instructor_name_syllabus', 'crse_number_syllabus'])
+    assert course_og == course_dup
 
     fs.delete_collection()

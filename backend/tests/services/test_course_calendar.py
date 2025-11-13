@@ -14,6 +14,7 @@ def testFall() :
 
     soup = cc.get_target_webpage(url, target)
     df = cc.get_dates(soup, target)
+    cc.process_academic_calendar(df,'Fall 2025', '2025')
 
 def testSpring2026() :
     url = 'https://www.easternct.edu/academics/academic-calendar/index.html'    
@@ -57,4 +58,7 @@ def testGenerateSchedule() :
         df = cc.generate_schedule(end_date, start_date, 'T')
     except Exception as err :
         assert str(err) == 'Start date 2014-08-10 must come before end date 2014-08-02'
+
+def testCreateSchedule():
+    cc.create_schedule('Fall','2025','MWF','https://www.easternct.edu/academics/academic-calendar/index.html')
 

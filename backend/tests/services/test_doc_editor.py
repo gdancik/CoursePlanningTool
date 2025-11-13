@@ -9,7 +9,13 @@ import backend.services.doc_editor as de
 from docx import Document
 import pandas as pd
 
-document = 'backend/tests/services/TestFiles/(Test)Doc1.docx'
+WIP = 0
+if WIP == 1:
+    document = 'TestFiles/(Test)Doc1.docx'
+else: 
+    document = 'backend/tests/services/TestFiles/(Test)Doc1.docx'
+
+
 doc= Document(document)
 def test_replaceTextInParagraph():
     test_dict ={
@@ -75,3 +81,30 @@ def test_removeBlocks():
             para += text + "\n"
     assert para == 'Hello my name is ${Name}, I am ${Age} years old.\nMy favorite hobby is ${Hobby}.\n'
     pass
+
+def test_replaceFormattedTextInParagraph():
+    if WIP == 1:
+        markdown_test_doc = Document('TestFiles/(Test)Markdown.docx')
+    else:
+        markdown_test_doc = Document('backend/tests/services/TestFiles/(Test)Markdown.docx')
+
+    de.replaceFormattedTextInParagraph(markdown_test_doc)
+    modified_doc = markdown_test_doc
+    para = ""
+    for paragraph in modified_doc.paragraphs:
+        text = paragraph.text.strip()
+        if text:
+            para += text + "\n"
+    print(para)
+    assert para == 'This is bold\nthis is italics\nThis is both\n'
+
+def test_copy_paragraph_before():
+    if WIP == 1:
+        hyperlink_test_doc = Document('TestFiles/(Test)Hyperlink.docx')
+    else:
+        hyperlink_test_doc = Document('backend/tests/services/TestFiles/(Test)Hyperlink.docx')
+    test_doc = Document()
+    test_doc.add_paragraph()
+    para = hyperlink_test_doc.paragraphs[0]
+    de.copy_paragraph_before(para,test_doc.paragraphs[0])
+    assert test_doc.paragraphs[0].text == para.text

@@ -34,7 +34,7 @@ def create_app(config=Config):
     # Session cookie settings
     app.config.update(
         SESSION_COOKIE_SAMESITE="None",
-        SESSION_COOKIE_SECURE=True  # use False temporarily for localhost testing
+        SESSION_COOKIE_SECURE=False  # use False temporarily for localhost testing
     )
 
     # Configure Swagger

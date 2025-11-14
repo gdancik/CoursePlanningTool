@@ -95,4 +95,38 @@ def test_updateValue_success(client, setup_test_sheet):
     # Assert the content of the response
     assert b'Function called successfully' in response.data
 
+def test_preview(client, setup_test_sheet):
+    # Define the test data for a successful request
+    test_data = {
+        "course_id":setup_test_sheet[0],
+    }
+
+    # Send a POST request to the /preview/ endpoint
+    response = client.post('/api/preview/', json=test_data)
+
+    # Print the response data for debugging purposes
+    print('Response data:', response.data)
+
+    # Assert that the response status code is 200
+    assert response.status_code == 200
+
+def test_generate_schedule_success(client):
+    # Define valid test data
+    test_data = {
+        "term": "Fall",
+        "year": '2025',
+        "days": 'MWF'
+    }
+
+    # Send a POST request to the /generateSchedule/ endpoint
+    response = client.post('/api/generateSchedule/', json=test_data)
+
+    # Print the response data for debugging purposes
+    print('Response data:', response.data)
+
+    # Assert that the response status code is 200
+    assert response.status_code == 200
+    # Assert the content of the response
+    assert b'schedule' in response.data
+
 

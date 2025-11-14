@@ -6,9 +6,18 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 
 import pytest
 import backend.services.syllabus_generator as sf
+import backend.services.firestore_stats as fs_stats
+
 from docx import Document
 
 syllabus_webpage = 'https://www.easternct.edu/center-for-teaching-learning-and-assessment/syllabus-statements/index.html'
+WIP = 0
+
+@pytest.fixture
+def db_setup():
+    fs_stats.create_tables()
+    yield
+
 def test_get_webpage():
     url = "http://example.com" 
     soup = sf.get_webpage(url)
@@ -27,7 +36,7 @@ def test_getStatements():
     assert 'Diversity Statement' in str(statement_keys[0])
     assert expected_diversity_statement.strip() in str(statement_values[0])
 
-def test_create_syllabus_statment_page():
+def test_create_syllabus_statment_page(db_setup):
     doc= Document()
     selected_statements= ['Academic Success Center']
     
@@ -39,3 +48,56 @@ def test_create_syllabus_statment_page():
     assert 'Academic Success Center (ASC)' in paragraphs[0]
     assert expected_text in paragraphs[1]
 
+#Testing that the code doesnt crash
+def test_generate_syllabus(db_setup):
+    if WIP == 1:
+        doc= Document('TestFiles/(Test)Policy.docx')
+    else:
+        doc= Document('backend/tests/services/TestFiles/(Test)Doc1.docx')
+    
+    title = sf.generate_syllabus(doc,'LH7o9UQR1Q7ge5njKd9q','annie')
+    # doc.save('test_syllabus.docx')
+    assert title != None
+
+def test_add_table_to_doc():
+    doc= Document()
+    data =  [
+        ['Header1', 'Header2'],
+        ['Row1Col1', 'Row1Col2'],
+        ['Row2Col1', 'Row2Col2']
+    ]
+    sf.add_table_to_doc(doc, data)
+
+    paragraphs = [para.text for para in doc.paragraphs]
+    table_found = False
+    for table in doc.tables:
+        if len(table.rows) == 3 and len(table.columns) == 2:
+            table_found = True
+            break
+    assert table_found
+
+def test_style_table_borders():
+    
+    doc= Document()
+    data =  [
+        ['Header1', 'Header2'],
+        ['Row1Col1', 'Row1Col2']
+    ]
+    sf.add_table_to_doc(doc, data)
+    table = doc.tables[0]
+    sf.style_table_borders(table)
+
+def test_generate_grading_policies():
+    if WIP == 1:
+        doc = Document('TestFiles/(Test)Policy.docx')
+    else:
+        doc = Document('backend/tests/services/TestFiles/(Test)Policy.docx')
+
+    data = [
+        {'title':'40-49','description':'Failing'},
+        {'title':'50-59','description':'Passing'},
+    ]
+    sf.generate_grading_policies(doc, data)
+    paragraphs = [para.text for para in doc.paragraphs]
+    assert 'Passing' in paragraphs[len(paragraphs)-1]
+   

@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import { handleNext, handleBack } from "../components/Button/ButtonLogic";
-import { createSaveAndExitHandler, createPreviewHandler } from "../utils/handlers/previewExitFactory";
+import {createPreviewHandler } from "../utils/handlers/previewExitFactory";
 import type { NavigateFunction } from "react-router-dom";
 import saveData from "../services/processData";
 import { loadCourseData } from "../utils/loadCourseData";
 import { useModalFactory } from "../utils/useModalFactory"; 
+import { saveAndExitHandler } from "../utils/handlers/SaveAndExitHandler";
 
 interface SyllabusWrapperLogicResult {
   modal: ReturnType<typeof useModalFactory>;
@@ -96,12 +97,13 @@ export function useSyllabusWrapperLogic(
     handleBackClick,
     handleNextClick,
     handleSave,
-    handleSaveAndExit: createSaveAndExitHandler(formData, navigate, {
-      setVisible: modal.hide,
-      setStatus: () => {},
-      setTitle: () => {},
-      setMessage: () => {},
-    }),
+    handleSaveAndExit: () =>
+      saveAndExitHandler({
+        formData,
+        containerRef: containerRef as React.RefObject<HTMLDivElement>,
+        modal,
+        navigate,
+      }),
     handlePreviewClick: createPreviewHandler(formData, {
       setVisible: modal.hide,
       setStatus: () => {},

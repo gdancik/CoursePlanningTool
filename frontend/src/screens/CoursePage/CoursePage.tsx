@@ -175,6 +175,10 @@ const CoursePage: React.FC = () => {
                                 </button>
                             </div>
                         </div>
+
+                        <div className='course-limit-info'>
+                            <p> <b>Please Note:</b> You can store up to {maxCourses} courses a time. If you want to create more courses, you will need to delete another course. Editing an existing syllabus will overwrite the previously entered information. If you use the duplicate function, you will be able to preserve the original version and create a new version of the syllabus.</p>
+                        </div>
                         
                         {isAtMaxCapacity && (
                             <div className="max-courses-message">

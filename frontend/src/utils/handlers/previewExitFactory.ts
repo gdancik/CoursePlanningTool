@@ -1,6 +1,6 @@
 // src/utils/handlers/previewExitFactory.ts
 
-import { saveToBackend, logoutUser, previewSyllabus } from "../../services/TestServices/syllabusService";
+import { previewSyllabus, updateCourseValues } from "../../services/course/courseService";
 import { createNewCourse } from "../../services/course/courseService";
 
 type ModalControls = {
@@ -65,7 +65,7 @@ export const createSaveHandler = (
 
         localStorage.setItem("currentCourseData", JSON.stringify({ ...mappedData, course_id }));
 
-        const result = await saveToBackend(course_id, mappedData);
+        const result = await updateCourseValues(course_id, mappedData);
         if (result !== null) {
             modal.setStatus("success");
             modal.setTitle("Saved!");
@@ -121,7 +121,7 @@ export const createSaveAndExitHandler = (
             localStorage.setItem("currentCourseData", JSON.stringify(mappedData));
         }
 
-        const saveResult = await saveToBackend(course_id, mappedData);
+        const saveResult = await updateCourseValues(course_id, mappedData);
         if (saveResult !== null) {
             modal.setStatus("success");
             modal.setTitle("Saved & Exiting");
@@ -188,7 +188,7 @@ export const createPreviewHandler = (
 
         localStorage.setItem("currentCourseData", JSON.stringify(mappedData));
 
-        const saveResult = await saveToBackend(course_id, mappedData);
+        const saveResult = await updateCourseValues(course_id, mappedData);
         if (saveResult !== null) {
             const blob = await previewSyllabus(course_id);
             if (blob) {

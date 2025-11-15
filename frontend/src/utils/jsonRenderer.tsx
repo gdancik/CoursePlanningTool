@@ -3,6 +3,7 @@ import SectionAccordion from "../screens/SyllabusView/BasicInformation/SectionAc
 import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
 import Alert from "../components/SyllabusComponents/Alert";
 import Information from "../components/SyllabusComponents/Information";
+import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -15,6 +16,7 @@ export type JsonComponent = {
     options?: string[];
     className?: string;
     informationText?: string;
+    file?: string;
 
     content?: JsonComponent[];
     text?: string;
@@ -226,6 +228,13 @@ export function jsonRenderComponent(
                     <p key={component.id} >{component.placeholder}</p>
 
                 );
+
+            case "paragraphFromFile" :               
+                return (
+                    <ParagraphFromFile file = {component.file || ""} 
+                       className = {component.className || undefined}/>                                        
+                    
+                )               
 
         default:
             return null;

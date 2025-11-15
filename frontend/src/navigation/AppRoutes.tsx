@@ -14,9 +14,9 @@ import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
 import TestPage from "../screens/TestingPages/TestPage"
 import TestPage2 from "../screens/TestingPages/TestPage2"
 import TestPage3 from "../screens/TestPage3"
-import ScheduleTest from "../components/courseSchedule"
 import GradeTable from "../components/Tables/gradeTable"
 import TestSyllabusPage from "../screens/TestingPages/TestSyllabusPage";
+import CourseSchedule from "../components/courseSchedule";
 
 //Application Endpoints
 import Overview from "../screens/SyllabusView/Overview/Overview";
@@ -25,7 +25,7 @@ import BasicInfo from "../screens/SyllabusView/BasicInformation/BasicInfo";
 import Description from "../screens/SyllabusView/Description/Description";
 import LearningOutcomes from "../screens/SyllabusView/Learning Outcomes/LearningOutcomes";
 import HIPs from "../screens/SyllabusView/HIPS/HIPs";
-import CourseSchedule from "../screens/SyllabusView/CourseSchedule";
+import CourseSchedulePage from "../screens/SyllabusView/CourseSchedule/CourseSchedule"
 import LearningResources from "../screens/SyllabusView/LearningResources/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";
 import CoursePage from "../screens/CoursePage/CoursePage";
@@ -56,7 +56,14 @@ const AppRoutes = () => {
                 <Route path = "/test-page" element={<TestPage/>}/>
                 <Route path = "/test-page2" element={<TestPage2/>}/>
                 <Route path = "/test-page3" element={<TestPage3/>}/>
-                <Route path ="/courseSchedule" element={<ScheduleTest/>}/>
+                <Route path ="/courseSchedule" 
+                        element={<CourseSchedule 
+                            id = "course-schedule-table"
+                            term = 'Spring' 
+                            year = '2026' 
+                            days = 'MWF'
+                        />}
+                />
                 <Route path= "grade-table" element={<GradeTable/>} />
                 <Route path = "/test-syllabus" element={<TestSyllabusPage/>}/>
 
@@ -87,7 +94,7 @@ const AppRoutes = () => {
                 <Route path = "hips" element={<HIPs/>}/>
                 <Route path = "learning-resources" element={<LearningResources/>} />
                 <Route path = "assessment" element={<Assessment/>} />
-                <Route path = "course-schedule" element={<CourseSchedule/>}/>
+                <Route path = "course-schedule" element={<CourseSchedulePage/>}/>
                 <Route path = "checklist" element={<Checklist/>}/>
                 <Route path="*" element={<NotFoundPage/>}/>
             </Routes>

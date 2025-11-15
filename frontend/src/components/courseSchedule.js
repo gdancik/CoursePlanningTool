@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import "./Tables/gradeTable.css";
+import "./Button/ReusableButton.css"
+import api from "../services/axios";
+
+//import axios from "axios";
+//import "./gradeTable.css";
+
 
 /**
  * @function CourseSchedule
@@ -8,51 +14,175 @@ import "./Tables/gradeTable.css";
  *      Learning Outcomes, and Reading/Assignments; and
  *      buttons for adding/removing rows
  */
-function CourseSchedule() {
+
+function CourseSchedule({ id, term, year, days }) {
   const [scheduleRows, setScheduleRows] = useState([
-    { date: "", unit: "", learningOutcomes: "", readingAssignments: "" }
+    {
+      date: "",
+      day: "",
+      unit: "",
+      learningOutcomes: "",
+      readingAssignments: "",
+    },
   ]);
 
-  const AddRow = () => {
-    setScheduleRows([
-      ...scheduleRows,
-      { date: "", unit: "", learningOutcomes: "", readingAssignments: "" },
-    ]);
+  const addRow = (index) => {
+    const newRow = {
+      date: "",
+      day: "",
+      unit: "",
+      learningOutcomes: "",
+      readingAssignments: "",
+    };
+    const updatedRows = [
+      ...scheduleRows.slice(0, index + 1),
+      newRow,
+      ...scheduleRows.slice(index + 1),
+    ];
+    setScheduleRows(updatedRows);
   };
 
-  const RemoveRow = () => {
+  const deleteRow = (index) => {
     if (scheduleRows.length > 1) {
-      const updatedRows = scheduleRows.slice(0, -1);
+      const updatedRows = scheduleRows.filter(
+        (row, rowIndex) => rowIndex !== index
+      );
       setScheduleRows(updatedRows);
     }
   };
 
+  /***
+  const login = async () => {
+    try {
+      await axios.get(
+        "https://gdancik.pythonanywhere.com/api/test_login/?user=annie&password=password"
+      );
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+***/
+
+  const generateSchedule = async () => {
+    try {
+      //await login();
+
+      const response = await api.post(
+        "https://gdancik.pythonanywhere.com/api/generateSchedule/",
+        { term, year, days }
+      );
+      const scheduleData = response.data;
+      console.log("API response:", scheduleData);
+
+      if (scheduleData.error) {
+        alert(
+          "Schedule can’t be generated. Please check your term, year, and days, or try again later."
+        );
+        return;
+      }
+
+      if (scheduleData.schedule && Array.isArray(scheduleData.schedule)) {
+        const generatedSchedule = scheduleData.schedule.map((item) => ({
+          date: item.Date || "",
+          day: item.Day || "",
+          unit: item.Description || "",
+          learningOutcomes: "",
+          readingAssignments: "",
+        }));
+        setScheduleRows(generatedSchedule);
+      }
+    } catch (error) {
+      alert(
+        "Schedule can’t be generated. Please check your term, year, and days, or try again later."
+      );
+      console.error("Error generating schedule", error);
+    }
+  };
+
+  // Render
   return (
-    <div>
-      <h3>Course Schedule</h3>
-      <table>
+    <div> 
+      <div style = {{margin: "2%"}}>
+      <button class = 'reusable-button primary' onClick={generateSchedule}>Generate Schedule</button>
+
+      </div>     
+      <table id={id} style = {{margin: "2%"}}>
         <thead>
           <tr>
             <th>Date</th>
+            <th>Day</th>
             <th>Unit and Theme/Topic</th>
             <th>Learning Outcomes Addressed</th>
             <th>Reading/Assignments Due</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           {scheduleRows.map((row, index) => (
             <tr key={index}>
-              <td>{row.date}</td>
-              <td>{row.unit}</td>
-              <td>{row.learningOutcomes}</td>
-              <td>{row.readingAssignments}</td>
+              <td>
+                <textarea
+                  value={row.date}
+                  onChange={(e) => {
+                    const updatedRows = [...scheduleRows];
+                    updatedRows[index].date = e.target.value;
+                    setScheduleRows(updatedRows);
+                  }}
+                />
+              </td>
+              <td>
+                <textarea
+                  value={row.day}
+                  onChange={(e) => {
+                    const updatedRows = [...scheduleRows];
+                    updatedRows[index].day = e.target.value;
+                    setScheduleRows(updatedRows);
+                  }}
+                />
+              </td>
+              <td>
+                <textarea
+                  value={row.unit}
+                  onChange={(e) => {
+                    const updatedRows = [...scheduleRows];
+                    updatedRows[index].unit = e.target.value;
+                    setScheduleRows(updatedRows);
+                  }}
+                />
+              </td>
+              <td>
+                <textarea
+                  value={row.learningOutcomes}
+                  onChange={(e) => {
+                    const updatedRows = [...scheduleRows];
+                    updatedRows[index].learningOutcomes = e.target.value;
+                    setScheduleRows(updatedRows);
+                  }}
+                />
+              </td>
+              <td>
+                <textarea
+                  value={row.readingAssignments}
+                  onChange={(e) => {
+                    const updatedRows = [...scheduleRows];
+                    updatedRows[index].readingAssignments = e.target.value;
+                    setScheduleRows(updatedRows);
+                  }}
+                />
+              </td>
+              <td className="action-btns">
+                <button onClick={() => addRow(index)}>( + )</button>
+                {scheduleRows.length > 1 && (
+                  <button onClick={() => deleteRow(index)}>( - )</button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
-      </table>
-      <button onClick={AddRow}>Add Row</button>
-      <button onClick={RemoveRow}>Remove Row</button>
+      </table>      
     </div>
   );
 }
+
 export default CourseSchedule;
+

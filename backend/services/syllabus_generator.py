@@ -381,19 +381,19 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     #University resources placeholder handling
 
-    resource_policies = fr_dict.get('university_resources',None)
-    try:
-        logging.debug(f'string before conversion to literal:{resource_policies}')
-        if resource_policies == None:
-            pass
-        else:
-            resource_policies = json.loads(resource_policies)
-    except ValueError as e:
-            logging.error(f"Error converting string to literal: {e}")
-    logging.debug(f'resource_policies: {resource_policies}, type:{type(resource_policies)}')#debug
+    # resource_policies = fr_dict.get('university_resources',None)
+    # try:
+    #     logging.debug(f'string before conversion to literal:{resource_policies}')
+    #     if resource_policies == None:
+    #         pass
+    #     else:
+    #         resource_policies = json.loads(resource_policies)
+    # except ValueError as e:
+    #         logging.error(f"Error converting string to literal: {e}")
+    # logging.debug(f'resource_policies: {resource_policies}, type:{type(resource_policies)}')#debug
 
-    resource_policies_page = Document()
-    create_syllabus_statment_page(resource_policies_page,syllabus_statment_webpage_url,resource_policies) 
+    # resource_policies_page = Document()
+    # create_syllabus_statment_page(resource_policies_page,syllabus_statment_webpage_url,resource_policies) 
 
     # Iterate through paragraphs and replace placeholders
     for paragraph in doc.paragraphs:
@@ -403,10 +403,10 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
             for source_paragraph in syllabus_statment_page.paragraphs:
                 de.copy_paragraph_before(source_paragraph,paragraph)
         
-        if 'university_resources'in paragraph.text: 
-            logging.debug('resource_policy Placeholder found') #debug
-            for source_paragraph in resource_policies_page.paragraphs:
-                de.copy_paragraph_before(source_paragraph,paragraph)
+        # if 'university_resources'in paragraph.text: 
+        #     logging.debug('resource_policy Placeholder found') #debug
+        #     for source_paragraph in resource_policies_page.paragraphs:
+        #         de.copy_paragraph_before(source_paragraph,paragraph)
         
 
         for key, value in json_columns.items():

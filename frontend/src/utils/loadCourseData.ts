@@ -14,6 +14,7 @@ export async function loadCourseData(): Promise<{
         if (!courseId) return {courseId: null, formData: {}};
 
         if ('loadData' in config && !config['loadData']) {
+            alert('loadData is set to False in config.json')
             return {courseId: null, formData: {}};
         }
 

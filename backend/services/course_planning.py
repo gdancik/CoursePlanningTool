@@ -76,7 +76,7 @@ columns_detailed = {
         'grading_policies_syllabus_json'
     ],
 
-    'course_schedule' : ['course_schedule_list'],
+    'course_schedule' : ['course_schedule_syllabus_list'],
 
     'checklist': [
         'additional_sections_syllabus_json',

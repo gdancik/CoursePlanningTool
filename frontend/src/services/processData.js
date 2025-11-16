@@ -1,22 +1,34 @@
 import {updateCourseValues} from "./course/courseService";
+import config from "../config.json";
+
 // get_table_records
 //  - creates nested lists of rows from mytable, returned as 
 //      an JSON object with key = mytable.id
 //  - mytable -- a table object
-//  - ignore_last_two -- if true, last 2 columns are ignored 
-//    (used to ignore add/delete buttons)
 // currently we filter out any rows that are empty
-function get_table_records(mytable, ignore_last_two = false) {
+// if table includes ANY buttons, we ignore the last column
+//    (assumes add/delete buttons are in the last column)
+// returns innerHTML of each cell or innerHTML of textarea if found
+function get_table_records(mytable) {
+
+    const ignore_last_column = mytable.querySelector('button') != null;
+         
     const rows = [...mytable.getElementsByTagName("tr")];
     const records = rows
         .map(row => {
-            const cells = ignore_last_two
-                ? [...Array.from(row.cells).slice(0, -2)]
+            const cells = ignore_last_column
+                ? [...Array.from(row.cells).slice(0, -1)]
                 : [...row.cells];
-            return cells.map(cell => cell.innerHTML.trim());
+            return cells.map(cell => {
+                const textarea = cell.querySelector('textarea');
+                if (textarea == null) {
+                    return cell.innerHTML.trim();
+                }
+                return textarea.innerHTML.trim();
+            });
         })
         .filter(row => row.join("") !== "");
-    return { [mytable.id]: records };
+    return { [mytable.id]: JSON.stringify(records) };
 }
 
 // returns a list of all checked checkboxes from element 'x',
@@ -36,7 +48,7 @@ const saveData = async (ref) => {
         return;
     }
 
-    const res_text = [...ref.current.querySelectorAll('input[type="text"],textarea')]
+    const res_text = [...ref.current.querySelectorAll('input[type="text"],textarea:not(:is(table *))')]
         .map(x => ({ [x.id]: x.value }));
     const res_select = [...ref.current.querySelectorAll("select")]
         .map(x => ({ [x.id]: x.value }));
@@ -65,6 +77,14 @@ const saveData = async (ref) => {
     }
 
     try {
+
+        if ('saveData' in config && !config['saveData']) {
+            alert('saveData is set to false in config.json; see console for more');
+            console.log('course id: ' + course_id);
+            console.log(combined);
+            return;
+        }
+
         await updateCourseValues(course_id, combined);
         console.log(" Data saved successfully via updateCourseValues");
     } catch (error) {

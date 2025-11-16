@@ -4,6 +4,7 @@ import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
 import Alert from "../components/SyllabusComponents/Alert";
 import Information from "../components/SyllabusComponents/Information";
 import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
+import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -26,6 +27,12 @@ export type JsonComponent = {
         field: string;
         value?: string;
     };
+
+    // required for courseSchedule
+    term?: string;   // field that includes the term
+    year?: string;   // field that includes the year
+    days1?: string   // field for days1
+    days2?: string   // field for days2
 };
 
 // Recursive renderer
@@ -234,9 +241,43 @@ export function jsonRenderComponent(
                     <ParagraphFromFile file = {component.file || ""} 
                        className = {component.className || undefined}/>                                        
                     
-                )               
+                )  
+            case "courseSchedule" :           
+
+                if (component.term === undefined || component.year === undefined || component.days1 == undefined) {
+                    alert('Must specify term, year, and days fields for courseSchedule component');
+                    return null;
+                    
+                }
+          
+                const days_to_string = function(x: any, name: string) {
+                    if (x === undefined) {
+                        return x;
+                    }                    
+                    if (Array.isArray(x)) {
+                        return x.join('');
+                    } else {
+                        alert("Error: " + name + " must correspond to an array")
+                    return x;
+                    }
+                }
+
+                const term = formData[component.term];
+                const year = formData[component.year];
+                let days = days_to_string(formData[component.days1], 'days1');
+                
+                if (component.days2) {
+                    const days2 = days_to_string(formData[component["days2"]], 'days2'); 
+                    const removeDuplicates = (str:string) => [...new Set(str)].join('');
+                    days = removeDuplicates(days +days2);
+                }                
+
+                return (
+                    <CourseSchedule id = {component.id} term = {term} year = {year} days = {days}></CourseSchedule>
+                )             
 
         default:
+            alert('Unknown type in json: ' + component.type )
             return null;
     }
 }

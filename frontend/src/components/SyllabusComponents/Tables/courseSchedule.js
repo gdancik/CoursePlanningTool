@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./Tables/gradeTable.css";
-import "./Button/ReusableButton.css"
-import api from "../services/axios";
+import "./gradeTable.css";
+import "../../../components/Button/ReusableButton.css"
+import api from "../../../services/axios";
 
 //import axios from "axios";
 //import "./gradeTable.css";
@@ -100,10 +100,30 @@ function CourseSchedule({ id, term, year, days }) {
   };
 
   // Render
+
+  const missingScheduleInfo = function(term, year, days) {
+    console.log('checking schedule info: '+ [term, year, days])
+    if ([term, year, days].some(x => x === undefined)) {
+      return true;
+    }
+    if ([term, year, days].some(x => x.trim() === '')) {
+      return true;
+    }
+    return false;
+  }
+
   return (
     <div> 
-      <div style = {{margin: "2%"}}>
-      <button class = 'reusable-button primary' onClick={generateSchedule}>Generate Schedule</button>
+      <div style = {{margin: "1%"}}>
+        {(missingScheduleInfo(term, year, days))? (
+          <p style = {{color: "darkred", fontWeight: "bold"}}>
+            Note: for the option to autogenerate your schedule, enter a term, year, and days on the Basic Information page</p>
+
+        ): 
+      <button class = 'reusable-button primary' onClick={generateSchedule}>Generate Schedule ({term} {year}, {days}) </button>  
+        }
+
+      
 
       </div>     
       <table id={id} style = {{margin: "2%"}}>

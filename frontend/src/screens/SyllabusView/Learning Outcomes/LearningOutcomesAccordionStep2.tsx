@@ -1,6 +1,6 @@
 import React from "react";
 import { FaAngleUp, FaArrowRight } from "react-icons/fa";
-import ContentTable from "../../../components/Tables/CompetencyTable1"
+import ContentTable from "../../../components/SyllabusComponents/Tables/CompetencyTable1"
 import { SyllabusContent } from "../../../utils/loadSyllabusContent";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import './LearningOutcomesAccordionStep2.css'

@@ -7,7 +7,7 @@ import AlertImage from "../../../assets/images/Writing_Alert.png"
 import BloomsImage from "../../../assets/images/blooms_taxonomy.png";
 import WritingTable from "../../../assets/images/WritingTable.png"
 import "./LearningOutcomesAccordionStep3.css"
-import CompetencyTable2 from "../../../components/Tables/CompetencyTable2";
+import CompetencyTable2 from "../../../components/SyllabusComponents/Tables/CompetencyTable2";
 
 interface Props {
     sectionName: string;

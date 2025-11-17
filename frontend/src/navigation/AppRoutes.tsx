@@ -57,11 +57,12 @@ const AppRoutes = () => {
                 <Route path = "/test-page2" element={<TestPage2/>}/>
                 <Route path = "/test-page3" element={<TestPage3/>}/>
                 <Route path ="/courseSchedule" 
-                        element={<CourseSchedule 
+                        element={<CourseSchedule
                             id = "course-schedule-table"
                             term = 'Spring' 
                             year = '2026' 
                             days = 'MWF'
+                            data = {undefined}
                         />}
                 />
                 <Route path= "grade-table" element={<GradeTable/>} />

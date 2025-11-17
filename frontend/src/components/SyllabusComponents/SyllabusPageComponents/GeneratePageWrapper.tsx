@@ -64,9 +64,11 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
     console.log("Form Data Updated:", formData);
   }, [formData]);
 
+
+  // TO DO: do we need handleChange?
   // Handle input field changes
-  const handleChange = (label: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [label]: value }));
+  const handleChange = (label: string, value: string) => {   
+    setFormData((prev) => ({ ...prev, [label]: value }));        
   };
 
   //ShowModal

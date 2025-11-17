@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./gradeTable.css";
 import "../../../components/Button/ReusableButton.css"
 import api from "../../../services/axios";
@@ -7,15 +7,41 @@ import api from "../../../services/axios";
 //import "./gradeTable.css";
 
 
+
 /**
  * @function CourseSchedule
+ * @note: refactor this using typescript and change to @param
  * @description The CourseSchedule component
+ * param {string} id - The id of the table element
+ * param {string} [term] - The course term (e.g., 'Spring')
+ * param {string} [year] - The course year (e.g., '2026')
+ * param {string} [days] - The days of the course (e.g., 'MWF')
+ * param {string} [data] - data to populate the table, as
+ *            a JSON string corresponding to a nested array; 
  * @returns {html} table with columns for Date, Unit/Theme, 
  *      Learning Outcomes, and Reading/Assignments; and
- *      buttons for adding/removing rows
+ *      buttons for adding/removing rows, and generate 
+ *      schedule button
  */
 
-function CourseSchedule({ id, term, year, days }) {
+function CourseSchedule({ id, term, year, days, data }) {
+
+  // populate table if data is provided
+  useEffect(() => {
+
+    if (data !== undefined) {
+      console.log('effect data: ' + data);   
+      
+      // skip header (header will not be changed))
+      const pdata = JSON.parse(data);
+      const [header, ...body] = pdata;
+      const bodyObjectArray = body.map(createRow);
+
+      setScheduleRows(bodyObjectArray);    
+    } 
+  }, [data]); // Empty dependency array
+
+
   const [scheduleRows, setScheduleRows] = useState([
     {
       date: "",
@@ -62,8 +88,17 @@ function CourseSchedule({ id, term, year, days }) {
     }
   };
 ***/
+ 
+  const createRow = function(x) {
+      const keys = ['date', 'day', 'unit', 'learningOutcomes', 'readingAssignments' ];
+      const obj = Object.fromEntries(keys.map( (k,i) => [k,x[i]]));
+      return obj;
+  }
 
+
+  // scheduleData has schedule
   const generateSchedule = async () => {
+
     try {
       //await login();
 
@@ -76,7 +111,7 @@ function CourseSchedule({ id, term, year, days }) {
 
       if (scheduleData.error) {
         alert(
-          "Schedule can’t be generated. Please check your term, year, and days, or try again later."
+          "Schedule can’t be generated. Please ensure valid term, year, and days, or try again later."
         );
         return;
       }
@@ -112,21 +147,25 @@ function CourseSchedule({ id, term, year, days }) {
     return false;
   }
 
+
   return (
+
     <div> 
       <div style = {{margin: "1%"}}>
         {(missingScheduleInfo(term, year, days))? (
           <p style = {{color: "darkred", fontWeight: "bold"}}>
             Note: for the option to autogenerate your schedule, enter a term, year, and days on the Basic Information page</p>
-
         ): 
-      <button class = 'reusable-button primary' onClick={generateSchedule}>Generate Schedule ({term} {year}, {days}) </button>  
+        <div style = {{display: "flex"}}>
+          <button class = 'reusable-button primary' 
+            onClick={generateSchedule}>Generate Schedule ({term} {year}, {days})
+          </button>. &nbsp;
+          <button style = {{all: "unset"}}> (Note: this will overwrite the current schedule)</button>          
+          </div>          
         }
+      </div> 
 
-      
-
-      </div>     
-      <table id={id} style = {{margin: "2%"}}>
+    <table id={id} style = {{margin: "2%"}}>
         <thead>
           <tr>
             <th>Date</th>
@@ -199,7 +238,7 @@ function CourseSchedule({ id, term, year, days }) {
             </tr>
           ))}
         </tbody>
-      </table>      
+      </table>            
     </div>
   );
 }

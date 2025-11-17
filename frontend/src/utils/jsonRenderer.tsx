@@ -244,6 +244,14 @@ export function jsonRenderComponent(
                 )  
             case "courseSchedule" :           
 
+            
+                if (component.id === undefined) {
+                    alert('courseSchedule component needs an id');
+                    return null;
+                }
+
+                const courseScheduleData = formData[component.id];
+
                 if (component.term === undefined || component.year === undefined || component.days1 == undefined) {
                     alert('Must specify term, year, and days fields for courseSchedule component');
                     return null;
@@ -272,8 +280,16 @@ export function jsonRenderComponent(
                     days = removeDuplicates(days +days2);
                 }                
 
+                
+
                 return (
-                    <CourseSchedule id = {component.id} term = {term} year = {year} days = {days}></CourseSchedule>
+                    <CourseSchedule 
+                        id={component.id} 
+                        term={term} 
+                        year={year}
+                        days={days}
+                        data={courseScheduleData}
+                    />
                 )             
 
         default:

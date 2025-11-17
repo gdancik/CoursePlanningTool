@@ -1,6 +1,6 @@
 import React from "react";
 import { useRef } from "react";
-import GradeTable from "../../components/Tables/gradeTable.js"
+import GradeTable from "../../components/SyllabusComponents/Tables/gradeTable.js"
 import saveData from "../../services/processData.js"
 
 function TestView(props) {

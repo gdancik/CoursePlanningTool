@@ -1,0 +1,5 @@
+Please note: The University typically publishes the academic year calendar for the current and coming year. 
+If you are planning a course for a year that has a published calendar, you can auto-populate the calendar
+by clicking the 'Generate Schedule' button below. In this case, holidays that appear on the academic
+calendar will be entered as a separate row even if your class does not meet at that time. These holidays
+can be easily removed if you do not want them reflected.

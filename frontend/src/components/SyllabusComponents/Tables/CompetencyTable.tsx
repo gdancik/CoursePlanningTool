@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./competencyTable.css";
-import SafeIcon from "../../utils/ComponentWrapper";
+import SafeIcon from "../../../utils/ComponentWrapper";
 import {FaPlus, FaTimes} from "react-icons/fa";
 
 interface CompetencyTableProps {

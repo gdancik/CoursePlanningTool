@@ -1,0 +1,33 @@
+{
+  "content": [
+    {
+      "type": "Accordion",
+      "title": "Course Schedule",
+      "content": [       
+          {
+            "type": "paragraphFromFile",
+            "file": "/data/courseScheduleText/courseScheduleIntro1.txt"                                       
+          },
+            {
+            "type": "paragraphFromFile",
+            "file": "/data/courseScheduleText/courseScheduleIntro2.txt"                                       
+          },
+          { "type": "paragraphFromFile",
+            "file": "/data/courseScheduleText/courseScheduleIntro3.txt",                            
+            "className": "note"           
+          },
+          {
+            "type": "Information",
+            "text": "Information entered below will appear in the final syllabus exactly as written."                            
+          },
+          {
+            "type": "courseSchedule",
+            "id": "course_schedule_syllabus_list",
+            "term": "term_syllabus",
+            "year": "year_syllabus",
+            "days1": "days1_syllabus_checkboxes"
+          }           
+      ]      
+    }
+  ]
+}

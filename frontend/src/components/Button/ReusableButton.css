@@ -19,6 +19,11 @@
 
 }
 
+.reusable-button.red {
+    background: #851e1e;
+    color: #ffffff;
+}
+
 
 .reusable-button.green {
     background: #03A65D;

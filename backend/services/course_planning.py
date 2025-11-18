@@ -88,6 +88,8 @@ columns_detailed = {
 
 }
 
+to_string = ['days1_syllabus_checkboxes', 'days2_syllabus_checkboxes']
+
 
 columns = []
 for key,values in columns_detailed.items() :

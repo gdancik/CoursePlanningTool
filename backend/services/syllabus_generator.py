@@ -347,6 +347,21 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     fr_dict = fs.getValue(course_id, column_names)
 
+    # convert from list to string for specified columns
+    for i in cp.to_string:
+        if i in fr_dict:
+            if fr_dict[i]:
+                fr_dict[i] = json.loads(fr_dict[i])
+            fr_dict[i] = ''.join(fr_dict[i]) if isinstance(fr_dict[i], list) else fr_dict[i]
+
+     # Process dictionary to remove "_checkboxes" suffix from keys
+    for key, value in list(fr_dict.items()):
+        if key.endswith('_checkboxes'):
+            new_key = key[:-11]
+            fr_dict[new_key] = value
+            # Optionally, remove the old key if you want to replace it
+            del fr_dict[key]
+    logging.debug('Removing "_checkboxes" from the column names')
 
     # Process dictionary to remove "_syllabus" suffix from keys
     syllabus_col = {key[:-9]: value for key, value in fr_dict.items() if key.endswith('_syllabus')}
@@ -379,21 +394,6 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     syllabus_statment_page = Document()
     create_syllabus_statment_page(syllabus_statment_page,syllabus_statment_webpage_url,policies) 
 
-    #University resources placeholder handling
-
-    resource_policies = fr_dict.get('university_resources',None)
-    try:
-        logging.debug(f'string before conversion to literal:{resource_policies}')
-        if resource_policies == None:
-            pass
-        else:
-            resource_policies = json.loads(resource_policies)
-    except ValueError as e:
-            logging.error(f"Error converting string to literal: {e}")
-    logging.debug(f'resource_policies: {resource_policies}, type:{type(resource_policies)}')#debug
-
-    resource_policies_page = Document()
-    create_syllabus_statment_page(resource_policies_page,syllabus_statment_webpage_url,resource_policies) 
 
     # Iterate through paragraphs and replace placeholders
     for paragraph in doc.paragraphs:
@@ -401,11 +401,6 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
         if 'policy_statements'in paragraph.text: 
             logging.debug('Policy Placeholder found') #debug
             for source_paragraph in syllabus_statment_page.paragraphs:
-                de.copy_paragraph_before(source_paragraph,paragraph)
-        
-        if 'university_resources'in paragraph.text: 
-            logging.debug('resource_policy Placeholder found') #debug
-            for source_paragraph in resource_policies_page.paragraphs:
                 de.copy_paragraph_before(source_paragraph,paragraph)
         
 

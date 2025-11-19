@@ -350,6 +350,8 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     # convert from list to string for specified columns
     for i in cp.to_string:
         if i in fr_dict:
+            if fr_dict[i]:
+                fr_dict[i] = json.loads(fr_dict[i])
             fr_dict[i] = ''.join(fr_dict[i]) if isinstance(fr_dict[i], list) else fr_dict[i]
 
      # Process dictionary to remove "_checkboxes" suffix from keys

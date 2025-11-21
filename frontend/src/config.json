@@ -1,5 +1,5 @@
 {
   "max_courses": 7,
-  "loadData" : false,
+  "loadData" : true,
   "saveData" : false
 }

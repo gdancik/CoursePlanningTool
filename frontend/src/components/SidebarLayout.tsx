@@ -16,8 +16,6 @@ export interface SidebarLayoutProps {
   contentClassName?: string;
 
   sidebarWidth?: string;
-  accentColor?: string;
-  borderColor?: string;
 
   children?: React.ReactNode;
 }
@@ -29,18 +27,15 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({
   sidebarClassName = "",
   contentClassName = "",
   sidebarWidth = "300px",
-  accentColor = "SideBarYellow",
-  borderColor = "gray-300",
   children
 }) => {
-  const accentClass = `bg-${accentColor}`;
-  const borderClass = `border-${borderColor}`;
+
 
   return(
     <div className={`flex bg-white rounded-md overflow-hidden my-4 ${className}`}>
       {/* Sidebar Left */}
       <div
-      className={`relative flex flex-row border-r ${borderClass} ${sidebarClassName}`}
+      className={`relative flex flex-row border-r amber-400 ${sidebarClassName}`}
       style={{ width: sidebarWidth, minWidth: sidebarWidth }} 
       >
 
@@ -59,9 +54,9 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({
           )}
         </div>
       </div>
-      <div className = {`w-1 flex-shrin-0 relative ${accentClass}`}>
-        <div className = {`absolute top-0 -left-1 w-3 h-3 rouded-sm ${accentClass}`}/>
-        </div>
+      <div className={`w-0.5 h-full flex-shrink-0 relative bg-amber-400`}>
+        <div className={`absolute top-0 -left-1 w-2.5 h-3 rounded-sm bg-amber-400`} />
+      </div>
       </div>
       <div className = {`flex-1 p-6 ${contentClassName}`}>
         {children}

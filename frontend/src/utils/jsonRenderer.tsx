@@ -307,8 +307,6 @@ export function jsonRenderComponent(
                     sidebarClassName={component.sidebarClassName || ""}
                     contentClassName={component.contentClassName || ""}
                     sidebarWidth={component.sidebarWidth || "300px"}
-                    accentColor={component.accentColor || "SideBarYellow"}
-                    borderColor={component.borderColor || "gray-300"}
                     >
                     {component.content?.map((child, i) => (
                         <div key={i}>

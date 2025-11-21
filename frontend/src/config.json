@@ -1,11 +1,5 @@
 {
   "max_courses": 7,
-<<<<<<< HEAD
-  "loadData" : false,
-  "saveData" : false
-}
-=======
   "loadData" : true,
   "saveData" : true
 }
->>>>>>> 06a16ed (update config)

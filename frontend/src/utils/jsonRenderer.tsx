@@ -5,7 +5,7 @@ import Alert from "../components/SyllabusComponents/Alert";
 import Information from "../components/SyllabusComponents/Information";
 import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
-
+import SidebarLayout from "../components/SidebarLayout";
 // Type for JSON-driven UI
 export type JsonComponent = {
     type: string;
@@ -18,6 +18,12 @@ export type JsonComponent = {
     className?: string;
     informationText?: string;
     file?: string;
+
+    sidebarClassName?: string;
+    contentClassName?: string;
+    sidebarWidth?: string;
+    accentColor?: string;
+    borderColor?: string;
 
     content?: JsonComponent[];
     text?: string;
@@ -290,8 +296,27 @@ export function jsonRenderComponent(
                         days={days}
                         data={courseScheduleData}
                     />
-                )             
+                )   
+            case "SidebarLayout":
+                return (
+                    <SidebarLayout
+                    sidebarTitle={component.title || ""}
+                    sidebarContent={component.text || component.informationText || ""}
 
+                    className = {component.className || ""}
+                    sidebarClassName={component.sidebarClassName || ""}
+                    contentClassName={component.contentClassName || ""}
+                    sidebarWidth={component.sidebarWidth || "300px"}
+                    accentColor={component.accentColor || "SideBarYellow"}
+                    borderColor={component.borderColor || "gray-300"}
+                    >
+                    {component.content?.map((child, i) => (
+                        <div key={i}>
+                            {jsonRenderComponent(child, formData, onChange)}
+                        </div>
+                    ))}
+                    </SidebarLayout>
+                )
         default:
             alert('Unknown type in json: ' + component.type )
             return null;

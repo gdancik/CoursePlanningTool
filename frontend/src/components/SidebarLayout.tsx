@@ -1,0 +1,71 @@
+import { type } from "@testing-library/user-event/dist/type";
+import React from "react";
+
+/**
+ * - Left: Sidebar title + content
+ * - Right: Renders any component passed as children
+ * 
+ */
+
+export interface SidebarLayoutProps {
+  sidebarTitle?: string | React.ReactNode;
+  sidebarContent?: string | React.ReactNode; 
+
+  className?: string;
+  sidebarClassName?: string;
+  contentClassName?: string;
+
+  sidebarWidth?: string;
+  accentColor?: string;
+  borderColor?: string;
+
+  children?: React.ReactNode;
+}
+
+const SidebarLayout: React.FC<SidebarLayoutProps> = ({
+  sidebarTitle = "",
+  sidebarContent = "",
+  className = "",
+  sidebarClassName = "",
+  contentClassName = "",
+  sidebarWidth = "300px",
+  accentColor = "SideBarYellow",
+  borderColor = "gray-300",
+  children
+}) => {
+  const accentClass = `bg-${accentColor}`;
+  const borderClass = `border-${borderColor}`;
+
+  return(
+    <div className={`flex bg-white rounded-md overflow-hidden my-4 ${className}`}>
+      {/* Sidebar Left */}
+      <div
+      className={`relative flex flex-row border-r ${borderClass} ${sidebarClassName}`}
+      style={{ width: sidebarWidth, minWidth: sidebarWidth }} 
+      >
+
+      <div className = "flex flex-col flex-1 p-6">
+        {sidebarTitle && (
+          <h3 className = "text-xl font-semibold mb-4 text-blue-700 leading-snug">
+            {sidebarTitle}
+            </h3>
+        )}
+
+        <div className = "text-[0.96rem] text-gray-700 leading-6">
+          {typeof sidebarContent === "string" ? (
+            <p className="m-0">{sidebarContent}</p>
+          ) : (
+            sidebarContent
+          )}
+        </div>
+      </div>
+      <div className = {`w-1 flex-shrin-0 relative ${accentClass}`}>
+        <div className = {`absolute top-0 -left-1 w-3 h-3 rouded-sm ${accentClass}`}/>
+        </div>
+      </div>
+      <div className = {`flex-1 p-6 ${contentClassName}`}>
+        {children}
+        </div>
+      </div>
+  )}
+export default SidebarLayout;

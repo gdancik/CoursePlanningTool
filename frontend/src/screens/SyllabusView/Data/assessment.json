@@ -1,0 +1,14 @@
+{
+    "content" : [
+        {
+            "type": "Accordion",
+            "title": "Step 1: Goals for Assignments",
+            "content": [
+                {
+                "type" : "paragraphFromFile",
+                "file" : "/data/assessmentText/AssessmentFirstSegment.txt"
+                }
+            ]
+        }
+    ]
+}

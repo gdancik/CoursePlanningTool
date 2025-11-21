@@ -20,7 +20,7 @@ import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedu
 
 //Application Endpoints
 import Overview from "../screens/SyllabusView/Overview/Overview";
-import Assessment from "../screens/SyllabusView/Assessment";
+import Assessment from "../screens/SyllabusView/Assessments/Assessment";
 import BasicInfo from "../screens/SyllabusView/BasicInformation/BasicInfo";
 import Description from "../screens/SyllabusView/Description/Description";
 import LearningOutcomes from "../screens/SyllabusView/Learning Outcomes/LearningOutcomes";

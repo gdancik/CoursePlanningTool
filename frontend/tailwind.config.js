@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: "#002656"
+        brand: "#002656",
+        SideBarYellow: "ffc107"
       }
     },
   },

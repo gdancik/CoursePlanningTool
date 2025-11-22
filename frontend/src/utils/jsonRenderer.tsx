@@ -9,6 +9,7 @@ import SidebarLayout from "../components/SidebarLayout";
 import Assignments from "../components/SyllabusComponents/Assignments";
 import GradeTable from "../components/SyllabusComponents/Tables/GradeTable";
 import { CardData } from "../components/SyllabusComponents/ContentCardSet";
+import ActionButton from "../components/SyllabusComponents/ActionButton";
 // Type for JSON-driven UI
 export type JsonComponent = {
     type: string;
@@ -21,6 +22,10 @@ export type JsonComponent = {
     className?: string;
     informationText?: string;
     file?: string;
+    variant?: "primary" | "secondary" | "exit" | "green";
+    href?: string;
+    modalCase?: string;
+    modalProps?: any;
 
     sidebarClassName?: string;
     contentClassName?: string;
@@ -215,7 +220,7 @@ export function jsonRenderComponent(
             );
 
 
-            case "Assignments": 
+            case "Assignments": {
         
             if (!component.id) {
                 console.error("Assignments component requires an 'id'");
@@ -240,6 +245,7 @@ export function jsonRenderComponent(
                     }
                 />
             );
+        }
 
         // Textarea
         case "textarea":
@@ -368,7 +374,16 @@ export function jsonRenderComponent(
                     }
                     />
                 );
-
+            case "Button":
+                return (
+                    <ActionButton
+                        label={component.label || "Button"}
+                        variant={component.variant}
+                        href={component.href}
+                        modalCase={component.modalCase}
+                        modalProps={component.modalProps}
+                    />
+                );
         default:
             alert('Unknown type in json: ' + component.type )
             return null;

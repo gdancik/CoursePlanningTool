@@ -57,7 +57,25 @@ const saveData = async (ref) => {
     const res_checkboxes = [...ref.current.querySelectorAll('div[id$="_checkboxes"]')]
         .map(x => get_checkboxes(x));
 
-    const combined = Object.assign({}, ...res_text, ...res_select, ...res_list, ...res_checkboxes);
+    const res_hidden = [...ref.current.querySelectorAll('input[type="hidden"]')]
+        .map(x => {
+            let val = x.value;
+
+            try{
+                const parsed = JSON.parse(val);
+                return { [x.id]: parsed };
+            } catch {
+                return { [x.id]: val };
+            }
+         });
+
+    const combined = Object.assign({}, 
+        ...res_text, 
+        ...res_select, 
+        ...res_list, 
+        ...res_checkboxes, 
+        ...res_hidden);
+        
     console.log("Payload to save:", combined);
 
     const saved = localStorage.getItem("currentCourseData");

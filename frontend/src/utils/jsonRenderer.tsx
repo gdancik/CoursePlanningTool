@@ -6,6 +6,8 @@ import Information from "../components/SyllabusComponents/Information";
 import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
 import SidebarLayout from "../components/SidebarLayout";
+import Assignments from "../components/SyllabusComponents/Assignments";
+import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 // Type for JSON-driven UI
 export type JsonComponent = {
     type: string;
@@ -137,7 +139,7 @@ export function jsonRenderComponent(
                     />
                 </div>
             );
-      case "checkbox":
+        case "checkbox":
             return (
                 <label className={component.className || ""}>
                     <input
@@ -210,6 +212,34 @@ export function jsonRenderComponent(
                     </select>
                 </label>
             );
+
+
+            case "Assignments": 
+        
+            if (!component.id) {
+                console.error("Assignments component requires an 'id'");
+                return null;
+            }
+       
+            const raw = formData[component.id];
+       
+            let initialArray: CardData[] = [];
+       
+            try {
+                initialArray = Array.isArray(JSON.parse(raw)) ? JSON.parse(raw) : [];
+            } catch {
+                initialArray = [];
+            }
+      
+        return (
+            <Assignments
+            id={component.id}
+            initialData={initialArray} 
+            onChange={(newData) =>
+                onChange(component.id!, JSON.stringify(newData))
+            }
+            />
+        );
 
         // Textarea
         case "textarea":

@@ -17,109 +17,41 @@ import ContentCardSet, { CardData } from '../../components/SyllabusComponents/Co
  */
 
 interface AssignmentsProps {
+    id: string;
     onChange?: (assignments: CardData[]) => void;
     initialData?: CardData[];
 }
 
 const Assignments: React.FC<AssignmentsProps> = ({ 
+    id,
     onChange,
     initialData = []
 }) => {
     const [assignments, setAssignments] = useState<CardData[]>(initialData);
 
-    // Load saved assignments data from localStorage
+    //Update the internal states
     useEffect(() => {
-        if (initialData.length === 0) {
-            const saved = localStorage.getItem("currentCourseData");
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    if (parsed.course_id && parsed.savedData) {
-                        const savedFormData = parsed.savedData;
-                        
-                        // Extract assignments from saved data
-                        const loadedAssignments: CardData[] = [];
-                        let index = 1;
-                        
-                        while (savedFormData[`Assignment ${index} Title`] !== undefined ||
-                               savedFormData[`Assignment ${index} Description`] !== undefined ||
-                               savedFormData[`Assignment ${index} Points`] !== undefined) {
-                            loadedAssignments.push({
-                                id: index.toString(),
-                                title: savedFormData[`Assignment ${index} Title`] || '',
-                                description: savedFormData[`Assignment ${index} Description`] || '',
-                                rightValue: savedFormData[`Assignment ${index} Points`] || ''
-                            });
-                            index++;
-                        }
-                        
-                        if (loadedAssignments.length > 0) {
-                            setAssignments(loadedAssignments);
-                        }
-                    }
-                } catch (err) {
-                    console.warn("Failed to parse saved course data:", err);
-                }
-            }
-        }
+        setAssignments(initialData);
     }, [initialData]);
 
-    // Handle assignments changes
+    //Handle changes
     const handleAssignmentsChange = (newAssignments: CardData[]) => {
         setAssignments(newAssignments);
-        
-        // Call parent onChange if provided
-        if (onChange) {
-            onChange(newAssignments);
+        onChange?.(newAssignments);
         }
-        
-        // Save to localStorage in the expected format
-        const saved = localStorage.getItem("currentCourseData");
-        if (saved) {
-            try {
-                const parsed = JSON.parse(saved);
-                if (parsed.course_id && parsed.savedData) {
-                    const updatedSavedData = { ...parsed.savedData };
-                    
-                    // Clear existing assignment data
-                    Object.keys(updatedSavedData).forEach(key => {
-                        if (key.startsWith('Assignment ')) {
-                            delete updatedSavedData[key];
-                        }
-                    });
-                    
-                    // Add current assignments
-                    newAssignments.forEach((assignment, index) => {
-                        const num = index + 1;
-                        updatedSavedData[`Assignment ${num} Title`] = assignment.title;
-                        updatedSavedData[`Assignment ${num} Description`] = assignment.description;
-                        updatedSavedData[`Assignment ${num} Points`] = assignment.rightValue || '';
-                    });
-                    
-                    // Update localStorage
-                    parsed.savedData = updatedSavedData;
-                    localStorage.setItem("currentCourseData", JSON.stringify(parsed));
-                }
-            } catch (err) {
-                console.warn("Failed to update saved course data:", err);
-            }
-        }
-    };
 
     return (
-        <div className="assignments-component">
-            <ContentCardSet
-                setTitle="Assignments"
-                titleLabel="Assignment {index} Title:"
-                descriptionLabel="Assignment {index} Description:"
-                rightLabel="Points:"
-                initialCards={assignments}
-                onChange={handleAssignmentsChange}
-                minCards={2}
-                maxCards={10}
-                showRightValue={true}
-            />
-        </div>
+        <ContentCardSet
+            setTitle = "Assignments"
+            titleLabel="Assignment {index} Title: "
+            descriptionLabel="Assignment {index} Description: "
+            rightLabel="Assignment {index} Percentage of Grade: "
+            onChange={handleAssignmentsChange}
+            initialCards={assignments}
+            minCards={2}
+            maxCards={10}
+            showRightValue={true}
+        />
     );
 };
 

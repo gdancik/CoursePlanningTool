@@ -87,6 +87,25 @@
                     ]
                 }
             ]
+        },
+        {
+            "type": "Accordion",
+            "title": "Step 3: Writing Assignments",
+            "content": [
+                {
+                    "type" : "informationText",
+                    "placeholder": "In the space below, provide a brief description of all of the assignments you have planned for this course. Try to answer the following questions in the description of each assignment: What are students expected to do in this assignment? How does this assignment connect to the learning objectives of the course? How will students submit the assignment?"
+                    
+                },
+                {
+                    "type": "Alert",
+                    "text": "Information entered below will appear in the final syllabus exactly as written."
+                },
+                {
+                    "type": "Assignments",
+                    "id": "assmt_assignments_syllabus_json"
+                }
+            ]
         }
     ]
 }

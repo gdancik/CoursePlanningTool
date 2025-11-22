@@ -44,6 +44,14 @@ const ModalRenderer: React.FC<ModalRendererProps> = ({ modal, onCourseCreate }) 
         />
       );
 
+      case "custom":
+        switch (modal.title) {
+          case "PurposeAndApplicationExamples":
+          case "ELACCompetenciesExamples":
+          case "AdditionalResources":
+          case "StudentCommunicationTips":
+        }
+
     default:
       return null;
   }

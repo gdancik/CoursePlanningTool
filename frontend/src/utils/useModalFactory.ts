@@ -1,6 +1,6 @@
 import { useState } from "react";
 export type ModalStatus = "loading" | "success" | "error";
-export type ModalType = "redirect" | "error" | "course"
+export type ModalType = "redirect" | "error" | "course" | "custom";
 
 export interface ModalFactory {
     visible: boolean;
@@ -12,6 +12,7 @@ export interface ModalFactory {
     showRedirect: (title: string, message: string, status?: ModalStatus) => void;
     showError: (message: string, errorCode?: number) => void;
     showCourseModal: (data?: any) => void;
+    showCustomModal: (customName: string, props?: any) => void;
     hide: () => void;
 }
 
@@ -50,6 +51,14 @@ export function useModalFactory(): ModalFactory {
         setPayload( data ||{});
     };
 
+    const showCustomModal = (customName: string, props?: any) => {
+        setVisible(true);
+        setType("custom");
+        setStatus("success")
+        setTitle(customName);
+        setPayload(props ||{});
+    };
+
     const hide = () => {
         setVisible(false);
         setPayload(null);
@@ -65,6 +74,7 @@ export function useModalFactory(): ModalFactory {
         showRedirect,
         showError,
         showCourseModal,
+        showCustomModal,
         hide,
     };
 }

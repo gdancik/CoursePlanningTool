@@ -7,6 +7,7 @@ import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFil
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
 import SidebarLayout from "../components/SidebarLayout";
 import Assignments from "../components/SyllabusComponents/Assignments";
+import GradeTable from "../components/SyllabusComponents/Tables/GradeTable";
 import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -230,16 +231,15 @@ export function jsonRenderComponent(
             } catch {
                 initialArray = [];
             }
-      
-        return (
-            <Assignments
-            id={component.id}
-            initialData={initialArray} 
-            onChange={(newData) =>
-                onChange(component.id!, JSON.stringify(newData))
-            }
-            />
-        );
+                return (
+                    <Assignments
+                    id={component.id}
+                    initialData={initialArray} 
+                    onChange={(newData) =>
+                     onChange(component.id!, JSON.stringify(newData))
+                    }
+                />
+            );
 
         // Textarea
         case "textarea":
@@ -345,6 +345,30 @@ export function jsonRenderComponent(
                     ))}
                     </SidebarLayout>
                 )
+            case "GradeTable":
+                if(!component.id) {
+                    alert('GradeTable component requires an id');
+                    return null;
+                }
+
+                let gradeTable : [string, string][] = [];
+                try{
+                    const parsedTable = JSON.parse(formData[component.id] || "[]");
+                    if(Array.isArray(parsedTable))  gradeTable = parsedTable; 
+                } catch {
+                    gradeTable = [];
+                }
+
+                return (
+                    <GradeTable 
+                    id={component.id}
+                    data={gradeTable}
+                    onChange={(updated) => 
+                        onChange(component.id!, JSON.stringify(updated))
+                    }
+                    />
+                );
+
         default:
             alert('Unknown type in json: ' + component.type )
             return null;

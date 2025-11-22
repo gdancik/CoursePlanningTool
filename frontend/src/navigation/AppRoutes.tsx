@@ -14,7 +14,7 @@ import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
 import TestPage from "../screens/TestingPages/TestPage"
 import TestPage2 from "../screens/TestingPages/TestPage2"
 import TestPage3 from "../screens/TestPage3"
-import GradeTable from "../components/SyllabusComponents/Tables/gradeTable"
+import GradeTable from "../components/SyllabusComponents/Tables/GradeTable"
 import TestSyllabusPage from "../screens/TestingPages/TestSyllabusPage";
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
 

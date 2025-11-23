@@ -65,7 +65,6 @@ const AppRoutes = () => {
                             data = {undefined}
                         />}
                 />
-                <Route path= "grade-table" element={<GradeTable/>} />
                 <Route path = "/test-syllabus" element={<TestSyllabusPage/>}/>
 
                 <Route path="/auto_login"

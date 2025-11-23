@@ -17,7 +17,7 @@
 
                     "sidebarWidth": "250px",
 
-                    "content" : [
+                    "content": [
                         {
                             "type" : "paragraphFromFile",
                             "file" : "/data/assessmentText/AssessmentFirstSegment2.txt"
@@ -33,7 +33,7 @@
 
                     "sidebarWidth": "250px",
 
-                    "content" : [
+                    "content": [
                         {
                             "type" : "paragraphFromFile",
                             "file" : "/data/assessmentText/AssessmentFirstSegment3.txt"
@@ -58,20 +58,16 @@
                         },
                         {
                 
-                            "type" : "textarea",
-                
+                            "type": "textarea",
                             "id": "assmt_order",
-                
                             "placeholder": "How will you order assignments so that students will be able to achieve learning outcomes by the end of the semester?",
-                
                             "required": false,
-                
                             "className": "Syllabus-text blue-box"
                
                         },
                 
                         {
-                            "type" : "textarea",
+                            "type": "textarea",
                             "id": "assmt_communicate",
                             "placeholder": "How will you communicate these assignments to students? How will written assignment prompts prepare them to complete the task? Is the language you use in the prompt accessible to students? How much explanation will you give verbally during class meetings?",
                             "required": false,
@@ -104,6 +100,29 @@
                 {
                     "type": "Assignments",
                     "id": "assmt_assignments_syllabus_json"
+                }
+           ]
+        },
+        {
+            "type":"Accordion",
+            "title": "Step 4: Grading Policy",
+            "content" : [
+                 {
+                    "type" : "SidebarLayout",
+                    "title" : "Communicating with Students about Course Goals and Policies",
+                    "className" : "shadow-lg",
+                    "sidebarClassName": "bg-blue-100",
+                    "contentClassName": "space-y-4",
+
+                    "sidebarWidth": "250px",
+
+                    "content": [
+                        {
+                            "type" : "Button",
+                            "label" : "Course Goals: Student Communication Tips",
+                            "modalCase" : "StudentCommunicationTips"
+                        }
+                    ]
                 }
             ]
         }

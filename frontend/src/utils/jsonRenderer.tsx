@@ -220,7 +220,7 @@ export function jsonRenderComponent(
             );
 
 
-            case "Assignments": {
+            case "Assignments": 
         
             if (!component.id) {
                 console.error("Assignments component requires an 'id'");
@@ -245,7 +245,6 @@ export function jsonRenderComponent(
                     }
                 />
             );
-        }
 
         // Textarea
         case "textarea":
@@ -274,7 +273,7 @@ export function jsonRenderComponent(
 
             case "informationText":
                 return (
-                    <p key={component.id} >{component.placeholder}</p>
+                    <p >{component.placeholder}</p>
 
                 );
 

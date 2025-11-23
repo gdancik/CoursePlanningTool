@@ -1,5 +1,5 @@
 import React from "react";
-import "./GradeTable.css";
+import "./gradeTable.css";
 
 export interface GradeTableProps {
     id: string;

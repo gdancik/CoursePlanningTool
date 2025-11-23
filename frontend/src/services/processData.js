@@ -49,6 +49,7 @@ const saveData = async (ref) => {
     }
 
     const res_text = [...ref.current.querySelectorAll('input[type="text"],textarea:not(:is(table *))')]
+        .filter(x => x.id && x.id.trim() !== "")  // only include elements with an ID    
         .map(x => ({ [x.id]: x.value }));
     const res_select = [...ref.current.querySelectorAll("select")]
         .map(x => ({ [x.id]: x.value }));

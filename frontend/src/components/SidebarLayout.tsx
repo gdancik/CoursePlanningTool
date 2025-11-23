@@ -29,38 +29,42 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({
   sidebarWidth = "300px",
   children
 }) => {
-
-
-  return(
-    <div className={`flex bg-white rounded-md overflow-hidden my-4 ${className}`}>
+  return (
+    <div className={`flex bg-white rounded-md overflow-hidden my-4 min-h-[150px] ${className}`}>
+      
       {/* Sidebar Left */}
       <div
-      className={`relative flex flex-row border-r amber-400 ${sidebarClassName}`}
-      style={{ width: sidebarWidth, minWidth: sidebarWidth }} 
+        className={`relative flex flex-row border-r border-amber-400 ${sidebarClassName}`}
+        style={{ width: sidebarWidth, minWidth: sidebarWidth }}
       >
-
-      <div className = "flex flex-col flex-1 p-6">
-        {sidebarTitle && (
-          <h3 className = "text-xl font-semibold mb-4 text-blue-700 leading-snug">
-            {sidebarTitle}
+        <div className="flex flex-col flex-1 p-6">
+          {sidebarTitle && (
+            <h3 className="text-xl font-semibold mb-4 text-blue-700 leading-snug">
+              {sidebarTitle}
             </h3>
-        )}
-
-        <div className = "text-[0.96rem] text-gray-700 leading-6">
-          {typeof sidebarContent === "string" ? (
-            <p className="m-0">{sidebarContent}</p>
-          ) : (
-            sidebarContent
           )}
+
+          <div className="text-[0.96rem] text-gray-700 leading-6">
+            {sidebarContent ? (
+              typeof sidebarContent === "string" ? (
+                <p className="m-0">{sidebarContent}</p>
+              ) : (
+                sidebarContent
+              )
+            ) : null}
+          </div>  
+        </div>
+
+        <div className="w-0.5 h-full flex-shrink-0 relative bg-amber-400">
+          <div className="absolute top-0 -left-1 w-2.5 h-3 rounded-sm bg-amber-400" />
         </div>
       </div>
-      <div className={`w-0.5 h-full flex-shrink-0 relative bg-amber-400`}>
-        <div className={`absolute top-0 -left-1 w-2.5 h-3 rounded-sm bg-amber-400`} />
-      </div>
-      </div>
-      <div className = {`flex-1 p-6 ${contentClassName}`}>
+
+      {/* Main Content */}
+      <div className={`flex-1 p-6 ${contentClassName}`}>
         {children}
-        </div>
       </div>
-  )}
+    </div>
+  );
+};
 export default SidebarLayout;

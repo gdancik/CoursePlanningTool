@@ -28,21 +28,36 @@ const Assignments: React.FC<AssignmentsProps> = ({
     initialData = []
 }) => {
     const [assignments, setAssignments] = useState<CardData[]>(initialData);
+    const hasMounted = React.useRef(false);
 
-    //Update the internal states
+    // keep local state synced with parent
     useEffect(() => {
         setAssignments(initialData);
     }, [initialData]);
 
-    //Handle changes
+    // SAFE onChange trigger – prevents sending empty data on first render
+    useEffect(() => {
+        if (hasMounted.current) {
+            onChange?.(assignments);
+        } else {
+            hasMounted.current = true;
+        }
+    }, [assignments]);
+
     const handleAssignmentsChange = (newAssignments: CardData[]) => {
         setAssignments(newAssignments);
-        onChange?.(newAssignments);
-        }
+    };
 
     return (
+    <>
+        <input 
+        type="hidden" id={id} 
+        value={JSON.stringify(assignments)} 
+        readOnly
+        />
+        
         <ContentCardSet
-            setTitle = "Assignments"
+            setTitle="Assignments"
             titleLabel="Assignment {index} Title: "
             descriptionLabel="Assignment {index} Description: "
             rightLabel="Assignment {index} Percentage of Grade: "
@@ -52,7 +67,7 @@ const Assignments: React.FC<AssignmentsProps> = ({
             maxCards={10}
             showRightValue={true}
         />
+        </>
     );
 };
-
 export default Assignments;

@@ -16,7 +16,7 @@ import { useModalFactory
     href,
     modalCase,
     modalProps,
-    variant = "primary",
+    variant = "secondary",
     className
  }) => {
     const modal = useModalFactory();

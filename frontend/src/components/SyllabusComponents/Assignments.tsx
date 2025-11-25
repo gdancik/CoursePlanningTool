@@ -32,16 +32,18 @@ const Assignments: React.FC<AssignmentsProps> = ({
 
     // keep local state synced with parent
     useEffect(() => {
-        setAssignments(initialData);
-    }, [initialData]);
+        if (JSON.stringify(initialData) !== JSON.stringify(assignments)) {
+            setAssignments(initialData);
 
+        }
+    }, [initialData]);
     // SAFE onChange trigger – prevents sending empty data on first render
     useEffect(() => {
-        if (hasMounted.current) {
-            onChange?.(assignments);
-        } else {
+        if (!hasMounted.current) {
             hasMounted.current = true;
+            return;
         }
+        onChange?.(assignments);
     }, [assignments]);
 
     const handleAssignmentsChange = (newAssignments: CardData[]) => {

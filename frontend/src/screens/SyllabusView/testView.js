@@ -10,6 +10,12 @@ function TestView(props) {
   // needed to get inputs from only this component
   const containerRef = useRef(null);
 
+  const gradeData = [
+    ['a',"97+"],
+    ['b',"80 - 90"],
+    ['c',3]
+  ];
+
   return (
     <div ref = {containerRef}>
 
@@ -37,10 +43,15 @@ function TestView(props) {
     )}
   </div>
 </div>
+   <br/>
+   <hr/>
 
-
+   <h1> Grade Table with default values </h1>
    <GradeTable id = 'grade_table_syllabus_list'></GradeTable>
     <br/>
+   
+   <h1> Grade Table with data prop  </h1>
+   <GradeTable id = 'grade_table2' data = {gradeData}></GradeTable>
 
     
    <button onClick = {() => saveData(containerRef)}>Save</button>

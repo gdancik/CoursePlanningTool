@@ -7,7 +7,7 @@ import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFil
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
 import SidebarLayout from "../components/SidebarLayout";
 import Assignments from "../components/SyllabusComponents/Assignments";
-import GradeTable from "../components/SyllabusComponents/Tables/GradeTable";
+import GradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 import ActionButton from "../components/SyllabusComponents/ActionButton";
 // Type for JSON-driven UI

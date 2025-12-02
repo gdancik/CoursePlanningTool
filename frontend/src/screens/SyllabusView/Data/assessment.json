@@ -118,9 +118,25 @@
 
                     "content": [
                         {
+                            "type" : "paragraphFromFile",
+                            "file" : "/data/assessmentText/AssessmentFourthSegment1.txt"
+                        },
+                        {
                             "type" : "Button",
                             "label" : "Course Goals: Student Communication Tips",
                             "modalCase" : "StudentCommunicationTips"
+                        },
+                        {
+                            "type": "informationText",
+                            "placeholder" : "In addition to communicating with students about course goals, you will want to ensure all course policies are transparent. Including grading policies and including university recommended policy statements on the syllabus provides the instructor of the course and students policy to work from when questions or challenges arise."
+                        },
+                        {
+                            "type": "informationText",
+                            "placeholder": "For your course, you will want to start by providing a breakdown of how numeric grades are converted to letter grades at the end of the semester. Please fill in the following table to provide that information:"            
+                        },
+                        {
+                            "type": "Alert",
+                            "text":"Information entered below will appear in the final syllabus exactly as written."
                         }
                     ]
                 }

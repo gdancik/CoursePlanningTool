@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaPen, FaRegSquare, FaCheckSquare } from 'react-icons/fa';
+import { FaRegSquare, FaCheckSquare } from 'react-icons/fa';
 import {Link} from 'react-router-dom';
 import SafeIcon from '../../../utils/ComponentWrapper'
 import EditIcon from "../../../assets/images/EditIcon.png"

@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useLocation} from "react-router-dom";
 import OverviewCard from "./OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSections";
-import {fetchValidInputs, isSectionComplete, getCurrentCourseData, ValidInputsResponse} from "../../../services/validInputsService";
+import {isSectionComplete, getCurrentCourseData, ValidInputsResponse} from "../../../services/validInputsService";
 import {MOCK_VALID_INPUTS} from "../../../services/mockValidInputs";
 import {loadMockCourseData, clearMockCourseData} from "../../../services/mockCourseData";
 import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader"

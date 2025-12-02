@@ -120,13 +120,18 @@ details[open] .checklist-arrow {
 
 .checklist-item-content {
     flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .checklist-item-title {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #002e5d;
-    margin: 0 0 0.5rem 0;
+    margin: 0;
+    flex-shrink: 0;
+    min-width: 200px;
 }
 
 .checklist-item-description {
@@ -134,6 +139,7 @@ details[open] .checklist-arrow {
     color: #485F6E;
     margin: 0;
     line-height: 1.6;
+    flex: 1;
 }
 
 .checklist-edit-btn {

@@ -6,7 +6,8 @@ import Papa from "papaparse";
 
 // TypeScript interface describing the shape of each row in the CSV.
 export interface SectionData{
-    id: string; // Unique identifier for each section
+    id: string; // Unique identifier for each section (numeric ID)
+    section_id: string; // Section identifier matching API valid_inputs (e.g., "basic_information")
     title: string; // Title of the section (e.g., "Basic Information")
     description: string; // Brief description or guidance for the section
     completed: boolean; // Whether the section is marked as completed
@@ -33,6 +34,7 @@ export async function loadSyllabusSections(path: string): Promise<SectionData[]>
                 //Converts parsed data into the expected SectionData Format,
                 const parsed = results.data.map((row: any) => ({
                     id: row.id,
+                    section_id: row.section_id,
                     title: row.title,
                     description: row.description,
                     completed: row.completed === "true",

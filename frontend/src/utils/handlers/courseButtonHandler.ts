@@ -118,6 +118,11 @@ export const createDeleteRowHandler = (
     setCourses: (courses: Course[]) => void
 ) => {
     return async (courseId: string) => {
+
+        if (!window.confirm("Are you sure you want to delete this course? This action cannot be undone")) {
+            return;
+        }
+
         modal.setTitle("Deleting Course");
         modal.setMessage("Please wait while we remove the course…")
         modal.setStatus("loading")

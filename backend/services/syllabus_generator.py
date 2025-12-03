@@ -298,27 +298,55 @@ def generate_grading_policies(doc, policies:list):
     Returns:
         None
     '''
-   
     for i in policies:
-        for key, value in i.items():
-            if key == 'title':
-                title = value
-                paragraph = doc.add_paragraph(title)
-                run_title = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
-                run_title.font.color.rgb = RGBColor(32, 44, 92)
-                run_title.font.size = Pt(12)
-                run_title.font.name = 'Calibri'
-                run_title.bold = True
-                run_title.italic = True
-            elif key == 'description':
-                description = value
-                paragraph = doc.add_paragraph(description)
-                run_description = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
-                run_description.font.color.rgb = RGBColor(0, 0, 0)
-                run_description.font.size = Pt(11)
-                run_description.font.name = 'Calibri'
-                run_description.bold = False
-                run_description.italic = False
+        #If its an outcome
+        if len(i) == 2:
+            items = list(i.items())
+            key_label, key, value = items[0][0], items[0][1], items[1][1]
+            #title
+            title = key
+            paragraph = doc.add_paragraph(f'{key_label}: {title}')
+            run_title = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+            run_title.font.color.rgb = RGBColor(32, 44, 92)
+            run_title.font.size = Pt(12)
+            run_title.font.name = 'Calibri'
+            run_title.bold = True
+            run_title.italic = True
+            #description
+            description = value
+            paragraph = doc.add_paragraph(description)
+            run_description = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+            run_description.font.color.rgb = RGBColor(0, 0, 0)
+            run_description.font.size = Pt(11)
+            run_description.font.name = 'Calibri'
+            run_description.bold = False
+            run_description.italic = False
+
+        if len(i) == 3:
+            items = list(i.items())
+            key_label, key = items[0][0], items[0][1]
+            points_label,points =  items[1][0],items[1][1]
+            value =  items[2][1]
+            #title
+            title = key
+            
+            paragraph = doc.add_paragraph(f'{key_label}: {title} {points_label:>50}: {points}')
+            run_title = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+            run_title.font.color.rgb = RGBColor(32, 44, 92)
+            run_title.font.size = Pt(12)
+            run_title.font.name = 'Calibri'
+            run_title.bold = True
+            run_title.italic = True
+            #description
+            description = value
+            paragraph = doc.add_paragraph(description)
+            run_description = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+            run_description.font.color.rgb = RGBColor(0, 0, 0)
+            run_description.font.size = Pt(11)
+            run_description.font.name = 'Calibri'
+            run_description.bold = False
+            run_description.italic = False
+           
                 
 def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_statment_webpage_url:str='https://www.easternct.edu/center-for-teaching-learning-and-assessment/syllabus-statements/index.html'):
     """ 

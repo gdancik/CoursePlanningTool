@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentCard from './ContentCard';
 import './ContentCardSet.css';
 
@@ -30,7 +30,7 @@ import './ContentCardSet.css';
  */
 
 interface CardData {
-    id: string;
+
     title: string;
     description: string;
     rightValue?: string;
@@ -59,43 +59,48 @@ const ContentCardSet: React.FC<ContentCardSetProps> = ({
     maxCards = 10,
     showRightValue = false
 }) => {
-    const [cards, setCards] = useState<CardData[]>(
-        initialCards.length > 0 ? initialCards : [
-            { id: '1', title: '', description: '', rightValue: '' },
-            { id: '2', title: '', description: '', rightValue: '' }
+
+    const [cards, setCards] = useState<CardData[]> (
+        initialCards.length > 0 ? initialCards : 
+        [
+            {title: '', description: '', rightValue: ''},
+            {title: '', description: '', rightValue: ''}
         ]
     );
 
-    const updateCards = (newCards: CardData[]) => {
-        setCards(newCards);
-        onChange(newCards);
+    useEffect(() => {
+        if (initialCards && initialCards.length > 0) {
+            setCards(initialCards);
+        }
+    },[initialCards]);
+
+    const updateCards = (updated: CardData[]) => {
+        setCards(updated);
+        onChange(updated);
     };
 
-    const handleCardChange = (id: string, field: keyof CardData, value: string) => {
-        const updatedCards = cards.map(card =>
-            card.id === id ? { ...card, [field]: value } : card
-        );
-        updateCards(updatedCards);
-    };
+    const handleCardChange = (index: number, field: keyof CardData, value: string) => {
+        const updated = [...cards];
+        updated[index] = {...updated[index], [field]: value};
+        updateCards(updated);
+    }
 
     const addCard = () => {
-        if (cards.length >= maxCards) return;
-        
-        const newId = Math.max(...cards.map(c => parseInt(c.id) || 0), 0) + 1;
+        if(cards.length >= maxCards) return;
+
         const newCard: CardData = {
-            id: newId.toString(),
             title: '',
             description: '',
             rightValue: ''
         };
-        updateCards([...cards, newCard]);
+        updateCards ([...cards, newCard]);
     };
 
-    const deleteCard = (id: string) => {
+    const deleteCard = (index: number) => {
         if (cards.length <= minCards) return;
         
-        const updatedCards = cards.filter(card => card.id !== id);
-        updateCards(updatedCards);
+        const updated = cards.filter((_, i) => i !== index);
+        updateCards(updated);
     };
 
     const formatLabel = (labelTemplate: string, index: number) => {
@@ -110,7 +115,7 @@ const ContentCardSet: React.FC<ContentCardSetProps> = ({
 
             <div className="content-cards-container">
                 {cards.map((card, index) => (
-                    <div key={card.id} className="content-card-wrapper">
+                    <div key={index} className="content-card-wrapper">
                         <ContentCard
                             titleLabel={formatLabel(titleLabel, index)}
                             titleValue={card.title}
@@ -118,10 +123,10 @@ const ContentCardSet: React.FC<ContentCardSetProps> = ({
                             descriptionValue={card.description}
                             rightLabel={showRightValue ? rightLabel : undefined}
                             rightValue={showRightValue ? card.rightValue : undefined}
-                            onTitleChange={(value) => handleCardChange(card.id, 'title', value)}
-                            onDescriptionChange={(value) => handleCardChange(card.id, 'description', value)}
+                            onTitleChange={(value) => handleCardChange(index, 'title', value)}
+                            onDescriptionChange={(value) => handleCardChange(index, 'description', value)}
                             onRightValueChange={showRightValue ? 
-                                (value) => handleCardChange(card.id, 'rightValue', value) : 
+                                (value) => handleCardChange(index, 'rightValue', value) : 
                                 undefined
                             }
                             className={`content-card-${index + 1}`}
@@ -130,7 +135,7 @@ const ContentCardSet: React.FC<ContentCardSetProps> = ({
                         {cards.length > minCards && (
                             <button
                                 className="delete-card-button"
-                                onClick={() => deleteCard(card.id)}
+                                onClick={() => deleteCard(index)}
                                 title={`Delete ${setTitle.toLowerCase().slice(0, -1)} ${index + 1}`}
                             >
                                 × Delete

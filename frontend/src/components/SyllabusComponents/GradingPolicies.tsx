@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import ContentCardSet, { CardData } from '../../components/SyllabusComponents/ContentCardSet';
 
@@ -15,6 +16,7 @@ import ContentCardSet, { CardData } from '../../components/SyllabusComponents/Co
  *   initialData={savedPolicies}
  * />
  */
+
 
 interface GradingPoliciesProps {
     onChange?: (policies: CardData[]) => void;
@@ -44,7 +46,6 @@ const GradingPolicies: React.FC<GradingPoliciesProps> = ({
                         while (savedFormData[`Grading Policy ${index} Title`] !== undefined ||
                                savedFormData[`Grading Policy ${index} Description`] !== undefined) {
                             loadedPolicies.push({
-                                id: index.toString(),
                                 title: savedFormData[`Grading Policy ${index} Title`] || '',
                                 description: savedFormData[`Grading Policy ${index} Description`] || ''
                             });

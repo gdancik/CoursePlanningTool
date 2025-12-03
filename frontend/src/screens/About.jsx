@@ -5,12 +5,12 @@ export function PersonCard({ name, role, photo, linkedin, email, website }) {
   return (
     <div className="bg-white border border-gray-300 rounded-lg shadow-sm p-4 w-64">
       {/* Image Area */}
-      <div className="w-full h-40 bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center">
+      <div className="w-full h-52 bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center">
         {photo ? (
           <img
             src={photo}
             alt={name}
-            className="w-full h-full object-cover rounded-md"
+            className="w-full h-full object-cover rounded-md object-top"
           />
         ) : (
           <img 
@@ -67,7 +67,7 @@ export function PersonCard({ name, role, photo, linkedin, email, website }) {
 
 export default function About() {
   return (
-    <div className="bg-[#e7eff9] min-h-screen p-10">
+    <div className="bg-[#e7eff9] min-h-screen py-10 px-20">
       
       {/* Main Title */}
       <h1 className="text-3xl font-bold text-gray-900 mb-8 tracking-wide">
@@ -82,21 +82,23 @@ export default function About() {
         <PersonCard
           name="Dr. Courtney Broscious"
           role="Project Director"
-          email = "NULL"
-          linkedin = "NULL"
-          website = "f"
         />
         <PersonCard
           name="Dr. Garrett Dancik"
           role="Project Lead"
+          website= "https://gdancik.github.io "
+          photo="/images/Dancik.jpg"
         />
         <PersonCard
           name="Julia DeLapp"
           role="Project Coordinator"
+          email= "delappj@easternct.edu"
         />
         <PersonCard
           name="Lora Lee"
           role="Project Lead"
+          website= "https://loraleestudio.com/ "
+          photo="/images/Lora Lee.jpg"
         />
       </CardGrid>
 
@@ -106,8 +108,19 @@ export default function About() {
       <SectionTitle title="STUDENTS" />
       <CardGrid>
         <PersonCard name="John Carrera" role="Additional Programming" />
-        <PersonCard name="Jessica Day" role="Graphic Design" />
-        <PersonCard name="Sencere Rabel" role="Backend Developer" />
+        <PersonCard 
+          name="Jessica Day" 
+          role="Graphic Design" 
+          linkedin= "https://www.linkedin.com/in/jessicallday"
+          photo="/images/Jessica_Day.jpg"
+        />
+        <PersonCard 
+          name="Sencere Rabel" 
+          role="Backend Developer"
+          email="Rabels@my.easternct.edu"
+          linkedin= "https://www.linkedin.com/in/sencere-rabel-324220352"
+          photo="/images/Sencere_Rabel.jpg"
+        />
         <PersonCard name="Christopher Windrow" role="Front End Developer" />
       </CardGrid>
 
@@ -139,7 +152,7 @@ function SectionTitle({ title }) {
 ------------------------ */
 function CardGrid({ children }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 mb-8">
       {children}
     </div>
   );

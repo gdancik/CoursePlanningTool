@@ -14,11 +14,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // Auto-login test user for local development (no Firebase credentials needed)
-    const [user, setUser] = useState<User | null>({ 
-        user: "test@example.com",
-        name: "Test User"
-    });    
+    const [user, setUser] = useState<User | null>(null);    
     return (
         <AuthContext.Provider value={{ user, setUser }}>
             {children}

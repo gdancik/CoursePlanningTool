@@ -1,6 +1,5 @@
 import React from "react";
 import { useRef } from "react";
-import GradeTable from "../../components/SyllabusComponents/Tables/gradeTable.js"
 import saveData from "../../services/processData.js"
 
 function TestView(props) {
@@ -46,12 +45,6 @@ function TestView(props) {
    <br/>
    <hr/>
 
-   <h1> Grade Table with default values </h1>
-   <GradeTable id = 'grade_table_syllabus_list'></GradeTable>
-    <br/>
-   
-   <h1> Grade Table with data prop  </h1>
-   <GradeTable id = 'grade_table2' data = {gradeData}></GradeTable>
 
     
    <button onClick = {() => saveData(containerRef)}>Save</button>

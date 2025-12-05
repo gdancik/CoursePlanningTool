@@ -2,7 +2,14 @@ import React from "react";
 import RedirectingModal from "./RedirectingModal/RedirectingModal";
 import ErrorModal from "./ErrorModal/ErrorModal";
 import CourseModal from "../CourseModal/NewCourseModal";
+import CustomModal from "./CustomModal/CustomModal";
+
+import StudentCommunicationTipsModal from "./SyllabusModals/StudentCommunicationTipsModal";
 import type { ModalFactory } from "../../utils/useModalFactory";
+
+const CUSTOM_MODAL_COMPONENTS: Record<string, React.FC<any>> = {
+  StudentCommunicationTips: StudentCommunicationTipsModal,
+};
 
 interface ModalRendererProps {
   modal: ModalFactory;
@@ -44,6 +51,17 @@ const ModalRenderer: React.FC<ModalRendererProps> = ({ modal, onCourseCreate }) 
         />
       );
 
+      case "custom":
+        const CustomComponent = CUSTOM_MODAL_COMPONENTS[modal.title];
+        if (!CustomComponent) {
+          console.error(`No custom modal component found for: ${modal.title}`);
+          return null;
+        }
+        return (
+          <CustomModal visible={modal.visible} title={modal.title} onClose={modal.hide}>
+            <CustomComponent {...modal.payload} />
+          </CustomModal>
+        );
     default:
       return null;
   }

@@ -14,13 +14,12 @@ import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
 import TestPage from "../screens/TestingPages/TestPage"
 import TestPage2 from "../screens/TestingPages/TestPage2"
 import TestPage3 from "../screens/TestPage3"
-import GradeTable from "../components/SyllabusComponents/Tables/gradeTable"
 import TestSyllabusPage from "../screens/TestingPages/TestSyllabusPage";
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
 
 //Application Endpoints
 import Overview from "../screens/SyllabusView/Overview/Overview";
-import Assessment from "../screens/SyllabusView/Assessment";
+import Assessment from "../screens/SyllabusView/Assessments/Assessment";
 import BasicInfo from "../screens/SyllabusView/BasicInformation/BasicInfo";
 import Description from "../screens/SyllabusView/Description/Description";
 import LearningOutcomes from "../screens/SyllabusView/Learning Outcomes/LearningOutcomes";
@@ -66,7 +65,6 @@ const AppRoutes = () => {
                             data = {undefined}
                         />}
                 />
-                <Route path= "grade-table" element={<GradeTable/>} />
                 <Route path = "/test-syllabus" element={<TestSyllabusPage/>}/>
 
                 <Route path="/auto_login"

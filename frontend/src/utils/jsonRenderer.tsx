@@ -5,7 +5,11 @@ import Alert from "../components/SyllabusComponents/Alert";
 import Information from "../components/SyllabusComponents/Information";
 import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
-
+import SidebarLayout from "../components/SidebarLayout";
+import Assignments from "../components/SyllabusComponents/Assignments";
+import GradeTable from "../components/SyllabusComponents/Tables/gradeTable";
+import { CardData } from "../components/SyllabusComponents/ContentCardSet";
+import ActionButton from "../components/SyllabusComponents/ActionButton";
 // Type for JSON-driven UI
 export type JsonComponent = {
     type: string;
@@ -18,6 +22,16 @@ export type JsonComponent = {
     className?: string;
     informationText?: string;
     file?: string;
+    variant?: "primary" | "secondary" | "exit" | "green";
+    href?: string;
+    modalCase?: string;
+    modalProps?: any;
+
+    sidebarClassName?: string;
+    contentClassName?: string;
+    sidebarWidth?: string;
+    accentColor?: string;
+    borderColor?: string;
 
     content?: JsonComponent[];
     text?: string;
@@ -131,7 +145,7 @@ export function jsonRenderComponent(
                     />
                 </div>
             );
-      case "checkbox":
+        case "checkbox":
             return (
                 <label className={component.className || ""}>
                     <input
@@ -205,6 +219,33 @@ export function jsonRenderComponent(
                 </label>
             );
 
+
+            case "Assignments": 
+        
+            if (!component.id) {
+                console.error("Assignments component requires an 'id'");
+                return null;
+            }
+       
+            const raw = formData[component.id];
+       
+            let initialArray: CardData[] = [];
+       
+            try {
+                initialArray = Array.isArray(JSON.parse(raw)) ? JSON.parse(raw) : [];
+            } catch {
+                initialArray = [];
+            }
+                return (
+                    <Assignments
+                    id={component.id}
+                    initialData={initialArray} 
+                    onChange={(newData) =>
+                     onChange(component.id!, JSON.stringify(newData))
+                    }
+                />
+            );
+
         // Textarea
         case "textarea":
             return (
@@ -232,7 +273,7 @@ export function jsonRenderComponent(
 
             case "informationText":
                 return (
-                    <p key={component.id} >{component.placeholder}</p>
+                    <p >{component.placeholder}</p>
 
                 );
 
@@ -290,8 +331,58 @@ export function jsonRenderComponent(
                         days={days}
                         data={courseScheduleData}
                     />
-                )             
+                )   
+            case "SidebarLayout":
+                return (
+                    <SidebarLayout
+                    sidebarTitle={component.title || ""}
+                    sidebarContent={component.text || component.informationText || ""}
 
+                    className = {component.className || ""}
+                    sidebarClassName={component.sidebarClassName || ""}
+                    contentClassName={component.contentClassName || ""}
+                    sidebarWidth={component.sidebarWidth || "300px"}
+                    >
+                    {component.content?.map((child, i) => (
+                        <div key={i}>
+                            {jsonRenderComponent(child, formData, onChange)}
+                        </div>
+                    ))}
+                    </SidebarLayout>
+                )
+            case "GradeTable":
+                if(!component.id) {
+                    alert('GradeTable component requires an id');
+                    return null;
+                }
+
+                let gradeTable : [string, string][] = [];
+                try{
+                    const parsedTable = JSON.parse(formData[component.id] || "[]");
+                    if(Array.isArray(parsedTable))  gradeTable = parsedTable; 
+                } catch {
+                    gradeTable = [];
+                }
+
+                return (
+                    <GradeTable 
+                    id={component.id}
+                    data={gradeTable}
+                    onChange={(updated) => 
+                        onChange(component.id!, JSON.stringify(updated))
+                    }
+                    />
+                );
+            case "Button":
+                return (
+                    <ActionButton
+                        label={component.label || "Button"}
+                        variant={component.variant}
+                        href={component.href}
+                        modalCase={component.modalCase}
+                        modalProps={component.modalProps}
+                    />
+                );
         default:
             alert('Unknown type in json: ' + component.type )
             return null;

@@ -9,7 +9,7 @@ export async function loadCourseData(): Promise<{
     if (!saved) return {courseId: null, formData: {}};
 
     try {
-        const parsed = JSON.parse(saved) as { course_id?: string };
+        const parsed = JSON.parse(saved) as { course_id?: string; savedData?: Record<string, string> };
         const courseId = parsed?.course_id ?? null;
         if (!courseId) return {courseId: null, formData: {}};
 
@@ -18,10 +18,18 @@ export async function loadCourseData(): Promise<{
             return {courseId: null, formData: {}};
         }
 
-        const backendData = await getCourseData(courseId);
-        if (!backendData) return {courseId: null, formData: {}};
-        return {courseId, formData:backendData};
-    }catch {
+        // Try to fetch from backend
+        try {
+            const backendData = await getCourseData(courseId);
+            if (backendData) return {courseId, formData: backendData};
+        } catch (error) {
+            console.warn('Backend not available, using localStorage data:', error);
+        }
+        
+        // Fallback to localStorage savedData if backend fails
+        const localData = parsed.savedData || {};
+        return {courseId, formData: localData};
+    } catch {
         return {courseId: null, formData: {}};
     }
 }

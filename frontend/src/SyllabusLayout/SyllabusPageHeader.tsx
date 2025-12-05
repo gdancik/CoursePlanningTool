@@ -20,7 +20,7 @@ const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
                                                                    onPreview,
                                                                }) => {
     return (
-        <div>
+        <div style = {{position: "sticky", top: "0px", width: "100%", zIndex: "1000"}}>
             <SyllabusHeader />
 
             <AppLayoutButtons

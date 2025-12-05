@@ -8,6 +8,9 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useLocation} from "react-router-dom";
 import OverviewCard from "./OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSections";
+import {isSectionComplete, getCurrentCourseData, ValidInputsResponse} from "../../../services/validInputsService";
+import {MOCK_VALID_INPUTS} from "../../../services/mockValidInputs";
+import {loadMockCourseData, clearMockCourseData} from "../../../services/mockCourseData";
 import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader"
 import RedirectingModal from "../../../components/Modals/RedirectingModal/RedirectingModal";
 import './Overview.css'
@@ -25,6 +28,8 @@ import MainImage from "../../../assets/images/BookShelfBackGroundMain.png";
 const Overview = () => {
     // State to hold the array of section data loaded from the CSV file.
     const [sections, setSections] = useState<SectionData[]>([]);
+    const [validInputs, setValidInputs] = useState<ValidInputsResponse>({});
+    const [courseData, setCourseData] = useState<Record<string, string>>({});
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
@@ -54,11 +59,49 @@ const Overview = () => {
     const handleSaveAndExit = createSaveAndExitHandler(formData, navigate, modalControls);
     const handlePreviewClick = createPreviewHandler(formData, modalControls);
 
-    // useEffect runs once on component mount to fetch CSV data
-    // using the custom loadSyllabusSections utility function.
+    // useEffect runs once on component mount to fetch CSV data and API data
     useEffect(() => {
+        // Load sections from CSV
         loadSyllabusSections("/data/syllabus_sections.csv").then(setSections);
+        
+        // For testing: Use mock data instead of API call
+        // When backend is available, uncomment the fetchValidInputs call below
+        console.log('Using mock valid inputs data for testing');
+        setValidInputs(MOCK_VALID_INPUTS);
+        
+        // Uncomment this when backend is running:
+        // fetchValidInputs()
+        //     .then(setValidInputs)
+        //     .catch(error => {
+        //         console.error('Failed to fetch valid inputs:', error);
+        //         setValidInputs({});
+        //     });
+        
+        // Load current course data
+        setCourseData(getCurrentCourseData());
     }, []);
+    
+    // Check if a section is complete
+    const checkSectionComplete = (sectionId: string): boolean => {
+        return isSectionComplete(sectionId, validInputs, courseData);
+    };
+    
+    // Testing functions
+    const handleLoadCompleteBasicInfo = () => {
+        loadMockCourseData(['basic_information']);
+        setCourseData(getCurrentCourseData());
+    };
+    
+    const handleLoadCompleteBoth = () => {
+        loadMockCourseData(['basic_information', 'course_description']);
+        setCourseData(getCurrentCourseData());
+    };
+    
+    const handleClearData = () => {
+        clearMockCourseData();
+        setCourseData({});
+    };
+    
     return(
         <div>
             <AppLayout
@@ -80,6 +123,7 @@ const Overview = () => {
             >
                 <div className='overview-container'>
 
+                 
                  {/* Introduction message to help users understand the tool */}
                     <p className="overview-intro"> This course planning tool will walk you through the steps of building
                     evidence-based courses and produces a downloadable, editable syllabus in Word. The creators of this
@@ -107,9 +151,10 @@ const Overview = () => {
                  {/* Render one OverviewCard per section from the CSV */}
                     {sections.map(section => (
                         <div className="overview-card-margin" key={section.id}>
-                          <OverviewCard   title={section.title}
+                          <OverviewCard   
+                                           title={section.title}
                                            description={section.description}
-                                           completed={section.completed}
+                                           completed={checkSectionComplete(section.section_id)}
                                            link={section.link}
                                             imageSrc={section.imageSrc}
                           />
@@ -128,3 +173,69 @@ const Overview = () => {
     );
 };
 export default Overview;
+
+
+/****
+ * Testing Panel 
+
+                 <div style={{
+                     background: 'rgba(255, 243, 205, 0.95)',
+                     padding: '20px',
+                     margin: '20px 0',
+                     borderRadius: '8px',
+                     border: '2px solid #ffc107'
+                 }}>
+                     <h3 style={{ marginTop: 0, color: '#856404' }}>🧪 Testing Panel (Remove this in production)</h3>
+                     <p style={{ color: '#856404', marginBottom: '15px' }}>
+                         Test the section completeness checking feature by loading mock data:
+                     </p>
+                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                         <button 
+                             onClick={handleLoadCompleteBasicInfo}
+                             style={{
+                                 padding: '10px 20px',
+                                 backgroundColor: '#28a745',
+                                 color: 'white',
+                                 border: 'none',
+                                 borderRadius: '4px',
+                                 cursor: 'pointer'
+                             }}
+                         >
+                             ✅ Load Complete Basic Info
+                         </button>
+                         <button 
+                             onClick={handleLoadCompleteBoth}
+                             style={{
+                                 padding: '10px 20px',
+                                 backgroundColor: '#007bff',
+                                 color: 'white',
+                                 border: 'none',
+                                 borderRadius: '4px',
+                                 cursor: 'pointer'
+                             }}
+                         >
+                             ✅✅ Load Both Sections Complete
+                         </button>
+                         <button 
+                             onClick={handleClearData}
+                             style={{
+                                 padding: '10px 20px',
+                                 backgroundColor: '#dc3545',
+                                 color: 'white',
+                                 border: 'none',
+                                 borderRadius: '4px',
+                                 cursor: 'pointer'
+                             }}
+                         >
+                             🗑️ Clear All Data
+                         </button>
+                     </div>
+                     <p style={{ color: '#856404', marginTop: '15px', fontSize: '14px' }}>
+                         Click a button above, then watch the checkboxes update below!
+                     </p>
+                 </div>
+
+  
+  
+ 
+ */

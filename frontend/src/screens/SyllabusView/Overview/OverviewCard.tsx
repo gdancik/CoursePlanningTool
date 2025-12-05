@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaPen, FaRegSquare } from 'react-icons/fa';
+import { FaRegSquare, FaCheckSquare } from 'react-icons/fa';
 import {Link} from 'react-router-dom';
 import SafeIcon from '../../../utils/ComponentWrapper'
 import EditIcon from "../../../assets/images/EditIcon.png"
@@ -38,7 +38,11 @@ const OverviewCard: React.FC<Props> = ({ title, description, completed, link,ima
                 <Link to={link}>
                     <img src = {EditIcon} alt="EditIcon" className="Editicon"/>
                 </Link>
-                <SafeIcon Icon={FaRegSquare} className="icon"/>
+                <SafeIcon 
+                    Icon={completed ? FaCheckSquare : FaRegSquare} 
+                    className="icon"
+                    style={{ color: completed ? '#28a745' : '#6c757d' }}
+                />
                 {completed && <span className="status">Completed</span>}
             </div>
         </div>

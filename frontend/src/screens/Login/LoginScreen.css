@@ -13,32 +13,33 @@
 
 /* Logo at the top */
 .logo-container {
-    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 .logo {
-    width: 240px;
+    width: 180px;
     height: auto;
 }
 
 /* Main container: split layout */
 .login-page-container {
     display: flex;
-    width: 80%;
-    height: calc(75vh - 80px);
+    width: 90%;
+    //height: calc(75vh - 80px);
+    //margin-bottom: 5px;
     font-family: sans-serif;
 
 }
 /* Left section */
 .left-section {
-    flex: 1;
+    flex: 1.7;
     background: linear-gradient(135deg, #002e5d, #4a90e2);
     color: white;
     padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden
+    overflow: hidden;
 }
 
 .left-section h1 {
@@ -114,8 +115,14 @@
 
 
 .how-block {
-    display: inline-block;
-    text-align: center;
+    display: none;
+}
+
+@media screen and (min-width: 800px) {
+    .how-block {
+        display: inline-block;
+        text-align: center;
+    }
 }
 
 

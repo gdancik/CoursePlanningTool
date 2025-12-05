@@ -59,9 +59,10 @@ const LoginScreen: React.FC = () => {
                       backgroundPosition: 'center',
                       backgroundRepeat: 'no-repeat',
                       backgroundAttachment: 'fixed',
-                 minHeight: '100vh',
+                 
              }}
              >
+                <p></p>
             {/* Logo */}
             <div className="logo-container">
                 <img
@@ -77,14 +78,12 @@ const LoginScreen: React.FC = () => {
                     <h1>Course Planning Tool</h1>
                     <p>
                         This course planning tool is an interactive platform that makes it easy to design your courses and download a complete syllabus through guided steps.
-                        You can edit and duplicate your courses as often as needed. Whether you're creating an ELAC course or any other type of course, this tool will streamline your planning process.
+                        You can edit and duplicate your courses as often as needed. Whether you're creating an ELAC course or any other type of course, this tool will streamline your planning process. Login to get started.
                     </p>
-                    <p className="details-bottom">
-                        Create an account or login to get started.
-                    </p>
-
-                    <h2>How It Works:</h2>
+                    
+                    
                     <div className="how-block">
+                        <h2 style = {{textAlign: "left"}}>How It Works:</h2>
                         <img
                         src = {LoginIcon}
                         alt = "Login Icon"

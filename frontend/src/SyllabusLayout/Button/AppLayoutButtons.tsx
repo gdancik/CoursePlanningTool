@@ -1,6 +1,6 @@
 import React from "react";
 import ReusableButton from "../../components/Button/ReusableButton";
-import {FaArrowLeft, FaArrowRight, FaEye, FaRegSave, FaRegWindowClose} from "react-icons/fa";
+import {FaArrowLeft, FaArrowRight, FaEye, FaRegSave, FaRegWindowClose, FaSignOutAlt} from "react-icons/fa";
 import SafeIcon from "../../utils/ComponentWrapper";
 import HomeButton from "../../assets/images/HomeButton.png"
 import "./AppLayoutButtons.css";
@@ -63,6 +63,19 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                 variant="green"                      // Green styling variant
                 onClick={onPreview}                  // Call the onPreview callback if provided
             />
+
+            {/* Logout Button */}
+            <ReusableButton
+                label="Logout"
+                icon={<SafeIcon Icon={FaSignOutAlt} />}     // Eye icon for preview
+                variant="secondary"                     // Green styling variant
+                onClick={() => {
+                    alert('Returning to Home Page (data will not be saved)');
+                   window.location.href = '/';
+                    }
+                }       // Call the onPreview callback if provided
+            />
+
         </div>
     );
 };

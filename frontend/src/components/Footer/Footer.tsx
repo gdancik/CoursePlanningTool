@@ -4,12 +4,19 @@ import './standardFooter.css';
 
 const StandardFooter = () => {
     return(
-        <header className="footer-bottom">
+        <header className="footer-bottom"> 
+
+            {/* 
             <img
                 src = {ecsuLogoBlack}
                 alt="Eastern Connecticut State University"
                 className="ecsu-logo-standard"
             />
+            */}
+            <p></p>
+            <p><a href = '/'>Home</a> | <a href = '/about/'>About</a></p>            
+            
+            <p></p>
         </header>
     );
 };

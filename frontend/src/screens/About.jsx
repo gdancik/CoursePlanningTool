@@ -75,7 +75,7 @@ export default function About() {
     <div className="p-20 pt-10 shadow-2xl">
       {/* TOP SECTION */}
         <TopSect/>
-      <div className=" bg-[#e7eff9] min-h-screen py-10 px-20">
+      <div className=" bg-[#e7eff9] min-h-screen py-10 px-10">
       
         {/* Main Title */}
         <h1 className="text-3xl font-bold text-[#012460] mb-8 tracking-wide">
@@ -136,10 +136,10 @@ export default function About() {
             ADDITIONAL CONTRIBUTORS
         ============================ */}
         <SectionTitle title="ADDITIONAL CONTRIBUTORS" />
-        <CardGrid>
-          <PersonCard name="Dr. Megan Heenehan" role="Early Development" />
-          <PersonCard name="Dr. Caitlin Carenen" role="Early Development" />
-        </CardGrid>
+        <p className="text-gray-700 leading-relaxed mb-4">
+          We would like to thank <b>Dr. Megan Heenehan</b> and <b>Dr. Caitlin Carenen</b>for their contributions to the early 
+          development of this tool.</p>
+        
       </div>
       {/* Bottom SECTION */}
       <BottomSect />
@@ -178,13 +178,13 @@ function TopSect() {
   return (
     <div className="bg-white p-10">
       <h1 className="text-3xl font-bold text-[#012460] mb-8 tracking-wide">COURSE PLANNING TOOL</h1>
-      <p className="text-sm text-gray-700 leading-relaxed mb-4">
+      <p className="text-base text-gray-700 leading-relaxed mb-4">
         This interactive course planning tool is built to support faculty in designing evidence-based courses and 
         syllabi through a series of easy- to- complete guided steps. <b>You can download a complete syllabus, edit and 
         duplicate your courses as often as needed, 
         and streamline your planning process</b>—whether you're creating an ELAC course or any other type of course.
       </p>
-      <p className="text-sm text-gray-700 leading-relaxed">
+      <p className="text-base text-gray-700 leading-relaxed">
        This project was made possible with the generous support of the Davis Educational Foundation, 
        established as a public charitable foundation in 1985. The Foundation supports undergraduate 
        programs at public and private, regionally accredited, baccalaureate degree-granting colleges and
@@ -206,7 +206,7 @@ function BottomSect() {
   return (
      <div className="bg-white p-10">
       <h1 className="text-3xl font-bold text-[#012460] mb-8 tracking-wide">THE CENTER FOR TEACHING, LEARNING, AND ASSESSMENT (CTLA) </h1>
-      <p className="text-sm text-gray-700 leading-relaxed mb-4">
+      <p className="text-base text-gray-700 leading-relaxed mb-4">
         The Center for Teaching, Learning, and Assessment (CTLA) supports faculty at Eastern with quality, 
         innovative, and inclusive teaching and learning methods, effective learning assessment, and scholarly activity. 
         The Center fosters collegial dialogue, promotes reflection, and creates disciplinary resources sharing, 

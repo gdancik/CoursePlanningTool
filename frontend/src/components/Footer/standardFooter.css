@@ -19,3 +19,8 @@ p.footer-bottom {
 a:hover {
     text-decoration: underline;
 }
+
+a {
+    margin-left: 1rem;
+    margin-right:1rem;
+}

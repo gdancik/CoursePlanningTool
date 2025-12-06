@@ -14,7 +14,10 @@ const StandardFooter = () => {
             />
             */}
             <p></p>
-            <p><a href = '/'>Home</a> | <a href = '/about/'>About</a></p>            
+            <p><a href = '/'>Home</a> | 
+               <a href = '/about/'>About</a> | 
+               <a href = '/policies'>Policies</a>
+               </p>            
             
             <p></p>
         </header>

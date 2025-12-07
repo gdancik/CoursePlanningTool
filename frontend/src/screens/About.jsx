@@ -125,7 +125,6 @@ export default function About() {
           <PersonCard 
             name="Sencere Rabel" 
             role="Backend Developer"
-            email="Rabels@my.easternct.edu"
             linkedin= "https://www.linkedin.com/in/sencere-rabel-324220352"
             photo="/images/Sencere_Rabel.jpg"
           />

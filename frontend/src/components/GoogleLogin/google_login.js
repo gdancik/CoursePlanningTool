@@ -9,6 +9,11 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import api from "../../services/axios";
 import ErrorModal from "../Modals/ErrorModal/ErrorModal";
 
+import ReusableButton from "../../components/Button/ReusableButton";
+import SafeIcon from "../../utils/ComponentWrapper";
+import { FaHouse } from "react-icons/fa6";
+import { GrLogout } from "react-icons/gr";
+
 // requires REACT_APP_CLIENT_ID set in .env
 
 /**
@@ -96,13 +101,9 @@ export default function MyGoogleLogin ({
 
     { user? (
         <center>
-            <p>Welcome, {user.name} ({user.user}) </p>
+            <p>Welcome, <b>{user.name}</b> ({user.user}) </p>
         </center>
-        ) : (null)
-    }
-
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
+        ) :   <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
        <GoogleLogin
         theme="filled_blue"
         shape="pill"
@@ -121,19 +122,31 @@ export default function MyGoogleLogin ({
         }}
       /> 
     </GoogleOAuthProvider>
+    }
+
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    
     {user && !auto_navigate? (
         <>         
-            <div style = {{marginTop: "10px"}}>
-            <button onClick = {() => {navigate('/course-page')}}
-                    style = {{backgroundColor:"lightblue",
-                                height: "30px"
-                    }}>Click to Continue</button>
-                    &nbsp;
-             <button onClick = {logout}
-                    style = {{backgroundColor:"#dc3545",
-                        height: "30px"
-                    }}
-            >Logout</button>
+            <div style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
+
+              
+                  <ReusableButton
+                    label="Continue"
+                    icon={<SafeIcon Icon={FaHouse}/>}
+                    variant="primary"
+                    className="tight"
+                    onClick = {() => {navigate('/course-page')}}
+                    />                    
+
+                    <ReusableButton
+                    label="Logout"
+                    icon={<SafeIcon Icon={GrLogout}/>}
+                    
+                    className="tight red"      
+                    onClick = {logout}              
+                    />
+                    
             </div>
             </>
         ) : (null)

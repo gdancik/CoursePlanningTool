@@ -8,6 +8,7 @@ import LoginIcon from '../../assets/images/Login_Page_Icon.png'
 import RedirectingModal from "../../components/Modals/RedirectingModal/RedirectingModal";
 import MyGoogleLogin from "../../components/GoogleLogin/google_login.js";
 import StandardFooter from "../../components/Footer/Footer";
+import config from "../../config.json"
 
 const LoginScreen: React.FC = () => {
     const [username, setUsername] = useState("annie");
@@ -100,37 +101,43 @@ const LoginScreen: React.FC = () => {
 
                 {/* Right Section */}
                 <div className="right-section">
-                     <h3> Google login </h3>
+                     
                     <form id = "form-google-login" 
-                        onSubmit = { (e)=> {e.preventDefault();}} 
+                        onSubmit = { (e)=> {e.preventDefault();}}                        
                         className="login-form"> 
-                    <MyGoogleLogin></MyGoogleLogin>  
-                                  
+                    <MyGoogleLogin auto_navigate = {false}></MyGoogleLogin>                                   
+                    
                     </form>
 
-                    <p></p>
-            
-                     <hr style={{ height: "1px", width: "90%", backgroundColor: "darkblue", fontWeight: "bold" }}/>
-                     <h3> Test login </h3>
-                    <form id = "form-test-login" onSubmit={handleSubmit} className="login-form">
-                        <input
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <button id = "btn-test-login" type="submit">Login</button>
-                    </form>
+                {'test_login' in config && config['test_login'] && 
+                 
+                    <>
+                        <p><br/><br/></p>
+                
+                        <hr style={{ height: "2px", width: "90%", backgroundColor: "darkblue", fontWeight: "bold" }}/>
+                        <p><br/></p>
+                        <h3> Test login </h3>
+                        <form id = "form-test-login" onSubmit={handleSubmit} className="login-form">
+                            <input
+                                type="text"
+                                placeholder="Username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <button id = "btn-test-login" type="submit">Login</button>
+                        </form>
 
-                    {error && <p className="error-message">{error}</p>}
+                        {error && <p className="error-message">{error}</p>}
+                        </>
+                    }
                 </div>
                 
             </div>

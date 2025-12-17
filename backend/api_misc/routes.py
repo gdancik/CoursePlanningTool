@@ -7,14 +7,31 @@ import io
 
 from backend.services.syllabus_generator import generate_syllabus
 from backend.services.course_calendar import create_schedule
-
 from backend.services.parameter_checking import require_post_params
+import backend.services.course_planning as cp
 
 #from backend.services.gs_editor import gsEditor
 from flask_login import current_user
 from . import api_misc_bp
 import logging
 
+'''Gets valid inputs 
+    type = 'raw', 'all' (default), or 'required'
+'''
+@api_misc_bp.route('valid_inputs/', methods = ['GET'])
+def valid_inputs():
+    
+    if 'type' not in request.args:
+        return jsonify(cp.columns_detailed)  
+      
+    type = request.args['type']
+    if type == 'all' :
+        return jsonify(cp.columns_detailed)    
+    elif type == 'required' :
+        return jsonify(cp.required_columns_detailed)
+    elif type == 'raw' :
+        return jsonify(cp.columns_detailed_raw)
+    return jsonify(f'error: invalid type {type}')
 
 @api_misc_bp.route('generateSchedule/', methods=['POST'])
 @require_post_params('term', 'year','days')

@@ -1,30 +1,29 @@
 
-columns_detailed = {
+columns_detailed_raw = {
 
-  'basic_information' : [ 
-        'course_id',
-        'term_syllabus',
-        'year_syllabus',
-        'subj_code_syllabus',
-        'crse_number_syllabus',
-        'course_title_syllabus',
+  'basic_information' : [         
+        'term_syllabus*',
+        'year_syllabus*',
+        'subj_code_syllabus*',
+        'crse_number_syllabus*',
+        'course_title_syllabus*',
         'elac',
-        'days1_syllabus_checkboxes',
-        'times1_syllabus',
-        'location1_syllabus',
+        'days1_syllabus_checkboxes*',
+        'times1_syllabus*',
+        'location1_syllabus*',
 	#'show_additional_meeting_checkboxes',
         'days2_syllabus_checkboxes',
      #   'show_additional_meeting_checkbox',
         'days2_syllabus_checkboxes',
         'times2_syllabus',
         'location2_syllabus',
-        'instructor_name_syllabus',
+        'instructor_name_syllabus*',
         'instructor_title_syllabus',    
       #  'form_of_address_syllabus',
-        'email_syllabus',
-        'office_location_syllabus',
+        'email_syllabus*',
+        'office_location_syllabus*',
         'phone_syllabus',
-        'office_hours_syllabus',
+        'office_hours_syllabus*',
         'instructor_additional_information'
     ],
 
@@ -37,7 +36,7 @@ columns_detailed = {
         'desc_expectations1',
         'desc_expectations2',
         'desc_limitations',
-        'course_description_syllabus'
+        'course_description_syllabus*'
     ],
 
     'learning_outcomes': [
@@ -48,7 +47,7 @@ columns_detailed = {
         'lo_how3',
         'lo_competencies_table1',
         'lo_competencies_table2',
-        'learning_outcomes_syllabus'
+        'learning_outcomes_syllabus*'
     ],
 
     'high_impact_practices': [
@@ -56,14 +55,14 @@ columns_detailed = {
         'hip_approach',
         'hip_other',
         'hip_teach',
-        'hip_syllabus'
+        'hip_syllabus*'
     ],
 
     'learning_resources': [
         'lr_materials',
         'lr_inequities',
         'lr_order',
-        'course_materials_syllabus'
+        'course_materials_syllabus*'
     ],
 
     'assessment': [
@@ -71,12 +70,12 @@ columns_detailed = {
         'assmt_order',
         'assmt_communicate',
         'assmt_feedback',
-        'assmt_assignments_syllabus_json',
+        'assmt_assignments_syllabus_json*',
         'grade_table_syllabus_list',
-        'grading_policies_syllabus_json'
+        'grading_policies_syllabus_json*'
     ],
 
-    'course_schedule' : ['course_schedule_syllabus_list'],
+    'course_schedule' : ['course_schedule_syllabus_list*'],
 
     'checklist': [
         'additional_sections_syllabus_json',
@@ -88,9 +87,18 @@ columns_detailed = {
 
 }
 
+columns_detailed = {key: [x.replace('*','') for x in columns_detailed_raw[key]] for key in columns_detailed_raw}
+
+
 to_string = ['days1_syllabus_checkboxes', 'days2_syllabus_checkboxes']
 
 
+'''All fields'''
 columns = []
 for key,values in columns_detailed.items() :
     columns += values
+
+
+'''Required fields (for syllabus), used to check completion on frontend'''
+
+required_columns_detailed = {key: [x.strip('*') for x in columns_detailed_raw[key] if x.endswith('*')] for key in columns_detailed_raw}

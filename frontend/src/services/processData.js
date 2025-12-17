@@ -22,12 +22,12 @@ function get_table_records(mytable) {
             return cells.map(cell => {
                 const textarea = cell.querySelector('textarea');
                 if (textarea == null) {
-                    return cell.innerHTML.trim();
+                    return cell.innerHTML;
                 }
-                return textarea.innerHTML.trim();
+                return textarea.innerHTML;
             });
         })
-        .filter(row => row.join("") !== "");
+        //.filter(row => row.join("") !== "");
     return { [mytable.id]: JSON.stringify(records) };
 }
 

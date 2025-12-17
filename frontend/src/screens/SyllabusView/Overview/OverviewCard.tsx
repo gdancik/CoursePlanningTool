@@ -43,7 +43,7 @@ const OverviewCard: React.FC<Props> = ({ title, description, completed, link,ima
                     className="icon"
                     style={{ color: completed ? '#28a745' : '#6c757d' }}
                 />
-                {completed && <span className="status">Completed</span>}
+                
             </div>
         </div>
     );

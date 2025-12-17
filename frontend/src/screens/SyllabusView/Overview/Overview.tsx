@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useLocation} from "react-router-dom";
 import OverviewCard from "./OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSections";
-import {isSectionComplete, getCurrentCourseData, ValidInputsResponse} from "../../../services/validInputsService";
+import {isSectionComplete, getCurrentCourseData, ValidInputsResponse, fetchValidInputs} from "../../../services/validInputsService";
 import {MOCK_VALID_INPUTS} from "../../../services/mockValidInputs";
 import {loadMockCourseData, clearMockCourseData} from "../../../services/mockCourseData";
 import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader"
@@ -23,20 +23,20 @@ import {
 import SyllabusGreen from "../../../assets/images/SyllabusGreen.png"
 import SyllabusGrey from "../../../assets/images/SyllabusGrey.png"
 import MainImage from "../../../assets/images/BookShelfBackGroundMain.png";
+import { loadCourseData } from "../../../utils/loadCourseData";
+import { useModalFactory } from "../../../utils/useModalFactory"; 
 
 // Functional component that displays the overview page.
 const Overview = () => {
     // State to hold the array of section data loaded from the CSV file.
     const [sections, setSections] = useState<SectionData[]>([]);
     const [validInputs, setValidInputs] = useState<ValidInputsResponse>({});
-    const [courseData, setCourseData] = useState<Record<string, string>>({});
+    //const [courseData, setCourseData] = useState<Record<string, string>>({});
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
-
-
 
     //Page Navigation for Buttons
     const navigate = useNavigate();
@@ -52,6 +52,8 @@ const Overview = () => {
         setMessage: setModalMessage
     };
 
+    const modal = useModalFactory();    
+
 
     const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
     const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
@@ -62,30 +64,60 @@ const Overview = () => {
     // useEffect runs once on component mount to fetch CSV data and API data
     useEffect(() => {
         // Load sections from CSV
+        console.log('loading sections..');
         loadSyllabusSections("/data/syllabus_sections.csv").then(setSections);
         
         // For testing: Use mock data instead of API call
         // When backend is available, uncomment the fetchValidInputs call below
-        console.log('Using mock valid inputs data for testing');
-        setValidInputs(MOCK_VALID_INPUTS);
+        //console.log('Using mock valid inputs data for testing');
+        //setValidInputs(MOCK_VALID_INPUTS);
         
         // Uncomment this when backend is running:
-        // fetchValidInputs()
-        //     .then(setValidInputs)
-        //     .catch(error => {
-        //         console.error('Failed to fetch valid inputs:', error);
-        //         setValidInputs({});
-        //     });
+         fetchValidInputs().then(setValidInputs)
+             .catch(error => {
+                 console.error('Failed to fetch valid inputs:', error);
+                 //setValidInputs({});
+         });
         
         // Load current course data
-        setCourseData(getCurrentCourseData());
+        //setCourseData(getCurrentCourseData());
+
+        //console.log('redirect modal..');
+        //modal.showRedirect("Loading Data", "Fetching course information...");
+        loadCourseData()
+        .then(({ formData: newData }) => {
+            if (courseID !== null) {
+                newData['course_id'] = courseID;
+            }
+            setFormData(newData);
+            //localStorage.setItem("courseData", JSON.stringify(newData));            
+            //modal.hide();
+        })
+        .catch((err: any) => {
+            console.error("Error loading course data:", err);
+            //modal.showError(err.message || "Unable to load course data.");
+        });
     }, []);
+
     
     // Check if a section is complete
     const checkSectionComplete = (sectionId: string): boolean => {
-        return isSectionComplete(sectionId, validInputs, courseData);
+        console.log("checking section: " + sectionId);
+        return isSectionComplete(sectionId, validInputs, formData);
     };
     
+    useEffect(() => {
+        console.log("valid inputs -->");
+        console.log(validInputs);
+    }, [validInputs]);
+
+    useEffect(() => {
+        console.log('form data -->');
+        console.log(formData);
+    }, [formData]);
+
+
+    /****
     // Testing functions
     const handleLoadCompleteBasicInfo = () => {
         loadMockCourseData(['basic_information']);
@@ -101,7 +133,8 @@ const Overview = () => {
         clearMockCourseData();
         setCourseData({});
     };
-    
+     */
+
     return(
         <div>
             <AppLayout

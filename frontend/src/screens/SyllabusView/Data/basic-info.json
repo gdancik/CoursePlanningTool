@@ -79,7 +79,15 @@
               "id": "times2_syllabus",
               "label": "Additional Meeting Time (optional)",
               "placeholder": "Enter meeting time",
-              "required": true,
+              "required": false,
+              "className": "syllabus-text medium-box"
+            },
+            {
+              "type": "text",
+              "id": "location2_syllabus",
+              "label": "Additional Classroom Location (optional)",
+              "placeholder": "Enter classroom location",
+              "required": false,
               "className": "syllabus-text medium-box"
             }
           ]

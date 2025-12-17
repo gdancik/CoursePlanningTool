@@ -6,7 +6,7 @@
 import api from './axios';
 
 export interface ValidInputsResponse {
-    [sectionId: string]: string[];
+    [sectionId: string]: string[] | null;
 }
 
 /**
@@ -16,7 +16,7 @@ export interface ValidInputsResponse {
  */
 export async function fetchValidInputs(): Promise<ValidInputsResponse> {
     try {
-        const response = await api.get('/valid_inputs/');
+        const response = await api.get('/valid_inputs/');      
         return response.data;
     } catch (error) {
         console.warn('Could not fetch valid inputs from API, using empty validation:', error);
@@ -43,12 +43,31 @@ export function isSectionComplete(
     if (!requiredFields || requiredFields.length === 0) {
         return false;
     }
+
+    if (!formData || formData == null) {
+        return false;
+    }
     
+    console.log('checking ' + sectionId + ' --------------');
     // Check if all required fields have values
-    return requiredFields.every(fieldId => {
-        const value = formData[fieldId];
-        return value !== undefined && value !== null && value.trim() !== '';
+    const complete =  requiredFields.every(fieldId => {
+        const value = formData[fieldId]; 
+           
+        console.log(fieldId + ' -- ' + typeof(value) + ' -- ' + value);
+
+        let c = true;
+        if (value === undefined || value === null) c = false;
+        if (typeof value === 'string' && value.trim() === '') c = false;
+                
+        if (sectionId === "course_description") {
+            alert(c + ' => ' + fieldId + ':' + value);
+        } 
+        return c;
     });
+
+    console.log(sectionId + " complete: " + complete);
+    
+    return complete;
 }
 
 /**

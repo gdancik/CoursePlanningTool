@@ -27,7 +27,7 @@ columns_detailed_raw = {
         'instructor_additional_information'
     ],
 
-    'description': [
+    'course_description': [
         'desc_opportunities',
         'desc_hopes',
         'desc_important',

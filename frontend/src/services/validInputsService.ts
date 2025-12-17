@@ -14,9 +14,9 @@ export interface ValidInputsResponse {
  * Returns an object with section IDs as keys and arrays of field IDs as values
  * Returns empty object if API call fails (e.g., network error, SSL certificate issue)
  */
-export async function fetchValidInputs(): Promise<ValidInputsResponse> {
+export async function fetchRequiredInputs(): Promise<ValidInputsResponse> {
     try {
-        const response = await api.get('/valid_inputs/');      
+        const response = await api.get('/valid_inputs/?type=required');      
         return response.data;
     } catch (error) {
         console.warn('Could not fetch valid inputs from API, using empty validation:', error);
@@ -53,19 +53,30 @@ export function isSectionComplete(
     const complete =  requiredFields.every(fieldId => {
         const value = formData[fieldId]; 
            
-        console.log(fieldId + ' -- ' + typeof(value) + ' -- ' + value);
+        //console.log(fieldId + ' -- ' + typeof(value) + ' -- ' + value);
 
         let c = true;
+
+        // no value
         if (value === undefined || value === null) c = false;
-        if (typeof value === 'string' && value.trim() === '') c = false;
-                
-        if (sectionId === "course_description") {
-            alert(c + ' => ' + fieldId + ':' + value);
+
+        // empty string
+        else if (typeof value === 'string' && value.trim() === '') c = false;
+
+        // table header only
+        else if (fieldId.endsWith('list')) {    
+            //alert(value);                    
+            const arr = JSON.parse(value).slice(1).flat().join('').trim();
+            if (arr === "") {
+                c = false;
+            }            
         } 
+        
+
         return c;
     });
 
-    console.log(sectionId + " complete: " + complete);
+    //console.log(sectionId + " complete: " + complete);
     
     return complete;
 }

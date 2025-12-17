@@ -7,7 +7,6 @@ import api from "../../../services/axios";
 //import "./gradeTable.css";
 
 
-
 /**
  * @function CourseSchedule
  * @note: refactor this using typescript and change to @param

@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useLocation} from "react-router-dom";
 import OverviewCard from "./OverviewCard";
 import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSections";
-import {isSectionComplete, getCurrentCourseData, ValidInputsResponse, fetchValidInputs} from "../../../services/validInputsService";
+import {isSectionComplete, getCurrentCourseData, ValidInputsResponse, fetchRequiredInputs} from "../../../services/validInputsService";
 import {MOCK_VALID_INPUTS} from "../../../services/mockValidInputs";
 import {loadMockCourseData, clearMockCourseData} from "../../../services/mockCourseData";
 import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader"
@@ -73,7 +73,7 @@ const Overview = () => {
         //setValidInputs(MOCK_VALID_INPUTS);
         
         // Uncomment this when backend is running:
-         fetchValidInputs().then(setValidInputs)
+         fetchRequiredInputs().then(setValidInputs)
              .catch(error => {
                  console.error('Failed to fetch valid inputs:', error);
                  //setValidInputs({});
@@ -102,10 +102,11 @@ const Overview = () => {
     
     // Check if a section is complete
     const checkSectionComplete = (sectionId: string): boolean => {
-        console.log("checking section: " + sectionId);
+        //console.log("checking section: " + sectionId);
         return isSectionComplete(sectionId, validInputs, formData);
     };
     
+    /*******
     useEffect(() => {
         console.log("valid inputs -->");
         console.log(validInputs);
@@ -116,7 +117,8 @@ const Overview = () => {
         console.log(formData);
     }, [formData]);
 
-
+    */
+   
     /****
     // Testing functions
     const handleLoadCompleteBasicInfo = () => {

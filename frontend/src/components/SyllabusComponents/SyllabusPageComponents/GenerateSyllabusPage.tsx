@@ -10,7 +10,7 @@ interface GenerateSyllabusPageProps {
     onBack: () => void;
     onNext: () => void;
     onSave?: () => void;
-    onSaveAndExit?: () => void;
+    onSaveAndExit?: (navigate_to:string) => void;
     onPreview: () => void;
     containerRef: React.RefObject<HTMLDivElement | null>;
 }
@@ -30,7 +30,7 @@ const GenerateSyllabusPage = ({
     const [hasChanged, setHasChanged] = useState(false);
 
     return (
-            <div ref ={containerRef} onChange = {() => setHasChanged(true)}>                                
+            <div ref ={containerRef} onInput = {() => setHasChanged(true)}>                                
                 <SyllabusLayout
                         {...{ onBack, onNext, onSave, onSaveAndExit, onPreview, changesDetected:hasChanged }}
                 /> 

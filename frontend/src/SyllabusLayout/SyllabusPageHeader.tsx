@@ -8,7 +8,7 @@ interface SyllabusPageHeaderProps {
     onBack?: () => void;
     onNext?: () => void;
     onSave?: () => void;
-    onSaveAndExit?: () => void;
+    onSaveAndExit?: (navigate_to: string) => void;
     onPreview?: () => void;
     changesDetected?: boolean;
 }
@@ -23,8 +23,7 @@ const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
                                                                }) => {
     return (
         <div style = {{position: "sticky", top: "0px", width: "100%", zIndex: "1000"}}>
-            <SyllabusHeader />
-
+            <SyllabusHeader />                 
             <AppLayoutButtons
                 onBack={onBack}
                 onNext={onNext}
@@ -33,8 +32,8 @@ const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
                 onPreview={onPreview}
                 changesDetected = {changesDetected}
             />
-
-            <SyllabusNav onSave={onSave} />
+            
+            <SyllabusNav onSave={onSave} changesDetected={changesDetected} />
         </div>
     );
 };

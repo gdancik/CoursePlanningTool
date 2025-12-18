@@ -64,6 +64,7 @@ function CourseSchedule({ id, term, year, days, data }) {
       newRow,
       ...scheduleRows.slice(index + 1),
     ];
+    triggerOnInput();
     setScheduleRows(updatedRows);
   };
 
@@ -72,6 +73,7 @@ function CourseSchedule({ id, term, year, days, data }) {
       const updatedRows = scheduleRows.filter(
         (row, rowIndex) => rowIndex !== index
       );
+      triggerOnInput();
       setScheduleRows(updatedRows);
     }
   };
@@ -94,9 +96,21 @@ function CourseSchedule({ id, term, year, days, data }) {
       return obj;
   }
 
+  const triggerOnInput = () => {
+    const textarea = document.querySelector('textarea');
+   
+    // Create and dispatch an input event
+    const event = new Event('input', { bubbles: true });
+    textarea.dispatchEvent(event);
+  }
 
   // scheduleData has schedule
   const generateSchedule = async () => {
+   
+   // Or, if you specifically want a 'change' event
+   //const changeEvent = new Event('change', { bubbles: true });
+   //textarea.dispatchEvent(changeEvent);  
+
 
     try {
       //await login();

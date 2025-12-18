@@ -16,7 +16,7 @@ interface SyllabusWrapperLogicResult {
   handleBackClick: () => void;
   handleNextClick: () => void;
   handleSave: () => void;
-  handleSaveAndExit: () => void;
+  handleSaveAndExit: (navigate_to:string) => void;
   handlePreviewClick: () => void;
 }
 
@@ -102,12 +102,13 @@ export function useSyllabusWrapperLogic(
     handleBackClick,
     handleNextClick,
     handleSave,
-    handleSaveAndExit: () =>
+    handleSaveAndExit: (navigate_to: string) =>
       saveAndExitHandler({
         formData,
         containerRef: containerRef as React.RefObject<HTMLDivElement>,
         modal,
         navigate,
+        navigate_to,
       }),
     handlePreviewClick: createPreviewHandler(formData, {
       setVisible: modal.hide,

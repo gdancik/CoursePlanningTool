@@ -18,8 +18,10 @@ const tabs = [
 
     const SyllabusNav = ({
             onSave,
+            changesDetected = false,
         }: {
             onSave?: () => void;
+            changesDetected?: boolean;            
         }) => {
             
         const navigate = useNavigate();
@@ -31,7 +33,7 @@ const tabs = [
                     key= {tab.path}  
                     onClick={async (e) => {                         
                         e.preventDefault();
-                        if (onSave) {                            
+                        if (changesDetected && onSave) {                            
                             const handleSave = async() => {
                                 await onSave();
                                 await new Promise((resolve) => setTimeout(resolve, 2500)); // wait for modal hide                              

@@ -7,12 +7,16 @@ export async function saveAndExitHandler({
   containerRef,
   modal,
   navigate,
+  navigate_to = '/course-page',
 }: {
   formData: Record<string, string>,
   containerRef: React.RefObject<HTMLDivElement>,
   modal: any,
   navigate: (path: string) => void,
+  navigate_to?: string
 }) {
+
+  
   modal.showRedirect("Saving & Exiting", "Hold on, we're saving and redirecting you...", "loading");
 
   let course_id = formData["course_id"] || localStorage.getItem("currentCourseId");
@@ -34,10 +38,14 @@ export async function saveAndExitHandler({
 
   try {
     await saveData(containerRef);
-    modal.showRedirect("Saved & Exiting", "Redirecting you to My Courses Home Page...", "success");
+    if (navigate_to == '/course-page') {
+      modal.showRedirect("Saved & Exiting", "Redirecting you to My Courses Page...", "success");
+    } else {
+      modal.showRedirect("Saved & Exiting", "Exiting Course Planning Tool...", "success");
+    }
     setTimeout(() => {
       modal.hide();
-      navigate("/course-page");
+      navigate(navigate_to);
     }, 1500);
   } catch (err: any) {
     modal.showError(err?.message || "An unexpected error occurred.");

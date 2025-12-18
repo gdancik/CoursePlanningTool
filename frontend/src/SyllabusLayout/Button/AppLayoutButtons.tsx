@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import ReusableButton from "../../components/Button/ReusableButton";
 import {FaArrowLeft, FaArrowRight, FaEye, FaRegSave, FaRegWindowClose, FaSignOutAlt} from "react-icons/fa";
 import SafeIcon from "../../utils/ComponentWrapper";
@@ -9,13 +9,13 @@ interface ButtonBarProps {
     onBack?: (x:boolean) => void;
     onNext?: (x:boolean) => void;
     onSave?: () => void;
-    onSaveAndExit?: () => void;
+    onSaveAndExit?: (navigate_to: string) => void;
     onPreview?: () => void;
     showSaveButtons?: boolean;
     changesDetected?: boolean;
 }
 
-// Functional component that renders a button bar
+// Functional component that renders a button bar that includes a changes detected message
 const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                                                  onBack,
                                                  onNext,
@@ -25,8 +25,64 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                                                  changesDetected = false
                                              }) => {
     
+    const [changesDetectedHere, setChangesDetectedHere] = useState(false);
+
+    // update changesDetectedHere state on render
+    useEffect(() => {    
+        setChangesDetectedHere(changesDetected);
+        //alert(changesDetected + "-" + changesDetectedHere);
+      }, [changesDetected]); // Empty dependency array
+    
+
     return (
         <div className="button-bar">
+
+        <style>
+        {`
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tip {
+            display: none;
+            position: absolute;
+            top: 100%;
+            //left: 50%;
+            transform: translateX(-80%);
+            transform: translateY(-50%);
+            border: 1px solid darkred;
+            background-color: white;
+            padding: 8px;
+            width: 250px;
+            z-index: 10;
+        }
+
+        .tooltip:hover .tip {
+            display: block;
+        }
+
+        .q {
+            color: #1a0dab;
+            text-decoration: underline;
+        }
+        `}
+        </style>
+
+        {changesDetectedHere && 
+        <p style={{fontSize: "1.1rem", margin: "0 auto", textAlign: "center", fontWeight: "bold", color: "#851e1e"}}>
+            <span className="text">Changes detected! </span>
+            <span className="tooltip">
+                (<span className="q">?</span>)
+                <span className="tip">
+                    Changes will be automatically saved when navigating to a new page.<br/>
+                    Click Discard to discard your changes.
+                </span>
+            </span>
+        </p>
+        }
+
             {/* Back Button */}
             <ReusableButton
                 label="Back"
@@ -48,15 +104,18 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                 label="Save"
                 icon={<SafeIcon Icon={FaRegSave} />}   // Save icon
                 variant="primary"                      // Primary styling variant
-                onClick={onSave}                       // Call the onSave callback if provided
-                disabled = {!changesDetected}
+                onClick={ () => {
+                    if (onSave) onSave();
+                    setChangesDetectedHere(false);
+                }}
+                disabled = {!changesDetectedHere}
             />
 
             <ReusableButton
                 label="Discard"
                 variant= {changesDetected ? "red" : "secondary"}
                 onClick={() => window.location.reload()}
-                disabled = {!changesDetected}
+                disabled = {!changesDetectedHere}
 
             />
 
@@ -65,7 +124,7 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                 label="&nbsp;"
                 icon={<img src = {HomeButton} alt = "Home" className="Home"/>} // Close icon
                 variant="exit"                               // Exit styling variant
-                onClick={onSaveAndExit}                      // Call the onSaveAndExit callback if provided
+                onClick={() => {onSaveAndExit?.('/course-page')}}                      // Call the onSaveAndExit callback if provided
             />
 
             {/* Preview Syllabus Button */}
@@ -81,11 +140,7 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                 label="Logout"
                 icon={<SafeIcon Icon={FaSignOutAlt} />}     // Eye icon for preview
                 variant="secondary"                     // Green styling variant
-                onClick={() => {
-                    alert('Returning to Home Page (data will not be saved)');
-                   window.location.href = '/';
-                    }
-                }       // Call the onPreview callback if provided
+                onClick={() => {onSaveAndExit?.('/')}}                 
             />
 
         </div>

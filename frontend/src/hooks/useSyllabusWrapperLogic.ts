@@ -7,6 +7,9 @@ import { loadCourseData } from "../utils/loadCourseData";
 import { useModalFactory } from "../utils/useModalFactory"; 
 import { saveAndExitHandler } from "../utils/handlers/SaveAndExitHandler";
 
+
+// Back and Next buttons call handleSave() by default
+
 interface SyllabusWrapperLogicResult {
   modal: ReturnType<typeof useModalFactory>;
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -67,7 +70,8 @@ export function useSyllabusWrapperLogic(
   };
 
   //Nav Handlers
-  const handleBackClick = () => {
+  const handleBackClick = (save = true) => {
+    if (save) handleSave();
     modal.showRedirect("Loading Previous Section", "Preparing previous section...", "loading");
     setTimeout(() => {
       handleBack(navigate, pathname, formData, courseID || undefined);
@@ -75,7 +79,8 @@ export function useSyllabusWrapperLogic(
     }, 800); 
   };
 
-  const handleNextClick = async () => {
+  const handleNextClick = async (save = true) => {
+    if (save) handleSave();
     modal.showRedirect("Loading Next Section", "Fetching next section data...");
     try {
       const { formData: newData } = await loadCourseData();

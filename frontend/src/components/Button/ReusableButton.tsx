@@ -9,7 +9,7 @@ interface ReusableButtonsProps {
     onClick?: () => void;                // Optional callback for the button's click event
     type?: "button" | "submit";          // HTML button type: "button" or "submit" (default is "button")
     icon?: React.ReactNode;              // Optional icon to display before the label
-    variant: "primary" | "secondary" | "green" | "exit"; // Styling variant
+    variant: "primary" | "secondary" | "green" | "exit" | "red"; // Styling variant
     className?: string;
     disabled?: boolean;                  // Optional disabled state
 }

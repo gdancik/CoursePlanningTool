@@ -6,12 +6,13 @@ import HomeButton from "../../assets/images/HomeButton.png"
 import "./AppLayoutButtons.css";
 
 interface ButtonBarProps {
-    onBack?: () => void;
-    onNext?: () => void;
+    onBack?: (x:boolean) => void;
+    onNext?: (x:boolean) => void;
     onSave?: () => void;
     onSaveAndExit?: () => void;
     onPreview?: () => void;
     showSaveButtons?: boolean;
+    changesDetected?: boolean;
 }
 
 // Functional component that renders a button bar
@@ -21,7 +22,9 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                                                  onSave,
                                                  onSaveAndExit,
                                                  onPreview,
+                                                 changesDetected = false
                                              }) => {
+    
     return (
         <div className="button-bar">
             {/* Back Button */}
@@ -29,7 +32,7 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                 label="Back"
                 icon={<SafeIcon Icon={FaArrowLeft} />} // Left arrow icon
                 variant="secondary"                   // Secondary styling variant
-                onClick={onBack}                      // Call the onBack callback if provided
+                onClick={() => onBack?.(changesDetected)}                      // Call the onBack callback if provided
             />
 
             {/* Next Button */}
@@ -37,7 +40,7 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                 label="Next"
                 icon={<SafeIcon Icon={FaArrowRight} />} // Right arrow icon
                 variant="secondary"                     // Secondary styling variant
-                onClick={onNext}                        // Call the onNext callback if provided
+                onClick={() => onNext?.(changesDetected)}                        // Call the onNext callback if provided
             />
 
             {/* Save Button */}
@@ -46,11 +49,20 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                 icon={<SafeIcon Icon={FaRegSave} />}   // Save icon
                 variant="primary"                      // Primary styling variant
                 onClick={onSave}                       // Call the onSave callback if provided
+                disabled = {!changesDetected}
+            />
+
+            <ReusableButton
+                label="Discard"
+                variant= {changesDetected ? "red" : "secondary"}
+                onClick={() => window.location.reload()}
+                disabled = {!changesDetected}
+
             />
 
             {/* Save & Exit Button */}
             <ReusableButton
-                label=""
+                label="&nbsp;"
                 icon={<img src = {HomeButton} alt = "Home" className="Home"/>} // Close icon
                 variant="exit"                               // Exit styling variant
                 onClick={onSaveAndExit}                      // Call the onSaveAndExit callback if provided

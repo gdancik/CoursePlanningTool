@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavLink} from  'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 import './SyllabusNav.css';
 
 const tabs = [
@@ -13,13 +13,37 @@ const tabs = [
     {label: "Course Schedule", path:"/course-schedule"},
     {label: "Checklist", path: "/checklist"},
 ];
+    
+    
 
-const SyllabusNav = () => {
+    const SyllabusNav = ({
+            onSave,
+        }: {
+            onSave?: () => void;
+        }) => {
+            
+        const navigate = useNavigate();
+
     return (
         <nav className="syllabus-nav">
             {tabs.map((tab) => (
                 <NavLink
-                    key= {tab.path}
+                    key= {tab.path}  
+                    onClick={async (e) => {                         
+                        e.preventDefault();
+                        if (onSave) {                            
+                            const handleSave = async() => {
+                                await onSave();
+                                await new Promise((resolve) => setTimeout(resolve, 2500)); // wait for modal hide                              
+                            }
+                            await handleSave();
+                            
+                            //await onSave();
+                            
+                        }
+                        //alert(tab.path);                         
+                        navigate(tab.path)                        
+                    }}                  
                     to={tab.path}
                     className={({isActive})=>
                         isActive ? 'nav-tab active' : 'nav-tab'

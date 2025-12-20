@@ -17,9 +17,18 @@ export async function saveAndExitHandler({
 }) {
 
   
-  modal.showRedirect("Saving & Exiting", "Hold on, we're saving and redirecting you...", "loading");
-
+  //modal.showRedirect("Saving & Exiting", "Hold on, we're saving and redirecting you...", "loading");
   let course_id = formData["course_id"] || localStorage.getItem("currentCourseId");
+
+  //alert('save and exit ==>' + navigate_to + "with course id " +course_id);
+  
+  //let rr = true;
+  //if (rr) {
+  //  return;
+  //}
+  
+
+  
   let dataToSave = { ...formData };
 
   if (!course_id) {
@@ -38,13 +47,14 @@ export async function saveAndExitHandler({
 
   try {
     await saveData(containerRef);
-    if (navigate_to == '/course-page') {
+    if (navigate_to == '/course-page') {      
       modal.showRedirect("Saved & Exiting", "Redirecting you to My Courses Page...", "success");
     } else {
       modal.showRedirect("Saved & Exiting", "Exiting Course Planning Tool...", "success");
     }
     setTimeout(() => {
       modal.hide();
+      //alert('navigate NOW to ' + navigate_to);
       navigate(navigate_to);
     }, 1500);
   } catch (err: any) {

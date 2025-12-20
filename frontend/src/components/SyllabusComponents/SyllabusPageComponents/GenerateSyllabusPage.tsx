@@ -27,15 +27,17 @@ const GenerateSyllabusPage = ({
                               }: GenerateSyllabusPageProps) => {
 
 
-    const [hasChanged, setHasChanged] = useState(false);
+    const [changesDetected, setChangesDetected] = useState(false);
 
     return (
-            <div ref ={containerRef} onInput = {() => setHasChanged(true)}>                                
+            <div ref ={containerRef} onInput = {() => {                
+                setChangesDetected(true)
+            }}>                                
                 <SyllabusLayout
-                        {...{ onBack, onNext, onSave, onSaveAndExit, onPreview, changesDetected:hasChanged }}
+                        {...{ onBack, onNext, onSave, onSaveAndExit, onPreview, changesDetected, setChangesDetected }}
                 /> 
                 
-                {/* {hasChanged && <p>Some input has changed!</p>} */}
+                 {/*changesDetected && <p>Some input has changed!</p>*/} 
                  
                 <GeneratePageContent
                     json={{content: json}}

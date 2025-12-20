@@ -13,6 +13,7 @@ interface ButtonBarProps {
     onPreview?: () => void;
     showSaveButtons?: boolean;
     changesDetected?: boolean;
+    setChangesDetected?: (x:boolean) => void;
 }
 
 // Functional component that renders a button bar that includes a changes detected message
@@ -22,17 +23,19 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                                                  onSave,
                                                  onSaveAndExit,
                                                  onPreview,
-                                                 changesDetected = false
+                                                 changesDetected = false,
+                                                 setChangesDetected = () =>{}
                                              }) => {
     
-    const [changesDetectedHere, setChangesDetectedHere] = useState(false);
+
 
     // update changesDetectedHere state on render
+    /****
     useEffect(() => {    
         setChangesDetectedHere(changesDetected);
         //alert(changesDetected + "-" + changesDetectedHere);
       }, [changesDetected]); // Empty dependency array
-    
+     ****/
 
     return (
         <div className="button-bar">
@@ -70,7 +73,7 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
         `}
         </style>
 
-        {changesDetectedHere && 
+        {changesDetected && 
         <p style={{fontSize: "1.1rem", margin: "0 auto", textAlign: "center", fontWeight: "bold", color: "#851e1e"}}>
             <span className="text">Changes detected! </span>
             <span className="tooltip">
@@ -89,6 +92,7 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                 icon={<SafeIcon Icon={FaArrowLeft} />} // Left arrow icon
                 variant="secondary"                   // Secondary styling variant
                 onClick={() => onBack?.(changesDetected)}                      // Call the onBack callback if provided
+                disabled = {onBack === undefined}
             />
 
             {/* Next Button */}
@@ -106,16 +110,16 @@ const AppLayoutButtons: React.FC<ButtonBarProps> = ({
                 variant="primary"                      // Primary styling variant
                 onClick={ () => {
                     if (onSave) onSave();
-                    setChangesDetectedHere(false);
+                    setChangesDetected(false);
                 }}
-                disabled = {!changesDetectedHere}
+                disabled = {!changesDetected}
             />
 
             <ReusableButton
                 label="Discard"
                 variant= {changesDetected ? "red" : "secondary"}
                 onClick={() => window.location.reload()}
-                disabled = {!changesDetectedHere}
+                disabled = {!changesDetected}
 
             />
 

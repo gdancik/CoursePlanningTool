@@ -33,7 +33,11 @@ export function useSyllabusWrapperLogic(
 //Load and data Cache
   useEffect(() => {
     const cachedData = localStorage.getItem("courseData");
-    if (cachedData) {
+    
+    // currently do not load cached data
+    // eventually, we can compare time stamp for cached data and
+    // only pull from back-end if cache is stale
+    if (false || cachedData) {
       try {
         setFormData(JSON.parse(cachedData));
       } catch (err) {

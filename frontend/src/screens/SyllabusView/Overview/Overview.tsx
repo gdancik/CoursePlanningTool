@@ -11,20 +11,16 @@ import {loadSyllabusSections, SectionData} from "../../../utils/loadSyllabusSect
 import {isSectionComplete, getCurrentCourseData, ValidInputsResponse, fetchRequiredInputs} from "../../../services/validInputsService";
 import {MOCK_VALID_INPUTS} from "../../../services/mockValidInputs";
 import {loadMockCourseData, clearMockCourseData} from "../../../services/mockCourseData";
-import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader"
-import RedirectingModal from "../../../components/Modals/RedirectingModal/RedirectingModal";
 import './Overview.css'
-import {handleBack, handleNext} from "../../../components/Button/ButtonLogic";
-import {
-    createPreviewHandler,
-    createSaveAndExitHandler,
-    createSaveHandler
-} from "../../../utils/handlers/previewExitFactory";
+
+import ModalRenderer from "../../../components/Modals/ModalRenderer";
+
 import SyllabusGreen from "../../../assets/images/SyllabusGreen.png"
 import SyllabusGrey from "../../../assets/images/SyllabusGrey.png"
 import MainImage from "../../../assets/images/BookShelfBackGroundMain.png";
-import { loadCourseData } from "../../../utils/loadCourseData";
-import { useModalFactory } from "../../../utils/useModalFactory"; 
+
+import { useSyllabusWrapperLogic } from "../../../hooks/useSyllabusWrapperLogic";
+import SyllabusPageHeader from '../../../SyllabusLayout/SyllabusPageHeader';
 
 // Functional component that displays the overview page.
 const Overview = () => {
@@ -37,29 +33,41 @@ const Overview = () => {
     const [modalStatus, setModalStatus] = useState<"loading" | "success">("loading");
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
-
-    //Page Navigation for Buttons
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    const [formData, setFormData] = useState<Record<string, string>>({});
-    const courseID = localStorage.getItem("currentCourseId")
-
+  
+    
     const modalControls = {
         setVisible: setModalVisible,
         setStatus: setModalStatus,
         setTitle: setModalTitle,
         setMessage: setModalMessage
     };
+  
+     
+    /*******************************************************************
+     * Taken from GeneratePageWrapper
+     ********************************************************************/
+    const navigate = useNavigate();
+      const location = useLocation();
+    
+      // Local page state
+      const [formData, setFormData] = useState<Record<string, string>>({});
+      const [courseId, setCourseId] = useState<string | null>( localStorage.getItem("currentCourseId"));
+      const [isLoading, setIsLoading] = useState(true);
+    
+      console.log('initial formData');
+      console.log(formData);
 
-    const modal = useModalFactory();    
+      // useSyllabusWrapperLogic will load course data!
+      const {
+        modal,
+        handleBackClick,
+        handleNextClick,
+        handleSave,
+        handleSaveAndExit,
+        handlePreviewClick,
+        containerRef,
+      } = useSyllabusWrapperLogic(formData, setFormData, navigate, location.pathname);
 
-
-    const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
-    const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
-    const handleSave = createSaveHandler(formData, modalControls);
-    const handleSaveAndExit = createSaveAndExitHandler(formData, navigate, modalControls);
-    const handlePreviewClick = createPreviewHandler(formData, modalControls);
 
     // useEffect runs once on component mount to fetch CSV data and API data
     useEffect(() => {
@@ -84,19 +92,7 @@ const Overview = () => {
 
         //console.log('redirect modal..');
         //modal.showRedirect("Loading Data", "Fetching course information...");
-        loadCourseData()
-        .then(({ formData: newData }) => {
-            if (courseID !== null) {
-                newData['course_id'] = courseID;
-            }
-            setFormData(newData);
-            //localStorage.setItem("courseData", JSON.stringify(newData));            
-            //modal.hide();
-        })
-        .catch((err: any) => {
-            console.error("Error loading course data:", err);
-            //modal.showError(err.message || "Unable to load course data.");
-        });
+
     }, []);
 
     
@@ -137,8 +133,26 @@ const Overview = () => {
     };
      */
 
+    //ShowModal
+    useEffect (() =>{
+        if (isLoading) {
+        modal.showRedirect("Loading Data", "Fetching course information...", "loading");
+    } else {
+        modal.hide ()
+    }
+    }, [isLoading]);
+
     return(
-        <div>
+        <div>            
+            <SyllabusPageHeader onBack = {undefined}
+                            onNext = {handleNextClick}
+                            onSave = {handleSave}
+                            onSaveAndExit = {handleSaveAndExit}
+                            onPreview = {handlePreviewClick}
+                            changesDetected = {false}            
+            />             
+
+            {/****
             <AppLayout
                 onBack={handleBackClick}
                 onNext={handleNextClick}
@@ -146,6 +160,7 @@ const Overview = () => {
                 onSaveAndExit={handleSaveAndExit}
                 onPreview={handlePreviewClick}
             />
+             */}
             <div className="entirePage"
                  style = {{
                      backgroundImage: `url(${MainImage})`,
@@ -196,12 +211,18 @@ const Overview = () => {
                         </div>
                  ))}
 
+
+
+                <ModalRenderer modal={modal} />
+
+                {/*
                  <RedirectingModal
                      visible={modalVisible}
                      status={modalStatus}
                         title={modalTitle}
                       message={modalMessage}
                     />
+                    */}
                 </div>
             </div>
         </div>

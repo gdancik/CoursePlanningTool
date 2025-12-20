@@ -138,6 +138,7 @@ function CourseSchedule({ id, term, year, days, data }) {
           readingAssignments: "",
         }));
         setScheduleRows(generatedSchedule);
+        triggerOnInput();
       }
     } catch (error) {
       alert(

@@ -11,6 +11,7 @@ interface SyllabusPageHeaderProps {
     onSaveAndExit?: (navigate_to: string) => void;
     onPreview?: () => void;
     changesDetected?: boolean;
+    setChangesDetected?: (x:boolean) => void;
 }
 
 const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
@@ -20,7 +21,9 @@ const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
                                                                    onSaveAndExit,
                                                                    onPreview,
                                                                    changesDetected,
+                                                                   setChangesDetected,
                                                                }) => {
+    
     return (
         <div style = {{position: "sticky", top: "0px", width: "100%", zIndex: "1000"}}>
             <SyllabusHeader />                 
@@ -31,6 +34,7 @@ const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
                 onSaveAndExit={onSaveAndExit}
                 onPreview={onPreview}
                 changesDetected = {changesDetected}
+                setChangesDetected = {setChangesDetected}
             />
             
             <SyllabusNav onSave={onSave} changesDetected={changesDetected} />

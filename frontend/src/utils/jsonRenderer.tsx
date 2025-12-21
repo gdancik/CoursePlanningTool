@@ -2,6 +2,7 @@ import React from "react";
 import SectionAccordion from "../screens/SyllabusView/BasicInformation/SectionAccordion";
 import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
 import Alert from "../components/SyllabusComponents/Alert";
+import Image from "../components/SyllabusComponents/Image";
 import Information from "../components/SyllabusComponents/Information";
 import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
@@ -24,14 +25,19 @@ export type JsonComponent = {
     file?: string;
     variant?: "primary" | "secondary" | "exit" | "green";
     href?: string;
+    new_tab?: boolean
     modalCase?: string;
     modalProps?: any;
 
     sidebarClassName?: string;
     contentClassName?: string;
+    sidebarContent?: JsonComponent[];
     sidebarWidth?: string;
     accentColor?: string;
     borderColor?: string;
+
+    value?: string;
+    alt?: string;
 
     content?: JsonComponent[];
     text?: string;
@@ -169,6 +175,9 @@ export function jsonRenderComponent(
         case "Information":
             return <Information text={component.text || ""} />;
 
+        case "Image":
+            return <Image type = "file" value={component.value} alt={component.alt} />
+           
         // Text-like inputs
 
         case "text":
@@ -333,22 +342,37 @@ export function jsonRenderComponent(
                     />
                 )   
             case "SidebarLayout":
+                //let children = <p>Hi <b>there</b></p>
+
+                // this is the body of the main panel
+                let children = component.content?.map((child, i) => (
+                            <div key={i}>
+                                {jsonRenderComponent(child, formData, onChange)}
+                            </div>
+                ))    
+                              
+                // sidebar content (left panel) can be a string (text or informationText)
+                let sidebarContent: React.ReactNode = component.text || component.informationText || undefined
+                            
+                // if undefined, then treat as list of objects                                            
+                sidebarContent = component.sidebarContent?.map((child, i) => (
+                            <div key={i}>
+                                {jsonRenderComponent(child, formData, onChange)}
+                            </div>
+                ))
+                            
                 return (
                     <SidebarLayout
                     sidebarTitle={component.title || ""}
-                    sidebarContent={component.text || component.informationText || ""}
+                    sidebarContent={sidebarContent}
 
                     className = {component.className || ""}
                     sidebarClassName={component.sidebarClassName || ""}
                     contentClassName={component.contentClassName || ""}
-                    sidebarWidth={component.sidebarWidth || "300px"}
-                    >
-                    {component.content?.map((child, i) => (
-                        <div key={i}>
-                            {jsonRenderComponent(child, formData, onChange)}
-                        </div>
-                    ))}
-                    </SidebarLayout>
+                    sidebarWidth={component.sidebarWidth || "300px"}   
+                    children = {children}
+                                
+                    />
                 )
             case "GradeTable":
                 if(!component.id) {
@@ -379,8 +403,10 @@ export function jsonRenderComponent(
                         label={component.label || "Button"}
                         variant={component.variant}
                         href={component.href}
+                        new_tab={component.new_tab}
                         modalCase={component.modalCase}
                         modalProps={component.modalProps}
+
                     />
                 );
         default:

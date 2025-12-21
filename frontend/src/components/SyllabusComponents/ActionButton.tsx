@@ -9,6 +9,7 @@ import { useModalFactory
     modalProps?: any;
     variant?: "primary" | "secondary" | "exit" | "green";
     className?: string;
+    new_tab?: boolean;
  }
 
  const ActionButton: React.FC<ActionButtonProps> = ({
@@ -17,13 +18,18 @@ import { useModalFactory
     modalCase,
     modalProps,
     variant = "secondary",
-    className
+    className,
+    new_tab = false
  }) => {
     const modal = useModalFactory();
 
     const handleClick = () => {
         if(href) {
-            window.location.href = href;
+            if (new_tab) {
+                window.open(href, '_blank', 'noopener,noreferrer')
+            } else {
+                window.location.href = href;
+            }
             return;
         }
         if(modalCase) {

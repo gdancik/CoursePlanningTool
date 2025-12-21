@@ -10,6 +10,7 @@ import MainPage from '../screens/testAPI/Home';
 import LoginScreen from '../screens/Login/LoginScreen';
 import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
+
 import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
 import TestPage from "../screens/TestingPages/TestPage"
 import TestPage2 from "../screens/TestingPages/TestPage2"
@@ -21,9 +22,9 @@ import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedu
 import Overview from "../screens/SyllabusView/Overview/Overview";
 import Assessment from "../screens/SyllabusView/Assessments/Assessment";
 import BasicInfo from "../screens/SyllabusView/BasicInformation/BasicInfo";
+import HIPS from "../screens/SyllabusView/HIPS/HIPS";
 import Description from "../screens/SyllabusView/Description/Description";
 import LearningOutcomes from "../screens/SyllabusView/Learning Outcomes/LearningOutcomes";
-import HIPs from "../screens/SyllabusView/HIPS/HIPs";
 import CourseSchedulePage from "../screens/SyllabusView/CourseSchedule/CourseSchedule"
 import LearningResources from "../screens/SyllabusView/LearningResources/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";
@@ -51,7 +52,7 @@ const AppRoutes = () => {
                 />
             )}
             <Routes>
-                {/*TEST API ENDPOINTS*/}
+                {/*TEST API ENDPOINTS*/}                
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
                 <Route path = "/test-page" element={<TestPage/>}/>
@@ -92,7 +93,7 @@ const AppRoutes = () => {
                 <Route path = "basic-info" element={<BasicInfo/>}/>
                 <Route path = "course-description" element={<Description/>}/>
                 <Route path = "learning-outcomes" element={<LearningOutcomes/>}/>
-                <Route path = "hips" element={<HIPs/>}/>
+                <Route path = "hips" element={<HIPS/>}/>
                 <Route path = "learning-resources" element={<LearningResources/>} />
                 <Route path = "assessment" element={<Assessment/>} />
                 <Route path = "course-schedule" element={<CourseSchedulePage/>}/>

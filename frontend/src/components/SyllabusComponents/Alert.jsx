@@ -102,7 +102,7 @@ function Alert({ text }) {
         
         {/* Text content */}
         <span style={{ flex: 1 }}>
-          {text}
+          <b>{text}</b>
         </span>
       </div>
     </div>

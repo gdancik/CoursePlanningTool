@@ -98,7 +98,7 @@
                             "placeholder": "Please summarize your responses to the questions above into a clear and compelling course description. You should write this course description with students in mind. For example, use “In this course, you will…” instead of “In this course, students will…” Also, avoid disciplinary jargon or technical language that might be confusing. Aim for clear, engaging wording that helps students understand what they’ll learn and why it matters." 
                         },
                         {
-                            "type" : "Alert",
+                            "type" : "Information",
                             "text": "Information entered below wil appear in the final syllabus exactly as written."
                         },
                         {

@@ -11,8 +11,8 @@ import './Image.css';
  * @param {string} [alt] - Optional alt text for accessibility. Defaults to descriptive text based on type
  * @param {string} [className] - Optional CSS class name for custom styling
  * @param {Object} [style] - Optional inline styles object
- * @param {number} [maxWidth] - Optional maximum width in pixels (default: 500)
- * @param {number} [maxHeight] - Optional maximum height in pixels (default: 400)
+ * @param {number} [maxWidth] - UNUSED; Optional maximum width in pixels (default: 500)
+ * @param {number} [maxHeight] - UNUSED; Optional maximum height in pixels (default: 400)
  * @returns {JSX.Element} An image element with proper error handling and responsive design
  * @example
  * // Display image from URL
@@ -31,6 +31,17 @@ import './Image.css';
  *   maxWidth={300}
  * />
  */
+
+type ImageProps = {
+  type?: string;
+  value?: string;
+  alt?: string;
+  className?: string;
+  style?: React.CSSProperties;
+  maxWidth?: number;
+  maxHeight?: number;
+};
+
 function Image({
   type,
   value,
@@ -39,7 +50,7 @@ function Image({
   style = {},
   maxWidth = 500,
   maxHeight = 400,
-}) {
+}: ImageProps) {
   const [imageError, setImageError] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -71,8 +82,7 @@ function Image({
           borderRadius: '8px',
           textAlign: 'center',
           color: '#dc3545',
-          backgroundColor: '#f8d7da',
-          maxWidth: `${maxWidth}px`,
+          backgroundColor: '#f8d7da',          
           ...style
         }}
       >
@@ -92,8 +102,7 @@ function Image({
           borderRadius: '8px',
           textAlign: 'center',
           color: '#dc3545',
-          backgroundColor: '#f8d7da',
-          maxWidth: `${maxWidth}px`,
+          backgroundColor: '#f8d7da',          
           ...style
         }}
       >
@@ -113,8 +122,7 @@ function Image({
           borderRadius: '8px',
           textAlign: 'center',
           color: '#dc3545',
-          backgroundColor: '#f8d7da',
-          maxWidth: `${maxWidth}px`,
+          backgroundColor: '#f8d7da',          
           ...style
         }}
       >
@@ -132,8 +140,7 @@ function Image({
     <div 
       className={`image-container ${className}`}
       style={{
-        display: 'inline-block',
-        maxWidth: `${maxWidth}px`,
+        display: 'inline-block',        
         position: 'relative',
         ...style
       }}
@@ -164,7 +171,7 @@ function Image({
         onLoad={handleLoad}
         style={{
           maxWidth: '100%',
-          maxHeight: `${maxHeight}px`,
+          maxHeight: '100%', //`${maxHeight}px`,
           height: 'auto',
           borderRadius: '8px',
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
@@ -185,7 +192,7 @@ function Image({
           fontStyle: 'italic'
         }}
       >
-        {type === 'file' ? '📁 Local file' : '🌐 External URL'}
+        {/*type === 'file' ? '📁 Local file' : '🌐 External URL'*/}
       </div>
     </div>
   );

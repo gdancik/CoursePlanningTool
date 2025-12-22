@@ -57,8 +57,8 @@ describe('SidebarLayout Component', () => {
     );
     
     // Check that the layout has flex display (two-column layout)
-    const layoutElement = container.firstChild;
-    expect(layoutElement).toHaveStyle('display: flex');
+    const layoutElement = container.firstChild;    
+    expect(layoutElement).toHaveClass('flex');
   });
 
   test('renders yellow accent bar', () => {

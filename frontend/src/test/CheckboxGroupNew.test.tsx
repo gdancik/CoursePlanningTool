@@ -112,13 +112,13 @@ describe("CheckboxGroup Component", () => {
   test("renders in horizontal layout by default", () => {
     const { container } = render(<ControlledCheckboxGroup />);
     const checkboxGroup = container.querySelector("#checkbox_group");
-    expect(checkboxGroup).toHaveStyle("flex-direction: row");
+    expect(checkboxGroup).toHaveClass("flex-row");
   });
 
   test("renders in vertical layout when horizontal=false", () => {
     const { container } = render(<ControlledCheckboxGroup horizontal={false} />);
     const checkboxGroup = container.querySelector("#checkbox_group");
-    expect(checkboxGroup).toHaveStyle("flex-direction: column");
+    expect(checkboxGroup).toHaveClass("flex-col");
   });
 
   test("handles empty data array", () => {

@@ -16,9 +16,8 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
 
   // Local page state
   const [formData, setFormData] = useState<Record<string, string>>({});
-  const [courseId, setCourseId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
+  
+  // useSyllabusWrapperLogic will load course data
   const {
     modal,
     handleBackClick,
@@ -29,56 +28,13 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
     containerRef,
   } = useSyllabusWrapperLogic(formData, setFormData, navigate, location.pathname);
 
-  // Load course data
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-
-      const cached = localStorage.getItem("courseData");
-      if (cached) {
-        try {
-          setFormData(JSON.parse(cached));
-        } catch {
-          console.warn("Invalid cached course data.");
-        }
-      }
-
-      try {
-        const { courseId, formData: newData } = await loadCourseData();
-        setCourseId(courseId);
-        setFormData(newData);
-        localStorage.setItem("courseData", JSON.stringify(newData));
-        modal.hide();
-      } catch (err: any) {
-        console.error("Error loading course data:", err);
-        modal.showError(err.message || "Unable to load course data.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    console.log("Form Data Updated:", formData);
-  }, [formData]);
-
-
+  
   // TO DO: do we need handleChange?
   // Handle input field changes
   const handleChange = (label: string, value: string) => {   
     setFormData((prev) => ({ ...prev, [label]: value }));        
   };
 
-  //ShowModal
-  useEffect (() =>{
-    if (isLoading) {
-    modal.showRedirect("Loading Data", "Fetching course information...", "loading");
-  } else {
-    modal.hide ()
-  }
-}, [isLoading]);
 
   return (
     <>

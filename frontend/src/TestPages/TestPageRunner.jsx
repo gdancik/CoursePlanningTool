@@ -270,11 +270,7 @@ const TEST_PAGES = {
           sidebarContent="lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
           >
           <div>
-            <p>
-              <SidebarLink href="https://www.easternct.edu/ctla/">
-                Link to CTLA ↗
-              </SidebarLink>
-            </p>
+            <p>Paragraph  </p>
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempore nobis, nemo corrupti laborum adipisci eaque iure quo, assumenda excepturi esse dolores inventore dolor debitis, ea laboriosam. Quae deserunt voluptatum, rerum velit, voluptates laudantium cupiditate dolorem similique fugit odio ex exercitationem! Neque repellat iste at, exercitationem ducimus harum, cum non quidem veniam facere accusamus ab cumque atque culpa doloribus iure, fugit esse nihil. Illum cumque vel quibusdam corporis sed eaque rem cupiditate? Tenetur eos dolore a vero culpa quia sapiente saepe quis possimus ex placeat ad cumque voluptates, omnis asperiores perferendis labore qui veniam aperiam. Ipsa, aspernatur? Laborum quaerat et odio?</p>
           </div>
         </SidebarLayout>

@@ -61,6 +61,8 @@
 .icon-login{
     height: 110px;
     object-fit: contain;
+    display: flex;
+    justify-content: center; /* horizontal */
 }
 
 /* Right section */
@@ -123,9 +125,16 @@
     .how-block {
         display: inline-block;
         text-align: center;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center
     }
 }
-
+.how-block h2 {
+    align-self: flex-start; /* override centering */
+    text-align: left;
+}
 
 .how-block .icon-login {
     object-fit: cover;
@@ -141,7 +150,8 @@
     padding-right: 2rem;
 
     grid-template-columns: repeat(3, 1fr);
-    width: 90%;
+    width: 480px;
+    //margin-left:100px;
     justify-content: center;
 
 }
@@ -151,6 +161,9 @@
     text-align: center;
     font-size: 0.875rem;
     line-height: 1.3;
+    width:180px;
+    //margin-left: 10px;
+    //margin-right: 10px;
     color: rgba(255,255,255,0.9);
 }
 

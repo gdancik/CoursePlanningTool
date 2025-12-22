@@ -51,8 +51,7 @@ const LoginScreen: React.FC = () => {
         }
     };
 
-    return (
-        <div>
+    return (        
             <div className="login-page-wrapper"
                 style = {{
                      backgroundImage: `url(${bgImage})`,
@@ -84,13 +83,16 @@ const LoginScreen: React.FC = () => {
                     
                     
                     <div className="how-block">
-                        <h2 style = {{textAlign: "left"}}>How It Works:</h2>
+                        <p></p>
+                        <h2 >How It Works:</h2>
+                        
+                        <div className="icon-login"                                                                        >
                         <img
                         src = {LoginIcon}
-                        alt = "Login Icon"
-                        className="icon-login"
+                        alt = "Login Icon"                        
                         />
-
+                        </div>
+                        
                         <div className="description-container">
                             <div> Create A New Course <br/> or Edit An Existing Course.</div>
                             <div>Develop or Edit Your Course <br/> Through Guided, Step-by-step Planning Tool</div>
@@ -148,9 +150,11 @@ const LoginScreen: React.FC = () => {
                 title={modalTitle}
                 message={modalMessage}
             />
+
+         <div className = "login-page-container">
+            <StandardFooter/>
         </div>
-        <StandardFooter/>
-        </div>
+        </div>             
     );
 };
 

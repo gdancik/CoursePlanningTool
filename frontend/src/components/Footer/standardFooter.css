@@ -1,10 +1,15 @@
 .footer-bottom{
     display: flex;
+    width: 90%;
+    margin-top:20px;
     justify-content: space-between;
     align-items: center;
     background-color: white;
     padding: 1rem 2rem;
     color: black;
+    position: fixed;
+    bottom: 0px;    
+    z-index: 2000;
 }
 
 .ecsu-logo-standard{

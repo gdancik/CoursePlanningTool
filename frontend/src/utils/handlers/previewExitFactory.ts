@@ -137,11 +137,16 @@ export const createSaveAndExitHandler = (
 };
 
 
+// GD: this is no longer used!
 export const createPreviewHandler = (
     formData: Record<string, string>,
     modal: ModalControls,
     fields?: { content: string; backendKey?: string; type: string }[]
 ) => {
+
+    
+    return () => {alert('previewing syllabus')};
+
     return async () => {
         modal.setTitle("Generating Preview");
         modal.setMessage("Please wait while we generate your syllabus...");

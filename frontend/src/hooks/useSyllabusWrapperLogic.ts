@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import { handleNext, handleBack } from "../components/Button/ButtonLogic";
-import {createPreviewHandler } from "../utils/handlers/previewExitFactory";
+//import {createPreviewHandler } from "../utils/handlers/previewExitFactory";
+import {createPreviewHandler} from "../utils/handlers/courseButtonHandler";
 import type { NavigateFunction } from "react-router-dom";
 import saveData from "../services/processData";
 import { loadCourseData } from "../utils/loadCourseData";
 import { useModalFactory } from "../utils/useModalFactory"; 
 import { saveAndExitHandler } from "../utils/handlers/SaveAndExitHandler";
+import {previewSyllabus} from "../services/TestServices/syllabusService";
 
 
 // Back and Next buttons call handleSave() by default
@@ -114,11 +116,49 @@ export function useSyllabusWrapperLogic(
         navigate,
         navigate_to,
       }),
-    handlePreviewClick: createPreviewHandler(formData, {
-      setVisible: modal.hide,
-      setStatus: () => {},
-      setTitle: () => {},
-      setMessage: () => {},
-    }),
+    handlePreviewClick: async () => {
+      
+      const courseDataString = localStorage.getItem("currentCourseData");
+      let display_error = false;
+      let courseId:string = '';
+      let courseName:string = '';
+
+      if (courseDataString !== null) {
+          const courseData = JSON.parse(courseDataString); 
+          courseId = courseData['course_id'];
+          let num = courseData['crse_number_syllabus'] ?? '???'
+          let subj = courseData['subj_code_syllabus'] ?? '???'
+          courseName = subj + '_' + num
+      } else {
+        display_error = true;
+      }
+      
+      if (courseId === '' || display_error) {
+        modal.showRedirect('Error determining course', 'Please logout and back in again');
+        return;
+      }
+
+      modal.showRedirect('Generating Syllabus', 'Generating syllabus for ' + courseName);
+            
+      try {
+          const blob = await previewSyllabus(courseId);
+          if (!blob) throw new Error("Empty preview response");
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `syllabus_preview_${courseName}.docx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          modal.showRedirect('Preview Ready!',`Downloaded "${courseName}".` )
+          
+      } catch (err: any) {
+          console.error("Preview failed:", err);          
+          modal.showRedirect('Error', err.message);
+      } finally {
+          setTimeout(() => modal.hide(), 1500);
+      }
+
+    }    
   };
 }

@@ -378,8 +378,9 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     # convert from list to string for specified columns
     for i in cp.to_string:
         if i in fr_dict:
-            if fr_dict[i]:
-                fr_dict[i] = json.loads(fr_dict[i])
+            #if fr_dict[i]:
+            #    print(f'convert list to string: fr_dict["{i}"] = {fr_dict[i]}')
+                #fr_dict[i] = json.loads(fr_dict[i])
             fr_dict[i] = ''.join(fr_dict[i]) if isinstance(fr_dict[i], list) else fr_dict[i]
 
      # Process dictionary to remove "_checkboxes" suffix from keys
@@ -442,8 +443,9 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
                 list_of_dicts = json_columns.get(key)
                 logging.debug(f'List of dicts: {list_of_dicts}') #debug
                 try:
-                    logging.debug(f'string before conversion to literal list_of_dicts:{list_of_dicts}')
-                    list_of_dicts= json.loads(list_of_dicts)
+                    logging.debug(f'skip -- string before conversion to literal list_of_dicts:{list_of_dicts}')
+                    # GD: this was causing an erro
+                    #list_of_dicts= json.loads(list_of_dicts)
                 except ValueError as e:
                     logging.error(f"Error converting string to literal: {e}")
                 logging.debug(f'list_of_dicts: {list_of_dicts}, type:{type(list_of_dicts)}')#debug

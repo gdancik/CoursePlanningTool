@@ -12,6 +12,7 @@ import GradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 import ActionButton from "../components/SyllabusComponents/ActionButton";
 import OverviewComponent from "../components/SyllabusComponents/OverviewComponent";
+import { CoreCompetencyInterface, FiveCoreCompetencies, AdditionalCompetencies } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesAccordionStep1";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -49,6 +50,9 @@ export type JsonComponent = {
         field: string;
         value?: string;
     };
+
+    // for five core competencies
+    competencies?: CoreCompetencyInterface[] | undefined;
 
     // required for courseSchedule
     term?: string;   // field that includes the term
@@ -416,6 +420,13 @@ export function jsonRenderComponent(
                 return (
                     <OverviewComponent formData={formData}/>
                 )
+            
+            case "FiveCoreCompetencies" :              
+                return <FiveCoreCompetencies five = {component.competencies ?? []}/>
+            
+            case "AdditionalCompetencies" :
+                return <AdditionalCompetencies/>
+
         default:
             alert('Unknown type in json: ' + component.type )
             return null;

@@ -33,6 +33,7 @@ import CoursePageTest from "../screens/CoursePage/CoursePageTest";
 import NotFoundPage from "../screens/NotFoundPage";
 import About from "../screens/About";
 import Policies from "../screens/Policies";
+import LearningOutcomesTest from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesTest"
 
 const AppRoutes = () => {
     const [modalMessage, setModalMessage] = useState<{ message: string; code?: number } | null>(null);
@@ -55,7 +56,8 @@ const AppRoutes = () => {
                 {/*TEST API ENDPOINTS*/}                
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
-                <Route path = "/test-page" element={<TestPage/>}/>
+                {/*<Route path = "/test-page" element={<TestPage/>}/>*/}
+                <Route path = "/test-page" element={<LearningOutcomesTest/>}/>
                 <Route path = "/test-page2" element={<TestPage2/>}/>
                 <Route path = "/test-page3" element={<TestPage3/>}/>
                 <Route path ="/courseSchedule" 

@@ -20,7 +20,7 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json, disable
   const [formData, setFormData] = useState<Record<string, string>>({});
   
   // useSyllabusWrapperLogic will load course data
- let {
+  const {
     modal,
     handleBackClick,
     handleNextClick,

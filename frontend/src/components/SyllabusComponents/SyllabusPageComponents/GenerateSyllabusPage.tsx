@@ -7,8 +7,8 @@ interface GenerateSyllabusPageProps {
     json: JsonComponent[];
     formData: Record<string, string>;
     onFieldChange: (label: string, value: string) => void;
-    onBack: () => void;
-    onNext: () => void;
+    onBack?: () => void;
+    onNext?: () => void;
     onSave?: () => void;
     onSaveAndExit?: (navigate_to:string) => void;
     onPreview: () => void;

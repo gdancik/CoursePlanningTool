@@ -11,6 +11,8 @@ import Assignments from "../components/SyllabusComponents/Assignments";
 import GradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 import ActionButton from "../components/SyllabusComponents/ActionButton";
+import OverviewComponent from "../components/SyllabusComponents/OverviewComponent";
+
 // Type for JSON-driven UI
 export type JsonComponent = {
     type: string;
@@ -409,6 +411,11 @@ export function jsonRenderComponent(
 
                     />
                 );
+
+            case "OverviewComponent": 
+                return (
+                    <OverviewComponent formData={formData}/>
+                )
         default:
             alert('Unknown type in json: ' + component.type )
             return null;

@@ -1,6 +1,6 @@
 // components/OverviewCard.test.tsx
 import { render, screen } from '@testing-library/react';
-import OverviewCard from '../screens/SyllabusView/Overview/OverviewCard';
+import OverviewCard from '../components/SyllabusComponents/OverviewCard';
 import { BrowserRouter } from 'react-router-dom';
 
 /**********************************************************

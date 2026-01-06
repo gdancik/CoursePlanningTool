@@ -8,9 +8,11 @@ import { JsonComponent } from "../../../utils/jsonRenderer";
 
 interface GeneratePageWrapperProps {
   json: JsonComponent[];
+  disableBack?: boolean;
+  disableNext?: boolean;
 }
 
-const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
+const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json, disableBack = false, disableNext = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,7 +20,7 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
   const [formData, setFormData] = useState<Record<string, string>>({});
   
   // useSyllabusWrapperLogic will load course data
-  const {
+ let {
     modal,
     handleBackClick,
     handleNextClick,
@@ -28,13 +30,11 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
     containerRef,
   } = useSyllabusWrapperLogic(formData, setFormData, navigate, location.pathname);
 
-  
   // TO DO: do we need handleChange?
   // Handle input field changes
   const handleChange = (label: string, value: string) => {   
     setFormData((prev) => ({ ...prev, [label]: value }));        
   };
-
 
   return (
     <>
@@ -42,8 +42,8 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json }) => {
         json={json}
         formData={formData}
         onFieldChange={handleChange}
-        onBack={handleBackClick}
-        onNext={handleNextClick}
+        onBack = {disableBack ? undefined : handleBackClick}
+        onNext={disableNext ? undefined : handleNextClick}
         onSave={handleSave}
         onSaveAndExit={handleSaveAndExit}
         onPreview={handlePreviewClick}

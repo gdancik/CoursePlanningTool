@@ -45,8 +45,8 @@ columns_detailed_raw = {
         'lo_how1',
         'lo_how2',
         'lo_how3',
-        'lo_competencies_table1',
-        'lo_competencies_table2',
+        'lo_competencies1_list',
+        'lo_competencies2_list',
         'learning_outcomes_syllabus*'
     ],
 

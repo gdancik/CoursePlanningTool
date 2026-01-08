@@ -47,7 +47,7 @@ columns_detailed_raw = {
         'lo_how3',
         'lo_competencies1_list',
         'lo_competencies2_list',
-        'learning_outcomes_syllabus*'
+        'lo_syllabus_json*'
     ],
 
     'high_impact_practices': [

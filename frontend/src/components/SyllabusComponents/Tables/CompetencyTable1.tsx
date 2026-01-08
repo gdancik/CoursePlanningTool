@@ -10,9 +10,10 @@ const initialRows = [
     ["Skill", "", "", ""],
 ];
 
-const CompetencyTable1: React.FC = () => {
+const CompetencyTable1: React.FC<{ id: string }> = ({ id }) => {
     return (
         <CompetencyTable
+            id={id}
             headers={headers}
             initialRows={initialRows}
             maxRows={6}

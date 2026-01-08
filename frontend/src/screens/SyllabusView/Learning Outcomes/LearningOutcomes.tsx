@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { handleBack, handleNext } from "../../../components/Button/ButtonLogic";
 import AppLayout from "../../../SyllabusLayout/SyllabusPageHeader";
 import { loadSyllabusContent, SyllabusContent } from "../../../utils/loadSyllabusContent";
-import LearningOutcomesAccordion from "./LearningOutcomesAccordionStep1";
+import {LearningOutcomesAccordion} from "./LearningOutcomesAccordionStep1";
 import Step2Accordion from "./LearningOutcomesAccordionStep2";
 import Step3Accordion from "./LearningOutcomesAccordionStep3";
 import Step4Accordion from "./LearningOutcomesAccordionStep4";

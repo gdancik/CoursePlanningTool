@@ -12,6 +12,7 @@ interface ReusableButtonsProps {
     variant: "primary" | "secondary" | "green" | "exit" | "red"; // Styling variant
     className?: string;
     disabled?: boolean;                  // Optional disabled state
+    externalLink?: boolean;                  // true for external icon
 }
 
 // Functional component that renders a styled button
@@ -23,6 +24,7 @@ const ReusableButton: React.FC<ReusableButtonsProps> = ({
     icon,
     variant= "secondary",
     className="",
+    externalLink = false,
     disabled = false,
 }) =>{
     return(
@@ -34,6 +36,7 @@ const ReusableButton: React.FC<ReusableButtonsProps> = ({
         >
             {icon && <span className="button-icon">{icon}</span>}
             {label}
+            {externalLink && <i className={"fa-solid fa-arrow-up-right-from-square"}></i>}
         </button>
     );
 };

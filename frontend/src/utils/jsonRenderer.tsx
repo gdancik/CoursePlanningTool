@@ -12,7 +12,10 @@ import GradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 import ActionButton from "../components/SyllabusComponents/ActionButton";
 import OverviewComponent from "../components/SyllabusComponents/OverviewComponent";
-import { CoreCompetencyInterface, FiveCoreCompetencies, AdditionalCompetencies } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesAccordionStep1";
+import { CoreCompetencyInterface, FiveCoreCompetencies, AdditionalCompetencies, 
+    BloomsTaxonomy, LearningOutcomesCards } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesAccordionStep1";
+import CompetencyTable1 from "../components/SyllabusComponents/Tables/CompetencyTable1"
+import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -28,6 +31,7 @@ export type JsonComponent = {
     file?: string;
     variant?: "primary" | "secondary" | "exit" | "green";
     href?: string;
+    externalLink?: boolean;
     new_tab?: boolean
     modalCase?: string;
     modalProps?: any;
@@ -176,7 +180,7 @@ export function jsonRenderComponent(
             );
 
         case "Alert":
-            return <Alert text={component.text || ""} />;
+            return <Alert text={component.text || ""} file = {component.file} />;
 
         case "Information":
             return <Information text={component.text || ""} />;
@@ -184,6 +188,15 @@ export function jsonRenderComponent(
         case "Image":
             return <Image type = "file" value={component.value} alt={component.alt} />
            
+        case "BloomsTaxonomy":
+            return <BloomsTaxonomy/>
+        
+        case "LearningOutcomesCards" :
+            if (!component.id) {
+                console.error("Assignments component requires an 'id'");
+                return null;
+            }
+            return <LearningOutcomesCards id = {component.id}/>
         // Text-like inputs
 
         case "text":
@@ -412,6 +425,7 @@ export function jsonRenderComponent(
                         new_tab={component.new_tab}
                         modalCase={component.modalCase}
                         modalProps={component.modalProps}
+                        externalLink={component.externalLink}
 
                     />
                 );
@@ -426,6 +440,24 @@ export function jsonRenderComponent(
             
             case "AdditionalCompetencies" :
                 return <AdditionalCompetencies/>
+
+            case "CompetencyTable1" :
+                console.log('need to pass data to Competency Table')
+                if (component.id === undefined) {
+                    alert('CompetencyTable1 needs an id');
+                    return null;
+                    
+                }
+                return <CompetencyTable1 id = {component.id}/>
+
+            case "CompetencyTable2" :
+                console.log('need to pass data to Competency Table')
+                if (component.id === undefined) {
+                    alert('CompetencyTable1 needs an id');
+                    return null;
+                    
+                }
+                return <CompetencyTable2 id = {component.id}/>
 
         default:
             alert('Unknown type in json: ' + component.type )

@@ -39,7 +39,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({
       >
         <div className="flex flex-col flex-1 p-6">
           {sidebarTitle && (
-            <h3 className="text-xl font-semibold mb-4 text-blue-700 leading-snug">
+            <h3 className="text-xl font-semibold mb-4 text-brand leading-snug">
               {sidebarTitle}
             </h3>
           )}

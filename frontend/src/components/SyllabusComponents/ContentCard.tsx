@@ -59,10 +59,10 @@ const ContentCard: React.FC<ContentCardProps> = ({
         <div className={`content-card ${className}`}>
             <div className="content-card-header">
                 <div className="content-card-title-section">
-                    <label className="content-card-label">{titleLabel}</label>
+                    {/*<label className="content-card-label">{titleLabel}</label>*/}
                     <input
                         type="text"
-                        value={titleValue}
+                        value = {titleValue}
                         onChange={(e) => onTitleChange(e.target.value)}
                         className="content-card-title-input"
                         placeholder="Enter title..."
@@ -73,7 +73,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     <div className="content-card-right-section">
                         <label className="content-card-right-label">{rightLabel}</label>
                         <input
-                            type="text"
+                            type="text"                            
                             value={rightValue || ''}
                             onChange={(e) => onRightValueChange(e.target.value)}
                             className="content-card-right-input"
@@ -84,7 +84,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
             </div>
             
             <div className="content-card-description-section">
-                <label className="content-card-label">{descriptionLabel}</label>
+                {/*<label className="content-card-label">{descriptionLabel}</label>*/}
                 <textarea
                     value={descriptionValue}
                     onChange={(e) => onDescriptionChange(e.target.value)}

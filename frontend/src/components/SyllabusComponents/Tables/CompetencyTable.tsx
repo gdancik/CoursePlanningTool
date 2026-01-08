@@ -4,6 +4,7 @@ import SafeIcon from "../../../utils/ComponentWrapper";
 import {FaPlus, FaTimes} from "react-icons/fa";
 
 interface CompetencyTableProps {
+    id:string;
     headers: string[];
     initialRows: string[][];
     maxRows?: number;
@@ -11,6 +12,7 @@ interface CompetencyTableProps {
 }
 
 const CompetencyTable: React.FC<CompetencyTableProps> = ({
+                                                             id,
                                                              headers,
                                                              initialRows,
                                                              maxRows = 6,
@@ -41,7 +43,7 @@ const CompetencyTable: React.FC<CompetencyTableProps> = ({
     };
     return (
         <div className={`competency-table-wrapper ${variant}`}>
-            <table className="competency-table1">
+            <table id ={id} className="competency-table1">
                 <thead>
                 <tr>
                     {headers.map((header, idx) => (

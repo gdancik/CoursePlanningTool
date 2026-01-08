@@ -40,7 +40,7 @@
     font-weight: 600;
     color: #155724;
     margin-bottom: 8px;
-    font-size: 14px;
+    //font-size: 14px;
     display: block;
 }
 
@@ -48,7 +48,7 @@
     font-weight: 600;
     color: #155724;
     margin-bottom: 8px;
-    font-size: 14px;
+    //font-size: 14px;
     text-align: right;
 }
 
@@ -73,7 +73,7 @@
     padding: 8px 10px;
     border: 1px solid #ced4da;
     border-radius: 4px;
-    font-size: 14px;
+    //font-size: 14px;
     text-align: center;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -94,7 +94,7 @@
     padding: 12px;
     border: 1px solid #ced4da;
     border-radius: 4px;
-    font-size: 14px;
+    //font-size: 14px;
     line-height: 1.5;
     resize: vertical;
     min-height: 100px;

@@ -75,72 +75,143 @@
             ]   
         }
     ]
-  },
-  {
-    "type": "Accordion",
-    "title": "Step 2: Brainstorming",
-    "content": [
-      {
-        "type": "Column",
-        "content": [                          
+  },  
+    {
+      "type": "Accordion",
+      "title": "Step 2: Purpose and Application",
+      "content": [
+        {
+                    "type" : "SidebarLayout",
+                    "title" : "Identify the purpose and application of the competencies.",
+                    "className" : "shadow-lg",
+                    "sidebarClassName": "bg-blue-100",
+                    "contentClassName": "space-y-4",
+
+                    "sidebarWidth": "250px",
+
+                    "content": [
+                        {
+                            "type" : "informationText",
+                            "placeholder": "The table on the next page provides an example of how to start identifying the purpose and application of the competencies you have identified as important to your course. This process prepares you to write clear learning outcomes and help students make the connection between course expectations, activities, and the competencies that they seek to develop."
+                        },
+                        {
+                            "type" : "Button",
+                            "label" : "Purpose and Application Examples (NEED LINK)",
+                            "href" : "https://www.easternct.edu/liberal-arts-core/high-impact-practices.html",
+                            "new_tab": true,
+                            "externalLink": true
+                        }
+                    ]
+                },
           {
-            "type": "textarea",
-            "id": "hip_what", 
-            "placeholder": "What High Impact Practices do you plan to implement in your course? Why do you think this high impact practice will best promote progress toward the learning outcomes for your course? If your course is not in the ELAC curriculum and is not conducive to implementation of a high impact practice skip to the question about teaching practices within your course below.",             
-            "required": false,
-            "className": "Syllabus-text blue-box"
+            "type": "informationText",
+            "placeholder": "Below is a fillable table for you to identify competencies for your course. Remember that If your course is an ELAC course, you will need at least 2 ELAC Learning Outcome competencies (in bold above). Add rows and change categories listed as necessary. Since these are long-term goals for students, be mindful of what can be accomplished in a course. Next, we’ll use this chart to convert these competencies into measurable learning outcomes."
           },
+          
           {
-            "type": "textarea",
-            "id": "hip_approach",
-            "placeholder": "How will you approach embedding high impact practices in your course in a way that recognizes that previous exposure to the practices may be disproportionate based on race, class, and gender and engages students from diverse backgrounds?",
-            "required": false,
-            "className": "Syllabus-text blue-box"
-          },
-          {
-            "type": "textarea",
-            "id": "hip_other",
-            "placeholder": "What other teaching practices do you plan to use in your course? How do you expect students to work toward learning outcomes throughout the semester?",
-            "required": false,
-            "className": "Syllabus-text blue-box"
-          },
-          {
-            "type": "textarea",
-            "id": "hip_teach",
-            "placeholder": "How can you teach with humility, acknowledging your own biases and challenging students to encounter their own?",
-            "required": false,
-            "className": "Syllabus-text blue-box"
-          }
+            "type": "CompetencyTable1",
+            "id": "lo_competencies1_list"            
+          }        
         ]
-        }
+      },
+
+      {
+      "type": "Accordion",
+      "title": "Step 3: Writing Course-specific Learning Outcomes",
+      "content": [        
+          {
+            "type": "Alert",
+            "file" : "/data/learningOutcomesText/LearningOutcomesStep3Alert.txt"   
+          },
+          {
+            "type" : "SidebarLayout",
+            "title" : "Write clear and measurable learning outcomes.",
+            "className" : "shadow-lg",
+            "sidebarClassName": "bg-blue-100",
+            "contentClassName": "space-y-4",
+            "sidebarWidth": "250px",
+            "content": [
+                {
+                    "type" : "informationText",
+                    "placeholder": "While competencies provide examples of the knowledge, skills, or attitudes students can expect to develop during the course, learning outcomes that connect to the required ELAC learning competencies are more specific and measurable goals. Learning outcomes are statements that reflect the action students will take to demonstrate what they have learned. In addition to the required ELAC learning outcomes, you will likely want to articulate a couple of course-specific learning outcomes related to additional competencies of your course. This section guides you through writing course-specific learning outcomes. A clear and measurable learning outcome contains four elements, listed here with corresponding examples:"
+                },
+                {
+                    "type" : "Image",
+                    "alt" : "Elements of course-specific learning outcomes",
+                    "value" : "images/WritingTable.png"                    
+                }
+            ]
+        },
+        {
+            "type" : "SidebarLayout",
+            "title" : "Consider who is doing the learning in your course.",
+            "className" : "shadow-lg",
+            "sidebarClassName": "bg-blue-100",
+            "contentClassName": "space-y-4",
+            "sidebarWidth": "250px",
+            "content": [
+                {
+                    "type" : "informationText",
+                    "placeholder": "When you write course learning outcomes you should consider who is doing the learning (is it all students in your course, majors in your course, non-majors in your course?). While you may have separate goals for a specific group of students (such as majors) in your course, you should write learning outcomes for all students in your course that will be listed in the syllabus. Second, for course learning outcomes, the learning should take place during the course in question. What should students in your course be able to do by the end of the course? The third and fourth elements require specific articulation of what will be learned and how. Specificity is important so that students can identify what is expected of them during the course."
+                }                
+            ]
+        },
+        {
+          "type": "BloomsTaxonomy"
+        },
+        {
+            "type" : "SidebarLayout",
+            "title" : "Connect ELAC Competencies with learning outcomes.",
+            "className" : "shadow-lg",
+            "sidebarClassName": "bg-blue-100",
+            "contentClassName": "space-y-4",
+            "sidebarWidth": "250px",
+            "content": [
+                {
+                    "type" : "informationText",
+                    "placeholder": "ELAC competencies below, as your course (either seminar or disciplinary perspectives) should include at least TWO of these learning outcomes to be a part of the ELAC program."
+                },
+                {
+                    "type" : "Button",
+                    "label" : "ELAC Competencies Examples (NEED LINK)",
+                    "href" : "",
+                    "new_tab": true,
+                    "externalLink": true
+                },
+                {
+                  "type": "informationText"
+                },
+                {
+                    "type" : "Button",
+                    "label" : "Additional Resources (NEED LINK)",
+                    "href" : "",
+                    "new_tab": true,
+                    "externalLink": true
+                }                                
+            ]
+        },
+        {
+            "type": "CompetencyTable2",
+            "id": "lo_competencies2_list"            
+        }   
       ]
     },
     {
       "type": "Accordion",
-      "title": "Step 3: Summary",
-      "content": [
+      "title": "Step 4: Summary",
+      "content": [ 
           {
             "type": "informationText",
-            "placeholder": "Based on the information you compiled above, how would you describe the high impact practices and/or other teaching practices you are embedding in this course to your students?"
-          },
-          
-           {
+            "placeholder": "Based on the information you compiled above, use the space below to list the learning outcomes for your course using bullet points. Learning outcomes should be written directly to students. They should clearly explain what students are expected to do during the course and help them understand how assignments connect to the overall goals of the course."
+          },       
+          {
             "type": "Information",
             "text": "Information entered below will appear in the final syllabus exactly as written."                            
           },
-
           {
-            "type": "Column",
-            "content": [
-              {
-              "type": "textarea",
-              "id": "hip_syllabus",
-              "required": true,
-              "className": "Syllabus-text green-box"
-              }
-        ]
-        }
-
+            "type": "LearningOutcomesCards",
+            "id": "lo_syllabus_json"          
+          }          
       ]
     }
   ]

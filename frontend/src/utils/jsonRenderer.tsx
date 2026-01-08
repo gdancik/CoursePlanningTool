@@ -13,7 +13,9 @@ import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 import ActionButton from "../components/SyllabusComponents/ActionButton";
 import OverviewComponent from "../components/SyllabusComponents/OverviewComponent";
 import { CoreCompetencyInterface, FiveCoreCompetencies, AdditionalCompetencies, 
-    BloomsTaxonomy, LearningOutcomesCards } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesAccordionStep1";
+         LearningOutcomesCards } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
+import { BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy"
+
 import CompetencyTable1 from "../components/SyllabusComponents/Tables/CompetencyTable1"
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { FaAngleUp } from "react-icons/fa";
 import { SyllabusContent } from "../../../utils/loadSyllabusContent";
 import SafeIcon from "../../../utils/ComponentWrapper";
@@ -9,7 +9,7 @@ import AdditionalCompetenciesImage from "../../../assets/images/AdditionalCompet
 import KnowledgeTable from "../../../assets/images/Knowledge_table.png";
 import SkillsTable from "../../../assets/images/Skill_table.png";
 import AttitudeTable from "../../../assets/images/Attitudes_Table.png";
-import ContentCardSet from "../../../components/SyllabusComponents/ContentCardSet";
+import {CardData, ContentCardSet} from "../../../components/SyllabusComponents/ContentCardSet";
 
 export interface CoreCompetencyInterface {
   icon: string;
@@ -58,14 +58,27 @@ export const FiveCoreCompetencies = ( { five }: { five: CoreCompetencyInterface[
     }
 
 
-export const LearningOutcomesCards = ({ id }: { id: string }) => {
+export const LearningOutcomesCards = ({ id, data = []}: { id: string, data?:CardData[] }) => {
+    
+  
+    const [mydata, setData] = useState<CardData[]>(data);
+          
+    useEffect(() => {        
+        if (data) {
+            console.log("setting data");
+            console.log(data);
+            setData(data);
+        }
+    }, [data]);
+
+
     return (
         <ContentCardSet
             id = {id}
             setTitle="Learning Outcomes"
             titleLabel="Learning Outcome {index} Title:"
             descriptionLabel="Learning Outcome {index} Description:"
-            initialCards={[]} //[{"title": "t1", "description": "d1"}]}
+            initialCards={mydata} //[{"title": "t1", "description": "d1"}]}
             onChange = {() => {}}           
             minCards={2}
             maxCards={8}    

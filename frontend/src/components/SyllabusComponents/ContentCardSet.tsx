@@ -29,7 +29,7 @@ import './ContentCardSet.css';
  * />
  */
 
-interface CardData {
+export interface CardData {
 
     title: string;
     description: string;
@@ -49,7 +49,7 @@ interface ContentCardSetProps {
     showRightValue?: boolean;
 }
 
-const ContentCardSet: React.FC<ContentCardSetProps> = ({
+export const ContentCardSet: React.FC<ContentCardSetProps> = ({
     id,
     setTitle,
     titleLabel,
@@ -172,6 +172,3 @@ const ContentCardSet: React.FC<ContentCardSetProps> = ({
         </div>
     );
 };
-
-export default ContentCardSet;
-export type { CardData };

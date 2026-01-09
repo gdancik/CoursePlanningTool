@@ -198,7 +198,13 @@ export function jsonRenderComponent(
                 console.error("Assignments component requires an 'id'");
                 return null;
             }
-            return <LearningOutcomesCards id = {component.id}/>
+
+
+            const LO_raw = formData[component.id];        
+            const LearningOutcomesData: CardData[] = Array.isArray(LO_raw) ? LO_raw : [];
+            //console.log("passing data = " + LearningOutcomesData);
+            //console.log(LearningOutcomesData);
+            return <LearningOutcomesCards id = {component.id} data = {LearningOutcomesData}/>            
         // Text-like inputs
 
         case "text":

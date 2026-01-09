@@ -2,10 +2,10 @@ import {useNavigate, useLocation} from "react-router-dom";
 import {handleBack,handleNext} from "../../components/Button/ButtonLogic";
 import AppLayout from "../../SyllabusLayout/SyllabusPageHeader";
 import {useState, useEffect} from "react";
-import {isSectionComplete, getCurrentCourseData, ValidInputsResponse} from "../../services/validInputsService";
 import {MOCK_VALID_INPUTS} from "../../services/mockValidInputs";
 import { FaAngleUp, FaEdit } from "react-icons/fa";
 import SafeIcon from "../../utils/ComponentWrapper";
+import {isSectionComplete, ValidInputsResponse, fetchRequiredInputs} from "../../services/validInputsService";
 import "./Checklist.css";
 
 interface ChecklistItem {
@@ -21,12 +21,12 @@ interface PolicyItem {
     label: string;
 }
 
-const Checklist = () => {
+const Checklist = ({ formData }: { formData: Record<string, string> }) => {
     //Page Navigation for Buttons
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [formData, setFormData] = useState<Record<string, string>>({});
+    //const [formData, setFormData] = useState<Record<string, string>>({});
     const courseID = localStorage.getItem("currentCourseId");
     const [validInputs, setValidInputs] = useState<ValidInputsResponse>({});
     const [courseData, setCourseData] = useState<Record<string, string>>({});
@@ -39,9 +39,6 @@ const Checklist = () => {
     // State for policy statements and resources
     const [selectedPolicies, setSelectedPolicies] = useState<Set<string>>(new Set());
     const [selectedResources, setSelectedResources] = useState<Set<string>>(new Set());
-
-    const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
-    const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
 
     // Checklist items matching syllabus sections
     const checklistItems: ChecklistItem[] = [
@@ -113,16 +110,21 @@ const Checklist = () => {
         { id: "student_wellness", label: "Statement on Student Wellness" }
     ];
 
-    useEffect(() => {
-        // Load valid inputs
-        setValidInputs(MOCK_VALID_INPUTS);
-        
-        // Load current course data
-        setCourseData(getCurrentCourseData());
-    }, []);
+        // useEffect runs once on component mount to fetch CSV data and API data
+        useEffect(() => {
+                
+            // Uncomment this when backend is running:
+             fetchRequiredInputs().then(setValidInputs)
+                 .catch(error => {
+                     console.error('Failed to fetch valid inputs:', error);
+                     //setValidInputs({});
+             });            
+    
+        }, []);
+    
 
-    const checkSectionComplete = (sectionId: string): boolean => {
-        return isSectionComplete(sectionId, validInputs, courseData);
+    const checkSectionComplete = (sectionId: string): boolean => {        
+        return isSectionComplete(sectionId, validInputs, formData);
     };
 
     const handleAddSection = () => {
@@ -178,10 +180,6 @@ const Checklist = () => {
 
     return (
         <div>
-            <AppLayout
-                onBack={handleBackClick}
-                onNext={handleNextClick}
-            />
             <div className="checklist-page">
                 <div className="checklist-container">
                     {/* Step 1: Syllabus Checklist */}
@@ -387,10 +385,18 @@ const Checklist = () => {
                                                 <label key={resource.id} className="checkbox-item">
                                                     <input 
                                                         type="checkbox"
-                                                        checked={selectedResources.has(resource.id)}
+                                                        checked={resource.id === "accommodations" || selectedResources.has(resource.id)}
                                                         onChange={() => toggleResource(resource.id)}
                                                     />
-                                                    <span>{resource.label}</span>
+                                                    <span>
+                                                        {resource.id === "accommodations" ?
+                                                        <>
+                                                            {resource.label} (<b>Required</b>) 
+                                                        </>
+                                                        :
+                                                            resource.label
+                                                        }                                                       
+                                                    </span>                                                    
                                                 </label>
                                             ))}
                                         </div>

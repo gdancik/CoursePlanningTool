@@ -12,6 +12,7 @@ import GradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 import ActionButton from "../components/SyllabusComponents/ActionButton";
 import OverviewComponent from "../components/SyllabusComponents/OverviewComponent";
+import ChecklistComponent from "../components/SyllabusComponents/ChecklistComponent"
 import { CoreCompetencyInterface, FiveCoreCompetencies, AdditionalCompetencies, 
          LearningOutcomesCards } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
 import { BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy"
@@ -442,7 +443,11 @@ export function jsonRenderComponent(
                 return (
                     <OverviewComponent formData={formData}/>
                 )
-            
+            case "ChecklistComponent": 
+                return (
+                    <ChecklistComponent formData={formData}/>
+                )
+
             case "FiveCoreCompetencies" :              
                 return <FiveCoreCompetencies five = {component.competencies ?? []}/>
             

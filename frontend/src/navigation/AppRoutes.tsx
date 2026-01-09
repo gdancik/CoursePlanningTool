@@ -26,7 +26,7 @@ import HIPS from "../screens/SyllabusView/HIPS/HIPS";
 import Description from "../screens/SyllabusView/Description/Description";
 import CourseSchedulePage from "../screens/SyllabusView/CourseSchedule/CourseSchedule"
 import LearningResources from "../screens/SyllabusView/LearningResources/LearningResources";
-import Checklist from "../screens/SyllabusView/Checklist";
+import Checklist from "../screens/SyllabusView/Checklist/Checklist";
 import CoursePage from "../screens/CoursePage/CoursePage";
 import CoursePageTest from "../screens/CoursePage/CoursePageTest";
 import NotFoundPage from "../screens/NotFoundPage";

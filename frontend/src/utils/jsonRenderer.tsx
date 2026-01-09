@@ -12,6 +12,12 @@ import GradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 import ActionButton from "../components/SyllabusComponents/ActionButton";
 import OverviewComponent from "../components/SyllabusComponents/OverviewComponent";
+import { CoreCompetencyInterface, FiveCoreCompetencies, AdditionalCompetencies, 
+         LearningOutcomesCards } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
+import { BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy"
+
+import CompetencyTable1 from "../components/SyllabusComponents/Tables/CompetencyTable1"
+import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -27,6 +33,7 @@ export type JsonComponent = {
     file?: string;
     variant?: "primary" | "secondary" | "exit" | "green";
     href?: string;
+    externalLink?: boolean;
     new_tab?: boolean
     modalCase?: string;
     modalProps?: any;
@@ -49,6 +56,9 @@ export type JsonComponent = {
         field: string;
         value?: string;
     };
+
+    // for five core competencies
+    competencies?: CoreCompetencyInterface[] | undefined;
 
     // required for courseSchedule
     term?: string;   // field that includes the term
@@ -172,7 +182,7 @@ export function jsonRenderComponent(
             );
 
         case "Alert":
-            return <Alert text={component.text || ""} />;
+            return <Alert text={component.text || ""} file = {component.file} />;
 
         case "Information":
             return <Information text={component.text || ""} />;
@@ -180,6 +190,21 @@ export function jsonRenderComponent(
         case "Image":
             return <Image type = "file" value={component.value} alt={component.alt} />
            
+        case "BloomsTaxonomy":
+            return <BloomsTaxonomy/>
+        
+        case "LearningOutcomesCards" :
+            if (!component.id) {
+                console.error("Assignments component requires an 'id'");
+                return null;
+            }
+
+
+            const LO_raw = formData[component.id];        
+            const LearningOutcomesData: CardData[] = Array.isArray(LO_raw) ? LO_raw : [];
+            //console.log("passing data = " + LearningOutcomesData);
+            //console.log(LearningOutcomesData);
+            return <LearningOutcomesCards id = {component.id} data = {LearningOutcomesData}/>            
         // Text-like inputs
 
         case "text":
@@ -408,6 +433,7 @@ export function jsonRenderComponent(
                         new_tab={component.new_tab}
                         modalCase={component.modalCase}
                         modalProps={component.modalProps}
+                        externalLink={component.externalLink}
 
                     />
                 );
@@ -416,6 +442,52 @@ export function jsonRenderComponent(
                 return (
                     <OverviewComponent formData={formData}/>
                 )
+            
+            case "FiveCoreCompetencies" :              
+                return <FiveCoreCompetencies five = {component.competencies ?? []}/>
+            
+            case "AdditionalCompetencies" :
+                return <AdditionalCompetencies/>
+
+            case "CompetencyTable1" :
+                                    
+                if (component.id === undefined) {
+                    alert('CompetencyTable1 needs an id');
+                    return null;                    
+                }
+
+                const competencyData1String = formData[component.id];  
+                                          
+                if (typeof(competencyData1String) == 'string') {                    
+                    return <CompetencyTable1 id = {component.id} 
+                                             data = {JSON.parse(competencyData1String.trim())}/>
+                } else if (competencyData1String === undefined) {
+                    return <CompetencyTable1 id = {component.id}/>
+                } else {                
+                    alert("Error: competencyData1 is not valid")       
+                    return null;      
+                }
+
+            case "CompetencyTable2" :                
+                if (component.id === undefined) {
+                    alert('CompetencyTable2 needs an id');
+                    return null;
+                    
+                }                
+
+                const competencyData2String = formData[component.id];  
+                                          
+                if (typeof(competencyData2String) == 'string') {                    
+                    return <CompetencyTable2 id = {component.id} 
+                                             data = {JSON.parse(competencyData2String.trim())}/>
+                } else if (competencyData2String === undefined) {
+                    return <CompetencyTable2 id = {component.id}/>
+                } else {                
+                    alert("Error: competencyData2 is not valid")       
+                    return null;      
+                }
+                
+
         default:
             alert('Unknown type in json: ' + component.type )
             return null;

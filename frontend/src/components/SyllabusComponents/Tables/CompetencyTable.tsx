@@ -1,104 +1,161 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./competencyTable.css";
 import SafeIcon from "../../../utils/ComponentWrapper";
-import {FaPlus, FaTimes} from "react-icons/fa";
+import { FaPlus, FaTimes } from "react-icons/fa";
 
 interface CompetencyTableProps {
-    headers: string[];
-    initialRows: string[][];
-    maxRows?: number;
-    variant?: "table1" | "table2"
+  id: string;
+  headers: string[];
+  initialRows: string[][];
+  maxRows?: number;
+  variant?: "table1" | "table2";
 }
 
+type Row = {
+  id: string;
+  cells: string[];
+};
+
 const CompetencyTable: React.FC<CompetencyTableProps> = ({
-                                                             headers,
-                                                             initialRows,
-                                                             maxRows = 6,
-    variant = "table1",
-                                                         }) => {
-    const [rows, setRows] = useState<string[][]>(initialRows);
+  id,
+  headers,
+  initialRows,
+  maxRows = 6,
+  variant = "table1",
+}) => {
+  const prevInitialRows = useRef(initialRows);
 
-    const handleCellChange = (
-        rowIndex: number,
-        colIndex: number,
-        value: string
-    ) => {
-        const updatedRows = [...rows];
-        updatedRows[rowIndex][colIndex] = value;
-        setRows(updatedRows);
-    };
+  // Initialize rows once
+  const [rows, setRows] = useState<Row[]>(() =>
+    initialRows.map((cells) => ({
+      id: crypto.randomUUID(),
+      cells: [...cells],
+    }))
+  );
 
-    const handleAddRow = () => {
-        if (rows.length >= maxRows) {
-            alert("You have reached the maximum size for this table");
-            return;
-        }
-        setRows([...rows, Array(headers.length).fill("")]);
-    };
+  // Sync with parent if initialRows truly changes
+  useEffect(() => {
+    const changed =
+      prevInitialRows.current.length !== initialRows.length ||
+      prevInitialRows.current.some((r, i) =>
+        r.some((cell, j) => cell !== initialRows[i][j])
+      );
 
-    const handleDeleteRow = (index: number) => {
-        setRows(rows.filter((_, i) => i !== index));
-    };
-    return (
-        <div className={`competency-table-wrapper ${variant}`}>
-            <table className="competency-table1">
-                <thead>
-                <tr>
-                    {headers.map((header, idx) => (
-                        <th key={idx}>{header}</th>
-                    ))}
-                    <th className="action-header">
-                        <button
-                            type="button"
-                            className="competency-table-button"
-                            onClick={handleAddRow}
-                        >
-                            <SafeIcon Icon={FaPlus}/>
-                        </button>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {rows.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                        {row.map((cell, colIndex) => (
-                            <td
-                                key={`${rowIndex}-${colIndex}`}
-                                contentEditable
-                                suppressContentEditableWarning
-                                onBlur={(e) =>
-                                    handleCellChange(
-                                        rowIndex,
-                                        colIndex,
-                                        e.currentTarget.innerText
-                                    )
-                                }
-                            >
-                                {cell}
-                            </td>
-                        ))}
-                        <td className="action-cell">
-                            <button
-                                type="button"
-                                className="competency-table-button"
-                                onClick={() => handleAddRow()}
-                            >
-                                <SafeIcon Icon={FaPlus}/>
-                            </button>
-                            <button
-                                type="button"
-                                className="competency-table-button"
-                                onClick={() => handleDeleteRow(rowIndex)}
-                            >
-                                <SafeIcon Icon={FaTimes}/>
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        </div>
+    if (changed) {
+      setRows(
+        initialRows.map((cells) => ({
+          id: crypto.randomUUID(),
+          cells: [...cells],
+        }))
+      );
+      prevInitialRows.current = initialRows;
+    }
+  }, [initialRows]);
+
+  // Update a single cell
+  const handleCellChange = (rowId: string, colIndex: number, value: string) => {
+    setRows((prev) =>
+      prev.map((row) =>
+        row.id === rowId
+          ? { ...row, cells: row.cells.map((cell, i) => (i === colIndex ? value : cell)) }
+          : row
+      )
     );
+  };
+
+  // Add a new empty row
+  const handleAddRow = () => {
+    if (rows.length >= maxRows) {
+      alert("You have reached the maximum size for this table");
+      return;
+    }
+
+    setRows((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), cells: Array(headers.length).fill("") },
+    ]);
+  };
+
+  const triggerOnInput = () => {
+    const textarea = document.querySelector('textarea');
+    if (!textarea) {
+      return;
+    }
+   
+    // Create and dispatch an input event
+    const event = new Event('input', { bubbles: true });
+    textarea.dispatchEvent(event);
+  }
+
+  // Delete a row
+  const handleDeleteRow = (rowId: string) => {
+    setRows((prev) => prev.filter((row) => row.id !== rowId));
+    triggerOnInput();
+  };
+
+  return (
+    <div className={`competency-table-wrapper ${variant}`}>
+      <table id={id} className="competency-table1">
+        <thead>
+          <tr>
+            {headers.map((header, idx) => (
+              <th key={idx}>{header}</th>
+            ))}
+            <th className="action-header">
+              <button
+                type="button"
+                className="competency-table-button"
+                onClick={handleAddRow}
+              >
+                <SafeIcon Icon={FaPlus} />
+              </button>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.id}>
+              {row.cells.map((cell, colIndex) => (
+                <td key={`${row.id}-${colIndex}`}>
+                  <textarea                    
+                    value={cell}                    
+                    onChange={(e) => handleCellChange(row.id, colIndex, e.target.value)}
+                    className="competency-table-input"
+                     style={{ width: "100%" }}
+                  />
+                </td>
+              ))}
+              <td className="adction-cell">
+               <div style={{
+                        display: "flex",
+                        flexDirection: "row",  // row | column
+                        justifyContent: "center", // align items horizontally
+                        alignItems: "center"     // align items vertically                        
+                    }}
+                >
+                <button
+                  type="button"
+                  className="competency-table-button"
+                  onClick={handleAddRow}
+                >
+                  <SafeIcon Icon={FaPlus} />
+                </button>
+                <button
+                  type="button"
+                  className="competency-table-button"
+                  onClick={() => handleDeleteRow(row.id)}
+                >
+                  <SafeIcon Icon={FaTimes} />
+                </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default CompetencyTable;

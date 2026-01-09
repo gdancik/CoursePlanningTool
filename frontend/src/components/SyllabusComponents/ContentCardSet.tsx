@@ -29,7 +29,7 @@ import './ContentCardSet.css';
  * />
  */
 
-interface CardData {
+export interface CardData {
 
     title: string;
     description: string;
@@ -37,6 +37,7 @@ interface CardData {
 }
 
 interface ContentCardSetProps {
+    id?: string;
     setTitle: string;
     titleLabel: string;
     descriptionLabel: string;
@@ -48,7 +49,8 @@ interface ContentCardSetProps {
     showRightValue?: boolean;
 }
 
-const ContentCardSet: React.FC<ContentCardSetProps> = ({
+export const ContentCardSet: React.FC<ContentCardSetProps> = ({
+    id,
     setTitle,
     titleLabel,
     descriptionLabel,
@@ -60,12 +62,21 @@ const ContentCardSet: React.FC<ContentCardSetProps> = ({
     showRightValue = false
 }) => {
 
+ const formatLabel = (labelTemplate: string, index: number) => {
+        if (labelTemplate === undefined) return labelTemplate;
+        return labelTemplate.replace('{index}', (index + 1).toString());
+    };
+
+    const createNewCard = (i:number) => {
+        return {   title: formatLabel(titleLabel,i), 
+                   description: formatLabel(descriptionLabel, i), 
+                   rightValue: formatLabel(rightLabel || "", i)
+                }            
+    }
+
     const [cards, setCards] = useState<CardData[]> (
-        initialCards.length > 0 ? initialCards : 
-        [
-            {title: '', description: '', rightValue: ''},
-            {title: '', description: '', rightValue: ''}
-        ]
+        initialCards.length > 0 ? initialCards :         
+        [...Array(minCards).keys()].map(i => createNewCard(i))        
     );
 
     useEffect(() => {
@@ -87,13 +98,7 @@ const ContentCardSet: React.FC<ContentCardSetProps> = ({
 
     const addCard = () => {
         if(cards.length >= maxCards) return;
-
-        const newCard: CardData = {
-            title: '',
-            description: '',
-            rightValue: ''
-        };
-        updateCards ([...cards, newCard]);
+        updateCards ([...cards, createNewCard(cards.length)]);
     };
 
     const deleteCard = (index: number) => {
@@ -103,12 +108,10 @@ const ContentCardSet: React.FC<ContentCardSetProps> = ({
         updateCards(updated);
     };
 
-    const formatLabel = (labelTemplate: string, index: number) => {
-        return labelTemplate.replace('{index}', (index + 1).toString());
-    };
+   
 
     return (
-        <div className="content-card-set">
+        <div id = {id} className="content-card-set">
             <div className="content-card-set-header">
                 <h2 className="content-card-set-title">{setTitle}</h2>
             </div>
@@ -152,20 +155,20 @@ const ContentCardSet: React.FC<ContentCardSetProps> = ({
                         disabled={cards.length >= maxCards}
                         title={cards.length >= maxCards ? `Maximum ${maxCards} cards allowed` : `Add new ${setTitle.toLowerCase()}`}
                     >
-                        + Add An {setTitle.slice(0, -1)}
+                        + Add {setTitle.slice(0, -1)} ({cards.length}  of {maxCards})
                     </button>
                 </div>
             </div>
-
+            
+            {/*
             <div className="content-card-set-footer">
                 <div className="card-count-info">
-                    {cards.length} of {maxCards} {setTitle.toLowerCase()} 
+                    {cards.length} {setTitle.toLowerCase()} (max of {maxCards} )
                     {minCards > 1 && ` (minimum ${minCards} required)`}
                 </div>
             </div>
+            */}
+
         </div>
     );
 };
-
-export default ContentCardSet;
-export type { CardData };

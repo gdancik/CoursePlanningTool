@@ -10,6 +10,7 @@ import { useModalFactory
     variant?: "primary" | "secondary" | "exit" | "green";
     className?: string;
     new_tab?: boolean;
+    externalLink?: boolean;
  }
 
  const ActionButton: React.FC<ActionButtonProps> = ({
@@ -19,7 +20,8 @@ import { useModalFactory
     modalProps,
     variant = "secondary",
     className,
-    new_tab = false
+    new_tab = false,
+    externalLink = false
  }) => {
     const modal = useModalFactory();
 
@@ -42,6 +44,7 @@ import { useModalFactory
         <ReusableButton
             label={label}
             onClick={handleClick}
+            externalLink={externalLink}
             variant={variant}
             className={className}
         />

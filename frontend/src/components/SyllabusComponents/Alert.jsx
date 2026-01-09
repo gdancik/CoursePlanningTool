@@ -1,26 +1,25 @@
 import React from "react";
 import { FaExclamationCircle } from "react-icons/fa";
-
+import ParagraphFromFile from "../../components/SyllabusComponents/ParagraphFromFile";
 /**
+ * 
  * @function Alert
  * @description A yellow warning alert component with stacked paper effect and octagonal red icon.
  * Used in the Syllabus Page Builder to display important warnings or notifications to users.
  * Features a layered background design with multiple shadow layers for visual depth.
- * @param {AlertProps} props - The warning message text to display in the alert
+ * @param text - The warning message text to display in the alert
+ * @param file - the file to read the text from (overwrites 'text')
  * @returns {JSX.Element} A styled alert component with yellow background, red octagonal icon, and stacked paper visual effect
  * @example
  * <Alert text="The ELAC requires that you implement at least two High Impact Practices into your course." />
  */
 
-/**
- * 
- * @typedef {Object} AlertProps
- * @property {string} text
- *
- */
+interface AlertProps {
+  text: string;
+  file?: string;
+}
 
-
-function Alert({ text }) {
+function Alert({ text, file }: AlertProps) {
   return (
     <div
       style={{
@@ -102,7 +101,7 @@ function Alert({ text }) {
         
         {/* Text content */}
         <span style={{ flex: 1 }}>
-          <b>{text}</b>
+          {file ? <ParagraphFromFile file = {file}/> : <b>{text}</b>}                                
         </span>
       </div>
     </div>

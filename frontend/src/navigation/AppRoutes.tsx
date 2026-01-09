@@ -24,7 +24,6 @@ import Assessment from "../screens/SyllabusView/Assessments/Assessment";
 import BasicInfo from "../screens/SyllabusView/BasicInformation/BasicInfo";
 import HIPS from "../screens/SyllabusView/HIPS/HIPS";
 import Description from "../screens/SyllabusView/Description/Description";
-import LearningOutcomes from "../screens/SyllabusView/Learning Outcomes/LearningOutcomes";
 import CourseSchedulePage from "../screens/SyllabusView/CourseSchedule/CourseSchedule"
 import LearningResources from "../screens/SyllabusView/LearningResources/LearningResources";
 import Checklist from "../screens/SyllabusView/Checklist";
@@ -33,6 +32,7 @@ import CoursePageTest from "../screens/CoursePage/CoursePageTest";
 import NotFoundPage from "../screens/NotFoundPage";
 import About from "../screens/About";
 import Policies from "../screens/Policies";
+import LearningOutcomes from "../screens/SyllabusView/Learning Outcomes/LearningOutcomes";
 
 const AppRoutes = () => {
     const [modalMessage, setModalMessage] = useState<{ message: string; code?: number } | null>(null);
@@ -55,7 +55,7 @@ const AppRoutes = () => {
                 {/*TEST API ENDPOINTS*/}                
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/api/hello/" element={<Hello />} />
-                <Route path = "/test-page" element={<TestPage/>}/>
+                <Route path = "/test-page" element={<TestPage/>}/>                
                 <Route path = "/test-page2" element={<TestPage2/>}/>
                 <Route path = "/test-page3" element={<TestPage3/>}/>
                 <Route path ="/courseSchedule" 

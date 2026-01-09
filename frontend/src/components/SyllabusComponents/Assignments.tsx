@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ContentCardSet, { CardData } from '../../components/SyllabusComponents/ContentCardSet';
+import {ContentCardSet, CardData } from '../../components/SyllabusComponents/ContentCardSet';
 
 /**
  * @function Assignments

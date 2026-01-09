@@ -158,8 +158,8 @@ const TestPage: React.FC = () => {
                 message={modalMessage}
             />
 	
-	    <div style = {{ marginTop: "2rem" }}><CompetencyTable1/>
-		<CompetencyTable2/>
+	    <div style = {{ marginTop: "2rem" }}><CompetencyTable1 id = {'competency1_table_test'}/>
+		<CompetencyTable2 id = 'competency2_table_test'/>
 	    </div>
         </div>
 

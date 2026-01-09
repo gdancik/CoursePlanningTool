@@ -31,6 +31,19 @@ function get_table_records(mytable) {
     return { [mytable.id]: JSON.stringify(records) };
 }
 
+// x is a div containing multiple content cards
+// returns array of objects {'title': '..', 'description', '...', 'rightValue':'...'}
+// with rightValue undefined if card contains only two inputs
+const processCard = (x) => {
+        let keys = ['title', 'description', 'rightValue'];    
+        let cards = [...x.getElementsByClassName('content-card')];
+        let objs = cards.map ( card => {
+            let values = [...card.querySelectorAll('input, textarea')].map( (input) => input.value);
+            let obj = Object.fromEntries(keys.map((key, i) => [key, values[i]]));  
+            return obj;
+        });
+        return objs;
+    }
 // returns a list of all checked checkboxes from element 'x',
 // or returns a string if 'x' has data-type set to "string" 
 function get_checkboxes(x) {
@@ -70,12 +83,18 @@ const saveData = async (ref) => {
             }
          });
 
+    const res_json = [...ref.current.querySelectorAll('div[id$="_json"]')]
+        .map(x => {
+            return { [x.id] : processCard(x)};
+        });
+        
     const combined = Object.assign({}, 
         ...res_text, 
         ...res_select, 
         ...res_list, 
         ...res_checkboxes, 
-        ...res_hidden);
+        ...res_hidden,
+        ...res_json);
         
     console.log("Payload to save:", combined);
 

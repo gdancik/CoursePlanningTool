@@ -76,9 +76,21 @@ const CompetencyTable: React.FC<CompetencyTableProps> = ({
     ]);
   };
 
+  const triggerOnInput = () => {
+    const textarea = document.querySelector('textarea');
+    if (!textarea) {
+      return;
+    }
+   
+    // Create and dispatch an input event
+    const event = new Event('input', { bubbles: true });
+    textarea.dispatchEvent(event);
+  }
+
   // Delete a row
   const handleDeleteRow = (rowId: string) => {
     setRows((prev) => prev.filter((row) => row.id !== rowId));
+    triggerOnInput();
   };
 
   return (
@@ -114,7 +126,14 @@ const CompetencyTable: React.FC<CompetencyTableProps> = ({
                   />
                 </td>
               ))}
-              <td className="action-cell">
+              <td className="adction-cell">
+               <div style={{
+                        display: "flex",
+                        flexDirection: "row",  // row | column
+                        justifyContent: "center", // align items horizontally
+                        alignItems: "center"     // align items vertically                        
+                    }}
+                >
                 <button
                   type="button"
                   className="competency-table-button"
@@ -129,6 +148,7 @@ const CompetencyTable: React.FC<CompetencyTableProps> = ({
                 >
                   <SafeIcon Icon={FaTimes} />
                 </button>
+                </div>
               </td>
             </tr>
           ))}

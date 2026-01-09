@@ -444,22 +444,43 @@ export function jsonRenderComponent(
                 return <AdditionalCompetencies/>
 
             case "CompetencyTable1" :
-                console.log('need to pass data to Competency Table')
+                                    
                 if (component.id === undefined) {
                     alert('CompetencyTable1 needs an id');
-                    return null;
-                    
+                    return null;                    
                 }
-                return <CompetencyTable1 id = {component.id}/>
 
-            case "CompetencyTable2" :
-                console.log('need to pass data to Competency Table')
+                const competencyData1String = formData[component.id];  
+                                          
+                if (typeof(competencyData1String) == 'string') {                    
+                    return <CompetencyTable1 id = {component.id} 
+                                             data = {JSON.parse(competencyData1String.trim())}/>
+                } else if (competencyData1String === undefined) {
+                    return <CompetencyTable1 id = {component.id}/>
+                } else {                
+                    alert("Error: competencyData1 is not valid")       
+                    return null;      
+                }
+
+            case "CompetencyTable2" :                
                 if (component.id === undefined) {
-                    alert('CompetencyTable1 needs an id');
+                    alert('CompetencyTable2 needs an id');
                     return null;
                     
+                }                
+
+                const competencyData2String = formData[component.id];  
+                                          
+                if (typeof(competencyData2String) == 'string') {                    
+                    return <CompetencyTable2 id = {component.id} 
+                                             data = {JSON.parse(competencyData2String.trim())}/>
+                } else if (competencyData2String === undefined) {
+                    return <CompetencyTable2 id = {component.id}/>
+                } else {                
+                    alert("Error: competencyData2 is not valid")       
+                    return null;      
                 }
-                return <CompetencyTable2 id = {component.id}/>
+                
 
         default:
             alert('Unknown type in json: ' + component.type )

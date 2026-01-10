@@ -39,7 +39,10 @@ const processCard = (x) => {
         let cards = [...x.getElementsByClassName('content-card')];
         let objs = cards.map ( card => {
             let values = [...card.querySelectorAll('input, textarea')].map( (input) => input.value);
-            let obj = Object.fromEntries(keys.map((key, i) => [key, values[i]]));  
+            let obj = Object.fromEntries(keys.map((key, i) => [key, values[i]]));             
+            if (obj['rightValue']) {
+                [obj['rightValue'], obj['description']] = [obj['description'], obj['rightValue']];
+            } 
             return obj;
         });
         return objs;

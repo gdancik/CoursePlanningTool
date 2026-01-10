@@ -1,12 +1,12 @@
 As you are designing an assignment, you will want to consider if the 
-intention of the assignment is to be formative or summative. Formative 
-assignments are typically those that help students build toward learning 
+intention of the assignment is to be formative or summative. <b>Formative 
+assignments</b> are typically those that help students build toward learning 
 outcomes. These assignments are often low stakes and help the faculty to 
 see where students are in terms of the skills and course materials being 
-covered. Summative assignments, on the other hand, are intended to assess 
+covered. <b>Summative assignments</b>, on the other hand, are intended to assess 
 student performance at the end of a course unit or semester. Assignments
 can ask students to engage in different levels of cognitive work as 
-discussed in the learning outcomes section. Standardized examinations, 
+discussed in the learning outcomes section. <b>Standardized examinations</b>, 
 for example, require memorization, while group projects require students
 to create something collaboratively. As you develop assignments for your 
 course, you will want to consider what role they play for students in terms 
@@ -15,3 +15,57 @@ what type of cognitive process you expect students to use in completing the
 assignment. Through this process you will also want to consider ordering of 
 assignments and think about how you expect students to integrate their 
 learning across assignments.
+<p>&nbsp;</p>
+
+
+<div style = "display: flex; alignItems: stretch; gap: 25px"/>
+
+<div style= "flex: 1.5">
+<table style = "height:100%">
+    <tr>
+        <th>Formative Assignments</th>
+        <th>Summative Assignment</th>
+    </tr>
+    <tr>
+        <td>
+            Quizzes</br>
+            Polls </br>
+            In-class Writing Assignments </br>
+            Guided Discussion Groups </br>
+            Case Studies</br>
+            Meeting with faculty</br>
+            Reading Responses</br>
+            Reflections
+        </td>
+        <td>
+            Research Papers</br>
+            Projects </br>
+            Exams </br>
+            Essays </br>
+            Performances</br>
+            Presentations</br>
+            Portfolios</br>
+            Standardized Examinations            
+        </td>
+    </tr>
+</table>
+</div>
+
+<div style= "flex: 1">
+<table style = "height:100%">
+    <tr>
+        <th>Resources for Building Assignments</th>        
+    </tr>
+    <tr>
+        <td>
+            <ul>
+                <li>American Association of Colleges and Universities, VALUEAdd Tools</li>
+                <li>National Institute for Learning Outcomes Assessment, Assignment Library </li>
+                <li>Transparency in Learning and Teaching, T1LT Higher Ed</li>
+                <p>&nbsp;</p><p></p>
+        </td>
+    </tr>
+</table>
+</div>
+</div>
+

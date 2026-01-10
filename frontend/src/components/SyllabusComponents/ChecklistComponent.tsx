@@ -13,7 +13,6 @@ interface ChecklistItem {
     title: string;
     description: string;
     link: string;
-    sectionId: string;
 }
 
 interface PolicyItem {
@@ -50,53 +49,46 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
     // Checklist items matching syllabus sections
     const checklistItems: ChecklistItem[] = [
         {
-            id: "basic_info",
+            id: "basic_information",
             title: "Basic Information",
             description: "Have you entered the detailed information about the course into the instructor?",
-            link: "/basic-info",
-            sectionId: "basic_information"
+            link: "/basic-info"            
         },
         {
-            id: "description",
+            id: "course_description",
             title: "Course Description",
             description: "Have you outlined the overarching goals of the course, and the type of experience do you want your students to have in this course?",
-            link: "/course-description",
-            sectionId: "course_description"
+            link: "/course-description"
         },
         {
             id: "learning_outcomes",
             title: "Learning Outcomes",
             description: "Have you clearly articulated the Competencies and Learning Outcomes that effectively communicate and engage students in pursuing these outcomes?",
-            link: "/learning-outcomes",
-            sectionId: "learning_outcomes"
+            link: "/learning-outcomes"
         },
         {
-            id: "hips",
+            id: "high_impact_practices",
             title: "High Impact Practices (HIPs)",
             description: "Have you incorporated High Impact Practices in your course?",
-            link: "/hips",
-            sectionId: "hips"
+            link: "/hips"            
         },
         {
             id: "learning_resources",
             title: "Learning Resources",
             description: "Have you listed all required materials for your course, such as textbooks, software, lab equipment, and other resources?",
-            link: "/learning-resources",
-            sectionId: "learning_resources"
+            link: "/learning-resources"            
         },
         {
             id: "assessment",
             title: "Assessment",
             description: "Have you connected the course materials and assignments explicitly to your learning outcomes?",
-            link: "/assessment",
-            sectionId: "assessment"
+            link: "/assessment"            
         },
         {
-            id: "schedule",
+            id: "course_schedule",
             title: "Course Schedule",
             description: "Have you drafted a clear schedule that outlined the detailed learning outcomes addressed and readings/assignments due?",
-            link: "/course-schedule",
-            sectionId: "course_schedule"
+            link: "/course-schedule"            
         }
     ];
 
@@ -198,7 +190,7 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
                             
                             <div className="checklist-content">
                                 <p className="checklist-instructions">
-                                    Click on the green button and download your draft syllabus in .Word document. Examine the syllabus and use the checklist below to ensure 
+                                    Click on the green button and download your draft syllabus as a Word document. Examine the syllabus and use the checklist below to ensure 
                                     that you have completed each section. Go back to previous steps and make revisions as needed. After completing all sections, you'll be able to 
                                     download the syllabus directly from the Home page for this course.
                                 </p>
@@ -210,7 +202,7 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
                                                 <input 
                                                     type="checkbox" 
                                                     id={item.id}
-                                                    checked={checkSectionComplete(item.sectionId)}
+                                                    checked={checkSectionComplete(item.id)}
                                                     readOnly
                                                     aria-label={`${item.title} completed`}
                                                 />
@@ -313,13 +305,14 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
                                                 <span>Check All</span>
                                             </label>
                                         </div>
-                                        <div className="checkbox-list">
+                                        <div id = {policy_checkboxes} className="checkbox-list">
                                             {policyStatements.map(policy => (
                                                 <label key={policy.id} className="checkbox-item">
                                                     <input 
                                                         type="checkbox"
                                                         checked={selectedPolicies.has(policy.id)}
                                                         onChange={() => togglePolicy(policy.id)}
+                                                        value = {policy.label}
                                                     />
                                                     <span>{policy.label}</span>
                                                 </label>
@@ -340,13 +333,14 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
                                                 <span>Check All</span>
                                             </label>
                                         </div>
-                                        <div className="checkbox-list">
+                                        <div id = {resources_checkboxes} className="checkbox-list">
                                             {resources.map(resource => (
                                                 <label key={resource.id} className="checkbox-item">
                                                     <input 
                                                         type="checkbox"
                                                         checked={resource.id === "accommodations" || selectedResources.has(resource.id)}
                                                         onChange={() => toggleResource(resource.id)}
+                                                        value = {resource.label}
                                                     />
                                                     <span>
                                                         {resource.id === "accommodations" ?

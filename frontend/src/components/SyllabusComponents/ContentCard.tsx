@@ -73,13 +73,13 @@ const ContentCard: React.FC<ContentCardProps> = ({
                 
                 {rightLabel && onRightValueChange && (
                     <div className="content-card-right-section">
-                        <label className="content-card-right-label">{rightLabel}</label>
+                        {separateLabel && <label className="content-card-right-label">{rightLabel}</label>}
                         <input
                             type="text"                            
-                            value={rightValue || ''}
+                            value={rightValue?.trim() || ''}
                             onChange={(e) => onRightValueChange(e.target.value)}
                             className="content-card-right-input"
-                            placeholder="0%"
+                            placeholder="Points (or %)"
                         />
                     </div>
                 )}

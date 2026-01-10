@@ -4,7 +4,7 @@ import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
 import Alert from "../components/SyllabusComponents/Alert";
 import Image from "../components/SyllabusComponents/Image";
 import Information from "../components/SyllabusComponents/Information";
-import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
+import ParagraphFromFile, {HTMLFromFile} from "../components/SyllabusComponents/ParagraphFromFile";
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
 import SidebarLayout from "../components/SidebarLayout";
 import Assignments from "../components/SyllabusComponents/Assignments";
@@ -264,22 +264,14 @@ export function jsonRenderComponent(
                 return null;
             }
        
-            const raw = formData[component.id];
-       
-            let initialArray: CardData[] = [];
-       
-            try {
-                initialArray = Array.isArray(JSON.parse(raw)) ? JSON.parse(raw) : [];
-            } catch {
-                initialArray = [];
-            }
+            const assignment_raw = formData[component.id];
+            
+            const AssignmentData: CardData[] = Array.isArray(assignment_raw) ? assignment_raw : [];
+
                 return (
                     <Assignments
                     id={component.id}
-                    initialData={initialArray} 
-                    onChange={(newData) =>
-                     onChange(component.id!, JSON.stringify(newData))
-                    }
+                    data={AssignmentData}                                         
                 />
             );
 
@@ -317,11 +309,18 @@ export function jsonRenderComponent(
             case "paragraphFromFile" :               
                 return (
                     <ParagraphFromFile file = {component.file || ""} 
-                       className = {component.className || undefined}/>                                        
-                    
+                       className = {component.className || undefined}/>                                                            
                 )  
-            case "courseSchedule" :           
+            
+            case "htmlFromFile" :
+                return (
+                    <ParagraphFromFile 
+                       file = {component.file || ""} 
+                       className = {component.className || undefined}
+                       html = {true}/>                                                            
+                )  
 
+            case "courseSchedule" :           
             
                 if (component.id === undefined) {
                     alert('courseSchedule component needs an id');

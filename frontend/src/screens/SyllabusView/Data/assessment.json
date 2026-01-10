@@ -19,8 +19,8 @@
 
                     "content": [
                         {
-                            "type" : "paragraphFromFile",
-                            "file" : "/data/assessmentText/AssessmentFirstSegment2.txt"
+                            "type" : "htmlFromFile",
+                            "file" : "/data/assessmentText/AssessmentFirstSegment2.txt"                            
                         }
                     ]
                 },
@@ -94,7 +94,7 @@
                     
                 },
                 {
-                    "type": "Alert",
+                    "type": "Information",
                     "text": "Information entered below will appear in the final syllabus exactly as written."
                 },
                 {
@@ -123,8 +123,11 @@
                         },
                         {
                             "type" : "Button",
-                            "label" : "Course Goals: Student Communication Tips",
-                            "modalCase" : "StudentCommunicationTips"
+                            "label" : "Course Goals: Student Communication Tips (NEED LINK)",
+                            "modalCase" : "StudentCommunicationTips",
+                            "externalLink": true
+
+                        
                         },
                         {
                             "type": "informationText",

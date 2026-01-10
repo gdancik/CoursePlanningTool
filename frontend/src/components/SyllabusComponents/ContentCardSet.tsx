@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ContentCard from './ContentCard';
+import { triggerInput } from '../../services/triggerInput';
+
 import './ContentCardSet.css';
 
 /**
@@ -47,6 +49,7 @@ interface ContentCardSetProps {
     minCards?: number;
     maxCards?: number;
     showRightValue?: boolean;
+    separateLabel?: boolean;
 }
 
 export const ContentCardSet: React.FC<ContentCardSetProps> = ({
@@ -59,7 +62,8 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
     onChange,
     minCards = 2,
     maxCards = 10,
-    showRightValue = false
+    showRightValue = false,
+    separateLabel = false
 }) => {
 
  const formatLabel = (labelTemplate: string, index: number) => {
@@ -106,9 +110,9 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
         
         const updated = cards.filter((_, i) => i !== index);
         updateCards(updated);
+        triggerInput();
     };
 
-   
 
     return (
         <div id = {id} className="content-card-set">
@@ -133,6 +137,7 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
                                 undefined
                             }
                             className={`content-card-${index + 1}`}
+                            separateLabel={separateLabel}
                         />
                         
                         {cards.length > minCards && (

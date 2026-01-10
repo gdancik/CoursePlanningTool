@@ -445,7 +445,10 @@ export function jsonRenderComponent(
                 )
             case "ChecklistComponent": 
                 return (
-                    <ChecklistComponent formData={formData}/>
+                    <ChecklistComponent formData={formData} 
+                    additional_sections_id="additional_sections_syllabus_json"
+                    policy_checkboxes="policy_checkboxes"
+                    resources_checkboxes="resources_checkboxes"/>
                 )
 
             case "FiveCoreCompetencies" :              

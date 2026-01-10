@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { triggerInput } from "../../../services/triggerInput";
 import "./competencyTable.css";
 import SafeIcon from "../../../utils/ComponentWrapper";
 import { FaPlus, FaTimes } from "react-icons/fa";
@@ -76,21 +77,11 @@ const CompetencyTable: React.FC<CompetencyTableProps> = ({
     ]);
   };
 
-  const triggerOnInput = () => {
-    const textarea = document.querySelector('textarea');
-    if (!textarea) {
-      return;
-    }
-   
-    // Create and dispatch an input event
-    const event = new Event('input', { bubbles: true });
-    textarea.dispatchEvent(event);
-  }
 
   // Delete a row
   const handleDeleteRow = (rowId: string) => {
     setRows((prev) => prev.filter((row) => row.id !== rowId));
-    triggerOnInput();
+    triggerInput();
   };
 
   return (

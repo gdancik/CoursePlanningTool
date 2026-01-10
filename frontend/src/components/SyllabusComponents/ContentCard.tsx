@@ -41,6 +41,7 @@ interface ContentCardProps {
     onDescriptionChange: (value: string) => void;
     onRightValueChange?: (value: string) => void;
     className?: string;
+    separateLabel?: boolean;   // to display label above input
 }
 
 const ContentCard: React.FC<ContentCardProps> = ({
@@ -53,16 +54,17 @@ const ContentCard: React.FC<ContentCardProps> = ({
     onTitleChange,
     onDescriptionChange,
     onRightValueChange,
-    className = ''
+    className = '',
+    separateLabel = false
 }) => {
     return (
         <div className={`content-card ${className}`}>
             <div className="content-card-header">
                 <div className="content-card-title-section">
-                    {/*<label className="content-card-label">{titleLabel}</label>*/}
+                    {separateLabel && <label className="content-card-label">{titleLabel}</label>}
                     <input
                         type="text"
-                        value = {titleValue}
+                        value = {!separateLabel ? titleValue : ""}
                         onChange={(e) => onTitleChange(e.target.value)}
                         className="content-card-title-input"
                         placeholder="Enter title..."

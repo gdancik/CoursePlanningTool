@@ -1,11 +1,11 @@
 import {useNavigate, useLocation} from "react-router-dom";
-import {handleBack,handleNext} from "../../components/Button/ButtonLogic";
-import AppLayout from "../../SyllabusLayout/SyllabusPageHeader";
 import {useState, useEffect} from "react";
-import {MOCK_VALID_INPUTS} from "../../services/mockValidInputs";
 import { FaAngleUp, FaEdit } from "react-icons/fa";
 import SafeIcon from "../../utils/ComponentWrapper";
 import {isSectionComplete, ValidInputsResponse, fetchRequiredInputs} from "../../services/validInputsService";
+import Information from "../../components/SyllabusComponents/Information";
+import {CardData, ContentCardSet} from "../../components/SyllabusComponents/ContentCardSet"
+
 import "./Checklist.css";
 
 interface ChecklistItem {
@@ -21,16 +21,23 @@ interface PolicyItem {
     label: string;
 }
 
-const Checklist = ({ formData }: { formData: Record<string, string> }) => {
+const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resources_checkboxes }: 
+    { formData: Record<string, string>,
+      additional_sections_id: string,
+      policy_checkboxes: string,
+      resources_checkboxes:string
+    },
+       
+) => {
     //Page Navigation for Buttons
     const navigate = useNavigate();
     const location = useLocation();
 
     //const [formData, setFormData] = useState<Record<string, string>>({});
-    const courseID = localStorage.getItem("currentCourseId");
     const [validInputs, setValidInputs] = useState<ValidInputsResponse>({});
-    const [courseData, setCourseData] = useState<Record<string, string>>({});
     
+    const [initialCards, setInitialCards] = useState<CardData[]>([]);
+
     // State for optional sections
     const [additionalSections, setAdditionalSections] = useState<Array<{title: string, content: string}>>([]);
     const [newSectionTitle, setNewSectionTitle] = useState("");
@@ -122,26 +129,17 @@ const Checklist = ({ formData }: { formData: Record<string, string> }) => {
     
         }, []);
     
-
+        useEffect(() =>{
+            const raw = formData[additional_sections_id];
+            const ic: CardData[] = Array.isArray(raw) ? raw : [];
+            setInitialCards(ic);
+        }, [formData])
+    
     const checkSectionComplete = (sectionId: string): boolean => {        
         return isSectionComplete(sectionId, validInputs, formData);
     };
 
-    const handleAddSection = () => {
-        if (newSectionTitle.trim() && newSectionContent.trim()) {
-            setAdditionalSections([...additionalSections, {
-                title: newSectionTitle,
-                content: newSectionContent
-            }]);
-            setNewSectionTitle("");
-            setNewSectionContent("");
-        }
-    };
-
-    const handleDeleteSection = (index: number) => {
-        setAdditionalSections(additionalSections.filter((_, i) => i !== index));
-    };
-
+    
     const togglePolicy = (policyId: string) => {
         const newSet = new Set(selectedPolicies);
         if (newSet.has(policyId)) {
@@ -256,63 +254,25 @@ const Checklist = ({ formData }: { formData: Record<string, string> }) => {
                                     You can add additional sections to your syllabus. These sections will appear after the Course Schedule section.
                                 </p>
 
-                                {additionalSections.length > 0 && (
-                                    <div className="additional-sections-list">
-                                        {additionalSections.map((section, index) => (
-                                            <div key={index} className="additional-section-item">
-                                                <div className="additional-section-content">
-                                                    <strong>Section Title:</strong> {section.title}
-                                                    <br />
-                                                    <strong>Section Content:</strong>
-                                                    <div className="section-content-preview">{section.content}</div>
-                                                </div>
-                                                <button 
-                                                    className="delete-section-btn"
-                                                    onClick={() => handleDeleteSection(index)}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-
-                                <div className="add-section-form">
-                                    <div className="info-banner">
-                                        <span className="info-icon">ⓘ</span>
-                                        <span>Information entered below will appear in the final syllabus exactly as written.</span>
-                                    </div>
+                                
+                                <div className="add-section-form">                                    
                                     
-                                    <div className="form-field">
-                                        <label htmlFor="section-title">Section Title:</label>
-                                        <input 
-                                            type="text"
-                                            id="section-title"
-                                            value={newSectionTitle}
-                                            onChange={(e) => setNewSectionTitle(e.target.value)}
-                                            placeholder="Enter section title"
-                                        />
-                                    </div>
+                                    <Information text="Information entered below will appear in the final syllabus exactly as written."/>
+                                    &nbsp;                                
 
-                                    <div className="form-field">
-                                        <label htmlFor="section-content">Section Content:</label>
-                                        <textarea
-                                            id="section-content"
-                                            value={newSectionContent}
-                                            onChange={(e) => setNewSectionContent(e.target.value)}
-                                            placeholder="Enter section content"
-                                            rows={4}
-                                        />
-                                        <div className="character-count">Word count: {newSectionContent.split(/\s+/).filter(w => w.length > 0).length} / 500 words max</div>
-                                    </div>
+                                     <ContentCardSet
+                                                id = {additional_sections_id}
+                                                setTitle="Additional Sections"
+                                                titleLabel="Additional Section {index} Title:"
+                                                descriptionLabel="Additional Section {index} Description:"
+                                                initialCards={initialCards} 
+                                                onChange = {() => {}}           
+                                                minCards={1}
+                                                maxCards={3}
+                                                separateLabel={false}    
+                                            />
 
-                                    <button 
-                                        className="add-section-btn"
-                                        onClick={handleAddSection}
-                                        disabled={!newSectionTitle.trim() || !newSectionContent.trim()}
-                                    >
-                                        <span className="plus-icon">+</span> Add A Section
-                                    </button>
+                                   
                                 </div>
                             </div>
                         </details>

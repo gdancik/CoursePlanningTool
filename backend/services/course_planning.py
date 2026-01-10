@@ -79,8 +79,8 @@ columns_detailed_raw = {
 
     'checklist': [
         'additional_sections_syllabus_json',
-        'policy_statements',
-        'university_resources'
+        'policy_checkboxes',
+        'resources_checkboxes'
     ],
     
     'metadata': ['created_at', 'last_edited']

@@ -414,14 +414,12 @@ export function jsonRenderComponent(
                 } catch {
                     gradeTable = [];
                 }
+                
 
                 return (
                     <GradeTable 
-                    id={component.id}
-                    data={gradeTable}
-                    onChange={(updated) => 
-                        onChange(component.id!, JSON.stringify(updated))
-                    }
+                        id={component.id}
+                        data={gradeTable}                    
                     />
                 );
             case "Button":

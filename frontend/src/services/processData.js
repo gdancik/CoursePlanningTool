@@ -24,7 +24,7 @@ function get_table_records(mytable) {
                 if (textarea == null) {
                     return cell.innerHTML;
                 }
-                return textarea.innerHTML;
+                return textarea.value;
             });
         })
         //.filter(row => row.join("") !== "");

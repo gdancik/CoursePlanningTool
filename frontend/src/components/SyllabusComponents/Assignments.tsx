@@ -19,52 +19,35 @@ import {ContentCardSet, CardData } from '../../components/SyllabusComponents/Con
 interface AssignmentsProps {
     id: string;
     onChange?: (assignments: CardData[]) => void;
-    initialData?: CardData[];
+    data?: CardData[];
 }
 
 const Assignments: React.FC<AssignmentsProps> = ({ 
-    id,
-    onChange,
-    initialData = []
+    id,    
+    data = []
 }) => {
-    const [assignments, setAssignments] = useState<CardData[]>(initialData);
-    const hasMounted = React.useRef(false);
-
-    // keep local state synced with parent
-    useEffect(() => {
-        if (JSON.stringify(initialData) !== JSON.stringify(assignments)) {
-            setAssignments(initialData);
-
+   
+    const [mydata, setData] = useState<CardData[]>(data);
+          
+    useEffect(() => {        
+        if (data) {
+            console.log("setting data");
+            console.log(data);
+            setData(data);
         }
-    }, [initialData]);
-    // SAFE onChange trigger – prevents sending empty data on first render
-    useEffect(() => {
-        if (!hasMounted.current) {
-            hasMounted.current = true;
-            return;
-        }
-        onChange?.(assignments);
-    }, [assignments]);
+    }, [data]);
 
-    const handleAssignmentsChange = (newAssignments: CardData[]) => {
-        setAssignments(newAssignments);
-    };
 
     return (
-    <>
-        <input 
-        type="hidden" id={id} 
-        value={JSON.stringify(assignments)} 
-        readOnly
-        />
-        
+    <>     
         <ContentCardSet
+            id = {id}
             setTitle="Assignments"
             titleLabel="Assignment {index} Title: "
             descriptionLabel="Assignment {index} Description: "
-            rightLabel="Assignment {index} Percentage of Grade: "
-            onChange={handleAssignmentsChange}
-            initialCards={assignments}
+            rightLabel=" "
+            onChange = {() => {}}   
+            initialCards={mydata}
             minCards={2}
             maxCards={10}
             showRightValue={true}

@@ -2,7 +2,7 @@ import React from "react";
 import "./SectionAccordion.css";
 import { FaAngleUp } from "react-icons/fa";
 import SafeIcon from "../../../utils/ComponentWrapper";
-import { JsonComponent, jsonRenderComponent } from "../../../utils/jsonRenderer";
+import { JsonComponent, JsonRenderComponent } from "../../../utils/jsonRenderer";
 
 interface Props {
     sectionName: string; // Name of the section (e.g., "Personal Info")
@@ -37,7 +37,7 @@ const SectionAccordion: React.FC<Props> = ({
                         ? children
                         : content?.map((comp, idx) => (
                             <div key={idx}>
-                                {jsonRenderComponent(comp, formData, onFieldChange)}
+                                <JsonRenderComponent component = {comp} formData = {formData} onChange = {onFieldChange}/>
                             </div>
                         ))}
                 </div>

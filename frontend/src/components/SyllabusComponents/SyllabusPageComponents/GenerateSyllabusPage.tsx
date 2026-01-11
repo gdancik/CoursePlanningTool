@@ -29,12 +29,17 @@ const GenerateSyllabusPage = ({
 
     const [changesDetected, setChangesDetected] = useState(false);
 
+    const courseNumber = formData['subj_code_syllabus'] + '-' + formData['crse_number_syllabus'] +
+                                ' (' + formData['term_syllabus'] + ' ' + 
+                                       formData['year_syllabus'] + ')'
+
     return (
             <div ref ={containerRef} onInput = {() => {                
                 setChangesDetected(true)
             }}>                                
                 <SyllabusLayout
-                        {...{ onBack, onNext, onSave, onSaveAndExit, onPreview, changesDetected, setChangesDetected }}
+                        {...{ onBack, onNext, onSave, onSaveAndExit, onPreview, 
+                            changesDetected, setChangesDetected, courseNumber }}
                 /> 
                 
                  {/*changesDetected && <p>Some input has changed!</p>*/} 

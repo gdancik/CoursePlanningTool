@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./gradeTable.css";
 import "../../../components/Button/ReusableButton.css"
+import {triggerInput} from "../../../services/triggerInput"
 import api from "../../../services/axios";
 
 //import axios from "axios";
@@ -64,7 +65,7 @@ function CourseSchedule({ id, term, year, days, data }) {
       newRow,
       ...scheduleRows.slice(index + 1),
     ];
-    triggerOnInput();
+    triggerInput();
     setScheduleRows(updatedRows);
   };
 
@@ -73,7 +74,7 @@ function CourseSchedule({ id, term, year, days, data }) {
       const updatedRows = scheduleRows.filter(
         (row, rowIndex) => rowIndex !== index
       );
-      triggerOnInput();
+      triggerInput();
       setScheduleRows(updatedRows);
     }
   };
@@ -94,14 +95,6 @@ function CourseSchedule({ id, term, year, days, data }) {
       const keys = ['date', 'day', 'unit', 'learningOutcomes', 'readingAssignments' ];
       const obj = Object.fromEntries(keys.map( (k,i) => [k,x[i]]));
       return obj;
-  }
-
-  const triggerOnInput = () => {
-    const textarea = document.querySelector('textarea');
-   
-    // Create and dispatch an input event
-    const event = new Event('input', { bubbles: true });
-    textarea.dispatchEvent(event);
   }
 
   // scheduleData has schedule
@@ -138,7 +131,7 @@ function CourseSchedule({ id, term, year, days, data }) {
           readingAssignments: "",
         }));
         setScheduleRows(generatedSchedule);
-        triggerOnInput();
+        triggerInput();
       }
     } catch (error) {
       alert(

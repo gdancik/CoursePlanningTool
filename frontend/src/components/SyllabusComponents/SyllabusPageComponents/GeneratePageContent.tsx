@@ -1,5 +1,5 @@
 import React from "react";
-import {jsonRenderComponent} from "../../../utils/jsonRenderer";
+import {JsonRenderComponent} from "../../../utils/jsonRenderer";
 import { JsonComponent } from "../../../utils/jsonRenderer";
 import '../../../screens/SyllabusView/BasicInformation/BasicInfo.css'
 
@@ -18,7 +18,7 @@ const GeneratePageContent: React.FC<GeneratePageContentProps> = ({
         <div className="course-info-container">
             {json.content.map((component, i) => (
                 <div key={i}>
-                    {jsonRenderComponent(component, formData, onFieldChange)}
+                    <JsonRenderComponent component = {component} formData = {formData} onChange = {onFieldChange}/>
                 </div>
             ))}
         </div>

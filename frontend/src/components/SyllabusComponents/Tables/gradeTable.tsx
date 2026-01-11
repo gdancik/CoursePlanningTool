@@ -3,12 +3,11 @@ import "./gradeTable.css";
 
 export interface GradeTableProps {
     id: string;
-    data?: [string, string][];
-    onChange?: (updated: [string, string][]) => void;
+    data?: [string, string][];    
 }
 
 
-const GradeTable: React.FC<GradeTableProps> = ({ id, data, onChange }) => {
+const GradeTable: React.FC<GradeTableProps> = ({ id, data }) => {
 
     const gradeLetters = ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'F'];
 
@@ -26,24 +25,35 @@ const GradeTable: React.FC<GradeTableProps> = ({ id, data, onChange }) => {
         "> 55%",
     ];
 
-    const rows: [string, string][] = gradeLetters.map((letter, i) => {
-        if(data && data[i] && data[i][0]){
-            return [letter, data[i][1]];
-        }
-        return [letter, defaultIntervals[i]];
-     });
 
-     const handleChange = (rowIndex: number, value: string) => {
-        const newRows = rows.map((row, i) =>
-            i === rowIndex ? [row[0], value] : row
-    ) as [string, string][];
+    const [intervals, setIntervals] = React.useState<string[]>(defaultIntervals);
+    const [rows, setRows] = React.useState<[string, string][]>([["",""]]);
 
-    onChange?.(newRows);
-
+    const handleChange = (index: number, value: string) => {
+      const updated = [...intervals];
+      updated[index] = value;
+      //alert("setting intervals: " + updated);
+      setIntervals(updated);
+      //onChange?.(updated); // optional callback
     };
+
+    React.useEffect(() => {        
+    
+      const r: [string, string][] = gradeLetters.map((letter, i) => {
+        if(data && data[i] && data[i][0]){
+            return [letter, data[i+1][1]];
+        }
+        return [letter, intervals[i]];
+      });
+
+      setRows(r);
+
+      }, [data, intervals]);
+
+         
   return (
     <div className="grade-table-wrapper">
-      <h2 className="grade-table-title">Grade Table</h2>
+      {/*<h2 className="grade-table-title">Grade Table</h2>*/}
 
       <table id={id} className="grade-table">
         <thead>
@@ -56,15 +66,13 @@ const GradeTable: React.FC<GradeTableProps> = ({ id, data, onChange }) => {
         <tbody>
           {rows.map(([letter, interval], idx) => (
             <tr key={idx}>
-              <td>{letter}</td>
-              <td>
-                <input
-                  type="text"
-                  value={interval}
-                  onChange={(e) => handleChange(idx, e.target.value)}
-                  className="grade-table-input"
-                />
-              </td>
+              <td>{letter}</td>              
+                <td>                              
+                    <textarea                  
+                      value={interval} 
+                      onChange={(e) => handleChange(idx, e.target.value)}                                                    
+                    />                                 
+              </td>              
             </tr>
           ))}
         </tbody>

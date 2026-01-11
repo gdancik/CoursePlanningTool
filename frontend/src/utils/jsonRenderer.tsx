@@ -4,7 +4,7 @@ import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
 import Alert from "../components/SyllabusComponents/Alert";
 import Image from "../components/SyllabusComponents/Image";
 import Information from "../components/SyllabusComponents/Information";
-import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
+import ParagraphFromFile, {HTMLFromFile} from "../components/SyllabusComponents/ParagraphFromFile";
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
 import SidebarLayout from "../components/SidebarLayout";
 import Assignments from "../components/SyllabusComponents/Assignments";
@@ -12,9 +12,11 @@ import GradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import { CardData } from "../components/SyllabusComponents/ContentCardSet";
 import ActionButton from "../components/SyllabusComponents/ActionButton";
 import OverviewComponent from "../components/SyllabusComponents/OverviewComponent";
+import ChecklistComponent from "../components/SyllabusComponents/ChecklistComponent"
 import { CoreCompetencyInterface, FiveCoreCompetencies, AdditionalCompetencies, 
          LearningOutcomesCards } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
 import { BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy"
+import {GradingPolicies} from "../components/SyllabusComponents/GradingPolicies"
 
 import CompetencyTable1 from "../components/SyllabusComponents/Tables/CompetencyTable1"
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
@@ -67,12 +69,17 @@ export type JsonComponent = {
     days2?: string   // field for days2
 };
 
-// Recursive renderer
-export function jsonRenderComponent(
-    component: JsonComponent,
-    formData: Record<string, string>,
-    onChange: (label: string, value: string) => void
-): React.ReactNode {
+interface JsonRenderComponentProps {
+  component: JsonComponent;
+  formData: Record<string, string>;
+  onChange: (label: string, value: string) => void;
+}
+
+const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
+  component,
+  formData,
+  onChange
+}) => {
     switch (component.type) {
         case "Accordion":
             return (
@@ -83,7 +90,7 @@ export function jsonRenderComponent(
                 >
                     {component.content?.map((child, i) => (
                         <div key={i}>
-                            {jsonRenderComponent(child, formData, onChange)}
+                            <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                         </div>
                     ))}
                 </SectionAccordion>
@@ -108,7 +115,7 @@ export function jsonRenderComponent(
             className={component.className || "form-column"}
             >
                     {component.content?.map((child, i) =>
-                        jsonRenderComponent(child, formData, onChange)
+                        <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                     )}
                 </div>
             );
@@ -130,7 +137,7 @@ export function jsonRenderComponent(
             return (
             <div key={component.id} className={component.className || "form-row"}>
                     {component.content?.map((child, i) =>
-                        jsonRenderComponent(child, formData, onChange)
+                        <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                     )}
                 </div>
             );
@@ -199,12 +206,23 @@ export function jsonRenderComponent(
                 return null;
             }
 
-
             const LO_raw = formData[component.id];        
             const LearningOutcomesData: CardData[] = Array.isArray(LO_raw) ? LO_raw : [];
             //console.log("passing data = " + LearningOutcomesData);
             //console.log(LearningOutcomesData);
             return <LearningOutcomesCards id = {component.id} data = {LearningOutcomesData}/>            
+        
+
+        case "GradingPolicies" :
+            if (!component.id) {
+                console.error("Assignments component requires an 'id'");
+                return null;
+            }
+
+            const GP_raw = formData[component.id];        
+            const GPData: CardData[] = Array.isArray(GP_raw) ? GP_raw : [];
+            return <GradingPolicies id = {component.id} data = {GPData}/>            
+
         // Text-like inputs
 
         case "text":
@@ -212,7 +230,7 @@ export function jsonRenderComponent(
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
                     <input
-                        id={component.id || component.label || ""}
+                        id={component.id}
                         type={component.type}
                         placeholder={component.placeholder}
                         value={
@@ -230,24 +248,38 @@ export function jsonRenderComponent(
 
         // Dropdown
         case "select":
+            //alert('need to use state for dropdown!')
+
+            if (component.id === undefined || typeof(component.id) != "string") {
+                alert('component.id needed for select component');
+                return null;
+            }
+
+            const select_id = component.id;
+
+            const s = "select_id: " + JSON.stringify(select_id) + "\nvalue:" + 
+                            JSON.stringify(formData[select_id]);
+                                      
+
             return (
-                <label key={component.id} className={component.className || ""}>
+                <label key={select_id} className={component.className || ""}>
                     {component.label}
                     <select
-                        id={component.id || component.label || ""}
+                        id={select_id}
                         value={
-                            formData[component.id || component.label || ""] ||
-                            ""
+                            formData[select_id] ?? ""
                         }
-                        onChange={(e) =>
-                            onChange(component.id || "", e.target.value)
-                        }
+                        onChange={(e) =>   {                         
+                            //alert("changing: " + select_id + " to: " + e.target.value);
+                            onChange(select_id ?? "", e.target.value)                        
+                        }}
+                         
                         required={component.required}
                         className={component.className || ""}
                     >
                         <option value="">Select</option>
                         {component.options?.map((opt, i) => (
-                            <option key={i} value={opt}>
+                            <option key={select_id + i} value={opt}>
                                 {opt}
                             </option>
                         ))}
@@ -263,22 +295,14 @@ export function jsonRenderComponent(
                 return null;
             }
        
-            const raw = formData[component.id];
-       
-            let initialArray: CardData[] = [];
-       
-            try {
-                initialArray = Array.isArray(JSON.parse(raw)) ? JSON.parse(raw) : [];
-            } catch {
-                initialArray = [];
-            }
+            const assignment_raw = formData[component.id];
+            
+            const AssignmentData: CardData[] = Array.isArray(assignment_raw) ? assignment_raw : [];
+
                 return (
                     <Assignments
                     id={component.id}
-                    initialData={initialArray} 
-                    onChange={(newData) =>
-                     onChange(component.id!, JSON.stringify(newData))
-                    }
+                    data={AssignmentData}                                         
                 />
             );
 
@@ -316,11 +340,18 @@ export function jsonRenderComponent(
             case "paragraphFromFile" :               
                 return (
                     <ParagraphFromFile file = {component.file || ""} 
-                       className = {component.className || undefined}/>                                        
-                    
+                       className = {component.className || undefined}/>                                                            
                 )  
-            case "courseSchedule" :           
+            
+            case "htmlFromFile" :
+                return (
+                    <ParagraphFromFile 
+                       file = {component.file || ""} 
+                       className = {component.className || undefined}
+                       html = {true}/>                                                            
+                )  
 
+            case "courseSchedule" :           
             
                 if (component.id === undefined) {
                     alert('courseSchedule component needs an id');
@@ -374,7 +405,7 @@ export function jsonRenderComponent(
                 // this is the body of the main panel
                 let children = component.content?.map((child, i) => (
                             <div key={i}>
-                                {jsonRenderComponent(child, formData, onChange)}
+                                <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                             </div>
                 ))    
                               
@@ -384,7 +415,7 @@ export function jsonRenderComponent(
                 // if undefined, then treat as list of objects                                            
                 sidebarContent = component.sidebarContent?.map((child, i) => (
                             <div key={i}>
-                                {jsonRenderComponent(child, formData, onChange)}
+                                <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                             </div>
                 ))
                             
@@ -414,14 +445,12 @@ export function jsonRenderComponent(
                 } catch {
                     gradeTable = [];
                 }
+                
 
                 return (
                     <GradeTable 
-                    id={component.id}
-                    data={gradeTable}
-                    onChange={(updated) => 
-                        onChange(component.id!, JSON.stringify(updated))
-                    }
+                        id={component.id}
+                        data={gradeTable}                    
                     />
                 );
             case "Button":
@@ -442,7 +471,14 @@ export function jsonRenderComponent(
                 return (
                     <OverviewComponent formData={formData}/>
                 )
-            
+            case "ChecklistComponent": 
+                return (
+                    <ChecklistComponent formData={formData} 
+                    additional_sections_id="additional_sections_syllabus_json"
+                    policy_checkboxes="policy_checkboxes"
+                    resources_checkboxes="resources_checkboxes"/>
+                )
+
             case "FiveCoreCompetencies" :              
                 return <FiveCoreCompetencies five = {component.competencies ?? []}/>
             
@@ -493,4 +529,7 @@ export function jsonRenderComponent(
             return null;
     }
 }
-export default jsonRenderComponent;
+
+// We use React.memo to prevent re-rendering when no props change. This was only an issue with the 
+// <select element>, which did not update on the first change
+export const JsonRenderComponent = React.memo(JsonRenderComponentInner);

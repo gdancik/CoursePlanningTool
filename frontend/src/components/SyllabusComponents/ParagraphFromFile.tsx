@@ -18,9 +18,10 @@ import './ParagraphFromFile.css';
 interface ParagraphFromFileProps {
   file: string;
   className?: string 
+  html?: boolean
 }
 
-const ParagraphFromFile: React.FC <ParagraphFromFileProps> = ({ file, className }) => {
+export const ParagraphFromFile: React.FC <ParagraphFromFileProps> = ({ file, className, html = false }) => {
   
   const [fileText, setFileText] = useState(''); // initialize state
 
@@ -39,8 +40,18 @@ const ParagraphFromFile: React.FC <ParagraphFromFileProps> = ({ file, className 
       .catch((err) => console.error(err));
   }, []);
 
-  return <p className = {className || undefined} style = {{marginBottom: "1rem"}}>{fileText}</p>
+  return <>
+  { html ?
+        <p className = {className || undefined} style = {{marginBottom: "1rem"}} 
+        dangerouslySetInnerHTML={{ __html: fileText }} />
+        :
+        <p className = {className || undefined} style = {{marginBottom: "1rem"}}>{fileText}</p>
+  }
+  </>
 
+}
+export const HTMLFromFile: React.FC <ParagraphFromFileProps> = ({ file, className, html = false }) => {
+  return <ParagraphFromFile file = {file} className = {className} html = {html}/>
 }
 
 export default ParagraphFromFile;

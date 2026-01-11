@@ -1,11 +1,11 @@
 import {useNavigate, useLocation} from "react-router-dom";
-import {handleBack,handleNext} from "../../components/Button/ButtonLogic";
-import AppLayout from "../../SyllabusLayout/SyllabusPageHeader";
 import {useState, useEffect} from "react";
-import {isSectionComplete, getCurrentCourseData, ValidInputsResponse} from "../../services/validInputsService";
-import {MOCK_VALID_INPUTS} from "../../services/mockValidInputs";
 import { FaAngleUp, FaEdit } from "react-icons/fa";
 import SafeIcon from "../../utils/ComponentWrapper";
+import {isSectionComplete, ValidInputsResponse, fetchRequiredInputs} from "../../services/validInputsService";
+import Information from "../../components/SyllabusComponents/Information";
+import {CardData, ContentCardSet} from "../../components/SyllabusComponents/ContentCardSet"
+
 import "./Checklist.css";
 
 interface ChecklistItem {
@@ -13,7 +13,6 @@ interface ChecklistItem {
     title: string;
     description: string;
     link: string;
-    sectionId: string;
 }
 
 interface PolicyItem {
@@ -21,16 +20,23 @@ interface PolicyItem {
     label: string;
 }
 
-const Checklist = () => {
+const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resources_checkboxes }: 
+    { formData: Record<string, string>,
+      additional_sections_id: string,
+      policy_checkboxes: string,
+      resources_checkboxes:string
+    },
+       
+) => {
     //Page Navigation for Buttons
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [formData, setFormData] = useState<Record<string, string>>({});
-    const courseID = localStorage.getItem("currentCourseId");
+    //const [formData, setFormData] = useState<Record<string, string>>({});
     const [validInputs, setValidInputs] = useState<ValidInputsResponse>({});
-    const [courseData, setCourseData] = useState<Record<string, string>>({});
     
+    const [initialCards, setInitialCards] = useState<CardData[]>([]);
+
     // State for optional sections
     const [additionalSections, setAdditionalSections] = useState<Array<{title: string, content: string}>>([]);
     const [newSectionTitle, setNewSectionTitle] = useState("");
@@ -40,59 +46,49 @@ const Checklist = () => {
     const [selectedPolicies, setSelectedPolicies] = useState<Set<string>>(new Set());
     const [selectedResources, setSelectedResources] = useState<Set<string>>(new Set());
 
-    const handleBackClick = () => handleBack(navigate, location.pathname, formData, courseID || undefined);
-    const handleNextClick = () => handleNext(navigate, location.pathname, formData, courseID || undefined);
-
     // Checklist items matching syllabus sections
     const checklistItems: ChecklistItem[] = [
         {
-            id: "basic_info",
+            id: "basic_information",
             title: "Basic Information",
             description: "Have you entered the detailed information about the course into the instructor?",
-            link: "/basic-info",
-            sectionId: "basic_information"
+            link: "/basic-info"            
         },
         {
-            id: "description",
+            id: "course_description",
             title: "Course Description",
             description: "Have you outlined the overarching goals of the course, and the type of experience do you want your students to have in this course?",
-            link: "/course-description",
-            sectionId: "course_description"
+            link: "/course-description"
         },
         {
             id: "learning_outcomes",
             title: "Learning Outcomes",
             description: "Have you clearly articulated the Competencies and Learning Outcomes that effectively communicate and engage students in pursuing these outcomes?",
-            link: "/learning-outcomes",
-            sectionId: "learning_outcomes"
+            link: "/learning-outcomes"
         },
         {
-            id: "hips",
+            id: "high_impact_practices",
             title: "High Impact Practices (HIPs)",
             description: "Have you incorporated High Impact Practices in your course?",
-            link: "/hips",
-            sectionId: "hips"
+            link: "/hips"            
         },
         {
             id: "learning_resources",
             title: "Learning Resources",
             description: "Have you listed all required materials for your course, such as textbooks, software, lab equipment, and other resources?",
-            link: "/learning-resources",
-            sectionId: "learning_resources"
+            link: "/learning-resources"            
         },
         {
             id: "assessment",
             title: "Assessment",
             description: "Have you connected the course materials and assignments explicitly to your learning outcomes?",
-            link: "/assessment",
-            sectionId: "assessment"
+            link: "/assessment"            
         },
         {
-            id: "schedule",
+            id: "course_schedule",
             title: "Course Schedule",
             description: "Have you drafted a clear schedule that outlined the detailed learning outcomes addressed and readings/assignments due?",
-            link: "/course-schedule",
-            sectionId: "course_schedule"
+            link: "/course-schedule"            
         }
     ];
 
@@ -113,33 +109,29 @@ const Checklist = () => {
         { id: "student_wellness", label: "Statement on Student Wellness" }
     ];
 
-    useEffect(() => {
-        // Load valid inputs
-        setValidInputs(MOCK_VALID_INPUTS);
-        
-        // Load current course data
-        setCourseData(getCurrentCourseData());
-    }, []);
-
-    const checkSectionComplete = (sectionId: string): boolean => {
-        return isSectionComplete(sectionId, validInputs, courseData);
+        // useEffect runs once on component mount to fetch CSV data and API data
+        useEffect(() => {
+                
+            // Uncomment this when backend is running:
+             fetchRequiredInputs().then(setValidInputs)
+                 .catch(error => {
+                     console.error('Failed to fetch valid inputs:', error);
+                     //setValidInputs({});
+             });            
+    
+        }, []);
+    
+        useEffect(() =>{
+            const raw = formData[additional_sections_id];
+            const ic: CardData[] = Array.isArray(raw) ? raw : [];
+            setInitialCards(ic);
+        }, [formData])
+    
+    const checkSectionComplete = (sectionId: string): boolean => {        
+        return isSectionComplete(sectionId, validInputs, formData);
     };
 
-    const handleAddSection = () => {
-        if (newSectionTitle.trim() && newSectionContent.trim()) {
-            setAdditionalSections([...additionalSections, {
-                title: newSectionTitle,
-                content: newSectionContent
-            }]);
-            setNewSectionTitle("");
-            setNewSectionContent("");
-        }
-    };
-
-    const handleDeleteSection = (index: number) => {
-        setAdditionalSections(additionalSections.filter((_, i) => i !== index));
-    };
-
+    
     const togglePolicy = (policyId: string) => {
         const newSet = new Set(selectedPolicies);
         if (newSet.has(policyId)) {
@@ -178,10 +170,6 @@ const Checklist = () => {
 
     return (
         <div>
-            <AppLayout
-                onBack={handleBackClick}
-                onNext={handleNextClick}
-            />
             <div className="checklist-page">
                 <div className="checklist-container">
                     {/* Step 1: Syllabus Checklist */}
@@ -202,7 +190,7 @@ const Checklist = () => {
                             
                             <div className="checklist-content">
                                 <p className="checklist-instructions">
-                                    Click on the green button and download your draft syllabus in .Word document. Examine the syllabus and use the checklist below to ensure 
+                                    Click on the green button and download your draft syllabus as a Word document. Examine the syllabus and use the checklist below to ensure 
                                     that you have completed each section. Go back to previous steps and make revisions as needed. After completing all sections, you'll be able to 
                                     download the syllabus directly from the Home page for this course.
                                 </p>
@@ -214,7 +202,7 @@ const Checklist = () => {
                                                 <input 
                                                     type="checkbox" 
                                                     id={item.id}
-                                                    checked={checkSectionComplete(item.sectionId)}
+                                                    checked={checkSectionComplete(item.id)}
                                                     readOnly
                                                     aria-label={`${item.title} completed`}
                                                 />
@@ -258,63 +246,25 @@ const Checklist = () => {
                                     You can add additional sections to your syllabus. These sections will appear after the Course Schedule section.
                                 </p>
 
-                                {additionalSections.length > 0 && (
-                                    <div className="additional-sections-list">
-                                        {additionalSections.map((section, index) => (
-                                            <div key={index} className="additional-section-item">
-                                                <div className="additional-section-content">
-                                                    <strong>Section Title:</strong> {section.title}
-                                                    <br />
-                                                    <strong>Section Content:</strong>
-                                                    <div className="section-content-preview">{section.content}</div>
-                                                </div>
-                                                <button 
-                                                    className="delete-section-btn"
-                                                    onClick={() => handleDeleteSection(index)}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-
-                                <div className="add-section-form">
-                                    <div className="info-banner">
-                                        <span className="info-icon">ⓘ</span>
-                                        <span>Information entered below will appear in the final syllabus exactly as written.</span>
-                                    </div>
+                                
+                                <div className="add-section-form">                                    
                                     
-                                    <div className="form-field">
-                                        <label htmlFor="section-title">Section Title:</label>
-                                        <input 
-                                            type="text"
-                                            id="section-title"
-                                            value={newSectionTitle}
-                                            onChange={(e) => setNewSectionTitle(e.target.value)}
-                                            placeholder="Enter section title"
-                                        />
-                                    </div>
+                                    <Information text="Information entered below will appear in the final syllabus exactly as written."/>
+                                    &nbsp;                                
 
-                                    <div className="form-field">
-                                        <label htmlFor="section-content">Section Content:</label>
-                                        <textarea
-                                            id="section-content"
-                                            value={newSectionContent}
-                                            onChange={(e) => setNewSectionContent(e.target.value)}
-                                            placeholder="Enter section content"
-                                            rows={4}
-                                        />
-                                        <div className="character-count">Word count: {newSectionContent.split(/\s+/).filter(w => w.length > 0).length} / 500 words max</div>
-                                    </div>
+                                     <ContentCardSet
+                                                id = {additional_sections_id}
+                                                setTitle="Additional Sections"
+                                                titleLabel="Additional Section {index} Title:"
+                                                descriptionLabel="Additional Section {index} Description:"
+                                                initialCards={initialCards} 
+                                                onChange = {() => {}}           
+                                                minCards={1}
+                                                maxCards={3}
+                                                separateLabel={false}    
+                                            />
 
-                                    <button 
-                                        className="add-section-btn"
-                                        onClick={handleAddSection}
-                                        disabled={!newSectionTitle.trim() || !newSectionContent.trim()}
-                                    >
-                                        <span className="plus-icon">+</span> Add A Section
-                                    </button>
+                                   
                                 </div>
                             </div>
                         </details>
@@ -355,13 +305,14 @@ const Checklist = () => {
                                                 <span>Check All</span>
                                             </label>
                                         </div>
-                                        <div className="checkbox-list">
+                                        <div id = {policy_checkboxes} className="checkbox-list">
                                             {policyStatements.map(policy => (
                                                 <label key={policy.id} className="checkbox-item">
                                                     <input 
                                                         type="checkbox"
                                                         checked={selectedPolicies.has(policy.id)}
                                                         onChange={() => togglePolicy(policy.id)}
+                                                        value = {policy.label}
                                                     />
                                                     <span>{policy.label}</span>
                                                 </label>
@@ -382,15 +333,24 @@ const Checklist = () => {
                                                 <span>Check All</span>
                                             </label>
                                         </div>
-                                        <div className="checkbox-list">
+                                        <div id = {resources_checkboxes} className="checkbox-list">
                                             {resources.map(resource => (
                                                 <label key={resource.id} className="checkbox-item">
                                                     <input 
                                                         type="checkbox"
-                                                        checked={selectedResources.has(resource.id)}
+                                                        checked={resource.id === "accommodations" || selectedResources.has(resource.id)}
                                                         onChange={() => toggleResource(resource.id)}
+                                                        value = {resource.label}
                                                     />
-                                                    <span>{resource.label}</span>
+                                                    <span>
+                                                        {resource.id === "accommodations" ?
+                                                        <>
+                                                            {resource.label} (<b>Required</b>) 
+                                                        </>
+                                                        :
+                                                            resource.label
+                                                        }                                                       
+                                                    </span>                                                    
                                                 </label>
                                             ))}
                                         </div>

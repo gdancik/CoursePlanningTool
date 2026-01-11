@@ -69,11 +69,11 @@
 }
 
 .content-card-right-input {
-    width: 80px;
-    padding: 8px 10px;
+    width: 130px;
+    padding: 10px 12px;
     border: 1px solid #ced4da;
     border-radius: 4px;
-    //font-size: 14px;
+    font-size: 16px;
     text-align: center;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }

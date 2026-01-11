@@ -41,6 +41,7 @@ interface ContentCardProps {
     onDescriptionChange: (value: string) => void;
     onRightValueChange?: (value: string) => void;
     className?: string;
+    separateLabel?: boolean;   // to display label above input
 }
 
 const ContentCard: React.FC<ContentCardProps> = ({
@@ -53,16 +54,17 @@ const ContentCard: React.FC<ContentCardProps> = ({
     onTitleChange,
     onDescriptionChange,
     onRightValueChange,
-    className = ''
+    className = '',
+    separateLabel = false
 }) => {
     return (
         <div className={`content-card ${className}`}>
             <div className="content-card-header">
                 <div className="content-card-title-section">
-                    {/*<label className="content-card-label">{titleLabel}</label>*/}
+                    {separateLabel && <label className="content-card-label">{titleLabel}</label>}
                     <input
                         type="text"
-                        value = {titleValue}
+                        value = {!separateLabel ? titleValue : ""}
                         onChange={(e) => onTitleChange(e.target.value)}
                         className="content-card-title-input"
                         placeholder="Enter title..."
@@ -71,13 +73,13 @@ const ContentCard: React.FC<ContentCardProps> = ({
                 
                 {rightLabel && onRightValueChange && (
                     <div className="content-card-right-section">
-                        <label className="content-card-right-label">{rightLabel}</label>
+                        {separateLabel && <label className="content-card-right-label">{rightLabel}</label>}
                         <input
                             type="text"                            
-                            value={rightValue || ''}
+                            value={rightValue?.trim() || ''}
                             onChange={(e) => onRightValueChange(e.target.value)}
                             className="content-card-right-input"
-                            placeholder="0%"
+                            placeholder="Points (or %)"
                         />
                     </div>
                 )}

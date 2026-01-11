@@ -126,7 +126,7 @@ export default function About() {
         ============================ */}
         <SectionTitle title="STUDENTS" />
         <CardGrid>
-          <PersonCard name="John Carrera" role="Additional Programming" />
+          <PersonCard name="Cameron Senna" role="Front End Developer" />
           <PersonCard 
             name="Jessica Day" 
             role="Graphic Design" 
@@ -147,8 +147,8 @@ export default function About() {
         ============================ */}
         <SectionTitle title="ADDITIONAL CONTRIBUTORS" />
         <p className="text-gray-700 leading-relaxed mb-4">
-          We would like to thank <b>Dr. Megan Heenehan</b> and <b>Dr. Caitlin Carenen</b>for their contributions to the early 
-          development of this tool.</p>
+          We would like to thank <b>Dr. Megan Heenehan</b> and <b>Dr. Caitlin Carenen</b> for their contributions to the early 
+          development of this tool. We also thank <b> John Carrera</b> for additional programming.</p>
         
       </div>
       {/* Bottom SECTION */}

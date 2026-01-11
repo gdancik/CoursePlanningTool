@@ -4,16 +4,19 @@
     background-color: white;
     border-bottom: 10px solid #3a8ef6;
     overflow-x: auto;
-    justify-content: space-between;
+    justify-content: space-around;
+    gap: 0px;
 }
 
 .nav-tab {
     font-weight: 600;
     color: #888;
-    padding: 1rem 1.25rem;
+    padding: 1rem 0.3rem;
     text-decoration: none;
     white-space: nowrap;
     position: relative;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .nav-tab.active{

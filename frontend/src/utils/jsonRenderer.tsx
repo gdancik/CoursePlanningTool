@@ -16,6 +16,7 @@ import ChecklistComponent from "../components/SyllabusComponents/ChecklistCompon
 import { CoreCompetencyInterface, FiveCoreCompetencies, AdditionalCompetencies, 
          LearningOutcomesCards } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
 import { BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy"
+import {GradingPolicies} from "../components/SyllabusComponents/GradingPolicies"
 
 import CompetencyTable1 from "../components/SyllabusComponents/Tables/CompetencyTable1"
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
@@ -200,13 +201,23 @@ export function jsonRenderComponent(
                 return null;
             }
 
-
             const LO_raw = formData[component.id];        
             const LearningOutcomesData: CardData[] = Array.isArray(LO_raw) ? LO_raw : [];
             //console.log("passing data = " + LearningOutcomesData);
             //console.log(LearningOutcomesData);
             return <LearningOutcomesCards id = {component.id} data = {LearningOutcomesData}/>            
         // Text-like inputs
+
+        case "GradingPolicies" :
+            if (!component.id) {
+                console.error("Assignments component requires an 'id'");
+                return null;
+            }
+
+            const GP_raw = formData[component.id];        
+            const GPData: CardData[] = Array.isArray(GP_raw) ? GP_raw : [];
+            return <GradingPolicies id = {component.id} data = {GPData}/>            
+
 
         case "text":
             return (

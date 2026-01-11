@@ -177,6 +177,10 @@
         {
             "type": "Information",
             "text": "Information entered below will appear in the final syllabus exactly as written."
+        },
+        {
+            "type": "GradingPolicies",
+            "id": "grading_policies_syllabus_json"            
         }
     ]
 }

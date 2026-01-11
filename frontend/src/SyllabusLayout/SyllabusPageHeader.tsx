@@ -12,6 +12,7 @@ interface SyllabusPageHeaderProps {
     onPreview?: () => void;
     changesDetected?: boolean;
     setChangesDetected?: (x:boolean) => void;
+    courseNumber?: string;
 }
 
 const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
@@ -22,11 +23,12 @@ const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
                                                                    onPreview,
                                                                    changesDetected,
                                                                    setChangesDetected,
+                                                                   courseNumber,
                                                                }) => {
     
     return (
         <div style = {{position: "sticky", top: "0px", width: "100%", zIndex: "1000"}}>
-            <SyllabusHeader />                 
+            <SyllabusHeader courseNumber = {courseNumber}/>                 
             <AppLayoutButtons
                 onBack={onBack}
                 onNext={onNext}

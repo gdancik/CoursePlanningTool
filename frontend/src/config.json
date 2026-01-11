@@ -1,6 +1,6 @@
 {
-  "max_courses": 7,
+  "max_courses": 4,
   "loadData" : true,
   "saveData" : true,
-  "test_login": true
+  "test_login": false
 }

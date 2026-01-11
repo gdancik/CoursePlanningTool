@@ -27,8 +27,6 @@ const div_class = "bg-white p-4";
 const h1_class = "text-3xl font-bold text-[#012460] mb-8 tracking-wide";
 const p_class = "text-base text-gray-700 leading-relaxed mb-4";
 
-
-
 /* -------------------------------------------
   Usage Policy Component
 ------------------------------------------- */
@@ -45,7 +43,11 @@ function UsagePolicy() {
         share and adapt the work as long as you give credit to the creators (BY), do not use it for commercial purposes (NC), and license any new creations under the same terms (SA). 
         Proper attribution to the creators (<b>Dr. Courtney Broscious</b>, <b>Dr. Garrett Dancik</b>,
         and <b>Lora Lee</b>) is required when referencing or sharing materials developed using this tool. Please include a citation or acknowledgment in any course materials, presentations, or publications that incorporate content created with this tool.
-      </p>      
+      </p>    
+      <p className={p_class}> Source code is available from: <a 
+        style = {{margin: "0px"}} href = "https://github.com/gdancik/CoursePlanningTool">
+          https://github.com/gdancik/CoursePlanningTool</a>
+        </p>  
     </div>
   );
 }

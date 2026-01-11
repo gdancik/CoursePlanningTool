@@ -33,7 +33,7 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json, disable
   // TO DO: do we need handleChange?
   // Handle input field changes
   const handleChange = (label: string, value: string) => {   
-    setFormData((prev) => ({ ...prev, [label]: value }));        
+      setFormData((prev) => ({ ...prev, [label]: value }));        
   };
 
   return (

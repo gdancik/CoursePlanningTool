@@ -69,12 +69,17 @@ export type JsonComponent = {
     days2?: string   // field for days2
 };
 
-// Recursive renderer
-export function jsonRenderComponent(
-    component: JsonComponent,
-    formData: Record<string, string>,
-    onChange: (label: string, value: string) => void
-): React.ReactNode {
+interface JsonRenderComponentProps {
+  component: JsonComponent;
+  formData: Record<string, string>;
+  onChange: (label: string, value: string) => void;
+}
+
+const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
+  component,
+  formData,
+  onChange
+}) => {
     switch (component.type) {
         case "Accordion":
             return (
@@ -85,7 +90,7 @@ export function jsonRenderComponent(
                 >
                     {component.content?.map((child, i) => (
                         <div key={i}>
-                            {jsonRenderComponent(child, formData, onChange)}
+                            <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                         </div>
                     ))}
                 </SectionAccordion>
@@ -110,7 +115,7 @@ export function jsonRenderComponent(
             className={component.className || "form-column"}
             >
                     {component.content?.map((child, i) =>
-                        jsonRenderComponent(child, formData, onChange)
+                        <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                     )}
                 </div>
             );
@@ -132,7 +137,7 @@ export function jsonRenderComponent(
             return (
             <div key={component.id} className={component.className || "form-row"}>
                     {component.content?.map((child, i) =>
-                        jsonRenderComponent(child, formData, onChange)
+                        <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                     )}
                 </div>
             );
@@ -206,7 +211,7 @@ export function jsonRenderComponent(
             //console.log("passing data = " + LearningOutcomesData);
             //console.log(LearningOutcomesData);
             return <LearningOutcomesCards id = {component.id} data = {LearningOutcomesData}/>            
-        // Text-like inputs
+        
 
         case "GradingPolicies" :
             if (!component.id) {
@@ -218,13 +223,14 @@ export function jsonRenderComponent(
             const GPData: CardData[] = Array.isArray(GP_raw) ? GP_raw : [];
             return <GradingPolicies id = {component.id} data = {GPData}/>            
 
+        // Text-like inputs
 
         case "text":
             return (
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
                     <input
-                        id={component.id || component.label || ""}
+                        id={component.id}
                         type={component.type}
                         placeholder={component.placeholder}
                         value={
@@ -242,24 +248,38 @@ export function jsonRenderComponent(
 
         // Dropdown
         case "select":
+            //alert('need to use state for dropdown!')
+
+            if (component.id === undefined || typeof(component.id) != "string") {
+                alert('component.id needed for select component');
+                return null;
+            }
+
+            const select_id = component.id;
+
+            const s = "select_id: " + JSON.stringify(select_id) + "\nvalue:" + 
+                            JSON.stringify(formData[select_id]);
+                                      
+
             return (
-                <label key={component.id} className={component.className || ""}>
+                <label key={select_id} className={component.className || ""}>
                     {component.label}
                     <select
-                        id={component.id || component.label || ""}
+                        id={select_id}
                         value={
-                            formData[component.id || component.label || ""] ||
-                            ""
+                            formData[select_id] ?? ""
                         }
-                        onChange={(e) =>
-                            onChange(component.id || "", e.target.value)
-                        }
+                        onChange={(e) =>   {                         
+                            //alert("changing: " + select_id + " to: " + e.target.value);
+                            onChange(select_id ?? "", e.target.value)                        
+                        }}
+                         
                         required={component.required}
                         className={component.className || ""}
                     >
                         <option value="">Select</option>
                         {component.options?.map((opt, i) => (
-                            <option key={i} value={opt}>
+                            <option key={select_id + i} value={opt}>
                                 {opt}
                             </option>
                         ))}
@@ -385,7 +405,7 @@ export function jsonRenderComponent(
                 // this is the body of the main panel
                 let children = component.content?.map((child, i) => (
                             <div key={i}>
-                                {jsonRenderComponent(child, formData, onChange)}
+                                <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                             </div>
                 ))    
                               
@@ -395,7 +415,7 @@ export function jsonRenderComponent(
                 // if undefined, then treat as list of objects                                            
                 sidebarContent = component.sidebarContent?.map((child, i) => (
                             <div key={i}>
-                                {jsonRenderComponent(child, formData, onChange)}
+                                <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
                             </div>
                 ))
                             
@@ -509,4 +529,7 @@ export function jsonRenderComponent(
             return null;
     }
 }
-export default jsonRenderComponent;
+
+// We use React.memo to prevent re-rendering when no props change. This was only an issue with the 
+// <select element>, which did not update on the first change
+export const JsonRenderComponent = React.memo(JsonRenderComponentInner);

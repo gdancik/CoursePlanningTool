@@ -33,6 +33,24 @@ const CourseCard: React.FC<CourseCardProps> = ({
         if (onDelete) onDelete();
 
     }
+
+    const convertDate = (s:string | undefined): string | undefined => {
+        if (!s) return s;
+       
+        let createdDate = new Date(s);
+        s = createdDate.toLocaleString(undefined, {
+            weekday: 'short',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    
+        return s;
+    }
+    
+
     return (
         <div className="course-card">
             <div className="course-left">
@@ -53,8 +71,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
                     </p>
                     <p className="course-type">{course.course_type || 'General Education'}</p>
                     <div className="course-meta">
-                        <span>Created: {course.created_at}</span>
-                        <span>Last Edited: {course.last_edited}</span>
+                        <p>Created: {convertDate(course.created_at)}</p>
+                        <p>Last Edited: {convertDate(course.last_edited)}</p>
                     </div>
                 </div>
             </div>

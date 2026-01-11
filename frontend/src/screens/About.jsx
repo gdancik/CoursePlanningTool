@@ -3,6 +3,7 @@ import { FaLinkedin, FaEnvelope, FaGlobe } from "react-icons/fa";
 import bgImage from '../assets/images/bookstack-bg.png'
 import StandardHeader from '../components/Header/standardHeader';
 import StandardFooter from '../components/Footer/Footer';
+
 export function PersonCard({ name, role, photo, linkedin, email, website }) {
   return (
     <div className="bg-white border border-gray-300 rounded-lg shadow-sm p-4 w-64">
@@ -37,7 +38,7 @@ export function PersonCard({ name, role, photo, linkedin, email, website }) {
             target="_blank"
             //Makes it seprate for security purposes
             rel="noopener noreferrer"
-            className="hover:text-blue-900"
+            className="hover:text-blue-900 inline_link"
           >
             <FaLinkedin />
           </a>
@@ -70,6 +71,15 @@ export function PersonCard({ name, role, photo, linkedin, email, website }) {
 export default function About() {
   return (
     <div className="min-h-screen w-screen" style={{ backgroundImage: `url(${bgImage})` }}>
+      <style> {`
+        .inline_link {
+           margin: 0px;
+           color: #012460;
+        }
+      `}
+
+      </style>
+
     <StandardHeader/>
     <h1 className="text-white text-5xl font-bold text-center pt-10">ABOUT</h1>
     <div className="p-20 pt-10 shadow-2xl">
@@ -95,6 +105,7 @@ export default function About() {
             name="Dr. Garrett Dancik"
             role="Project Lead"
             website= "https://gdancik.github.io "
+            linkedin= "https://www.linkedin.com/in/garrett-dancik/"
             photo="/images/Dancik.jpg"
           />
           <PersonCard
@@ -179,12 +190,13 @@ function TopSect() {
       <h1 className="text-3xl font-bold text-[#012460] mb-8 tracking-wide">COURSE PLANNING TOOL</h1>
       <p className="text-base text-gray-700 leading-relaxed mb-4">
         This interactive course planning tool is built to support faculty in designing evidence-based courses and 
-        syllabi through a series of easy- to- complete guided steps. <b>You can download a complete syllabus, edit and 
-        duplicate your courses as often as needed, 
+        syllabi through a series of easy-to-complete guided steps. <b>You can download a complete syllabus, edit and 
+        duplicate your courses, 
         and streamline your planning process</b>—whether you're creating an ELAC course or any other type of course.
       </p>
       <p className="text-base text-gray-700 leading-relaxed">
-       This project was made possible with the generous support of the Davis Educational Foundation, 
+       This project was made possible with the generous support of the <a class = "inline_link" href = "https://www.davisfoundations.org/">
+       Davis Educational Foundation</a>, 
        established as a public charitable foundation in 1985. The Foundation supports undergraduate 
        programs at public and private, regionally accredited, baccalaureate degree-granting colleges and
         universities throughout the six New England states. It was co-founded by Elisabeth K. Davis and Stanton W. Davis 
@@ -206,7 +218,8 @@ function BottomSect() {
      <div className="bg-white p-10">
       <h1 className="text-3xl font-bold text-[#012460] mb-8 tracking-wide">THE CENTER FOR TEACHING, LEARNING, AND ASSESSMENT (CTLA) </h1>
       <p className="text-base text-gray-700 leading-relaxed mb-4">
-        The Center for Teaching, Learning, and Assessment (CTLA) supports faculty at Eastern with quality, 
+        The <a class = 'inline_link' href = "https://www.easternct.edu/center-for-teaching-learning-and-assessment/index.html">
+        Center for Teaching, Learning, and Assessment (CTLA)</a> supports faculty at Eastern with quality, 
         innovative, and inclusive teaching and learning methods, effective learning assessment, and scholarly activity. 
         The Center fosters collegial dialogue, promotes reflection, and creates disciplinary resources sharing, 
         while providing resources that promote ongoing improvement in teaching. The CTLA offers various faculty development 

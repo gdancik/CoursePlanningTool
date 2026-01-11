@@ -25,7 +25,9 @@
                   "type" : "Button",
                   "label" : "Link to CTLA",
                   "href" : "https://www.easternct.edu/liberal-arts-core/high-impact-practices.html",
-                  "new_tab": true
+                  "new_tab": true,
+                  "externalLink": true
+
               }
           ],                      
           "sidebarWidth": "250px",

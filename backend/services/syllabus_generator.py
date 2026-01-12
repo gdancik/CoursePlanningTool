@@ -3,7 +3,7 @@ import json
 from bs4 import BeautifulSoup
 from docx import Document
 from htmldocx import HtmlToDocx
-from docx.shared import RGBColor, Pt
+from docx.shared import RGBColor, Pt, Inches
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn 
 
@@ -63,6 +63,7 @@ def getStatements(url,selected_statements:list = None):
     Returns:
         dict: A dictionary where keys are headers and values are lists of content for the corresponding statements.
     '''
+
     soup = get_webpage(url)
 
     logging.info(f'Getting selected syllabus statements')
@@ -71,7 +72,8 @@ def getStatements(url,selected_statements:list = None):
     all_statements = extractFromAccordian(soup)
 
     #Filter only the statements selected (Will have to search header for string)
-    statments = all_statements
+    statments = {} #all_statements
+
     logging.debug(f'selected_statements: {selected_statements},type:{type(selected_statements)}')#debug
     if selected_statements:
         statments = {}
@@ -98,9 +100,15 @@ def create_syllabus_statment_page(doc,url: str,selected_statements=None):
 
     logging.debug(f'selected_statements: {selected_statements}, type:{type(selected_statements)}')#debug
 
+   
+
     x = getStatements(url,selected_statements)
+
     for header, content in x.items():
-        header_string = str(header)
+        
+        # get header and remove whitespace after any closing tag
+        header_string = str(header).strip()
+        header_string = re.sub(r'(</[^>]+>)\s+', r'\1', header_string)
         content_string = str(list(content)[0])
         html_to_word_htmldocx(doc,header_string)
         html_to_word_htmldocx(doc,content_string)
@@ -150,7 +158,7 @@ def add_table_to_doc(doc, table_list:list, merge: list = None, header = True):
 
     logging.info(f'Adding table to document')
     table = doc.add_table(rows=len(table_list), cols=len(table_list[0]),style = "Table Grid")
-
+   
     if merge:
         logging.debug('Merging Cells')
         #iterate through list
@@ -167,6 +175,13 @@ def add_table_to_doc(doc, table_list:list, merge: list = None, header = True):
 
     if header == True:
         style_table_header(table)
+
+    # change formatting if this is the GradeTable
+    if len(table_list) == 12 and table_list[0][0] == 'Grade' :
+        table.autofit = False
+        for column in table.columns:
+            for cell in column.cells:
+                cell.width = Inches(2)
    
     return table
     
@@ -300,12 +315,17 @@ def generate_grading_policies(doc, policies:list):
     '''
     for i in policies:
         #If its an outcome
-        if len(i) == 2:
-            items = list(i.items())
+        if len(i) == 2:           
+            #doc.add_paragraph(f'{i['title']}: {i['description']}')
+            #return
+            items = list(i.items())            
             key_label, key, value = items[0][0], items[0][1], items[1][1]
             #title
             title = key
-            paragraph = doc.add_paragraph(f'{key_label}: {title}')
+
+            key_label, title = "", i['title']   # GD
+
+            paragraph = doc.add_paragraph(f'{title.strip()}')
             run_title = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
             run_title.font.color.rgb = RGBColor(32, 44, 92)
             run_title.font.size = Pt(12)
@@ -314,6 +334,7 @@ def generate_grading_policies(doc, policies:list):
             run_title.italic = True
             #description
             description = value
+            description = i['description']      # GD
             paragraph = doc.add_paragraph(description)
             run_description = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
             run_description.font.color.rgb = RGBColor(0, 0, 0)
@@ -329,16 +350,22 @@ def generate_grading_policies(doc, policies:list):
             value =  items[2][1]
             #title
             title = key
+
+            key_label, title = "", i['title']  # GD
+            points_label, points = "", i['rightValue'] # GD
             
-            paragraph = doc.add_paragraph(f'{key_label}: {title} {points_label:>50}: {points}')
+            paragraph = doc.add_paragraph(f'{title} ({points})')
             run_title = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
             run_title.font.color.rgb = RGBColor(32, 44, 92)
             run_title.font.size = Pt(12)
             run_title.font.name = 'Calibri'
             run_title.bold = True
             run_title.italic = True
+
             #description
             description = value
+            description = i['description']      # GD
+          
             paragraph = doc.add_paragraph(description)
             run_description = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
             run_description.font.color.rgb = RGBColor(0, 0, 0)
@@ -407,7 +434,10 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     logging.debug('Removing "_list" from the column names')
 
     #policy placeholder handling
-    policies = fr_dict.get('policy_statements',None)
+    policies = fr_dict.get('policy', [])
+    policies += fr_dict.get('resources', ['Accommodations for Students with Disabilities'])
+
+    '''
     try:
         logging.debug(f'string before conversion to literal:{policies}')
         if policies == None:
@@ -416,6 +446,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
             policies = json.loads(policies)
     except ValueError as e:
         logging.error(f"Error converting string to literal: {e}")
+    '''
         
 
     logging.debug(f'policies: {policies}, type:{type(policies)}')#debug
@@ -427,7 +458,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     # Iterate through paragraphs and replace placeholders
     for paragraph in doc.paragraphs:
         #Add policies
-        if 'policy_statements'in paragraph.text: 
+        if '<policy_statements></policy_statements>'in paragraph.text: 
             logging.debug('Policy Placeholder found') #debug
             for source_paragraph in syllabus_statment_page.paragraphs:
                 de.copy_paragraph_before(source_paragraph,paragraph)
@@ -495,9 +526,22 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     if fr_dict.get('phone_syllabus') == "":
         removeBlocks.append('phone')
-    else:
+    else: 
         removeTags.append('phone')
+    
+    if fr_dict.get('instructor_additional_information') == "":
+        removeBlocks.append('instructor_additional_information')
+    else:
+        removeTags.append('instructor_additional_information')
 
+    if fr_dict.get('hip'):
+        removeTags.append('hip')        
+    else: 
+        removeBlocks.append('HIP')
+    
+    # always remove -- can we do this for all of them???
+    removeBlocks.append('policy_statements')
+    
     de.removeBlocks(doc,removeBlocks)
     de.removeBlockTags(doc,removeTags)
     #Replace any formatted text that is in markdown

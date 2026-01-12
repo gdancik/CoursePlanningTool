@@ -18,6 +18,7 @@ import CourseModal from '../../components/CourseModal/NewCourseModal';
 import CourseCard from './CourseCard';
 import { Navigate, useNavigate } from 'react-router-dom';
 import StandardFooter from '../../components/Footer/Footer';
+import ScrollToTop from '../../components/ScrollToTop/ScrollToTop';
 import config from '../../config.json';
 import './CoursePage.css';
 
@@ -206,8 +207,12 @@ const CoursePage: React.FC = () => {
                                 ))}
                             </div>
                         )}
-                    </div>
+
+                     <ScrollToTop/>
+                    </div>               
                 </div>
+
+           
             <StandardFooter/>
 
             <CourseModal

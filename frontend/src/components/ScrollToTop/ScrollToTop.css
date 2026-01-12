@@ -1,7 +1,10 @@
 #scrollToTop {
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  bottom: 20px;  
+  background-color: white;
+  margin: 5px;
+  padding: 5px;
 }
 
 html {

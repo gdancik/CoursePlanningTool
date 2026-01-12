@@ -30,25 +30,36 @@ const GradeTable: React.FC<GradeTableProps> = ({ id, data }) => {
     const [rows, setRows] = React.useState<[string, string][]>([["",""]]);
 
     const handleChange = (index: number, value: string) => {
-      const updated = [...intervals];
+      const updated = [...intervals];      
       updated[index] = value;
       //alert("setting intervals: " + updated);
-      setIntervals(updated);
-      //onChange?.(updated); // optional callback
+      setIntervals(updated);          
+     
     };
 
+     // handle updates to data
+    React.useEffect(() => {              
+      const r: [string, string][] = gradeLetters.map((letter, i) => {        
+        return [letter, intervals[i]];
+      });            
+      
+      setRows(r);
+
+      }, [intervals]);
+
+    // handle updates to data
     React.useEffect(() => {        
-    
+          
       const r: [string, string][] = gradeLetters.map((letter, i) => {
         if(data && data[i] && data[i][0]){
             return [letter, data[i+1][1]];
         }
         return [letter, intervals[i]];
       });
-
+      
       setRows(r);
 
-      }, [data, intervals]);
+      }, [data]);
 
          
   return (
@@ -69,8 +80,10 @@ const GradeTable: React.FC<GradeTableProps> = ({ id, data }) => {
               <td>{letter}</td>              
                 <td>                              
                     <textarea                  
-                      value={interval} 
-                      onChange={(e) => handleChange(idx, e.target.value)}                                                    
+                      value={interval}                       
+                      onChange={(e) => {                        
+                        handleChange(idx, e.target.value)                      
+                      }}                                                    
                     />                                 
               </td>              
             </tr>

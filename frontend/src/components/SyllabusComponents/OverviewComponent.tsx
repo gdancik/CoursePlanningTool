@@ -139,14 +139,18 @@ const OverviewComponent = ({ formData }: { formData: Record<string, string> }) =
                 questions present in the tool are geared to help you build your course and do not appear in the
                 syllabus itself.</p>
 
+                <p>&nbsp;</p>
+
                 <p>
                     The fields that show up on your syllabus are in <span
                 className="green-text">green</span> throughout the tool
                 </p>   
 
-                <img src ={SyllabusGreen} alt="SyllabusGreen" className="Syllabus-green-box"/>                    
+                <img src ={SyllabusGreen} alt="SyllabusGreen" className="Syllabus-green-box"/>  
+                <p>&nbsp;</p>                  
                 <p>The fields that are brainstorming and do not show up on your syllabus are in gray.</p>
                 <img src={SyllabusGrey} alt="SyllabusGrey" className="Syllabus-grey-box"/>
+                      <p>&nbsp;</p>
                 <p>If you would like to add images or figures to your syllabus, you should do so AFTER you have downloaded the syllabus into word.</p>
                 <p>You can store up to {config.max_courses} syllabi in the course planning tool at a time.</p>
             </p>

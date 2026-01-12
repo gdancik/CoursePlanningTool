@@ -93,20 +93,19 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
     ];
 
     const policyStatements: PolicyItem[] = [
-        { id: "academic_integrity", label: "Academic Integrity Policy" },
+        { id: "academic_integrity", label: "Academic Integrity" },
         { id: "diversity", label: "Diversity Statement" },
         { id: "final_exam", label: "Final Examination Statement" },
-        { id: "sexual_misconduct", label: "Student Sexual Misconduct Statement" },
-        { id: "weather", label: "Weather Policy" }
+        { id: "sexual_misconduct", label: "Student Sexual Misconduct Policy" },
+        { id: "weather", label: "Class Meetings During Inclement Weather" }
     ];
 
     const resources: PolicyItem[] = [
         { id: "academic_success", label: "Academic Success Center" },
         { id: "accommodations", label: "Accommodations for Students with Disabilities" },
-        { id: "writing", label: "Writing Assistance" },
-        { id: "math_tutoring", label: "Math Tutoring Statement" },
-        { id: "counseling", label: "Counseling and Psychological Services" },
-        { id: "student_wellness", label: "Statement on Student Wellness" }
+        { id: "writing", label: "Assistance at the Writing Center" },
+        { id: "math_tutoring", label: "Math Tutoring Statement (not available)" },
+        { id: "counseling", label: "Counseling and Psychological Services" }        
     ];
 
         // useEffect runs once on component mount to fetch CSV data and API data

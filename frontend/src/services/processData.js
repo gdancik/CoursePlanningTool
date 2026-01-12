@@ -40,7 +40,7 @@ const processCard = (x) => {
         let objs = cards.map ( card => {
             let values = [...card.querySelectorAll('input, textarea')].map( (input) => input.value);
             let obj = Object.fromEntries(keys.map((key, i) => [key, values[i]]));             
-            if (obj['rightValue']) {
+            if (obj['rightValue'] !== undefined) {
                 [obj['rightValue'], obj['description']] = [obj['description'], obj['rightValue']];
             } 
             return obj;
@@ -90,7 +90,7 @@ const saveData = async (ref) => {
         .map(x => {
             return { [x.id] : processCard(x)};
         });
-        
+            
     const combined = Object.assign({}, 
         ...res_text, 
         ...res_select, 

@@ -475,8 +475,8 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                 return (
                     <ChecklistComponent formData={formData} 
                     additional_sections_id="additional_sections_syllabus_json"
-                    policy_checkboxes="policy_checkboxes"
-                    resources_checkboxes="resources_checkboxes"/>
+                    policy_checkboxes_id="policy_checkboxes"
+                    resources_checkboxes_id="resources_checkboxes"/>
                 )
 
             case "FiveCoreCompetencies" :              

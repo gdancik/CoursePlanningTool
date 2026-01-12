@@ -20,11 +20,11 @@ interface PolicyItem {
     label: string;
 }
 
-const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resources_checkboxes }: 
+const Checklist = ({ formData, additional_sections_id, policy_checkboxes_id, resources_checkboxes_id }: 
     { formData: Record<string, string>,
       additional_sections_id: string,
-      policy_checkboxes: string,
-      resources_checkboxes:string
+      policy_checkboxes_id: string,
+      resources_checkboxes_id:string
     },
        
 ) => {
@@ -123,9 +123,36 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
         useEffect(() =>{
             const raw = formData[additional_sections_id];
             const ic: CardData[] = Array.isArray(raw) ? raw : [];
-            setInitialCards(ic);
+            setInitialCards(ic);        
+
+
+            // We currently assign check value by id, but save the labels, so we need to
+            // create label → id lookups to handle saved data
+            
+            const policyLabelToId = Object.fromEntries(
+                policyStatements.map(r => [r.label, r.id])
+            );
+
+            const resourcesLabelToId = Object.fromEntries(
+                resources.map(r => [r.label, r.id])
+            );
+
+            // Get relevant data
+            const pc: string[] = Array.isArray(formData['policy_checkboxes']) ? formData['policy_checkboxes'] : [];
+            const rc: string[] = Array.isArray(formData['resources_checkboxes']) ? formData['resources_checkboxes'] : [];
+
+            // Get the corresponding ids
+            const pIds = pc.map(label => policyLabelToId[label]).filter(Boolean); 
+            const rIds = rc.map(label => resourcesLabelToId[label]).filter(Boolean); 
+
+            // set the state
+            setSelectedPolicies(new Set(pIds));
+            setSelectedResources(new Set(rIds));
+
         }, [formData])
     
+        
+
     const checkSectionComplete = (sectionId: string): boolean => {        
         return isSectionComplete(sectionId, validInputs, formData);
     };
@@ -147,8 +174,8 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
             newSet.delete(resourceId);
         } else {
             newSet.add(resourceId);
-        }
-        setSelectedResources(newSet);
+        }                
+        setSelectedResources(newSet);        
     };
 
     const toggleAllPolicies = () => {
@@ -156,15 +183,15 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
             setSelectedPolicies(new Set());
         } else {
             setSelectedPolicies(new Set(policyStatements.map(p => p.id)));
-        }
+        }       
     };
 
     const toggleAllResources = () => {
-        if (selectedResources.size === resources.length) {
+        if (selectedResources.size === resources.length) {           
             setSelectedResources(new Set());
         } else {
             setSelectedResources(new Set(resources.map(r => r.id)));
-        }
+        }       
     };
 
     return (
@@ -304,7 +331,7 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
                                                 <span>Check All</span>
                                             </label>
                                         </div>
-                                        <div id = {policy_checkboxes} className="checkbox-list">
+                                        <div id = {policy_checkboxes_id} className="checkbox-list">
                                             {policyStatements.map(policy => (
                                                 <label key={policy.id} className="checkbox-item">
                                                     <input 
@@ -332,7 +359,7 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes, resour
                                                 <span>Check All</span>
                                             </label>
                                         </div>
-                                        <div id = {resources_checkboxes} className="checkbox-list">
+                                        <div id = {resources_checkboxes_id} className="checkbox-list">
                                             {resources.map(resource => (
                                                 <label key={resource.id} className="checkbox-item">
                                                     <input 

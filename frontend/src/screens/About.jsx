@@ -149,7 +149,7 @@ export default function About() {
         <SectionTitle title="ADDITIONAL CONTRIBUTORS" />
         <p className="text-gray-700 leading-relaxed mb-4">
           We would like to thank <b>Dr. Megan Heenehan</b> (ECSU) <b>Dr. Caitlin Carenen</b> (ECSU), and 
-          <b>Dr. Kate McConnell</b> (AAC&U) for their contributions to the early 
+          <b> Dr. Kate McConnell</b> (AAC&U) for their contributions to the early 
           development of this tool. We also thank <b> John Carrera</b> for additional programming.</p>
         
       </div>

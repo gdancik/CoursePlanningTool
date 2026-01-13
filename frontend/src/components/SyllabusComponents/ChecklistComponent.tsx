@@ -96,15 +96,15 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes_id, res
         { id: "academic_integrity", label: "Academic Integrity" },
         { id: "diversity", label: "Diversity Statement" },
         { id: "final_exam", label: "Final Examination Statement" },
-        { id: "sexual_misconduct", label: "Student Sexual Misconduct Policy" },
+        { id: "sexual_misconduct", label: "Sexual Misconduct Policy" },
         { id: "weather", label: "Class Meetings During Inclement Weather" }
     ];
 
     const resources: PolicyItem[] = [
         { id: "academic_success", label: "Academic Success Center" },
         { id: "accommodations", label: "Accommodations for Students with Disabilities" },
-        { id: "writing", label: "Assistance at the Writing Center" },
-        { id: "math_tutoring", label: "Math Tutoring Statement (not available)" },
+        { id: "writing", label: "Writing Center" },
+        { id: "math_tutoring", label: "Math Achievement Center (not yet available)" },
         { id: "counseling", label: "Counseling and Psychological Services" }        
     ];
 

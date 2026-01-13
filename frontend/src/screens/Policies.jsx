@@ -15,9 +15,9 @@ export default function Policies() {
       {/* TOP SECTION */} 
         <UsagePolicy/>        
         <PrivacyPolicy/>
-
-      </div>
       <StandardFooter/>
+      </div>
+      
     </div>       
   );
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import ecsuLogoBlack from "../../assets/images/ecsu-logo-stacked-black.png"
 import './standardFooter.css';
 
@@ -13,13 +14,16 @@ const StandardFooter = () => {
                 className="ecsu-logo-standard"
             />
             */}
-            <p></p>
+            <div className = "center-group">
             <p><a href = '/'>Home</a> | 
                <a href = '/about/'>About</a> | 
                <a href = '/policies'>Policies</a>
-               </p>            
-            
-            <p></p>
+               </p>      
+               </div>      
+            <div className = "right-item footer">
+            <ScrollToTop/>                          
+                      
+            </div>            
         </header>
     );
 };

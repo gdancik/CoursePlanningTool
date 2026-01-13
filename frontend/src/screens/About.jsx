@@ -113,6 +113,8 @@ export default function About() {
             name="Julia DeLapp"
             role="Project Coordinator"
             email= "delappj@easternct.edu"
+            photo="/images/DeLapp.jpg"
+            linkedin= "https://www.linkedin.com/in/julia-delapp-367a2b3b/"
           />
           <PersonCard
             name="Lora Lee"
@@ -155,9 +157,11 @@ export default function About() {
       </div>
       {/* Bottom SECTION */}
       <BottomSect />
-      </div>
-      <StandardFooter/>
+      <StandardFooter/> 
+      </div>   
+           
     </div>
+    
   );
 }
 
@@ -219,26 +223,32 @@ function BottomSect() {
   return (
      <div className="bg-white p-10">
       <h1 className="text-3xl font-bold text-[#012460] mb-8 tracking-wide">THE CENTER FOR TEACHING, LEARNING, AND ASSESSMENT (CTLA) </h1>
+      
+
       <p className="text-base text-gray-700 leading-relaxed mb-4">
-        The <a class = 'inline_link' href = "https://www.easternct.edu/center-for-teaching-learning-and-assessment/index.html">
-        Center for Teaching, Learning, and Assessment (CTLA)</a> supports faculty at Eastern with quality, 
-        innovative, and inclusive teaching and learning methods, effective learning assessment, and scholarly activity. 
-        The Center fosters collegial dialogue, promotes reflection, and creates disciplinary resources sharing, 
-        while providing resources that promote ongoing improvement in teaching. The CTLA offers various faculty development 
-        opportunities related to the CTLA and the IDEA Grant, on-campus, online, or in hybrid formats.
+       The <a class = 'inline_link' href = "https://www.easternct.edu/center-for-teaching-learning-and-assessment/index.html">
+        Center for Teaching, Learning, and Assessment (CTLA)</a> supports 
+        faculty in developing high quality, innovative, and inclusive 
+        teaching and learning experiences to meet the diverse learning needs of 
+        Eastern’s students. The Center promotes faculty dialogue, reflective 
+        teaching, collaborative learning, and information-sharing across the 
+        disciplines and provides resources that support the continuing improvement
+        of teaching.
       </p>
+
+
       <div className="mt-4 text-sm text-gray-700">
-        <p>To view CTLA hours or if you have questions, please contact:</p>
-        <p className="mb-0">
+        <p className="text-base text-gray-700 leading-relaxed mb-4">For questions about the CTLA or the Course Planning Tool, please contact:</p>
+        <p className="text-base text-gray-700 leading-relaxed mb-4" >
           <b>Julia DeLapp</b>
           <br />
-          Project Director
-          <br />
-          delappj@easternct.edu
+          Director
+          <br /
+          ><a class = 'inline_link' href = "mailto:delappj@easternct.edu">delappj@easternct.edu</a>
           <br />
           860.465.0687
         </p>
-      </div>
+      </div>   
     </div>
   );
 }

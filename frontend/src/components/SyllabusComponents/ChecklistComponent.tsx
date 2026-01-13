@@ -103,8 +103,7 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes_id, res
     const resources: PolicyItem[] = [
         { id: "academic_success", label: "Academic Success Center" },
         { id: "accommodations", label: "Accommodations for Students with Disabilities" },
-        { id: "writing", label: "Writing Center" },
-        { id: "math_tutoring", label: "Math Achievement Center (not yet available)" },
+        { id: "writing", label: "Writing Center" },        
         { id: "counseling", label: "Counseling and Psychological Services" }        
     ];
 

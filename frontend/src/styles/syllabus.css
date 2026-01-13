@@ -23,6 +23,9 @@
   @apply w-full col-span-3 sm:col-span-3 border-2 p-2 box-border rounded-md min-h-40 resize-y;
 }
 
+.blue-box textarea {
+    border: dashed 2px;
+}
 
 /* Green variant */
 .form-row textarea.green-box,

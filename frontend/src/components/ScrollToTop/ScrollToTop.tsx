@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import "./ScrollToTop.css";
 
 
@@ -23,5 +24,16 @@ const ScrollToTop: React.FC = () => {
           
     );
 };
+
+export function AutoScrollToTop() {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    setTimeout(() => window.scrollTo(0, 0), 50);
+  }, [pathname]);
+
+  return null;
+}
+
 
 export default ScrollToTop

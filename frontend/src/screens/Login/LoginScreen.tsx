@@ -78,7 +78,8 @@ const LoginScreen: React.FC = () => {
                     <h1>Course Planning Tool</h1>
                     <p>
                         This course planning tool is an interactive platform that makes it easy to design your courses and download a complete syllabus through guided steps.
-                        You can edit and duplicate your courses as often as needed. Whether you're creating an ELAC course or any other type of course, this tool will streamline your planning process. Login to get started.
+                        You can edit and duplicate your courses as often as needed. Whether you're creating an ELAC course or any other type of course, this tool will streamline your planning process. 
+                        Sign in with a Google account to get started.
                     </p>
                     
                     
@@ -94,7 +95,7 @@ const LoginScreen: React.FC = () => {
                         </div>
                         
                         <div className="description-container">
-                            <div> Create A New Course <br/> or Edit An Existing Course.</div>
+                            <div> Create A New Course <br/> or Edit An Existing Course</div>
                             <div>Develop or Edit Your Course <br/> Through Guided, Step-by-step Planning Tool</div>
                             <div>Generate Your Course Syllabus As A <br/> Word Document</div>
                         </div>

@@ -142,7 +142,7 @@ const OverviewComponent = ({ formData }: { formData: Record<string, string> }) =
                 questions present in the tool are geared to help you build your course and will not appear in the
                 syllabus itself.
             </p>
-            
+            <p>&nbsp;</p>
             <p>
                     The fields that show up on your syllabus are in <span
                 className="green-text">green</span> throughout the tool

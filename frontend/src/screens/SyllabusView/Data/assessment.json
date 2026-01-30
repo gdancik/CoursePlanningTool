@@ -86,7 +86,7 @@
         },
         {
             "type": "Accordion",
-            "title": "Step 3: Writing Assignments",
+            "title": "Step 3: Describing Assignments",
             "content": [
                 {
                     "type" : "informationText",
@@ -135,7 +135,7 @@
                         },
                         {
                             "type": "informationText",
-                            "placeholder": "For your course, you will want to start by providing a breakdown of how numeric grades are converted to letter grades at the end of the semester. Please fill in the following table to provide that information:"            
+                            "placeholder": "For your course, you will want to start by providing a breakdown of how numeric grades are converted to letter grades at the end of the semester. The table below includes suggested percentage intervals. Please feel free to modify these if you wish."            
                         },
                         {
                             "type": "Information",
@@ -168,12 +168,7 @@
         {
             "type": "informationText",
             "placeholder": "Are there other classroom policies that you have that you would like included in your syllabus? If so, please add them in the space below:"
-        },
-        {
-            "type": "Button",
-            "label": "Grading Policy Overview & Examples (NEED LINK)",
-            "externalLink": true
-        },
+        },        
         {
             "type": "Information",
             "text": "Information entered below will appear in the final syllabus exactly as written."

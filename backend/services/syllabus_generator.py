@@ -400,7 +400,10 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     fs = fse.fsEditor(sheet_name)
     column_names = cp.columns
 
-    fr_dict = fs.getValue(course_id, column_names)
+    # do not use getValue, since these returns None values
+    # fr_dict = fs.getValue(course_id, column_names)
+    #fr_dict = fs.getValue(course_id, column_names)
+    fr_dict = fs.getCourse(course_id)
 
     # convert from list to string for specified columns
     for i in cp.to_string:
@@ -432,6 +435,9 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     # Process dictionary to handle table placeholders
     tables_col = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_list')}
     logging.debug('Removing "_list" from the column names')
+
+
+    #print('fr_dict = ', fr_dict)
 
     #policy placeholder handling
     policies = fr_dict.get('policy', [])

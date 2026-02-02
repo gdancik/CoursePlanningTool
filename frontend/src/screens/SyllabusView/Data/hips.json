@@ -8,13 +8,7 @@
               "type": "Alert",
               "text": "The ELAC requires that you implement at least two High Impact Practices into your ELAC seminar course or one High Impact Practice into your ELAC disciplinary course."              
          },
-         {
-              "type": "Image",
-              "value": "/images/HIPS_Table.png",
-              "alt": "Table of High Impact Practices",
-              "className": "hips-table"
-         },
-         {
+           {
           "type" : "SidebarLayout",
           "title" : "Definition of High Impact Practices",          
           "className" : "shadow-lg",
@@ -41,8 +35,13 @@
                   "file" : "/data/hipsText/HIPsDefinition2.txt"
               }            
           ]
-      }
-        
+      },
+         {
+              "type": "Image",
+              "value": "/images/HIPS_Table.png",
+              "alt": "Table of High Impact Practices",
+              "className": "hips-table"
+         }
       ]
     },
     {

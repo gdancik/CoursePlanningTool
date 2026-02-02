@@ -76,48 +76,9 @@
         }
     ]
   },  
-    {
-      "type": "Accordion",
-      "title": "Step 2: Purpose and Application",
-      "content": [
-        {
-                    "type" : "SidebarLayout",
-                    "title" : "Identify the purpose and application of the competencies.",
-                    "className" : "shadow-lg",
-                    "sidebarClassName": "bg-blue-100",
-                    "contentClassName": "space-y-4",
-
-                    "sidebarWidth": "250px",
-
-                    "content": [
-                        {
-                            "type" : "informationText",
-                            "placeholder": "The table on the next page provides an example of how to start identifying the purpose and application of the competencies you have identified as important to your course. This process prepares you to write clear learning outcomes and help students make the connection between course expectations, activities, and the competencies that they seek to develop."
-                        },
-                        {
-                            "type" : "Button",
-                            "label" : "Purpose and Application Examples (NEED LINK)",
-                            "href" : "https://www.easternct.edu/liberal-arts-core/high-impact-practices.html",
-                            "new_tab": true,
-                            "externalLink": true
-                        }
-                    ]
-                },
-          {
-            "type": "informationText",
-            "placeholder": "Below is a fillable table for you to identify competencies for your course. Remember that If your course is an ELAC course, you will need at least 2 ELAC Learning Outcome competencies (in bold above). Add rows and change categories listed as necessary. Since these are long-term goals for students, be mindful of what can be accomplished in a course. Next, we’ll use this chart to convert these competencies into measurable learning outcomes."
-          },
-          
-          {
-            "type": "CompetencyTable1",
-            "id": "lo_competencies1_list"            
-          }        
-        ]
-      },
-
       {
       "type": "Accordion",
-      "title": "Step 3: Writing Course-specific Learning Outcomes",
+      "title": "Step 2: Writing Course-specific Learning Outcomes",
       "content": [        
           {
             "type": "Alert",

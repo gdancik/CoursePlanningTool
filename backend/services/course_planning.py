@@ -18,7 +18,8 @@ columns_detailed_raw = {
         'times2_syllabus',
         'location2_syllabus',
         'instructor_name_syllabus*',
-        'instructor_title_syllabus',    
+        'instructor_title_syllabus',  
+        'instructor_pronouns_syllabus'
       #  'form_of_address_syllabus',
         'email_syllabus*',
         'office_location_syllabus*',

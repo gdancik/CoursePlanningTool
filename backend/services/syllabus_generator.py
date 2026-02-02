@@ -425,6 +425,18 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     # Process dictionary to remove "_syllabus" suffix from keys
     syllabus_col = {key[:-9]: value for key, value in fr_dict.items() if key.endswith('_syllabus')}
     logging.debug('Removing "_syllabus" from the column names')
+    
+
+
+    # Handle items that are displayed as numbered lists
+    # TO DO: Use appropriate naming convention so this is automatic
+
+    placeholder = "${course_materials}"
+    item_string = fr_dict.get('course_materials_syllabus', None)
+    generate_numbered_list(doc, placeholder, item_string)
+
+    
+    # Find and replace are handled here
     de.replaceTextInParagraph(doc, syllabus_col)
 
     # Process dictionary to remove "_json" suffix from keys
@@ -511,6 +523,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
                 except (ValueError, SyntaxError) as e:
                     logging.error(f"Error evaluating string for key {key}: {e}")
 
+
     # Blocks are removed
     removeTags = []
     removeBlocks = []
@@ -567,6 +580,26 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
 
     return title
+
+'''Replaces placeholder with a numbered list in doc'''
+def generate_numbered_list(doc, placeholder, item_string):
+    if item_string :
+        items = [item.strip() for item in item_string.split('\n') if item.strip()]
+
+        for i, paragraph in enumerate(doc.paragraphs):
+            if placeholder in paragraph.text:
+                # Remove the placeholder paragraph
+                p = paragraph._element
+                parent = p.getparent()
+                parent.remove(p)
+
+                # Insert numbered list items (reverse order preserves order)
+                for item in reversed(items):
+                    new_p = doc.paragraphs[i]._insert_paragraph_before()
+                    new_p.add_run(item)
+                    new_p.style = "Numbered List"
+
+                break
 
     
     

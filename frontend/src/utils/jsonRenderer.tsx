@@ -318,6 +318,10 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                     )}
                     <textarea
                         id={component.id || component.label || ""}
+                        style={{
+                            overflowY: "auto",
+                            resize: "vertical",
+                        }}
                         value={
                             formData[component.id || component.label || ""] ||
                             ""

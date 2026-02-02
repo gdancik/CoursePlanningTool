@@ -49,11 +49,11 @@
                         },
                         {
                             "type" : "Alert",
-                            "text": "Information entered below wil appear in the final syllabus exactly as written."
+                            "text": "Information entered below will appear in the final syllabus as a numbered list. Each line will be a numbered item, but blank lines are ignored."
                         },
                         {
                             "type": "textarea",
-                            "id": "course_materials_syllabus",
+                            "id": "course_materials_syllabus",                            
                             "required": true,
                             "className": "Syllabus-text green-box"
                         }

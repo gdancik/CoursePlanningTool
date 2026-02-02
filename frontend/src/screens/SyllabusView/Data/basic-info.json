@@ -133,11 +133,20 @@
             {
               "type": "text",
               "id": "instructor_title_syllabus",
-              "label": "Instructor Title",
+              "label": "Instructor Title (optional)",
               "placeholder": "Enter instructor title",
               "required": true,
               "className": "syllabus-text medium-box"
+            },
+            {
+              "type": "text",
+              "id": "instructor_pronouns_syllabus",
+              "label": "Pronouns (optional)",
+              "placeholder": "Enter pronouns",
+              "required": true,
+              "className": "syllabus-text medium-box"
             }
+
           ]
         },
         {

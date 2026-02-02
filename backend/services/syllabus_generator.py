@@ -524,6 +524,12 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
         removeBlocks.append('title')
     else:
         removeTags.append('title')
+
+    if fr_dict.get('instructor_pronouns_syllabus') == "":
+        removeBlocks.append('pronouns')
+    else:
+        removeTags.append('pronouns')
+    
     
     if fr_dict.get('form_of_address_syllabus') == "":
         removeBlocks.append('foa')

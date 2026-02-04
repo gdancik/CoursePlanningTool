@@ -14,7 +14,7 @@
               {   
                   "icon": "images/communication.png",
                   "alt": "Communication",
-                  "content": "requires students to recognize and utilize the most appropriate means to address specific audiences in relevant context or genres in order to effectively inform or persuade."
+                  "content": "requires students to recognize and utilize the most appropriate means to address specific audiences in relevant contexts or genres in order to effectively inform or persuade."
               },
               {   
                   "icon": "images/creativity.png",
@@ -29,12 +29,12 @@
               {
                   "icon": "images/ethical_reasoning.png",
                   "alt": "Ethical Reasoning",
-                  "content": "requires students to recognize ethical issues, identify their own ethical positions, and analyze other ethical perspectives in real-world situations in order to consider teh impact of decisions and actions on other individuals, society, and the environment."
+                  "content": "requires students to recognize ethical issues, identify their own ethical positions, and analyze other ethical perspectives in real-world situations in order to consider the impact of decisions and actions on other individuals, society, and the environment."
               },        
               {
                   "icon": "images/quantitative_literacy.png",
                   "alt": "Quantitative Literacy",
-                  "content": "is competency in working with numerical data to reason or solve problems, the ability to make judgements and draw conclusions supported by quantitative evidence, and the ability to communicate those arguments utilizing quantitative roles."
+                  "content": "is competency in working with numerical data to reason or solve problems, the ability to make judgements and draw conclusions supported by quantitative evidence, and the ability to communicate those arguments utilizing quantitative tools."
               }
             ]            
         },
@@ -68,7 +68,7 @@
                 {
                     "type": "textarea",
                     "id": "lo_how3",
-                    "placeholder": "How might you ensure that students understand these learning outcomes regardless of background or major? (Students might have different ideas of what it means to “research” or “analyze” based on preparation before entering Eastern, life experience, AND based on what training they have in their major)",
+                    "placeholder": "How might you ensure that students understand these learning outcomes regardless of background or major? (Students might have different ideas of what it means to “research” or “analyze” based on preparation before entering Eastern, life experience, and training they have in their major.)",
                     "required": false,
                     "className": "Syllabus-text blue-box"
                 }
@@ -167,7 +167,7 @@
       "content": [ 
           {
             "type": "informationText",
-            "placeholder": "Based on the information you compiled above, use the space below to list the learning outcomes for your course using bullet points. Learning outcomes should be written directly to students. They should clearly explain what students are expected to do during the course and help them understand how assignments connect to the overall goals of the course."
+            "placeholder": "Based on the information you compiled above, use the space below to list the learning outcomes for your course using bullet points. Learning outcomes should be written in language that addresses students directly (e.g., \"You will be able to evaluate...\"). They should clearly explain what students are expected to do during the course and help them understand how assignments connect to the overall goals of the course."
           },       
           {
             "type": "Information",

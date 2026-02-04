@@ -16,14 +16,14 @@ export const BloomsTaxonomy: React.FC = () => {
                 higher order processes are at the top. As you plan your learning outcomes 
                 you will want to consider the course level and your expectations for what 
                 students know coming into the course (which you considered in Step One above).
-            </p>
+            </p><p><br/></p>
             <p className="explanation-paragraph">
                 Once you decide what cognitive processes you expect students to 
                 engage in you can identify observable actions that students can 
                 take to demonstrate each process. For example, you cannot observe 
                 someone understanding something unless they explain it to you. 
                 Some examples of observable verbs connected to Bloom’s categories 
-                of thinking can be found in the table below:
+                of thinking can be found by clicking on the button below.
             </p>            
         </div>
 

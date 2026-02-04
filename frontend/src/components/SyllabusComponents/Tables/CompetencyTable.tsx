@@ -113,7 +113,7 @@ const CompetencyTable: React.FC<CompetencyTableProps> = ({
                     value={cell}                    
                     onChange={(e) => handleCellChange(row.id, colIndex, e.target.value)}
                     className="competency-table-input"
-                     style={{ width: "100%" }}
+                     style={{ width: "100%", height: "80px", overflowY: "auto" }}
                   />
                 </td>
               ))}

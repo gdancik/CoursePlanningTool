@@ -31,9 +31,12 @@ export const BloomsTaxonomy: React.FC = () => {
             <img src={BloomsImage} alt="Bloom's Taxonomy Pyramid" className="blooms-pyramid"/>
         </div>
 
-        <ActionButton label = "Examples of Observable Verbs (NEED LINK)" 
+        <ActionButton label = "Examples of Observable Verbs" 
                       className = "resource-button"
                       externalLink = {true}
+                      href = "/images/Observable Verbs.jpg"
+                      new_tab = {true}
+                    
         />        
         </div>
     )

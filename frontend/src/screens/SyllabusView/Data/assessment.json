@@ -123,9 +123,12 @@
                         },
                         {
                             "type" : "Button",
-                            "label" : "Course Goals: Student Communication Tips (NEED LINK)",
+                            "label" : "Course Goals: Student Communication Tips",
                             "modalCase" : "StudentCommunicationTips",
-                            "externalLink": true
+                            "externalLink": true,
+                            "new_tab": true,
+                            "href": "/images/Student Communication Tips.jpg"
+                            
 
                         
                         },

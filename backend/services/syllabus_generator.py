@@ -176,8 +176,8 @@ def add_table_to_doc(doc, table_list:list, merge: list = None, header = True):
     if header == True:
         style_table_header(table)
 
-    # change formatting if this is the GradeTable
-    if len(table_list) == 12 and table_list[0][0] == 'Grade' :
+    # change formatting for Grade and Assessment tables
+    if table_list[0][0] == 'Grade' or table_list[0][0] == 'Assessment':
         table.autofit = False
         for column in table.columns:
             for cell in column.cells:
@@ -433,8 +433,43 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     placeholder = "${course_materials}"
     item_string = fr_dict.get('course_materials_syllabus', None)
-    generate_numbered_list(doc, placeholder, item_string)
+    items = [item.strip() for item in item_string.split('\n') if item.strip()] if item_string else None
+    generate_numbered_list(doc, placeholder, items, p_style = 'CPT Numbered List')
 
+    placeholder = "${ lo_syllabus_json }"
+    item_json = fr_dict.get('lo_syllabus_json', None) 
+
+    items = None
+    if item_json :
+        items = []        
+        titles = []
+        for i, item in enumerate(item_json) :
+            s = f'Learning outcome {i+1} (LO{i+1}'
+            if item['title'] :
+                s += ', ' + item['title'] + ')'
+            titles.append(s)
+            items.append(': ' + item['description'])
+                
+    generate_numbered_list(doc, placeholder, items, titles, p_style = 'Bullet List')
+
+    ## Add Assignment Table and Descriptions
+    placeholder = '${assmt_assignments_syllabus_json}'
+    item_json = fr_dict.get('assmt_assignments_syllabus_json', None) 
+    titles = [d['title'] for d in item_json]
+    descriptions = [d['description'] for d in item_json]
+    percentages = [d['rightValue'] for d in item_json]
+    
+    # must be first since placeholder is included twice in the syllabus  
+    assessment_table = [['Assessment', 'Points or Percentage']] + list(zip(titles, percentages))
+
+    for p in doc.paragraphs :
+        if placeholder in p.text :
+            table_placeholder_replacement(doc, p, placeholder, assessment_table)
+            break
+
+    titles = [t  + ': ' for t in titles]
+    generate_numbered_list(doc, placeholder, descriptions, titles)
+    
     
     # Find and replace are handled here
     de.replaceTextInParagraph(doc, syllabus_col)
@@ -578,28 +613,36 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     title += str(syllabus_col.get('crse_number',None))
     title += "_" + str(syllabus_col.get('term',None))
 
-
     return title
 
 '''Replaces placeholder with a numbered list in doc'''
-def generate_numbered_list(doc, placeholder, item_string):
-    if item_string :
-        items = [item.strip() for item in item_string.split('\n') if item.strip()]
-
+def generate_numbered_list(doc, placeholder, items, titles = None, p_style = None):
+    if items :        
+   
         for i, paragraph in enumerate(doc.paragraphs):
             if placeholder in paragraph.text:
                 # Remove the placeholder paragraph
-                p = paragraph._element
-                parent = p.getparent()
-                parent.remove(p)
+                #p = paragraph._element
+                anchor = paragraph                               
 
                 # Insert numbered list items (reverse order preserves order)
-                for item in reversed(items):
-                    new_p = doc.paragraphs[i]._insert_paragraph_before()
+                for item_idx, item in reversed(list(enumerate(items))):
+                    new_p = doc.paragraphs[i].insert_paragraph_before()
+
+                    if p_style :
+                        new_p.style = p_style
+                                        
+
+                    if titles :
+                        #r = new_p.add_run(titles[item_idx])
+                        r = new_p.add_run(titles[item_idx])
+                        r.style = 'List Item Title'
+                                        
                     new_p.add_run(item)
-                    new_p.style = "Numbered List"
-
+                                                                       
+                anchor._element.getparent().remove(anchor._element)
                 break
-
+          
+       
     
     

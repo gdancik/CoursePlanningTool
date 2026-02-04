@@ -167,7 +167,7 @@
           },       
           {
             "type": "Information",
-            "text": "Information entered below will appear in the final syllabus exactly as written."                            
+            "text": "Information entered below will appear in the final syllabus as a numbered list with the format <i>Learning Outcome 1 (LO1, title): description ... </i>"           
           },
           {
             "type": "LearningOutcomesCards",

@@ -42,6 +42,8 @@ interface ContentCardProps {
     onRightValueChange?: (value: string) => void;
     className?: string;
     separateLabel?: boolean;   // to display label above input
+    titlePlaceholder?: string;
+    descriptionPlaceholder?: string;
 }
 
 const ContentCard: React.FC<ContentCardProps> = ({
@@ -55,7 +57,9 @@ const ContentCard: React.FC<ContentCardProps> = ({
     onDescriptionChange,
     onRightValueChange,
     className = '',
-    separateLabel = false
+    separateLabel = false,
+    titlePlaceholder = 'Enter title ...',
+    descriptionPlaceholder = 'Enter description ...'
 }) => {
     return (
         <div className={`content-card ${className}`}>
@@ -64,10 +68,10 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     {separateLabel && <label className="content-card-label">{titleLabel}</label>}
                     <input
                         type="text"
-                        value = {!separateLabel ? titleValue : ""}
+                        value = { titleValue }
                         onChange={(e) => onTitleChange(e.target.value)}
                         className="content-card-title-input"
-                        placeholder="Enter title..."
+                        placeholder={titlePlaceholder}
                     />
                 </div>
                 
@@ -91,7 +95,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     value={descriptionValue}
                     onChange={(e) => onDescriptionChange(e.target.value)}
                     className="content-card-description-textarea"
-                    placeholder="Enter description..."
+                    placeholder={descriptionPlaceholder}
                     rows={4}
                 />
                 <div className="word-count">

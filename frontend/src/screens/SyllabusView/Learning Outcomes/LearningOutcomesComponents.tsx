@@ -76,12 +76,14 @@ export const LearningOutcomesCards = ({ id, data = []}: { id: string, data?:Card
         <ContentCardSet
             id = {id}
             setTitle="Learning Outcomes"
-            titleLabel="Learning Outcome {index} Title:"
-            descriptionLabel="Learning Outcome {index} Description:"
+            titleLabel="Learning Outcome {index}"
+            separateLabel = {true}
+            descriptionLabel=""
             initialCards={mydata} //[{"title": "t1", "description": "d1"}]}
             onChange = {() => {}}           
             minCards={2}
-            maxCards={8}    
+            maxCards={8}
+            titlePlaceholder = "Enter learning outcome title or abbreviation"    
         />
     )
 }

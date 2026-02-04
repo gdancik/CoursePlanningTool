@@ -59,9 +59,11 @@ function Information({ text }) {
       </div>
       
       {/* Text content */}
-      <span style={{ flex: 1 }}>
-        {text}
-      </span>
+     
+        <span style={{ flex: 1 }} dangerouslySetInnerHTML={{__html:text}}>
+          
+        </span>
+
     </div>
   );
 }

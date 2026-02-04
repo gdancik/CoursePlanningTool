@@ -24,38 +24,120 @@ def replaceTextInParagraph(doc, fr_dict):
     logging.info('Replacing text in document')
     docx_replace(doc, **fr_dict)
 
+
+''' Convert run to dictionary '''
+def run_to_dict(r) :
+    return {    
+            'text': r.text,
+            'style': r.style,
+            'bold': r.bold,
+            'italic': r.italic
+            }
+
+'''
+create_runs
+    - run: a run possibly containing markdown
+    - type: should be one of 'bold', 'italic', or 'both'
+
+    Returns a paragraph with formatted runs, or None if formatting not done
+'''
+def create_runs(run, type):
+    
+    pattern = r'\*\*(.*?)\*\*'
+    if type == 'both' :
+        pattern = r'\*\*\*(.*?)\*\*\*'
+    elif type == 'italic' :
+        pattern = r'\*(.*?)\*'
+    
+    text = run.text    
+    parts = re.split(pattern, text)
+    
+    n = len(parts)
+    if n == 1 :
+        return None
+    
+    new_doc = Document()
+    new_p = new_doc.add_paragraph()
+    
+    run.text = ""     # Clear original run
+    for i in range(n) :        
+        run1 = new_p.add_run(parts[i])
+        run1.style = run.style
+        if i % 2 == 1 :
+            if type == 'bold' or type == 'both' :
+                run1.bold = True
+            if type == 'italic' or type == 'both' :
+                run1.italic = True
+    return new_doc
+
+''' Extract and return a list of all runs from a document'''
+def extract_runs (doc) :
+    rlist = []
+    for p in doc.paragraphs :
+        for r in p.runs :
+            rlist.append(r)
+    return rlist
+
+''' 
+    Reformats paragraphs containing markdown for type = 'bold', 'italic', or 'both'
+    Needs to be called in this order: 'both', 'bold', 'italic' to handle repeated *'s
+'''
+def reformat_paragraphs(doc, type):
+    for p in doc.paragraphs :
+        runList = []
+        formatted = False
+        for r in p.runs :
+            # need to keep list of all runs in case we need to reformat
+            runList.append(r)
+        
+            # break into new runs if necessary       
+            new_doc = create_runs(r, type)  
+            if new_doc :
+                runList += extract_runs(new_doc)           
+                formatted = True     
+
+        # if reformatting, re-create the paragraph
+        if formatted :
+            p.clear()
+            for r in runList :
+                rd = run_to_dict(r)
+                nr = p.add_run(rd.get('text'))
+                nr.style = rd.get('style')
+                nr.bold = rd.get('bold')
+                nr.italic = rd.get('italic')
+
+
+    
+def add_text_in_runs(paragraph, run_positions, start, end, bold=False):
+    """Add text between start and end indices using original run styles."""
+    remaining_start = start
+    while remaining_start < end:
+        # Find the run that contains this start
+        for run_start, run_end, orig_run in run_positions:
+            if run_start <= remaining_start < run_end:
+                run_relative_start = remaining_start - run_start
+                run_relative_end = min(end - run_start, run_end - run_start)
+                text_segment = orig_run.text[run_relative_start:run_relative_end]
+                new_run = paragraph.add_run(text_segment)
+                new_run.style = orig_run.style
+                if bold:
+                    new_run.bold = True
+                remaining_start += len(text_segment)
+                break
+
+
 def replaceFormattedTextInParagraph(doc):
     '''
     Replaces markdown-formatted text in a Word document with formatted text (bold, italic).
     Args:
         doc: Word document object.
-    '''
-    for paragraph in doc.paragraphs:
-        text = paragraph.text
-        if '***' in text or '**' in text or '*' in text:
-            # Clear the paragraph to rebuild it with formatted runs
-            paragraph.clear()
-            # Split the text into parts for bold and italic
-            parts = re.split(r'(\*\*\*[^*].*?[^*]\*\*\*|\*\*[^*].*?[^*]\*\*|\*[^*].*?[^*]\*)', text)
+    '''    
 
-            for part in parts:
-                if part.startswith('***') and part.endswith('***'):
-                    # Add italic text
-                    run = paragraph.add_run(part[3:-3])
-                    run.italic = True
-                    run.bold = True
-                elif part.startswith('**') and part.endswith('**'):
-                    # Add bold text
-                    run = paragraph.add_run(part[2:-2])
-                    run.bold = True
-                elif part.startswith('*') and part.endswith('*'):
-                    # Add italic text
-                    run = paragraph.add_run(part[1:-1])
-                    run.italic = True
-                elif part:
-                    # Add normal text
-                    paragraph.add_run(part)
-            
+    # must call in this order to correctly parse asterisks
+    reformat_paragraphs(doc, 'both')
+    reformat_paragraphs(doc, 'bold')
+    reformat_paragraphs(doc, 'italic')
+      
         
 def removeBlocks(doc, block_ls):
     '''

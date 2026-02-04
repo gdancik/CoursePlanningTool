@@ -53,6 +53,8 @@ interface ContentCardSetProps {
     maxCards?: number;
     showRightValue?: boolean;
     separateLabel?: boolean;
+    titlePlaceholder?: string;
+    descriptionPlaceholder?: string;
 }
 
 export const ContentCardSet: React.FC<ContentCardSetProps> = ({
@@ -66,7 +68,9 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
     minCards = 2,
     maxCards = 10,
     showRightValue = false,
-    separateLabel = false
+    separateLabel = false,
+    titlePlaceholder = 'Enter title ...',
+    descriptionPlaceholder = 'Enter description ...'
 }) => {
 
  const [userUpdated, setUserUpdated] = useState<boolean>(false);
@@ -77,7 +81,7 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
     };
 
     const createNewCard = (i:number) => {
-        return {   title: formatLabel(titleLabel,i), 
+        return {   title: separateLabel ? '' : formatLabel(titleLabel,i), 
                    description: formatLabel(descriptionLabel, i), 
                    rightValue: formatLabel(rightLabel || "", i)
                 }            
@@ -147,6 +151,8 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
                             }
                             className={`content-card-${index + 1}`}
                             separateLabel={separateLabel}
+                            titlePlaceholder={titlePlaceholder}
+                            descriptionPlaceholder={descriptionPlaceholder}
                         />
                         
                         {cards.length > minCards && (

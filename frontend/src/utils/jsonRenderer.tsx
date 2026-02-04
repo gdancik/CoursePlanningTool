@@ -337,8 +337,11 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
 
             case "informationText":
                 return (
-                    <p >{component.placeholder}</p>
-
+                    component.placeholder ? (
+                    <p>{component.placeholder}</p>
+                    ) : (
+                    <p><br/></p>
+                    )
                 );
 
             case "paragraphFromFile" :               

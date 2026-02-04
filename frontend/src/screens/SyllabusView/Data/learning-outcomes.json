@@ -133,22 +133,26 @@
                     "placeholder": "ELAC competencies below, as your course (either seminar or disciplinary perspectives) should include at least TWO of these learning outcomes to be a part of the ELAC program."
                 },
                 {
+                    "type" : "informationText"
+                },
+                {
                     "type" : "Button",
-                    "label" : "ELAC Competencies Examples (NEED LINK)",
-                    "href" : "",
+                    "label" : "ELAC Competencies Examples",
+                    "href" : "/images/ELAC Competencies.jpg",
                     "new_tab": true,
                     "externalLink": true
                 },
                 {
-                  "type": "informationText"
+                  "type": "informationText",
+                  "placeholder": ""
                 },
                 {
                     "type" : "Button",
-                    "label" : "Additional Resources (NEED LINK)",
-                    "href" : "",
-                    "new_tab": true,
-                    "externalLink": true
-                }                                
+                    "label" : "Additional Resources",
+                    "href" : "AdditionalResources.html",             
+                    "externalLink": true,
+                    "new_tab": true            
+                }                                     
             ]
         },
         {

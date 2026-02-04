@@ -145,10 +145,13 @@ const OverviewComponent = ({ formData }: { formData: Record<string, string> }) =
             <p>&nbsp;</p>
             <p>
                     The fields that show up on your syllabus are in <span
-                className="green-text">green</span> throughout the tool
+                className="green-text">green</span> throughout the tool*
             </p>   
 
                 <img src ={SyllabusGreen} alt="SyllabusGreen" className="Syllabus-green-box"/>  
+                <p style = {{fontWeight: 'normal'}}>For text appearing in the syllabus, you can 
+                    use **text** to bold <b>text</b>, *text* to italicize <i>text</i>, and
+                    ***text*** for bold and italicized <b><i>text</i></b>. </p>
                 <p>&nbsp;</p>                  
                 <p>The fields that are brainstorming and do not show up on your syllabus are in gray.</p>
                 <img src={SyllabusGrey} alt="SyllabusGrey" className="Syllabus-grey-box"/>

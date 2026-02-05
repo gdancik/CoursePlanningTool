@@ -25,7 +25,7 @@ columns_detailed_raw = {
         'office_location_syllabus*',
         'phone_syllabus',
         'office_hours_syllabus*',
-        'instructor_additional_information'
+        'instructor_additional_information_syllabus'
     ],
 
     'course_description': [

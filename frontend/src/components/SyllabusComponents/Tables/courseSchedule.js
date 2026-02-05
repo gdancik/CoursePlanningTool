@@ -3,6 +3,7 @@ import "./gradeTable.css";
 import "../../../components/Button/ReusableButton.css"
 import {triggerInput} from "../../../services/triggerInput"
 import api from "../../../services/axios";
+import config from "../../../config.json";
 
 //import axios from "axios";
 //import "./gradeTable.css";
@@ -30,7 +31,7 @@ function CourseSchedule({ id, term, year, days, data }) {
   useEffect(() => {
 
     if (data !== undefined) {
-      console.log('effect data: ' + data);   
+      //console.log('effect data: ' + data);   
       
       // skip header (header will not be changed))
       const pdata = JSON.parse(data);
@@ -113,7 +114,10 @@ function CourseSchedule({ id, term, year, days, data }) {
         { term, year, days }
       );
       const scheduleData = response.data;
-      console.log("API response:", scheduleData);
+
+      if (config.log) {
+        console.log("API response:", scheduleData);
+      }
 
       if (scheduleData.error) {
         alert(
@@ -144,7 +148,7 @@ function CourseSchedule({ id, term, year, days, data }) {
   // Render
 
   const missingScheduleInfo = function(term, year, days) {
-    console.log('checking schedule info: '+ [term, year, days])
+    //console.log('checking schedule info: '+ [term, year, days])
     if ([term, year, days].some(x => x === undefined)) {
       return true;
     }

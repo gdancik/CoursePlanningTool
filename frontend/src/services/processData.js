@@ -99,7 +99,9 @@ const saveData = async (ref) => {
         ...res_hidden,
         ...res_json);
         
-    console.log("Payload to save:", combined);
+    if (config.log) {
+        console.log("Payload to save:", combined);
+    }
 
     const saved = localStorage.getItem("currentCourseData");
     let course_id = null;

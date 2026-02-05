@@ -64,9 +64,7 @@ export const LearningOutcomesCards = ({ id, data = []}: { id: string, data?:Card
     const [mydata, setData] = useState<CardData[]>(data);
           
     useEffect(() => {        
-        if (data) {
-            console.log("setting data");
-            console.log(data);
+        if (data) {           
             setData(data);
         }
     }, [data]);

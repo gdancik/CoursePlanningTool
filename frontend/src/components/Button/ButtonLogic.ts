@@ -69,16 +69,16 @@ export const handleNext = (
     formData: Record<string, string>,
     courseID?: string
 ) => {
-    console.log("Current Path:", currentPath);
+    //console.log("Current Path:", currentPath);
     const index = pageOrder.indexOf(currentPath); // Find the index of the current page
-    console.log("Current index:", index);
+    //console.log("Current index:", index);
 
     if (index >= 0 && index < pageOrder.length - 1) {
         const nextPage = pageOrder[index + 1]; // Determine the next page
-        console.log("Navigating to:", nextPage);
+        //console.log("Navigating to:", nextPage);
         navigate(nextPage); // Navigate to the next page
     } else {
-        console.log("No next page found"); // No next page (already at last)
+        //console.log("No next page found"); // No next page (already at last)
     }
 };
 

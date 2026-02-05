@@ -7,9 +7,7 @@ export const GradingPolicies = ({ id, data = []}: { id: string, data?:CardData[]
     const [mydata, setData] = useState<CardData[]>(data);
           
     useEffect(() => {        
-        if (data) {
-            console.log("setting data");
-            console.log(data);
+        if (data) {            
             setData(data);
         }
     }, [data]);

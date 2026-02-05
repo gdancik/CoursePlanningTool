@@ -97,7 +97,7 @@ interface AccordionProps {
 export const LearningOutcomesAccordion: React.FC<AccordionProps> = ({ sectionName, fields, formData, onFieldChange }) => {
     const sectionFields = fields.filter(f => f.section === sectionName);
 
-    console.log(sectionFields);
+    //console.log(sectionFields);
 
     const getText = (startsWith: string) =>
         sectionFields.find(f => f.content?.trim().startsWith(startsWith))?.content || "";

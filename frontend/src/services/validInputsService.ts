@@ -38,12 +38,9 @@ export function isSectionComplete(
     formData: Record<string, string>
 ): boolean {
     // Get the required field IDs for this section
-
-    console.log("all form data:");
-    console.log(formData);
+ 
+    //console.log(formData);
    
-
-
     const requiredFields = validInputs[sectionId];
     
     if (!requiredFields || requiredFields.length === 0) {
@@ -60,7 +57,7 @@ export function isSectionComplete(
     const complete =  requiredFields.every(fieldId => {
         const value = formData[fieldId]; 
            
-        console.log(fieldId + ' -- ' + typeof(value) + ' -- ' + value);
+        //console.log(fieldId + ' -- ' + typeof(value) + ' -- ' + value);
 
         let c = true;
 
@@ -83,8 +80,8 @@ export function isSectionComplete(
         return c;
     });
 
-    console.log(sectionId + " complete: " + complete);
-    console.log(formData[sectionId]);
+    //console.log(sectionId + " complete: " + complete);
+    //console.log(formData[sectionId]);
     
     return complete;
 }

@@ -164,7 +164,7 @@ export const createDuplicateRowHandler = (
             const response = await duplicateCourse(courseId);
 
             // Log response for debugging
-            console.log("Duplicate course API response:", response);
+            //console.log("Duplicate course API response:", response);
 
             // TEMP: Support current backend response key with colon
             const newId =

@@ -56,7 +56,7 @@ export const handleBack = (
     if (index > 0) {
         navigate(pageOrder[index - 1]); // Navigate to the previous page
     } else {
-        console.log("No previous page"); // No previous page (already at first)
+        //console.log("No previous page"); // No previous page (already at first)
     }
 };
 

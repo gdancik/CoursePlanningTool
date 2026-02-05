@@ -129,7 +129,7 @@ const saveData = async (ref) => {
         }
 
         await updateCourseValues(course_id, combined);
-        console.log(" Data saved successfully via updateCourseValues");
+        //console.log(" Data saved successfully via updateCourseValues");
     } catch (error) {
         console.error(" Failed to save data:", error);
         throw error;

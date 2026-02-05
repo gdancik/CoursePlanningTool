@@ -40,17 +40,17 @@ export default function MyGoogleLogin ({
     const google_login = async (jwt) => { 
     try {
         const response = await api.post('google_login', {"jwt": jwt})
-        console.log("status = " + response.status);
+        //console.log("status = " + response.status);
         
         if (response.status !== 200) {          
           setErrorModalCode(response.status);
           setErrorModalMessage(response.setErrorModalMessage)
           setErrorModalVisible(true);
-          console.log(response);          
+          //console.log(response);          
         }   
         
-        console.log("confirmed...");          
-        console.log(response.data);            
+        //console.log("confirmed...");          
+        //console.log(response.data);            
                 
         const data = response.data;
         setUser({user: data.user, name: data.name});            
@@ -108,10 +108,10 @@ export default function MyGoogleLogin ({
         theme="filled_blue"
         shape="pill"
         onSuccess={(credentialResponse) => {
-          console.log("Encoded JWT ID token:", credentialResponse.credential);
+          //console.log("Encoded JWT ID token:", credentialResponse.credential);
           const decoded = jwtDecode(credentialResponse.credential);
-          console.log("Decoded JWT:", decoded);
-          console.log("calling fetch...");
+          //console.log("Decoded JWT:", decoded);
+          //console.log("calling fetch...");
 
           // log on to backend
           google_login(credentialResponse.credential);

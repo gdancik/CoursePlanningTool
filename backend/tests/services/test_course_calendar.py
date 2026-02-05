@@ -10,7 +10,7 @@ import backend.services.course_calendar as cc
 def testFall() :
     url = 'https://www.easternct.edu/academics/academic-calendar/index.html'
     today = datetime.today()
-    target = 'Fall ' + str(today.year)
+    target = 'Fall ' + str(today.year-1)
 
     soup = cc.get_target_webpage(url, target)
     df = cc.get_dates(soup, target)

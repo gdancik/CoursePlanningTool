@@ -404,13 +404,13 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     # fr_dict = fs.getValue(course_id, column_names)
     #fr_dict = fs.getValue(course_id, column_names)
     fr_dict = fs.getCourse(course_id)
-
+    
     # convert from list to string for specified columns
     for i in cp.to_string:
         if i in fr_dict:
             #if fr_dict[i]:
             #    print(f'convert list to string: fr_dict["{i}"] = {fr_dict[i]}')
-                #fr_dict[i] = json.loads(fr_dict[i])
+                #fr_dict[i] = json.loads(fr_dict[i])         
             fr_dict[i] = ''.join(fr_dict[i]) if isinstance(fr_dict[i], list) else fr_dict[i]
 
      # Process dictionary to remove "_checkboxes" suffix from keys
@@ -440,6 +440,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     item_json = fr_dict.get('lo_syllabus_json', None) 
 
     items = None
+    titles = None
     if item_json :
         items = []        
         titles = []
@@ -455,20 +456,22 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     ## Add Assignment Table and Descriptions
     placeholder = '${assmt_assignments_syllabus_json}'
     item_json = fr_dict.get('assmt_assignments_syllabus_json', None) 
-    titles = [d['title'] for d in item_json]
-    descriptions = [d['description'] for d in item_json]
-    percentages = [d['rightValue'] for d in item_json]
-    
-    # must be first since placeholder is included twice in the syllabus  
-    assessment_table = [['Assessment', 'Points or Percentage']] + list(zip(titles, percentages))
 
-    for p in doc.paragraphs :
-        if placeholder in p.text :
-            table_placeholder_replacement(doc, p, placeholder, assessment_table)
-            break
+    if item_json: 
+        titles = [d.get('title', '') for d in item_json]
+        descriptions = [d.get('description', '') for d in item_json]
+        percentages = [d.get('rightValue','') for d in item_json]
+        
+        # must be first since placeholder is included twice in the syllabus  
+        assessment_table = [['Assessment', 'Points or Percentage']] + list(zip(titles, percentages))
 
-    titles = [t  + ': ' for t in titles]
-    generate_numbered_list(doc, placeholder, descriptions, titles)
+        for p in doc.paragraphs :
+            if placeholder in p.text :
+                table_placeholder_replacement(doc, p, placeholder, assessment_table)
+                break
+
+        titles = [t  + ': ' for t in titles]
+        generate_numbered_list(doc, placeholder, descriptions, titles)
     
     
     # Find and replace are handled here

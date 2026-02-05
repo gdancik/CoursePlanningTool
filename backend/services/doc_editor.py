@@ -82,7 +82,13 @@ def extract_runs (doc) :
     Reformats paragraphs containing markdown for type = 'bold', 'italic', or 'both'
     Needs to be called in this order: 'both', 'bold', 'italic' to handle repeated *'s
 '''
-def reformat_paragraphs(doc, type):
+
+def reformat_paragraphs(doc) :
+    reformat_paragraphs_by_type(doc, 'both')
+    reformat_paragraphs_by_type(doc, 'bold')
+    reformat_paragraphs_by_type(doc, 'italic')
+
+def reformat_paragraphs_by_type(doc, type):
     for p in doc.paragraphs :
         runList = []
         formatted = False
@@ -133,10 +139,7 @@ def replaceFormattedTextInParagraph(doc):
         doc: Word document object.
     '''    
 
-    # must call in this order to correctly parse asterisks
-    reformat_paragraphs(doc, 'both')
-    reformat_paragraphs(doc, 'bold')
-    reformat_paragraphs(doc, 'italic')
+    reformat_paragraphs(doc)
       
         
 def removeBlocks(doc, block_ls):

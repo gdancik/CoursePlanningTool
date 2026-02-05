@@ -9,8 +9,8 @@ export const BloomsTaxonomy: React.FC = () => {
         <div className="blooms-text">
             <h3 className="section-heading">Bloom’s taxonomy</h3>            
             <p className="explanation-paragraph">
-                Bloom’s taxonomy provides a foundational framework for generating these 
-                elements of the course learning outcomes. Bloom categorizes six major categories
+                Bloom’s taxonomy provides a foundational framework for generating course
+                learning outcomes. Bloom categorizes six major categories
                 of thinking. The categories are ordered by the level of cognition required 
                 for the process. Lower-order processes are at the bottom of the pyramid and 
                 higher order processes are at the top. As you plan your learning outcomes 

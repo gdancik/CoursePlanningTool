@@ -113,7 +113,7 @@
             "content": [
                 {
                     "type" : "informationText",
-                    "placeholder": "When you write course learning outcomes you should consider who is doing the learning (is it all students in your course, majors in your course, non-majors in your course?). While you may have separate goals for a specific group of students (such as majors) in your course, you should write learning outcomes for all students in your course that will be listed in the syllabus. Second, for course learning outcomes, the learning should take place during the course in question. What should students in your course be able to do by the end of the course? The third and fourth elements require specific articulation of what will be learned and how. Specificity is important so that students can identify what is expected of them during the course."
+                    "placeholder": "When you write course learning outcomes you should consider who is doing the learning (is it all students in your course, majors in your course, non-majors in your course?). While you may have separate goals for a specific group of students (such as majors) in your course, your syllabus should include the learning outcomes for all of the students in your course. Second, for course learning outcomes, the learning should take place during the course in question. What should students in your course be able to do by the end of the course? The third and fourth elements require specific articulation of what will be learned and how. Specificity is important so that students can identify what is expected of them during the course."
                 }                
             ]
         },
@@ -130,7 +130,7 @@
             "content": [
                 {
                     "type" : "informationText",
-                    "placeholder": "ELAC competencies below, as your course (either seminar or disciplinary perspectives) should include at least TWO of these learning outcomes to be a part of the ELAC program."
+                    "placeholder": "Your course competencies should be connected to the learning outcomes in the course. Learning outcomes tell your students how you will demonstrate the competency. In the table below, you can connect your competency areas to learning outcomes directly."
                 },
                 {
                     "type" : "informationText"

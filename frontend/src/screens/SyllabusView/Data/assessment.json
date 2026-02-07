@@ -76,7 +76,7 @@
                          {
                             "type" : "textarea",
                             "id": "assmt_feedback",
-                            "placeholder": "What type of feedback might students expect from this assignment? How will feedback assist students in progressing toward or meeting learning outcomes?",
+                            "placeholder": "What type of feedback might students expect from each assignment? How will feedback assist students in progressing toward or meeting learning outcomes?",
                             "required": false,
                             "className": "Syllabus-text blue-box" 
                         }
@@ -134,7 +134,7 @@
                         },
                         {
                             "type": "informationText",
-                            "placeholder" : "In addition to communicating with students about course goals, you will want to ensure all course policies are transparent. Including grading policies and including university recommended policy statements on the syllabus provides the instructor of the course and students policy to work from when questions or challenges arise."
+                            "placeholder" : "In addition to communicating with students about course goals, you will want to ensure all course policies are transparent. Including grading policies and university recommended policy statements on the syllabus provides the instructor of the course and students a written policy to work from when questions or challenges arise."
                         },
                         {
                             "type": "informationText",

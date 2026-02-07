@@ -74,6 +74,7 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
 }) => {
 
  const [userUpdated, setUserUpdated] = useState<boolean>(false);
+ const [addCardTitle, setAddCardTitle] = useState<string>(setTitle);
 
  const formatLabel = (labelTemplate: string, index: number) => {
         if (labelTemplate === undefined) return labelTemplate;
@@ -91,6 +92,10 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
         initialCards.length > 0 ? initialCards :         
         [...Array(minCards).keys()].map(i => createNewCard(i))        
     );
+
+    useEffect(() => {
+        setAddCardTitle('Add ' + setTitle);
+    }, [setTitle]);
 
     useEffect(() => {
         if (initialCards && initialCards.length > 0) {
@@ -175,7 +180,7 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
                         disabled={cards.length >= maxCards}
                         title={cards.length >= maxCards ? `Maximum ${maxCards} cards allowed` : `Add new ${setTitle.toLowerCase()}`}
                     >
-                        + Add {setTitle.slice(0, -1)} ({cards.length}  of {maxCards})
+                        + {addCardTitle} ({cards.length}  of {maxCards})
                     </button>
                 </div>
             </div>

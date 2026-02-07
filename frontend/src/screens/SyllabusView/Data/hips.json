@@ -6,7 +6,7 @@
       "content": [
          {
               "type": "Alert",
-              "text": "The ELAC requires that you implement at least two High Impact Practices into your ELAC seminar course or one High Impact Practice into your ELAC disciplinary course."              
+              "text": "If you are teaching an ELAC course, you are required to implement at least two High Impact Practices in your ELAC seminar course or one High Impact Practice in your ELAC disciplinary course."              
          },
            {
           "type" : "SidebarLayout",
@@ -18,7 +18,7 @@
               {
                   "type" : "Button",
                   "label" : "Link to CTLA",
-                  "href" : "https://www.easternct.edu/liberal-arts-core/high-impact-practices.html",
+                  "href" : "https://www.easternct.edu/center-for-teaching-learning-and-assessment/teaching-resources/high-impact-practices.html",
                   "new_tab": true,
                   "externalLink": true
 
@@ -54,7 +54,7 @@
             {
               "type": "textarea",
               "id": "hip_what", 
-              "placeholder": "What High Impact Practices do you plan to implement in your course? Why do you think this high impact practice will best promote progress toward the learning outcomes for your course? If your course is not in the ELAC curriculum and is not conducive to implementation of a high impact practice skip to the question about teaching practices within your course below.",             
+              "placeholder": "Which high impact practices do you plan to implement in your course? Why do you think this high impact practice will best promote progress toward the learning outcomes for your course? If your course is not in the ELAC curriculum and is not conducive to implementation of a high impact practice, skip to the question about teaching practices within your course below.",             
               "required": false,
               "className": "Syllabus-text blue-box"
             },

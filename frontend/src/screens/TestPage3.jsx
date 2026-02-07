@@ -33,8 +33,8 @@ const TEST_PAGES = {
 
       <section style={{ marginBottom: '2rem', padding: '1rem', border: '1px solid #ccc', borderRadius: '4px' }}>
         <h2>Alert Component</h2>
-        <Alert text="If your course is not in the ELAC curriculum, you may still want to use ELAC competencies, here are some additional competencies that you may want to incorporate into your course may fall into the following categories: knowledge, skills, or attitudes." />
-        <Alert text="The ELAC requires that you implement at least two High Impact Practices into your ELAC seminar course or one High Impact Practice into your ELAC disciplinary perspectives course." />
+        <Alert text="If your course is not in the ELAC curriculum, you may still want to use ELAC competencies. In addition, you may want to incorporate knowledge, skills, or attitudes as additional competencies in your course." />
+        <Alert text="If you are teaching an ELAC course, you are required to implement at least two High Impact Practices into your ELAC seminar course or one High Impact Practice into your ELAC disciplinary perspectives course." />
       </section>
 
       <section style={{ marginBottom: '2rem', padding: '1rem', border: '1px solid #ccc', borderRadius: '4px' }}>

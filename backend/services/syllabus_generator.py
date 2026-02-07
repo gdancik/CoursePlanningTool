@@ -426,6 +426,10 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     syllabus_col = {key[:-9]: value for key, value in fr_dict.items() if key.endswith('_syllabus')}
     logging.debug('Removing "_syllabus" from the column names')
     
+    for dkey, dvalue in cp.defaults.items() :
+        if dkey not in syllabus_col :
+            syllabus_col[dkey] = dvalue
+            print(f'default {dkey}: {dvalue}')
 
 
     # Handle items that are displayed as numbered lists
@@ -436,7 +440,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     items = [item.strip() for item in item_string.split('\n') if item.strip()] if item_string else None
     generate_numbered_list(doc, placeholder, items, p_style = 'CPT Numbered List')
 
-    placeholder = "${ lo_syllabus_json }"
+    placeholder = "${lo_syllabus_json}"
     item_json = fr_dict.get('lo_syllabus_json', None) 
 
     items = None
@@ -452,6 +456,8 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
             items.append(': ' + item['description'])
                 
     generate_numbered_list(doc, placeholder, items, titles, p_style = 'Bullet List')
+    descriptions = None
+    titles = None
 
     ## Add Assignment Table and Descriptions
     placeholder = '${assmt_assignments_syllabus_json}'
@@ -471,7 +477,8 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
                 break
 
         titles = [t  + ': ' for t in titles]
-        generate_numbered_list(doc, placeholder, descriptions, titles)
+    
+    generate_numbered_list(doc, placeholder, descriptions, titles)
     
     
     # Find and replace are handled here
@@ -482,11 +489,14 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     logging.debug('Removing "_json" from the column names')
     logging.debug(f'json_columns:{json_columns}')
     
-
     # Process dictionary to handle table placeholders
     tables_col = {key[:-5]: value for key, value in fr_dict.items() if key.endswith('_list')}
     logging.debug('Removing "_list" from the column names')
 
+   # remove placeholders for missing json values
+    missing = cp.json_columns - json_columns.keys() - tables_col.keys()
+    for m in missing :
+        de.replaceTextInParagraph(doc, {m: ""})
 
     #print('fr_dict = ', fr_dict)
 
@@ -523,7 +533,7 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
         for key, value in json_columns.items():
             if key in paragraph.text:
-                logging.debug(f'key: {key}') #debug
+                logging.debug(f'key: {key}') #debug                
                 logging.debug(f'Value: {value}') #debug
                 if value == None:
                     logging.debug('Value is None, skipping') #debug
@@ -567,42 +577,23 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     removeTags = []
     removeBlocks = []
 
-    if fr_dict.get('times2_syllabus') == "":
-        removeBlocks.append('time2')
-    else:
-        removeTags.append('time2')
-    
-    if fr_dict.get('instructor_title_syllabus') == "":
-        removeBlocks.append('title')
-    else:
-        removeTags.append('title')
+    key_tag_list = [
+        ('times2_syllabus', 'time2'),
+        ('instructor_title_syllabus', 'title'),
+        ('instructor_pronouns_syllabus', 'pronouns'),
+        ('phone_syllabus', 'phone'),
+        ('instructor_additional_information', 'instructor_additional_information'),        
+        ('assmt_assignments_syllabus', 'assessments_json'),
+        ('course_schedule_syllabus_list', 'course_schedule_syllabus_list')        
+    ]
 
-    if fr_dict.get('instructor_pronouns_syllabus') == "":
-        removeBlocks.append('pronouns')
-    else:
-        removeTags.append('pronouns')
-    
-    
-    if fr_dict.get('form_of_address_syllabus') == "":
-        removeBlocks.append('foa')
-    else:
-        removeTags.append('foa')
+    for key,tag in key_tag_list :
+        if not fr_dict.get(key):
+            removeBlocks.append(tag)
+        else:
+            removeTags.append(tag)
 
-    if fr_dict.get('phone_syllabus') == "":
-        removeBlocks.append('phone')
-    else: 
-        removeTags.append('phone')
-    
-    if fr_dict.get('instructor_additional_information') == "":
-        removeBlocks.append('instructor_additional_information')
-    else:
-        removeTags.append('instructor_additional_information')
 
-    if fr_dict.get('hip'):
-        removeTags.append('hip')        
-    else: 
-        removeBlocks.append('HIP')
-    
     # always remove -- can we do this for all of them???
     removeBlocks.append('policy_statements')
     
@@ -619,33 +610,39 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
 
     return title
 
+
 '''Replaces placeholder with a numbered list in doc'''
-def generate_numbered_list(doc, placeholder, items, titles = None, p_style = None):
-    if items :        
-   
-        for i, paragraph in enumerate(doc.paragraphs):
-            if placeholder in paragraph.text:
-                # Remove the placeholder paragraph
-                #p = paragraph._element
-                anchor = paragraph                               
+def generate_numbered_list(doc, placeholder, items, titles = None, p_style = None):    
 
-                # Insert numbered list items (reverse order preserves order)
-                for item_idx, item in reversed(list(enumerate(items))):
-                    new_p = doc.paragraphs[i].insert_paragraph_before()
+    if not items:
+        placeholder = re.fullmatch(r'\$\{\s*(.*?)\s*\}', placeholder)
+        if placeholder:
+            de.replaceTextInParagraph(doc, {placeholder.group(1): ""})
+        return
+    
+    for i, paragraph in enumerate(doc.paragraphs):
+        if placeholder in paragraph.text:
+            # Remove the placeholder paragraph
+            #p = paragraph._element
+            anchor = paragraph                               
 
-                    if p_style :
-                        new_p.style = p_style
-                                        
+            # Insert numbered list items (reverse order preserves order)
+            for item_idx, item in reversed(list(enumerate(items))):
+                new_p = doc.paragraphs[i].insert_paragraph_before()
 
-                    if titles :
-                        #r = new_p.add_run(titles[item_idx])
-                        r = new_p.add_run(titles[item_idx])
-                        r.style = 'List Item Title'
-                                        
-                    new_p.add_run(item)
-                                                                       
-                anchor._element.getparent().remove(anchor._element)
-                break
+                if p_style :
+                    new_p.style = p_style
+                                    
+
+                if titles :
+                    #r = new_p.add_run(titles[item_idx])
+                    r = new_p.add_run(titles[item_idx])
+                    r.style = 'List Item Title'
+                                    
+                new_p.add_run(item)
+                                                                    
+            anchor._element.getparent().remove(anchor._element)
+            break
           
        
     

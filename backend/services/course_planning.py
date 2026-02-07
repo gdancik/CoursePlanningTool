@@ -103,3 +103,20 @@ for key,values in columns_detailed.items() :
 '''Required fields (for syllabus), used to check completion on frontend'''
 
 required_columns_detailed = {key: [x.strip('*') for x in columns_detailed_raw[key] if x.endswith('*')] for key in columns_detailed_raw}
+
+
+# default values for syllabus items (name does not include _syllabus ending)
+defaults = {
+    "days1":"(DAYS)","times1": "(TIMES)","location1":"(LOCATION)",
+    "instructor_name": "",       
+    "office_hours": "",
+    "office_location": "",
+    "email": "",
+    "phone": "",
+    "course_description": "\n\n",
+    "course_materials": "",
+    "hip": ""    
+}
+
+# actually json and list columns
+json_columns = [item[:-5] for item in columns if item.endswith('_json')] + [item for item in columns if item.endswith('_list')]

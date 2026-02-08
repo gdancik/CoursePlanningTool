@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './ContentCard.css';
 
 /**
@@ -61,6 +61,17 @@ const ContentCard: React.FC<ContentCardProps> = ({
     titlePlaceholder = 'Enter title ...',
     descriptionPlaceholder = 'Enter description ...'
 }) => {
+
+    const WC = (x:string) => {
+        return x.trim().split(/\s+/).filter(word => word.length > 0).length;
+    }
+
+    const [wordCount, setWordCount] = useState<number>(0);
+
+    useEffect(() => {
+            setWordCount(WC(descriptionValue));
+        },[descriptionValue]);
+
     return (
         <div className={`content-card ${className}`}>
             <div className="content-card-header">
@@ -72,6 +83,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                         onChange={(e) => onTitleChange(e.target.value)}
                         className="content-card-title-input"
                         placeholder={titlePlaceholder}
+                        maxLength = {100}
                     />
                 </div>
                 
@@ -84,6 +96,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                             onChange={(e) => onRightValueChange(e.target.value)}
                             className="content-card-right-input"
                             placeholder="Points (or %)"
+                            maxLength = {10}
                         />
                     </div>
                 )}
@@ -93,13 +106,20 @@ const ContentCard: React.FC<ContentCardProps> = ({
                 {/*<label className="content-card-label">{descriptionLabel}</label>*/}
                 <textarea
                     value={descriptionValue}
-                    onChange={(e) => onDescriptionChange(e.target.value)}
+                    onChange={(e) => {
+                        const new_length = WC(e.target.value);
+                        const current_length = WC(descriptionValue);
+                        if (new_length <= 500 || new_length <= current_length) {                            
+                            onDescriptionChange(e.target.value)}
+                        }
+                    }
                     className="content-card-description-textarea"
                     placeholder={descriptionPlaceholder}
                     rows={4}
                 />
-                <div className="word-count">
-                    Word Count: {descriptionValue.trim().split(/\s+/).filter(word => word.length > 0).length} / 500 words max
+                <div className="word-count"> 
+                    <span style={{ color: wordCount >= 500 ? "red" : "inherit" }}>                     
+                    Word Count: {wordCount} / 500 words max       </span>                                    
                 </div>
             </div>
         </div>

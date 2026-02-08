@@ -13,7 +13,8 @@
               "label": "Subject Code",
               "placeholder": "Enter subject code",
               "required": true,
-              "className": "syllabus-text large-box"
+              "className": "syllabus-text large-box",
+              "maxLength": 3
             },
             {
               "type": "text",
@@ -21,7 +22,8 @@
               "label": "Course Number",
               "placeholder": "Enter course number",
               "required": true,
-              "className": "syllabus-text medium-box"
+              "className": "syllabus-text medium-box",
+              "maxLength": 6
             },
             {
               "type": "text",

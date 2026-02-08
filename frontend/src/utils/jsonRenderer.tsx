@@ -40,6 +40,9 @@ export type JsonComponent = {
     modalCase?: string;
     modalProps?: any;
 
+    // for text boxes
+    maxLength?: number;
+
     sidebarClassName?: string;
     contentClassName?: string;
     sidebarContent?: JsonComponent[];
@@ -225,7 +228,10 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
 
         // Text-like inputs
 
-        case "text":
+        case "text":    
+        
+            const maxLength = component.maxLength? component.maxLength : 100;
+            
             return (
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
@@ -242,6 +248,7 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                         }
                         required={component.required}
                         className={component.className || ""}
+                        maxLength = {maxLength}
                     />
                 </label>
             );
@@ -308,6 +315,7 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
 
         // Textarea
         case "textarea":
+            const maxLengthTextArea = component.maxLength? component.maxLength : 4000;
             return (
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
@@ -331,6 +339,7 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                         }
                         required={component.required}
                         className={component.className || ""}
+                        maxLength = {maxLengthTextArea}
                     />
                 </label>
             );

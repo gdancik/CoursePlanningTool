@@ -191,7 +191,9 @@ function CourseSchedule({ id, term, year, days, data }) {
           {scheduleRows.map((row, index) => (
             <tr key={index}>
               <td>
+              <div>
                 <textarea
+                  maxLength = {30}                                                  
                   value={row.date}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];
@@ -199,10 +201,12 @@ function CourseSchedule({ id, term, year, days, data }) {
                     setScheduleRows(updatedRows);
                   }}
                 />
+                </div>
               </td>
               <td>
                 <textarea
                   value={row.day}
+                  maxLength = {30}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];
                     updatedRows[index].day = e.target.value;
@@ -212,6 +216,13 @@ function CourseSchedule({ id, term, year, days, data }) {
               </td>
               <td>
                 <textarea
+                maxLength = {200}
+                style = {{
+                    overflowY: 'auto',
+                    resize:    'vertical',    
+                    minHeight: '4em',
+                    width: '100%'                  
+                  }}
                   value={row.unit}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];
@@ -222,6 +233,13 @@ function CourseSchedule({ id, term, year, days, data }) {
               </td>
               <td>
                 <textarea
+                 maxLength = {200}
+                 style = {{
+                    overflowY: 'auto',
+                    resize:    'vertical',    
+                    minHeight: '4em',
+                    width: '100%'                  
+                  }}
                   value={row.learningOutcomes}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];
@@ -232,6 +250,13 @@ function CourseSchedule({ id, term, year, days, data }) {
               </td>
               <td>
                 <textarea
+                 maxLength = {200}
+                  style = {{
+                    overflowY: 'auto',
+                    resize:    'vertical',    
+                    minHeight: '4em',
+                    width: '100%'                
+                  }}
                   value={row.readingAssignments}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];

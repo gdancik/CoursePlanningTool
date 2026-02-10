@@ -123,14 +123,10 @@
                         },
                         {
                             "type" : "Button",
-                            "label" : "Course Goals: Student Communication Tips",
-                            "modalCase" : "StudentCommunicationTips",
+                            "label" : "Course Goals: Student Communication Tips",                            
                             "externalLink": true,
                             "new_tab": true,
-                            "href": "/images/Student Communication Tips.jpg"
-                            
-
-                        
+                            "href": "/images/CommunicationTips.jpg"                        
                         },
                         {
                             "type": "informationText",

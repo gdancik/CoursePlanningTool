@@ -1,6 +1,6 @@
 import React from "react";
 
-import StudentCommunicationTipsContent from "../../../assets/images/StudentCommunicationTips.png";
+import StudentCommunicationTipsContent from "../../../assets/images/CommunicationTips.png";
 import def from "ajv/dist/vocabularies/discriminator";
 
 const StudentCommunicationTipsModal  = () => {

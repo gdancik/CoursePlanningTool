@@ -215,7 +215,7 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes_id, res
                             
                             <div className="checklist-content">
                                 <p className="checklist-instructions">
-                                    Click on the green button and download your draft syllabus as a Word document. Examine the syllabus and use the checklist below to ensure 
+                                    Click on the green button on the top menu bar and download your draft syllabus as a Word document. Examine the syllabus and use the checklist below to ensure 
                                     that you have completed each section. Go back to previous steps and make revisions as needed. After completing all sections, you'll be able to 
                                     download the syllabus directly from the Home page for this course.
                                 </p>

@@ -527,9 +527,12 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
         #Add policies
         if '<policy_statements></policy_statements>'in paragraph.text: 
             logging.debug('Policy Placeholder found') #debug
-            for source_paragraph in syllabus_statment_page.paragraphs:
-                de.copy_paragraph_before(source_paragraph,paragraph)
-        
+            # Original code using de.copy_paragraph_before
+            #for source_paragraph in syllabus_statment_page.paragraphs:
+                #de.copy_paragraph_before(source_paragraph,paragraph)
+
+            # GD: updated code
+            de.copy_paragraph_with_html_before(syllabus_statment_page, doc, paragraph)
 
         for key, value in json_columns.items():
             if key in paragraph.text:

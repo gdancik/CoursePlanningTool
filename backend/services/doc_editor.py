@@ -5,6 +5,7 @@ from python_docx_replace import docx_replace, docx_blocks
 from docx.shared import Pt, RGBColor
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
+import copy
 import re
 import docx
 import logging
@@ -268,6 +269,9 @@ def getTable(doc, i):
     df = pd.DataFrame(rows)
     return df
 
+# GD: this does not work with hyperlinks, use 
+# copy_paragraph_with_html_before instead 
+# for syllabus policies
 def copy_paragraph_before(source_paragraph, target_paragraph):
     '''
     Copies a paragraph from one document and inserts it before a specified paragraph in another document,
@@ -392,4 +396,29 @@ def copy_paragraph_before(source_paragraph, target_paragraph):
             logging.debug(f'current_run: {current_run}, run: {i}')  # Debugging log
                     
                 
+def copy_paragraph_with_html_before(source_doc, target_doc, target_para):
+    '''Copies all text in source_doc to before target_para
+    Must handle hyperlinks by copying relationships and remapping rIds
+    '''
+    
+    # Hyperlinks use rId references — we need to port them over so the links resolve
+    rel_id_map = {}
+    for rel in source_doc.part.rels.values():
+        if "hyperlink" in rel.reltype:        
+        # Add the relationship to the target doc and capture the new rId
+            new_rId = target_doc.part.relate_to(rel.target_ref, rel.reltype, is_external=True)
+            rel_id_map[rel.rId] = new_rId
 
+    for para in reversed(source_doc.paragraphs):
+        para_element = copy.deepcopy(para._element)
+
+        # Remap any rId references in hyperlink elements to the new doc's rIds
+        for hyperlink in para_element.findall(f'.//{qn("w:hyperlink")}'):
+            old_rId = hyperlink.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')
+            if old_rId and old_rId in rel_id_map:
+                hyperlink.set(
+                '{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id',
+                rel_id_map[old_rId]
+            )
+
+        target_para._element.addnext(para_element)

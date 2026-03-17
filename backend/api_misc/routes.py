@@ -52,7 +52,7 @@ def generateSchedule():
             return jsonify({"error": "term must be Fall or Spring"}), 400
 
         logging.info('Creating Schedule')
-        schedule = create_schedule(term, year, days, url = 'https://www.easternct.edu/academics/academic-calendar/index.html')
+        schedule = create_schedule(term, year, days, url = None)
 
         return jsonify({'schedule': schedule.to_dict(orient = 'records')})
 

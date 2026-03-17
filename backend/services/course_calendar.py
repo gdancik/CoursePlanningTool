@@ -50,7 +50,7 @@ import numpy as np
 import logging
 
 
-def create_schedule(term, year, days, url = 'https://www.easternct.edu/academics/academic-calendar/index.html') :
+def create_schedule(term, year, days, url = None) :
     '''
     Creates a table for the course schedule, 
     integrated with the academic calendar, for the
@@ -60,7 +60,15 @@ def create_schedule(term, year, days, url = 'https://www.easternct.edu/academics
     logging.info('Creating Schedule')
     target = term + ' ' + year
 
-    soup = get_target_webpage(url, target)
+    if not url:
+            url = ['https://www.easternct.edu/academics/academic-calendar/index.html',
+                   'https://www.easternct.edu/academics/academic-calendar/academic-calendar-2026-27.html']
+            try:
+                soup = get_target_webpage(url[0], target)
+            except :
+                soup = get_target_webpage(url[1], target)
+    else :
+        soup = get_target_webpage(url, target)
 
     df_calendar = get_dates(soup, target)
     df_calendar = process_academic_calendar(df_calendar, target, year)

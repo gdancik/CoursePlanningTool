@@ -171,7 +171,7 @@
           },       
           {
             "type": "Information",
-            "text": "Information entered below will appear in the final syllabus as a numbered list with the format <i>Learning Outcome 1 (LO1, title): description ... </i>"           
+            "text": "Information entered below will appear in the final syllabus following the text, \"Upon completing this course, you will be able to\", followed by a numbered list with the format <i>Learning Outcome 1 (LO1, title): description ... </i>"           
           },
           {
             "type": "LearningOutcomesCards",

@@ -74,6 +74,7 @@ export const LearningOutcomesCards = ({ id, data = []}: { id: string, data?:Card
         <ContentCardSet
             id = {id}
             setTitle="Learning Outcomes"
+            setPreface = "Upon completing this course, you will be able to:"
             titleLabel="Learning Outcome {index}"
             separateLabel = {true}
             descriptionLabel=""

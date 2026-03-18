@@ -10,6 +10,7 @@ import './ContentCardSet.css';
  * Used as the base for Learning Outcomes, Assignments, and Grading Policies components.
  * Provides standardized management of multiple content cards with consistent styling and behavior.
  * @param {string} setTitle - The main title for the entire card set
+ * @param {string} setPreface -- Optional introductory text displayed above the cards 
  * @param {string} titleLabel - The label template for card titles (e.g., "Learning Outcome {index} Title:")
  * @param {string} descriptionLabel - The label template for card descriptions (e.g., "Learning Outcome {index} Description:")
  * @param {string} [rightLabel] - Optional label for right-side values (e.g., "Points:")
@@ -44,6 +45,7 @@ export interface CardData {
 interface ContentCardSetProps {
     id?: string;
     setTitle: string;
+    setPreface?: string;
     titleLabel: string;
     descriptionLabel: string;
     rightLabel?: string;
@@ -60,6 +62,7 @@ interface ContentCardSetProps {
 export const ContentCardSet: React.FC<ContentCardSetProps> = ({
     id,
     setTitle,
+    setPreface = undefined,
     titleLabel,
     descriptionLabel,
     rightLabel,
@@ -137,6 +140,13 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
             <div className="content-card-set-header">
                 <h2 className="content-card-set-title">{setTitle}</h2>
             </div>
+            {setPreface && 
+            <div className="content-card-set-header">
+                <h2 className = "content-card-set-preface">
+                {setPreface}
+                </h2>
+            </div>
+            }
 
             <div className="content-cards-container">
                 {cards.map((card, index) => (

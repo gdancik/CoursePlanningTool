@@ -24,6 +24,15 @@
     flex: 1;
 }
 
+.content-card-set-preface {
+    color: #155724;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+}
+
+
 .add-card-button {
     display: flex;
     align-items: center;

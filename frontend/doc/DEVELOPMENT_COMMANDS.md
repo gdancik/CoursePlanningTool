@@ -33,7 +33,7 @@ src/
 ├── TestPageRunner.jsx # Component showcase page
 └── components/
     └── SyllabusComponents/
-        ├── Alert.jsx
+        ├── Alert.tsx
         ├── Information.jsx  
         ├── CheckboxGroup.jsx
         └── SidebarLayout.jsx

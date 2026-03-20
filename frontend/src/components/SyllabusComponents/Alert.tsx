@@ -15,7 +15,7 @@ import ParagraphFromFile from "../../components/SyllabusComponents/ParagraphFrom
  */
 
 interface AlertProps {
-  text: string;
+  text?: string;
   file?: string;
 }
 
@@ -91,7 +91,7 @@ function Alert({ text, file }: AlertProps) {
             flexShrink: 0,
           }}
         >
-          <FaExclamationCircle 
+          <FaExclamationCircle
             style={{ 
               color: "#fff", 
               fontSize: "20px" 

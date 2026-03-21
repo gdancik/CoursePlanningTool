@@ -38,7 +38,7 @@ export type ComponentTypes =
 
 //BaseComponent Across all Components
 
-export interface BaseComponents {
+export interface BaseComponent {
     type: ComponentTypes;
     className?: string;
 }
@@ -64,7 +64,7 @@ export interface WithRequired {
 }
 
 //WithContent Mixin
-export interface withContent {
+export interface WithContent {
     content?: JsonComponent[];
 }
 
@@ -74,5 +74,73 @@ export interface WithConditional {
         value?: string;
     }
 }
+
+
+/* =================================== */
+/*     Presentational Components       */
+/* =================================== */
+
+export interface ImageComponent extends BaseComponent {
+    type: "Image";
+    value: string;
+    alt?: string;
+    imageType?: "file" | "url";
+}
+
+export interface AlertComponent extends BaseComponent {
+    type: "Alert";
+    text: string;
+    file?: string;
+}
+
+export interface InformationComponent extends BaseComponent {
+    type: "Information";
+    text: string;
+}
+export interface BloomsTaxonomy extends BaseComponent {
+    type: "BloomsTaxonomy";
+}
+
+export interface AdditionalCompetenciesComponent extends BaseComponent {
+    type: "AdditionalCompetencies";
+}
+
+/* =================================== */
+/*        Container Components         */
+/* =================================== */
+
+export interface AccordionComponent extends BaseComponent, WithContent {
+    type: "Accordion";
+    title: string;
+}
+
+export interface ColumnComponent extends BaseComponent, WithContent, WithConditional {
+    type: "Column";
+    id?: string;
+}
+export interface RowComponent extends BaseComponent, WithConditional, WithContent {
+    type: "Row";
+    id?: string;
+}
+
+export interface SidebarLayoutComponent extends BaseComponent, WithContent {
+    type: "SidebarLayout";
+    title?: string;
+    sideBarContent?: JsonComponent[];
+    sidebarWidth?: string;
+    sidebarClassName?: string;
+    contentClassName?: string;
+    text?: string;
+    informationText?: string;
+}
+
+/* =================================== */
+/*           Input Components          */
+/* =================================== */
+
+
+
+
+
 
 

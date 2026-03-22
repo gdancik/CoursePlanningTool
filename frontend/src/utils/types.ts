@@ -138,7 +138,15 @@ export interface SidebarLayoutComponent extends BaseComponent, WithContent {
 /*           Input Components          */
 /* =================================== */
 
+export interface TextInputComponent extends BaseComponent, WithId, WithLabel, WithPlaceholder, WithRequired {
+    type: "text";
+    maxLength?: number;
+}
 
+export interface TextAreaComponent extends BaseComponent, WithId, WithLabel, WithPlaceholder, WithRequired {
+    type: "textarea";
+    maxLength?: number;
+}
 
 
 

@@ -21,6 +21,9 @@ import {GradingPolicies} from "../components/SyllabusComponents/GradingPolicies"
 import CompetencyTable1 from "../components/SyllabusComponents/Tables/CompetencyTable1"
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
+import {ComponentRegistry} from "./ComponentRegistry";
+import {AccordionComponent} from "./types";
+
 // Type for JSON-driven UI
 export type JsonComponent = {
     type: string;
@@ -84,20 +87,23 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
   onChange
 }) => {
     switch (component.type) {
-        case "Accordion":
+        case "Accordion": {
+            const Component = ComponentRegistry["Accordion"];
+
+            if (!Component) {
+                console.error("Accordion not found in registry");
+                return null;
+            }
+
             return (
-                <SectionAccordion
-                    sectionName={component.title || ""}
+                <Component
+                    component={component as AccordionComponent}
                     formData={formData}
-                    onFieldChange={onChange}
-                >
-                    {component.content?.map((child, i) => (
-                        <div key={i}>
-                            <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
-                        </div>
-                    ))}
-                </SectionAccordion>
+                    onChange={onChange}
+                />
             );
+        }
+
 
         case "Column":
             if (component.conditional) {

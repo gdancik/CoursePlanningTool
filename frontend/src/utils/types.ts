@@ -1,12 +1,10 @@
 /* Types.TS - All Type components currently used */
 
-import {JsonComponent} from "./jsonRenderer";
-
 export type ComponentTypes =
     | "Accordion"
     | "Column"
     | "Row"
-    | "CheckBoxGroup"
+    | "CheckboxGroup"
     | "checkbox"
     | "Alert"
     | "Information"
@@ -97,7 +95,7 @@ export interface InformationComponent extends BaseComponent {
     type: "Information";
     text: string;
 }
-export interface BloomsTaxonomy extends BaseComponent {
+export interface BloomsTaxonomyComponent extends BaseComponent {
     type: "BloomsTaxonomy";
 }
 
@@ -148,7 +146,135 @@ export interface TextAreaComponent extends BaseComponent, WithId, WithLabel, Wit
     maxLength?: number;
 }
 
+export interface SelectComponent extends BaseComponent, WithId, WithLabel, WithRequired {
+    type: "select";
+    options?: string[];
+}
 
+export interface CheckboxComponent extends BaseComponent, WithId, WithLabel {
+    type: "checkbox";
+}
 
+export interface CheckboxGroupComponent extends BaseComponent, WithId, WithLabel {
+    type: "CheckboxGroup";
+    data: string[];
+    horizontal?: boolean;
+}
+/* ========================= */
+/* DATA / COMPLEX COMPONENTS */
+/* ========================= */
 
+export interface AssignmentsComponent extends BaseComponent, WithId {
+    type: "Assignments";
+}
 
+export interface GradeTableComponent extends BaseComponent, WithId{
+    type: "GradeTable"
+}
+
+export interface CourseScheduleComponent extends BaseComponent, WithId {
+    type: "courseSchedule",
+    term: string;
+    year: string;
+    days1: string;
+    days2?: string;
+}
+
+export interface LearningOutcomesComponent extends BaseComponent, WithId {
+    type: "LearningOutcomesCards";
+}
+
+export interface GradingPoliciesComponent extends BaseComponent, WithId {
+    type: "GradingPolicies";
+}
+
+/* ========================= */
+/*   FILE-BASED COMPONENTS   */
+/* ========================= */
+
+export interface ParagraphFromFileComponent extends BaseComponent {
+    type: "paragraphFromFile";
+    file: string;
+}
+
+export interface HtmlFromFileComponent extends BaseComponent {
+    type: "htmlFromFile";
+    file: string,
+}
+
+/* ========================= */
+/*            Misc.          */
+/* ========================= */
+
+export interface InformationTextComponent extends BaseComponent {
+    type: "informationText";
+    placeholder?: string;
+}
+
+export interface ButtonComponent extends BaseComponent, WithLabel {
+    type: "Button";
+    variant?: "primary" | "secondary" | "exit" | "green";
+    href?: string;
+    externalLink?: boolean;
+    new_tab?: boolean;
+    modalCase?: string;
+    modalProps?: any;
+}
+export interface OverviewComponentType extends BaseComponent {
+    type: "OverviewComponent";
+}
+
+export interface ChecklistComponentType extends BaseComponent {
+    type: "ChecklistComponent";
+}
+
+export interface FiveCoreCompetenciesComponent extends BaseComponent {
+    type: "FiveCoreCompetencies";
+    competencies?: any[]; // refine later if needed
+}
+
+export interface CompetencyTable1Component
+    extends BaseComponent,
+        WithId {
+    type: "CompetencyTable1";
+}
+
+export interface CompetencyTable2Component
+    extends BaseComponent,
+        WithId {
+    type: "CompetencyTable2";
+}
+
+/* ========================= */
+/*      JSON Engine Type     */
+/* ========================= */
+
+export type JsonComponent =
+    | ImageComponent
+    | AlertComponent
+    | InformationComponent
+    | BloomsTaxonomyComponent
+    | AdditionalCompetenciesComponent
+    | AccordionComponent
+    | ColumnComponent
+    | RowComponent
+    | SidebarLayoutComponent
+    | TextInputComponent
+    | TextAreaComponent
+    | SelectComponent
+    | CheckboxComponent
+    | CheckboxGroupComponent
+    | AssignmentsComponent
+    | GradeTableComponent
+    | CourseScheduleComponent
+    | LearningOutcomesComponent
+    | GradingPoliciesComponent
+    | ParagraphFromFileComponent
+    | HtmlFromFileComponent
+    | InformationTextComponent
+    | ButtonComponent
+    | OverviewComponentType
+    | ChecklistComponentType
+    | FiveCoreCompetenciesComponent
+    | CompetencyTable1Component
+    | CompetencyTable2Component;

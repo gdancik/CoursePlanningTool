@@ -22,7 +22,7 @@ import CompetencyTable1 from "../components/SyllabusComponents/Tables/Competency
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
 import {ComponentRegistry} from "./ComponentRegistry";
-import {AccordionComponent} from "./types";
+import {AccordionComponent, ColumnComponent} from "./types";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -106,27 +106,19 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
 
 
         case "Column":
-            if (component.conditional) {
-                const fieldValue = formData[component.conditional.field];
-                const requiredValue = component.conditional.value;
+            const Component = ComponentRegistry["Column"];
 
-            
-                if (requiredValue === undefined) {
-                    if (!fieldValue) return null;
-                } else {
-                    if (fieldValue !== requiredValue) return null;
-                }
+            if (!Component) {
+                console.error("Column not found in registry");
+                return null;
             }
 
             return (
-            <div 
-            key={component.id} 
-            className={component.className || "form-column"}
-            >
-                    {component.content?.map((child, i) =>
-                        <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
-                    )}
-                </div>
+                <Component
+                    component={component as ColumnComponent}
+                    formData={formData}
+                    onChange={onChange}
+                />
             );
 
         case "Row":

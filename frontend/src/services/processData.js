@@ -68,6 +68,7 @@ const saveData = async (ref) => {
         .filter(x => x.id && x.id.trim() !== "")  // only include elements with an ID    
         .map(x => ({ [x.id]: x.value }));
     const res_select = [...ref.current.querySelectorAll("select")]
+        .filter(x => x.id && x.id.trim() !== "")
         .map(x => ({ [x.id]: x.value }));
     const res_list = [...ref.current.querySelectorAll('table[id$="_list"]')]
         .map(x => get_table_records(x, false));

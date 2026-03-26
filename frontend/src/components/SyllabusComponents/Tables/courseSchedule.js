@@ -8,6 +8,147 @@ import config from "../../../config.json";
 //import axios from "axios";
 //import "./gradeTable.css";
 
+const createEmptyScheduleRow = () => ({
+  date: "",
+  day: "",
+  unit: "",
+  learningOutcomes: "",
+  readingAssignments: "",
+});
+
+const parseRowDateValue = (dateValue) => {
+  const value = (dateValue || "").trim();
+  if (!value) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  const parsed = Date.parse(value);
+  if (!Number.isNaN(parsed)) {
+    return parsed;
+  }
+
+  const fallbackMatch = value.match(/^(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?$/);
+  if (fallbackMatch) {
+    const month = Number(fallbackMatch[1]);
+    const day = Number(fallbackMatch[2]);
+    const year = fallbackMatch[3] ? Number(fallbackMatch[3]) : new Date().getFullYear();
+    if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+      const normalizedYear = year < 100 ? 2000 + year : year;
+      return new Date(normalizedYear, month - 1, day).getTime();
+    }
+  }
+
+  return Number.POSITIVE_INFINITY;
+};
+
+const sortRowsByDate = (rows) =>
+  rows
+    .map((row, index) => ({ row, index }))
+    .sort((a, b) => {
+      const dateA = parseRowDateValue(a.row.date);
+      const dateB = parseRowDateValue(b.row.date);
+
+      if (dateA !== dateB) {
+        return dateA - dateB;
+      }
+
+      return a.index - b.index;
+    })
+    .map((entry) => entry.row);
+
+const toDeduplicationKey = (row) =>
+  [
+    row.date,
+    row.day,
+    row.unit,
+    row.learningOutcomes,
+    row.readingAssignments,
+  ]
+    .map((value) => (value || "").trim().toLowerCase())
+    .join("|");
+
+const deduplicateRows = (rows) => {
+  const seenKeys = new Set();
+  return rows.filter((row) => {
+    const key = toDeduplicationKey(row);
+    if (seenKeys.has(key)) {
+      return false;
+    }
+    seenKeys.add(key);
+    return true;
+  });
+};
+
+const coerceToTrimmedString = (value) => {
+  if (value === undefined || value === null) {
+    return "";
+  }
+
+  if (Array.isArray(value)) {
+    return value.join("").trim();
+  }
+
+  return String(value).trim();
+};
+
+const normalizeTerm = (value) => {
+  const trimmed = coerceToTrimmedString(value);
+  if (!trimmed) {
+    return "";
+  }
+
+  const lower = trimmed.toLowerCase();
+  if (lower === "fall") {
+    return "Fall";
+  }
+  if (lower === "spring") {
+    return "Spring";
+  }
+
+  return trimmed;
+};
+
+const normalizeYear = (value) => {
+  const trimmed = coerceToTrimmedString(value);
+  const yearMatch = trimmed.match(/\d{4}/);
+  return yearMatch ? yearMatch[0] : trimmed;
+};
+
+const normalizeDays = (value) => {
+  if (Array.isArray(value)) {
+    return [...new Set(value.map((day) => String(day).trim().toUpperCase()).join("").split(""))]
+      .filter((day) => "MTRFS".includes(day))
+      .join("");
+  }
+
+  const raw = coerceToTrimmedString(value);
+  if (!raw) {
+    return "";
+  }
+
+  let normalized = raw;
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      normalized = parsed.join("");
+    }
+  } catch {
+    normalized = raw;
+  }
+
+  return [...new Set(normalized.toUpperCase().replace(/[^MTRFS]/g, "").split(""))].join("");
+};
+
+const formatDate = (timestamp, format) => {
+  if (timestamp === Number.POSITIVE_INFINITY) return "";
+  const d = new Date(timestamp);
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  if (format === "mm/dd") return `${mm}/${dd}`;
+  if (format === "mm/dd/yy") return `${mm}/${dd}/${String(d.getFullYear()).slice(-2)}`;
+  return `${mm}/${dd}/${d.getFullYear()}`;
+};
+
 
 /**
  * @function CourseSchedule
@@ -44,23 +185,33 @@ function CourseSchedule({ id, term, year, days, data }) {
 
 
   const [scheduleRows, setScheduleRows] = useState([
-    {
-      date: "",
-      day: "",
-      unit: "",
-      learningOutcomes: "",
-      readingAssignments: "",
-    },
+    createEmptyScheduleRow(),
   ]);
 
+  const [dateFormat, setDateFormat] = useState("mm/dd/yyyy");
+
+  const normalizedTerm = normalizeTerm(term);
+  const normalizedYear = normalizeYear(year);
+  const normalizedDays = normalizeDays(days);
+
+  const datesSorted = scheduleRows.length <= 1 || scheduleRows.every((row, i) => {
+    if (i === 0) return true;
+    return parseRowDateValue(scheduleRows[i - 1].date) <= parseRowDateValue(row.date);
+  });
+
+  useEffect(() => {
+    setScheduleRows((currentRows) =>
+      currentRows.map((row) => {
+        const ts = parseRowDateValue(row.date);
+        if (ts === Number.POSITIVE_INFINITY) return row;
+        return { ...row, date: formatDate(ts, dateFormat) };
+      })
+    );
+    triggerInput();
+  }, [dateFormat]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const addRow = (index) => {
-    const newRow = {
-      date: "",
-      day: "",
-      unit: "",
-      learningOutcomes: "",
-      readingAssignments: "",
-    };
+    const newRow = createEmptyScheduleRow();
     const updatedRows = [
       ...scheduleRows.slice(0, index + 1),
       newRow,
@@ -98,6 +249,19 @@ function CourseSchedule({ id, term, year, days, data }) {
       return obj;
   }
 
+  const clearSchedule = () => {
+    const clearedRows = scheduleRows.length > 0
+      ? scheduleRows.map(() => createEmptyScheduleRow())
+      : [createEmptyScheduleRow()];
+    setScheduleRows(clearedRows);
+    triggerInput();
+  };
+
+  const sortScheduleByDate = () => {
+    setScheduleRows((currentRows) => sortRowsByDate(currentRows));
+    triggerInput();
+  };
+
   // scheduleData has schedule
   const generateSchedule = async () => {
    
@@ -107,11 +271,16 @@ function CourseSchedule({ id, term, year, days, data }) {
 
 
     try {
+      if (missingScheduleInfo(normalizedTerm, normalizedYear, normalizedDays)) {
+        alert("Please provide valid term, year, and days before generating a schedule.");
+        return;
+      }
+
       //await login();
 
       const response = await api.post(
-        "https://gdancik.pythonanywhere.com/api/generateSchedule/",
-        { term, year, days }
+        "generateSchedule/",
+        { term: normalizedTerm, year: normalizedYear, days: normalizedDays }
       );
       const scheduleData = response.data;
 
@@ -134,12 +303,20 @@ function CourseSchedule({ id, term, year, days, data }) {
           learningOutcomes: "",
           readingAssignments: "",
         }));
-        setScheduleRows(generatedSchedule);
+
+        setScheduleRows((currentRows) => {
+          const mergedRows = [...currentRows, ...generatedSchedule];
+          const deduplicatedRows = deduplicateRows(mergedRows);
+          return sortRowsByDate(deduplicatedRows);
+        });
         triggerInput();
       }
     } catch (error) {
+      const apiMessage = error?.response?.data?.error;
       alert(
-        "Schedule can’t be generated. Please check your term, year, and days, or try again later."
+        apiMessage
+          ? `Schedule can’t be generated: ${apiMessage}`
+          : "Schedule can’t be generated. Please check your term, year, and days, or try again later."
       );
       console.error("Error generating schedule", error);
     }
@@ -148,11 +325,8 @@ function CourseSchedule({ id, term, year, days, data }) {
   // Render
 
   const missingScheduleInfo = function(term, year, days) {
-    //console.log('checking schedule info: '+ [term, year, days])
-    if ([term, year, days].some(x => x === undefined)) {
-      return true;
-    }
-    if ([term, year, days].some(x => x.trim() === '')) {
+    const values = [term, year, days].map(coerceToTrimmedString);
+    if (values.some((x) => x === "")) {
       return true;
     }
     return false;
@@ -163,18 +337,30 @@ function CourseSchedule({ id, term, year, days, data }) {
 
     <div> 
       <div style = {{margin: "1%"}}>
-        {(missingScheduleInfo(term, year, days))? (
+        {(missingScheduleInfo(normalizedTerm, normalizedYear, normalizedDays))? (
           <p style = {{color: "darkred", fontWeight: "bold"}}>
             Note: for the option to autogenerate your schedule, enter a term, year, and days on the Basic Information page</p>
         ): 
         <div style = {{display: "flex"}}>
           <button class = 'reusable-button primary' 
-            onClick={generateSchedule}>Generate Schedule ({term} {year}, {days})
-          </button>. &nbsp;
-          <button style = {{all: "unset"}}> (Note: this will overwrite the current schedule)</button>          
+            onClick={generateSchedule}>Generate Schedule ({normalizedTerm} {normalizedYear}, {normalizedDays})
+          </button>&nbsp;
+          <button class = 'reusable-button primary' onClick={clearSchedule}>Clear Schedule</button>
           </div>          
         }
       </div> 
+
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem", marginRight: "2%", alignItems: "center" }}>
+        <label>Date format:&nbsp;
+          <select value={dateFormat} onChange={(e) => setDateFormat(e.target.value)}>
+            <option value="mm/dd">mm/dd</option>
+            <option value="mm/dd/yyyy">mm/dd/yyyy</option>
+            <option value="mm/dd/yy">mm/dd/yy</option>
+          </select>
+        </label>
+        &nbsp;
+        <button class='reusable-button primary' onClick={sortScheduleByDate} disabled={datesSorted}>Sort by date</button>
+      </div>
 
     <table id={id} style = {{margin: "2%"}}>
         <thead>
@@ -199,6 +385,14 @@ function CourseSchedule({ id, term, year, days, data }) {
                     const updatedRows = [...scheduleRows];
                     updatedRows[index].date = e.target.value;
                     setScheduleRows(updatedRows);
+                  }}
+                onBlur={(e) => {
+                    const ts = parseRowDateValue(e.target.value);
+                    if (ts !== Number.POSITIVE_INFINITY) {
+                      const updatedRows = [...scheduleRows];
+                      updatedRows[index] = { ...updatedRows[index], date: formatDate(ts, dateFormat) };
+                      setScheduleRows(updatedRows);
+                    }
                   }}
                 />
                 </div>

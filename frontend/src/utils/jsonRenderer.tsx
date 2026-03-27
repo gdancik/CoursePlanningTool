@@ -1,5 +1,5 @@
 import React from "react";
-import SectionAccordion from "../screens/SyllabusView/BasicInformation/SectionAccordion";
+import SectionAccordion from "../components/SyllabusComponents/SectionAccordion";
 import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
 import Alert from "../components/SyllabusComponents/Alert";
 import Image from "../components/SyllabusComponents/Image";
@@ -22,7 +22,7 @@ import CompetencyTable1 from "../components/SyllabusComponents/Tables/Competency
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
 import {ComponentRegistry} from "./ComponentRegistry";
-import {AccordionComponent, ColumnComponent} from "./types";
+import {AccordionComponent, ColumnComponent, RowComponent} from "./types";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -105,7 +105,7 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
         }
 
 
-        case "Column":
+        case "Column": {
             const Component = ComponentRegistry["Column"];
 
             if (!Component) {
@@ -120,29 +120,24 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                     onChange={onChange}
                 />
             );
+        }
 
-        case "Row":
-            // Handle conditional logic for rows
-            if (component.conditional) {
-                const fieldValue = formData[component.conditional.field];
-                const requiredValue = component.conditional.value;
+        case "Row": {
+            const Component = ComponentRegistry["Row"];
 
-                // If no specific value is required, just check truthiness
-                if (requiredValue === undefined) {
-                    if (!fieldValue) return null;
-                } else {
-                    if (fieldValue !== requiredValue) return null;
-                }
+            if (!Component) {
+                console.error("Row not found in registry");
+                return null;
             }
 
             return (
-            <div key={component.id} className={component.className || "form-row"}>
-                    {component.content?.map((child, i) =>
-                        <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
-                    )}
-                </div>
-            );
-
+                <Component
+                    component={component as RowComponent}
+                    formData={formData}
+                    onChange={onChange}
+                />
+            )
+    }
         case "CheckboxGroup":
             const fieldId = component.id || "";
             const rawValue = formData[fieldId];

@@ -1,4 +1,4 @@
-import SectionAccordion from "../../../screens/SyllabusView/BasicInformation/SectionAccordion";
+import SectionAccordion from "../SectionAccordion";
 import {JsonRenderComponent} from "../../../utils/jsonRenderer";
 import {AccordionComponent} from "../../../utils/types";
 

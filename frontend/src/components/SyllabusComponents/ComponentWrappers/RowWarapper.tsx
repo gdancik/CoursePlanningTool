@@ -25,7 +25,7 @@ export default function RowWrapper({component, formData, onChange}: Props) {
     return (
         <div key = {component.id} className={component.className || "form-row"}>
             {component.content?.map((child, i) =>
-                <JsonRenderComponent component={child} formData={formData} onChange={onChange} />
+                <JsonRenderComponent  key={i} component={child} formData={formData} onChange={onChange} />
             )}
 
         </div>

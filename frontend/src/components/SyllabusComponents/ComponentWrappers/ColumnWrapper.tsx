@@ -27,7 +27,7 @@ export default function ColumnWrapper({component, formData, onChange}: Props) {
         className={component.className || "form-column"}
         >
             {component.content?.map ((child, i) =>
-            <JsonRenderComponent  component = {child} formData={formData} onChange = {onChange} />
+            <JsonRenderComponent key={i} component = {child} formData={formData} onChange = {onChange} />
                 )}
         </div>
     )

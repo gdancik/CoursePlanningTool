@@ -19,7 +19,7 @@ export default function RowWrapper({component, formData, onChange}: Props) {
         if (requiredValue === undefined) {
             if(!fieldValue) return null;
         } else {
-            if (fieldValue != requiredValue) return null;
+            if (fieldValue !== requiredValue) return null;
         }
     }
     return (

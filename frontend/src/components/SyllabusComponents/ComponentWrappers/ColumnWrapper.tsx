@@ -13,7 +13,7 @@ export default function ColumnWrapper({component, formData, onChange}: Props) {
         const fieldValue = formData[component.conditional.field];
         const requiredValue = component.conditional.value;
 
-        if (requiredValue == undefined) {
+        if (requiredValue === undefined) {
             if(!fieldValue) return null;
         }
         else

@@ -142,7 +142,7 @@ export default function About() {
             linkedin= "https://www.linkedin.com/in/sencere-rabel-324220352"
             photo="/images/Sencere_Rabel.jpg"
           />
-          <PersonCard name="Christopher Windrow" role="Front End Developer" />
+          <PersonCard name="Audrey Windrow" role="Front End Developer" />
         </CardGrid>
 
         {/* ===========================

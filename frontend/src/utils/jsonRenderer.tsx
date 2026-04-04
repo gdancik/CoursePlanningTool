@@ -22,7 +22,7 @@ import CompetencyTable1 from "../components/SyllabusComponents/Tables/Competency
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
 import {ComponentRegistry} from "./ComponentRegistry";
-import {AccordionComponent, ColumnComponent, RowComponent} from "./types";
+import {AccordionComponent, CheckboxGroupComponent, ColumnComponent, RowComponent} from "./types";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -138,34 +138,22 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                 />
             )
     }
-        case "CheckboxGroup":
-            const fieldId = component.id || "";
-            const rawValue = formData[fieldId];
-            let currentValue: string [] = []
-            if(Array.isArray(rawValue)) {
-                currentValue = rawValue;
-            } else if (typeof rawValue === "string") {
-                try{
-                    const parsed = JSON.parse(rawValue);
-                    if(Array.isArray (parsed)) currentValue = parsed;
-                    else currentValue = rawValue.split(",").filter(Boolean);
-                }catch {
-                    currentValue = rawValue.split(",").filter(Boolean);
-                }
+        case "CheckboxGroup": {
+            const Component = ComponentRegistry["CheckBoxGroup"];
+
+            if (!Component) {
+                console.error(Component + "Not found in Registry");
+                return null;
             }
+
             return (
-                <div key = {component.id}>
-                    <CheckboxGroup 
-                    label = {component.label}
-                    id = {component.id}
-                    data = {component.data || []}
-                    className = {component.className}
-                    horizontal = {component.horizontal ?? true}
-                    value = {currentValue}
-                    onChange={(vals: string[]) => onChange(fieldId, JSON.stringify(vals))}
-                    />
-                </div>
+                <Component
+                    component={component as CheckboxGroupComponent}
+                    formData={formData}
+                    onChange={onChange}
+                />
             );
+        }
         case "checkbox":
             return (
                 <label className={component.className || ""}>

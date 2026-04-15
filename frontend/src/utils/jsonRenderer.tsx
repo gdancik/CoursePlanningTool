@@ -388,6 +388,16 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                     }                    
                     if (Array.isArray(x)) {
                         return x.join('');
+                    } else if (typeof x === 'string') {
+                        try {
+                            const parsed = JSON.parse(x);
+                            if (Array.isArray(parsed)) {
+                                return parsed.join('');
+                            }
+                        } catch {
+                            // ignore and fall back to normalized plain string
+                        }
+                        return x.replace(/[^A-Za-z]/g, '').toUpperCase();
                     } else {
                         alert("Error: " + name + " must correspond to an array")
                     return x;

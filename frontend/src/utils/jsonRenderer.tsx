@@ -1,6 +1,5 @@
 import React from "react";
-import SectionAccordion from "../components/SyllabusComponents/SectionAccordion";
-import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
+
 import Alert from "../components/SyllabusComponents/Alert";
 import Image from "../components/SyllabusComponents/Image";
 import Information from "../components/SyllabusComponents/Information";
@@ -22,7 +21,7 @@ import CompetencyTable1 from "../components/SyllabusComponents/Tables/Competency
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
 import {ComponentRegistry} from "./ComponentRegistry";
-import {AccordionComponent, CheckboxGroupComponent, ColumnComponent, RowComponent} from "./types";
+import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent} from "./types";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -154,23 +153,21 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                 />
             );
         }
-        case "checkbox":
+        case "checkbox": {
+            const Component = ComponentRegistry["checkbox"];
+
+            if (!Component) {
+                console.error(Component + "not found in registry");
+                return null;
+            }
             return (
-                <label className={component.className || ""}>
-                    <input
-                        type="checkbox"
-                        id={component.id}
-                        checked={!!formData[component.id || ""]}
-                        onChange={(e) =>
-                            onChange(
-                                component.id || "",
-                                e.target.checked ? "true" : ""
-                            )
-                        }
-                    />
-                    {component.label}
-                </label>
+                <Component
+                    component={component as CheckboxComponent}
+                    formData={formData}
+                    onChange={onChange}
+                />
             );
+        }
 
         case "Alert":
             return <Alert text={component.text || ""} file = {component.file} />;

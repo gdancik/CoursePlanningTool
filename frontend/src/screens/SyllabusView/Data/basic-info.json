@@ -74,8 +74,8 @@
               "required": true,
               "data": ["M", "T", "W", "R", "F", "S"],
               "horizontal": true,
-              "className": "syllabus-checkbox green"
-            },
+              "className": "syllabus- green"
+       },
             {
               "type": "text",
               "id": "times2_syllabus",

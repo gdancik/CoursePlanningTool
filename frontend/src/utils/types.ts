@@ -31,6 +31,26 @@ export type ComponentTypes =
     | "CompetencyTable2"
 
 /* =================================== */
+/*    FormData Specification Type      */
+/* =================================== */
+
+
+export type FormValue =
+    | string
+    | string[]
+    | boolean
+    | number
+    | undefined
+
+export type FormData = Record<string, FormValue>;
+
+
+/* =================================== */
+/*    FormValue Specification Type     */
+/* =================================== */
+
+
+/* =================================== */
 /*    Base Components + Shared Ones    */
 /* =================================== */
 

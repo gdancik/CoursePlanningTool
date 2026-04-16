@@ -21,6 +21,7 @@ import CompetencyTable1 from "../components/SyllabusComponents/Tables/Competency
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
 import {ComponentRegistry} from "./ComponentRegistry";
+import {FormData, FormValue} from "./types";
 import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent} from "./types";
 
 // Type for JSON-driven UI
@@ -85,6 +86,10 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
   formData,
   onChange
 }) => {
+    const onStringChange = (fieldId: string, value: string) => {
+        onChange(fieldId, value);
+    };
+
     switch (component.type) {
         case "Accordion": {
             const Component = ComponentRegistry["Accordion"];

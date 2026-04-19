@@ -1,13 +1,13 @@
 import Checkbox from "../Checkbox";
 import {
-    FormData,
+    FormState,
     FormValue,
     CheckboxComponent,
 } from "../../../utils/types";
 
 type Props = {
     component: CheckboxComponent;
-    formData: FormData;
+    formData: FormState;
     onChange: (fieldId: string, value: FormValue) => void;
 };
 

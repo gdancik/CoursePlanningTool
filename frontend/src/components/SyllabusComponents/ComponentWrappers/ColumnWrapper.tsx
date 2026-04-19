@@ -1,11 +1,11 @@
 import React from "react";
 import {JsonRenderComponent} from "../../../utils/jsonRenderer";
-import {ColumnComponent} from "../../../utils/types";
+import {ColumnComponent, FormState, FormValue} from "../../../utils/types";
 
 type Props = {
     component: ColumnComponent;
-    formData: Record<string, string>;
-    onChange: (label: string, value: string) => void;
+    formData: FormState;
+    onChange: (label: string, value: FormValue) => void;
 };
 
 export default function ColumnWrapper({component, formData, onChange}: Props) {

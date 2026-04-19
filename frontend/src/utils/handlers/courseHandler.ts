@@ -7,6 +7,7 @@ import {
     Course,
 } from "../../services/course/courseService";
 import { Dispatch, SetStateAction } from "react";
+import {FormState} from "../types";
 
 export type ModalControls = {
     setVisible: Dispatch<SetStateAction<boolean>>;
@@ -19,7 +20,7 @@ export const createCourseHandler = (
     modal: ModalControls,
     setCourses: (courses: Course[]) => void
 ) => {
-    return async (formData: Record<string, string>) => {
+    return async (formData: FormState) => {
         modal.setVisible(true);
 
         try {

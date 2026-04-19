@@ -1,5 +1,6 @@
 import { createApiCaller } from "../../utils/apiFactory";
 import {SHEET_COLUMNS} from "../../utils/handlers/sheetColumns";
+import {FormState, FormValue} from "../../utils/types";
 
 export interface Course {
     course_id: string;
@@ -12,7 +13,7 @@ export interface Course {
     last_edited: string;
     created_at?: string;
     course_type?: string;
-    [key: string]: string | undefined;
+    [key: string]: FormValue;
 }
 
 /**
@@ -35,7 +36,7 @@ export const getNewCourseId = (
  */
 export const updateCourseValues = (
     course_id: string,
-    values: Record<string, string>
+    values: FormState
 ): Promise<void | null> => {
     return createApiCaller<void>({
         url: "updateValue/",
@@ -53,7 +54,7 @@ export const updateCourseValues = (
  */
 export const getCourses = async (): Promise<Course[] | null> => {
     //const raw = await createApiCaller<any>({
-    const raw = await createApiCaller<Record<string, Record<string, string>>>({
+    const raw = await createApiCaller<Record<string, FormState>>({
         url: "getSheet/",
         method: "POST",
         withCredentials: true,
@@ -86,8 +87,8 @@ export const getCourses = async (): Promise<Course[] | null> => {
  */
 export const getCourseData = (
     course_id: string
-): Promise<Record<string, string> | null> => {
-    return createApiCaller<Record<string, string>>({
+): Promise<FormState | null> => {
+    return createApiCaller<FormState>({
         url: "getCourse/",
         method: "POST",
         withCredentials: true,
@@ -107,7 +108,7 @@ export interface CreateCourseResponse {
 }
 
 export const createNewCourse = (
-    data: Record<string, string>
+    data: FormState
 ): Promise<CreateCourseResponse | null> => {
     return createApiCaller<Record<string, any>>({
         url: "createNewCourse/",

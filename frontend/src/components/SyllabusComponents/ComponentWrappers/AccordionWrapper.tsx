@@ -1,11 +1,11 @@
 import SectionAccordion from "../SectionAccordion";
 import {JsonRenderComponent} from "../../../utils/jsonRenderer";
-import {AccordionComponent} from "../../../utils/types";
+import {AccordionComponent, FormState, FormValue} from "../../../utils/types";
 
 type Props = {
     component: AccordionComponent;
-    formData: Record <string, string>;
-    onChange: (label: string, value: string) => void;
+    formData: FormState;
+    onChange: (label: string, value: FormValue => void;
 }
 
 export default function AccordionWrapper ({component, formData, onChange} : Props) {

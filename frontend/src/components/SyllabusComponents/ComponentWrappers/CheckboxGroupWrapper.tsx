@@ -1,11 +1,11 @@
 import React from "react";
 import CheckboxGroup from "../CheckboxGroup";
-import {CheckboxGroupComponent} from "../../../utils/types";
+import {CheckboxGroupComponent, FormState, FormValue} from "../../../utils/types";
 
 type Props = {
     component: CheckboxGroupComponent
-    formData: Record<string, string>
-    onChange: (label: string, value: string) => void;
+    formData: FormState;
+    onChange: (label: string, value: FormValue) => void;
 };
 
 export default function CheckboxGroupWrapper ({component, formData, onChange}: Props) {

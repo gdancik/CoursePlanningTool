@@ -1,6 +1,6 @@
 import AccordionWrapper from "../components/SyllabusComponents/ComponentWrappers/AccordionWrapper";
 import ColumnWrapper from "../components/SyllabusComponents/ComponentWrappers/ColumnWrapper";
-import RowWrapper from "../components/SyllabusComponents/ComponentWrappers/RowWarapper";
+import RowWrapper from "../components/SyllabusComponents/ComponentWrappers/RowWrapper";
 import CheckboxGroupWrapper from "../components/SyllabusComponents/ComponentWrappers/CheckboxGroupWrapper";
 import CheckboxWrapper from "../components/SyllabusComponents/ComponentWrappers/CheckboxWrapper";
 import Alert from "../components/SyllabusComponents/Alert";
@@ -18,5 +18,5 @@ export const ComponentRegistry = {
     Information: Information,
     Image: Image,
     BloomsTaxonomy: BloomsTaxonomy,
-    LearningOutcomesCards: LearningOutcomesCardsWrapper
+
 }

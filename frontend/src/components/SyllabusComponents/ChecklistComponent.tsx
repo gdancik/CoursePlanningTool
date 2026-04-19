@@ -7,6 +7,7 @@ import Information from "../../components/SyllabusComponents/Information";
 import {CardData, ContentCardSet} from "../../components/SyllabusComponents/ContentCardSet"
 
 import "./Checklist.css";
+import {FormState} from "../../utils/types";
 
 interface ChecklistItem {
     id: string;
@@ -21,7 +22,7 @@ interface PolicyItem {
 }
 
 const Checklist = ({ formData, additional_sections_id, policy_checkboxes_id, resources_checkboxes_id }: 
-    { formData: Record<string, string>,
+    { formData: FormState,
       additional_sections_id: string,
       policy_checkboxes_id: string,
       resources_checkboxes_id:string
@@ -32,7 +33,7 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes_id, res
     const navigate = useNavigate();
     const location = useLocation();
 
-    //const [formData, setFormData] = useState<Record<string, string>>({});
+    //const [formData, setFormData] = useState<FormState>({});
     const [validInputs, setValidInputs] = useState<ValidInputsResponse>({});
     
     const [initialCards, setInitialCards] = useState<CardData[]>([]);
@@ -118,37 +119,38 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes_id, res
              });            
     
         }, []);
-    
-        useEffect(() =>{
-            const raw = formData[additional_sections_id];
-            const ic: CardData[] = Array.isArray(raw) ? raw : [];
-            setInitialCards(ic);        
 
+    useEffect(() => {
+        const getCardDataArray = (fieldId: string): CardData[] => {
+            const raw = formData[fieldId];
+            return Array.isArray(raw) ? (raw as CardData[]) : [];
+        };
 
-            // We currently assign check value by id, but save the labels, so we need to
-            // create label → id lookups to handle saved data
-            
-            const policyLabelToId = Object.fromEntries(
-                policyStatements.map(r => [r.label, r.id])
-            );
+        const getStringArray = (fieldId: string): string[] => {
+            const raw = formData[fieldId];
+            return Array.isArray(raw) ? (raw as string[]) : [];
+        };
 
-            const resourcesLabelToId = Object.fromEntries(
-                resources.map(r => [r.label, r.id])
-            );
+        const ic = getCardDataArray(additional_sections_id);
+        setInitialCards(ic);
 
-            // Get relevant data
-            const pc: string[] = Array.isArray(formData['policy_checkboxes']) ? formData['policy_checkboxes'] : [];
-            const rc: string[] = Array.isArray(formData['resources_checkboxes']) ? formData['resources_checkboxes'] : [];
+        const policyLabelToId = Object.fromEntries(
+            policyStatements.map(r => [r.label, r.id])
+        );
 
-            // Get the corresponding ids
-            const pIds = pc.map(label => policyLabelToId[label]).filter(Boolean); 
-            const rIds = rc.map(label => resourcesLabelToId[label]).filter(Boolean); 
+        const resourcesLabelToId = Object.fromEntries(
+            resources.map(r => [r.label, r.id])
+        );
 
-            // set the state
-            setSelectedPolicies(new Set(pIds));
-            setSelectedResources(new Set(rIds));
+        const pc = getStringArray("policy_checkboxes");
+        const rc = getStringArray("resources_checkboxes");
 
-        }, [formData])
+        const pIds = pc.map(label => policyLabelToId[label]).filter(Boolean);
+        const rIds = rc.map(label => resourcesLabelToId[label]).filter(Boolean);
+
+        setSelectedPolicies(new Set(pIds));
+        setSelectedResources(new Set(rIds));
+    }, [formData]);
     
         
 

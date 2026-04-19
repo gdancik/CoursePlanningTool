@@ -21,7 +21,7 @@ import CompetencyTable1 from "../components/SyllabusComponents/Tables/Competency
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
 import {ComponentRegistry} from "./ComponentRegistry";
-import {FormData, FormValue} from "./types";
+import {FormState, FormValue} from "./types";
 import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent} from "./types";
 
 // Type for JSON-driven UI
@@ -77,8 +77,8 @@ export type JsonComponent = {
 
 interface JsonRenderComponentProps {
   component: JsonComponent;
-  formData: Record<string, string>;
-  onChange: (label: string, value: string) => void;
+  formData: FormState;
+  onChange: (label: string, value: FormValue) => void;
 }
 
 const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({

@@ -1,6 +1,7 @@
 import { createNewCourse
  } from "../../services/course/courseService";
  import saveData from "../../services/processData";
+import {FormState} from "../types";
 
 export async function saveAndExitHandler({
   formData,
@@ -9,7 +10,7 @@ export async function saveAndExitHandler({
   navigate,
   navigate_to = '/course-page',
 }: {
-  formData: Record<string, string>,
+  formData: FormState,
   containerRef: React.RefObject<HTMLDivElement>,
   modal: any,
   navigate: (path: string) => void,
@@ -18,8 +19,12 @@ export async function saveAndExitHandler({
 
   
   //modal.showRedirect("Saving & Exiting", "Hold on, we're saving and redirecting you...", "loading");
-  let course_id = formData["course_id"] || localStorage.getItem("currentCourseId");
+  const existingCourseId =
+      typeof formData["course_id"] === "string"
+          ? formData["course_id"]
+          : localStorage.getItem("currentCourseId");
 
+  let course_id: string = existingCourseId ?? "";
   //alert('save and exit ==>' + navigate_to + "with course id " +course_id);
   
   //let rr = true;

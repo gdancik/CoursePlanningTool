@@ -7,6 +7,7 @@
 import React, {useEffect, useState} from 'react';
 import OverviewCard from "./OverviewCard";
 import {isSectionComplete, ValidInputsResponse, fetchRequiredInputs} from "../../services/validInputsService";
+import {FormState} from "../../utils/types";
 
 import './Overview.css'
 
@@ -16,7 +17,7 @@ import SyllabusGreen from "../../assets/images/SyllabusGreen.png"
 import SyllabusGrey from "../../assets/images/SyllabusGrey.png"
 
 // Functional component that displays the overview page.
-const OverviewComponent = ({ formData }: { formData: Record<string, string> }) => {
+const OverviewComponent = ({ formData }: { formData: FormState }) => {
     
     const [validInputs, setValidInputs] = useState<ValidInputsResponse>({});
     

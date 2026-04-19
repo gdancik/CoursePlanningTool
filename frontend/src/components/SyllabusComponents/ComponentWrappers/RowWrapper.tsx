@@ -1,11 +1,11 @@
 import React from "react";
 import {JsonRenderComponent} from "../../../utils/jsonRenderer";
-import {RowComponent} from "../../../utils/types";
+import {FormState, FormValue, RowComponent} from "../../../utils/types";
 
 type Props = {
     component: RowComponent;
-    formData: Record<string, string>;
-    onChange: (label: string, value: string) => void;
+    formData: FormState;
+    onChange: (label: string, value: FormValue) => void;
 };
 
 export default function RowWrapper({component, formData, onChange}: Props) {

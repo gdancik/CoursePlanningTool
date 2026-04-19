@@ -1,4 +1,5 @@
 /* Types.TS - All Type components currently used */
+import {CardData} from "../components/SyllabusComponents/ContentCardSet";
 
 export type ComponentTypes =
     | "Accordion"
@@ -39,10 +40,12 @@ export type FormValue =
     | string
     | string[]
     | boolean
+    | CardData[]
+    | [string,string][]
     | number
     | undefined
 
-export type FormData = Record<string, FormValue>;
+export type FormState = Record<string, FormValue>;
 
 
 /* =================================== */

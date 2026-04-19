@@ -1,9 +1,10 @@
 import {getCourseData} from "../services/course/courseService";
 import config from "../config.json"
+import {FormState} from "./types";
 
 export async function loadCourseData(): Promise<{
     courseId: string | null;
-    formData: Record<string,string>;
+    formData: FormState;
 }> {
     const saved = localStorage.getItem("currentCourseData");
     if (!saved) return {courseId: null, formData: {}};

@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import SyllabusLayout from "../../../SyllabusLayout/SyllabusPageHeader";
-import GeneratePageContent from "./GeneratePageContent"
-import { JsonComponent} from "../../../utils/jsonRenderer";
+import GeneratePageContent from "./GeneratePageContent";
+import { JsonComponent } from "../../../utils/jsonRenderer";
+import { FormState, FormValue } from "../../../utils/types";
 
 interface GenerateSyllabusPageProps {
     json: JsonComponent[];
-    formData: Record<string, string>;
-    onFieldChange: (label: string, value: string) => void;
+    formData: FormState;
+    onFieldChange: (fieldId: string, value: FormValue) => void;
     onBack?: () => void;
     onNext?: () => void;
     onSave?: () => void;
-    onSaveAndExit?: (navigate_to:string) => void;
+    onSaveAndExit?: (navigate_to: string) => void;
     onPreview: () => void;
     containerRef: React.RefObject<HTMLDivElement | null>;
 }
+
 const GenerateSyllabusPage = ({
                                   json,
                                   formData,
@@ -25,32 +27,57 @@ const GenerateSyllabusPage = ({
                                   onPreview,
                                   containerRef,
                               }: GenerateSyllabusPageProps) => {
-
-
     const [changesDetected, setChangesDetected] = useState(false);
 
-    const courseNumber = formData['subj_code_syllabus'] + '-' + formData['crse_number_syllabus'] +
-                                ' (' + formData['term_syllabus'] + ' ' + 
-                                       formData['year_syllabus'] + ')'
+    const subjCode =
+        typeof formData["subj_code_syllabus"] === "string"
+            ? formData["subj_code_syllabus"]
+            : "";
+
+    const courseNumberValue =
+        typeof formData["crse_number_syllabus"] === "string"
+            ? formData["crse_number_syllabus"]
+            : "";
+
+    const term =
+        typeof formData["term_syllabus"] === "string"
+            ? formData["term_syllabus"]
+            : "";
+
+    const year =
+        typeof formData["year_syllabus"] === "string"
+            ? formData["year_syllabus"]
+            : "";
+
+    const courseNumber = `${subjCode}-${courseNumberValue} (${term} ${year})`;
 
     return (
-            <div ref ={containerRef} onInput = {() => {                
-                setChangesDetected(true)
-            }}>                                
-                <SyllabusLayout
-                        {...{ onBack, onNext, onSave, onSaveAndExit, onPreview, 
-                            changesDetected, setChangesDetected, courseNumber }}
-                /> 
-                
-                 {/*changesDetected && <p>Some input has changed!</p>*/} 
-                 
-                <GeneratePageContent
-                    json={{content: json}}
-                    formData={formData}
-                    onFieldChange={onFieldChange} />
-            </div>             
-    )             
+        <div
+            ref={containerRef}
+            onInput={() => {
+                setChangesDetected(true);
+            }}
+        >
+            <SyllabusLayout
+                {...{
+                    onBack,
+                    onNext,
+                    onSave,
+                    onSaveAndExit,
+                    onPreview,
+                    changesDetected,
+                    setChangesDetected,
+                    courseNumber,
+                }}
+            />
+
+            <GeneratePageContent
+                json={{ content: json }}
+                formData={formData}
+                onFieldChange={onFieldChange}
+            />
+        </div>
+    );
 };
 
-
-export default GenerateSyllabusPage
+export default GenerateSyllabusPage;

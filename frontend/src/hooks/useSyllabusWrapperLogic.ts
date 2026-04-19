@@ -8,6 +8,7 @@ import { loadCourseData } from "../utils/loadCourseData";
 import { useModalFactory } from "../utils/useModalFactory"; 
 import { saveAndExitHandler } from "../utils/handlers/SaveAndExitHandler";
 import {previewSyllabus} from "../services/TestServices/syllabusService";
+import {FormState} from "../utils/types";
 
 
 // Back and Next buttons call handleSave() by default
@@ -23,8 +24,8 @@ interface SyllabusWrapperLogicResult {
 }
 
 export function useSyllabusWrapperLogic(
-  formData: Record<string, string>,
-  setFormData: React.Dispatch<React.SetStateAction<Record<string, string>>>,
+  formData: FormState,
+  setFormData: React.Dispatch<React.SetStateAction<FormState>>,
   navigate: NavigateFunction,
   pathname: string
 ): SyllabusWrapperLogicResult {

@@ -89,6 +89,29 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
     const onStringChange = (fieldId: string, value: string) => {
         onChange(fieldId, value);
     };
+    function isCardDataArray(value: unknown): value is CardData[] {
+        return (
+            Array.isArray(value) &&
+            value.every(item =>
+                typeof item === "object" &&
+                item !== null &&
+                typeof (item as CardData).title === "string"
+            )
+        );
+    }
+
+    function isStringPairArray(value: unknown): value is [string, string][] {
+        return (
+            Array.isArray(value) &&
+            value.every(
+                item =>
+                    Array.isArray(item) &&
+                    item.length === 2 &&
+                    typeof item[0] === "string" &&
+                    typeof item[1] === "string"
+            )
+        );
+    }
 
     switch (component.type) {
         case "Accordion": {
@@ -185,36 +208,58 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
            
         case "BloomsTaxonomy":
             return <BloomsTaxonomy/>
-        
-        case "LearningOutcomesCards" :
+
+        case "LearningOutcomesCards": {
             if (!component.id) {
-                console.error("Assignments component requires an 'id'");
+                console.error("LearningOutcomesCards component requires an 'id'");
                 return null;
             }
 
-            const LO_raw = formData[component.id];        
-            const LearningOutcomesData: CardData[] = Array.isArray(LO_raw) ? LO_raw : [];
-            //console.log("passing data = " + LearningOutcomesData);
-            //console.log(LearningOutcomesData);
-            return <LearningOutcomesCards id = {component.id} data = {LearningOutcomesData}/>            
-        
+            const LO_raw = formData[component.id];
 
-        case "GradingPolicies" :
+            const LearningOutcomesData: CardData[] = isCardDataArray(LO_raw)
+                ? LO_raw
+                : [];
+
+            return (
+                <LearningOutcomesCards
+                    id={component.id}
+                    data={LearningOutcomesData}
+                />
+            );
+        }
+
+        case "GradingPolicies": {
             if (!component.id) {
-                console.error("Assignments component requires an 'id'");
+                console.error("GradingPolicies component requires an 'id'");
                 return null;
             }
 
-            const GP_raw = formData[component.id];        
-            const GPData: CardData[] = Array.isArray(GP_raw) ? GP_raw : [];
-            return <GradingPolicies id = {component.id} data = {GPData}/>            
+            const GP_raw = formData[component.id];
 
+            const GPData: CardData[] = isCardDataArray(GP_raw)
+                ? GP_raw
+                : [];
+
+            return (
+                <GradingPolicies
+                    id={component.id}
+                    data={GPData}
+                />
+            );
+        }
         // Text-like inputs
 
-        case "text":    
-        
-            const maxLength = component.maxLength? component.maxLength : 100;
-            
+        case "text": {
+            const maxLength = component.maxLength ? component.maxLength : 100;
+
+            const rawValue = formData[component.id || component.label || ""];
+
+            const inputValue =
+                typeof rawValue === "string" || typeof rawValue === "number"
+                    ? rawValue
+                    : "";
+
             return (
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
@@ -222,48 +267,42 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                         id={component.id}
                         type={component.type}
                         placeholder={component.placeholder}
-                        value={
-                            formData[component.id || component.label || ""] ||
-                            ""
-                        }
+                        value={inputValue}
                         onChange={(e) =>
                             onChange(component.id || "", e.target.value)
                         }
                         required={component.required}
                         className={component.className || ""}
-                        maxLength = {maxLength}
+                        maxLength={maxLength}
                     />
                 </label>
             );
+        }
 
         // Dropdown
-        case "select":
-            //alert('need to use state for dropdown!')
-
-            if (component.id === undefined || typeof(component.id) != "string") {
-                alert('component.id needed for select component');
+        case "select": {
+            if (component.id === undefined || typeof component.id !== "string") {
+                alert("component.id needed for select component");
                 return null;
             }
 
             const select_id = component.id;
+            const rawValue = formData[select_id];
 
-            const s = "select_id: " + JSON.stringify(select_id) + "\nvalue:" + 
-                            JSON.stringify(formData[select_id]);
-                                      
+            const selectValue =
+                typeof rawValue === "string" || typeof rawValue === "number"
+                    ? rawValue
+                    : "";
 
             return (
                 <label key={select_id} className={component.className || ""}>
                     {component.label}
                     <select
                         id={select_id}
-                        value={
-                            formData[select_id] ?? ""
-                        }
-                        onChange={(e) =>   {                         
-                            //alert("changing: " + select_id + " to: " + e.target.value);
-                            onChange(select_id ?? "", e.target.value)                        
+                        value={selectValue}
+                        onChange={(e) => {
+                            onChange(select_id, e.target.value);
                         }}
-                         
                         required={component.required}
                         className={component.className || ""}
                     >
@@ -276,56 +315,62 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                     </select>
                 </label>
             );
+        }
 
-
-            case "Assignments": 
-        
+        case "Assignments": {
             if (!component.id) {
                 console.error("Assignments component requires an 'id'");
                 return null;
             }
-       
-            const assignment_raw = formData[component.id];
-            
-            const AssignmentData: CardData[] = Array.isArray(assignment_raw) ? assignment_raw : [];
 
-                return (
-                    <Assignments
+            const assignment_raw = formData[component.id];
+
+            const AssignmentData: CardData[] = isCardDataArray(assignment_raw)
+                ? assignment_raw
+                : [];
+
+            return (
+                <Assignments
                     id={component.id}
-                    data={AssignmentData}                                         
+                    data={AssignmentData}
                 />
             );
-
+        }
         // Textarea
-        case "textarea":
-            const maxLengthTextArea = component.maxLength? component.maxLength : 4000;
+        case "textarea": {
+            const maxLengthTextArea = component.maxLength ? component.maxLength : 4000;
+
+            const fieldId = component.id || component.label || "";
+            const rawValue = formData[fieldId];
+
+            const textareaValue =
+                typeof rawValue === "string" || typeof rawValue === "number"
+                    ? rawValue
+                    : "";
+
             return (
                 <label key={component.id} className={component.className || ""}>
                     {component.label}
                     {component.placeholder && (
-                        <p>
-                            {component.placeholder}
-                        </p>
+                        <p>{component.placeholder}</p>
                     )}
                     <textarea
-                        id={component.id || component.label || ""}
+                        id={fieldId}
                         style={{
                             overflowY: "auto",
                             resize: "vertical",
                         }}
-                        value={
-                            formData[component.id || component.label || ""] ||
-                            ""
-                        }
+                        value={textareaValue}
                         onChange={(e) =>
                             onChange(component.id || "", e.target.value)
                         }
                         required={component.required}
                         className={component.className || ""}
-                        maxLength = {maxLengthTextArea}
+                        maxLength={maxLengthTextArea}
                     />
                 </label>
             );
+        }
 
             case "informationText":
                 return (
@@ -431,27 +476,38 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                                 
                     />
                 )
-            case "GradeTable":
-                if(!component.id) {
-                    alert('GradeTable component requires an id');
-                    return null;
-                }
+        case "GradeTable": {
+            if (!component.id) {
+                alert("GradeTable component requires an id");
+                return null;
+            }
 
-                let gradeTable : [string, string][] = [];
-                try{
-                    const parsedTable = JSON.parse(formData[component.id] || "[]");
-                    if(Array.isArray(parsedTable))  gradeTable = parsedTable; 
+            const rawValue = formData[component.id];
+
+            let gradeTable: [string, string][] = [];
+
+            if (isStringPairArray(rawValue)) {
+                gradeTable = rawValue;
+            } else if (typeof rawValue === "string") {
+                try {
+                    const parsedTable: unknown = JSON.parse(rawValue);
+
+                    if (isStringPairArray(parsedTable)) {
+                        gradeTable = parsedTable;
+                    }
                 } catch {
                     gradeTable = [];
                 }
-                
+            }
 
-                return (
-                    <GradeTable 
-                        id={component.id}
-                        data={gradeTable}                    
-                    />
-                );
+            return (
+                <GradeTable
+                    id={component.id}
+                    data={gradeTable}
+                />
+            );
+        }
+
             case "Button":
                 return (
                     <ActionButton

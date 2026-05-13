@@ -40,6 +40,7 @@ export const createEditHandler = (
 
             // 3) Build Course object
             const course: Course = {
+                ...raw,
                 course_id: courseId,
                 course_title_syllabus:    raw["Course Title"]    || "",
                 subj_code_syllabus:       raw["Course Code"]     || "",
@@ -50,7 +51,6 @@ export const createEditHandler = (
                 last_edited:              raw["Last Edited"]     || "",
                 created_at:               raw["Created"] || raw["Created At"] || "",
                 course_type:              raw["Course Type"] || raw["Type"] || "General Education",
-                ...raw,
             };
 
             // 4) Persist & refresh

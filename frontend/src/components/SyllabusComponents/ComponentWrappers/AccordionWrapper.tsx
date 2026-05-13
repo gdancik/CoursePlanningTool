@@ -5,7 +5,7 @@ import {AccordionComponent, FormState, FormValue} from "../../../utils/types";
 type Props = {
     component: AccordionComponent;
     formData: FormState;
-    onChange: (label: string, value: FormValue => void;
+    onChange: (label: string, value: FormValue) => void;
 }
 
 export default function AccordionWrapper ({component, formData, onChange} : Props) {

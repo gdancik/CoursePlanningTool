@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import RedirectingModal from "../../components/Modals/RedirectingModal/RedirectingModal";
 import { useAuth } from '../../context/AuthContext';
 import { createCourseHandler } from '../../utils/handlers/courseHandler';
 import {
@@ -14,30 +13,19 @@ import ReusableButton from '../../components/Button/ReusableButton';
 import SafeIcon from '../../utils/ComponentWrapper';
 import { FaPlus } from 'react-icons/fa';
 import bgImage from '../../assets/images/bookstack-bg.png'
-import CourseModal from '../../components/CourseModal/NewCourseModal';
 import CourseCard from './CourseCard';
 import { Navigate, useNavigate } from 'react-router-dom';
-import StandardFooter from '../../components/Footer/Footer';
 import config from '../../config.json';
 import './CoursePage.css';
+import {useModalFactory} from "../../utils/useModalFactory";
+import ModalRenderer from "../../components/Modals/ModalRenderer";
 
 const CoursePage: React.FC = () => {
     // Always call hooks at the top-level
     const { user } = useAuth(); // user: string | null
     const navigate = useNavigate();
 
-
-    const [isCreateOpen, setCreateOpen] = useState(false);
-    const [createTitle, setCreateTitle] = useState('');
-    const [createMessage, setCreateMessage] = useState('');
-    const [createStatus, setCreateStatus] = useState<'loading' | 'success' | 'error'>('loading');
-
-    const [isRedirectOpen, setRedirectOpen] = useState(false);
-    const [redirectStatus, setRedirectStatus] = useState<'loading' | 'success' | 'error'>('loading');
-
-    const [redirectTitle, setRedirectTitle] = useState('');
-    const [redirectMessage, setRedirectMessage] = useState('');
-
+    const modal = useModalFactory();
 
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
@@ -63,32 +51,21 @@ const CoursePage: React.FC = () => {
         })();
     }, []);
 
-    // Setup modal control callbacks
-    const createModalControls = {
-        setVisible: setCreateOpen,
-        setStatus: setCreateStatus,
-        setTitle: setCreateTitle,
-        setMessage: setCreateMessage,
-    };
-
-    const redirectModalControls = {
-        setVisible: setRedirectOpen,
-        setStatus: setRedirectStatus,
-        setTitle: setRedirectTitle,
-        setMessage: setRedirectMessage,
-    };
 
     // Create course handler using user ID
-    const handleCreateCourse = createCourseHandler(createModalControls, setCourses);
+    const handleCreateCourse = createCourseHandler(modal, setCourses);
 
-    const handleEditCourse = createEditHandler(redirectModalControls, setCourses, navigate)
+    const handleEditCourse = createEditHandler(modal, setCourses, navigate)
 
-    const handlePreviewCourse = (courseId: string, courseTitle: string) => createPreviewHandler(redirectModalControls, courseId, courseTitle)();
+    const handlePreviewCourse = (courseId: string, courseTitle: string) => createPreviewHandler(modal, courseId, courseTitle)();
 
-    const handleDeleteCourse = createDeleteRowHandler(redirectModalControls, setCourses);
+    const handleDeleteCourse = createDeleteRowHandler(modal, setCourses);
 
-    const handleDuplicateCourse = createDuplicateRowHandler(redirectModalControls, setCourses);
+    const handleDuplicateCourse = createDuplicateRowHandler(modal, setCourses);
 
+    const getCourseDisplayTitle = (course: Course): string => {
+        return course.course_title_syllabus || "Untitled Course";
+    };
     // Sorting function
     const sortCourses = (courseList: Course[], sortKey: typeof sortBy): Course[] => {
         return [...courseList].sort((a, b) => {
@@ -147,7 +124,7 @@ const CoursePage: React.FC = () => {
                         label="New Course"
                         icon={<SafeIcon Icon={FaPlus}/>}
                         variant="primary"
-                        onClick={() => setCreateOpen(true)}
+                        onClick={() => modal.showCourseModal()}
                         className="course-page-button"
                         disabled={isAtMaxCapacity}
                     />
@@ -197,9 +174,9 @@ const CoursePage: React.FC = () => {
                                     <CourseCard
                                         key={course.course_id}
                                         course={course}
-                                        onEdit={() => handleEditCourse(course.course_id)}
-                                        onDuplicate={() => handleDuplicateCourse(course.course_id)}
-                                        onDelete={() => handleDeleteCourse(course.course_id)}
+                                        onEdit={() => handleEditCourse(course.course_id, getCourseDisplayTitle(course))}
+                                        onDuplicate={() => handleDuplicateCourse(course.course_id, getCourseDisplayTitle(course))}
+                                        onDelete={() => handleDeleteCourse(course.course_id, getCourseDisplayTitle(course))}
                                         onDownload={() => handlePreviewCourse(course.course_id, course.course_title_syllabus)}
                                         disableDuplicate={isAtMaxCapacity}
                                     />
@@ -209,23 +186,7 @@ const CoursePage: React.FC = () => {
                      
                     </div>                                   
                 </div>
-
-            <CourseModal
-                isOpen={isCreateOpen}
-                onClose={() => setCreateOpen(false)}
-                onCreate={handleCreateCourse}
-                modalTitle={createTitle}
-                modalMessage={createMessage}
-                modalStatus={createStatus}
-            />
-
-            {/* Redirecting modal for edit/delete/preview */}
-            <RedirectingModal
-                visible={isRedirectOpen}
-                status={redirectStatus}
-                title={redirectTitle}
-                message={redirectMessage}
-            />
+            <ModalRenderer modal = {modal} onCourseCreate={handleCreateCourse}/>
         </div>
     );
 };

@@ -6,6 +6,7 @@ import CustomModal from "./CustomModal/CustomModal";
 
 import StudentCommunicationTipsModal from "./SyllabusModals/StudentCommunicationTipsModal";
 import type { ModalFactory } from "../../utils/useModalFactory";
+import {FormState} from "../../utils/types";
 
 const CUSTOM_MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   StudentCommunicationTips: StudentCommunicationTipsModal,
@@ -13,7 +14,7 @@ const CUSTOM_MODAL_COMPONENTS: Record<string, React.FC<any>> = {
 
 interface ModalRendererProps {
   modal: ModalFactory;
-  onCourseCreate?: (data: Record<string, string>) => Promise<void>;
+  onCourseCreate?: (data: FormState) => Promise<void>;
 }
 
 const ModalRenderer: React.FC<ModalRendererProps> = ({ modal, onCourseCreate }) => {

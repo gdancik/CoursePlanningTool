@@ -1,36 +1,65 @@
-import {getCourseData} from "../services/course/courseService";
-import config from "../config.json"
-import {FormState} from "./types";
+import { getCourseData } from "../services/course/courseService";
+import config from "../config.json";
+import { FormState } from "./types";
 
-export async function loadCourseData(): Promise<{
+type loadCourseDataResult = {
     courseId: string | null;
     formData: FormState;
-}> {
+};
+
+type courseDataStored = FormState & {
+    course_id?: string;
+    savedData?: FormState;
+};
+
+const emptyCourseData = (): loadCourseDataResult => ({
+    courseId: null,
+    formData: {},
+});
+
+export async function loadCourseData(): Promise<loadCourseDataResult> {
     const saved = localStorage.getItem("currentCourseData");
-    if (!saved) return {courseId: null, formData: {}};
+
+    if (!saved) {
+        return emptyCourseData();
+    }
 
     try {
-        const parsed = JSON.parse(saved) as { course_id?: string; savedData?: Record<string, string> };
-        const courseId = parsed?.course_id ?? null;
-        if (!courseId) return {courseId: null, formData: {}};
+        const parsed = JSON.parse(saved) as courseDataStored;
+        const courseId = parsed.course_id ?? null;
 
-        if ('loadData' in config && !config['loadData']) {
-            alert('loadData is set to False in config.json')
-            return {courseId: null, formData: {}};
+        if (!courseId) {
+            return emptyCourseData();
         }
 
-        // Try to fetch from backend
+        if ("loadData" in config && !config.loadData) {
+            alert("loadData is set to False in config.json");
+            return emptyCourseData();
+        }
+
         try {
             const backendData = await getCourseData(courseId);
-            if (backendData) return {courseId, formData: backendData};
+
+            if (backendData) {
+                return {
+                    courseId,
+                    formData: backendData,
+                };
+            }
         } catch (error) {
-            console.warn('Backend not available, using localStorage data:', error);
+            console.warn(
+                "Backend not available, using localStorage data:",
+                error
+            );
         }
-        
-        // Fallback to localStorage savedData if backend fails
-        const localData = parsed.savedData || {};
-        return {courseId, formData: localData};
+
+        const { savedData, ...courseData } = parsed;
+
+        return {
+            courseId,
+            formData: savedData ?? courseData,
+        };
     } catch {
-        return {courseId: null, formData: {}};
+        return emptyCourseData();
     }
 }

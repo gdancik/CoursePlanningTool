@@ -5,29 +5,19 @@ import {
     Course, deleteCourseRow, duplicateCourse
 } from "../../services/course/courseService";
 import {previewSyllabus} from "../../services/TestServices/syllabusService";
-import { Dispatch, SetStateAction } from "react";
-
-export type ModalControls = {
-    setVisible: Dispatch<SetStateAction<boolean>>;
-    setStatus: Dispatch<SetStateAction<"loading" | "success" | "error">>;
-    setTitle: Dispatch<SetStateAction<string>>;
-    setMessage: Dispatch<SetStateAction<string>>;
-};
+import type {ModalFactory} from "../useModalFactory";
 
 /**
  * Loads an existing course into localStorage, refreshes the list,
  * and navigates to the overview page.
  */
 export const createEditHandler = (
-    modal: ModalControls,
+    modal: ModalFactory,
     setCourses: (courses: Course[]) => void,
     navigate: (path: string) => void
 ) => {
-    return async (courseId: string) => {
-        modal.setTitle("Loading Course");
-        modal.setMessage(`Fetching data for course ${courseId}…`);
-        modal.setStatus("loading");
-        modal.setVisible(true);
+    return async (courseId: string, courseTitle: string) => {
+        modal.showRedirect("Loading Course", `Fetching data for course ${courseId}...`, "loading")
 
         try {
             // 1) Clear stale data
@@ -36,60 +26,49 @@ export const createEditHandler = (
 
             // 2) Fetch from backend
             const raw = await getCourseData(courseId);
-            if (!raw) throw new Error(`No data for course ${courseId}`);
+            if (!raw) {
+                throw new Error(`No data for course ${courseId}`);
+            }
 
             // 3) Build Course object
             const course: Course = {
                 ...raw,
                 course_id: courseId,
-                course_title_syllabus:    raw["Course Title"]    || "",
-                subj_code_syllabus:       raw["Course Code"]     || "",
-                crse_number_syllabus:     raw["Course Number"]   || "",
-                instructor_name_syllabus: raw["Instructor Name"] || "",
-                term_syllabus:            raw["Semester"]        || "",
-                year_syllabus:            raw["Year"]            || "",
-                last_edited:              raw["Last Edited"]     || "",
-                created_at:               raw["Created"] || raw["Created At"] || "",
-                course_type:              raw["Course Type"] || raw["Type"] || "General Education",
-            };
+            } as Course;
 
             // 4) Persist & refresh
             localStorage.setItem("currentCourseId", courseId);
             localStorage.setItem("currentCourseData", JSON.stringify(course));
+
             const all = (await apiFetchCourses()) || [];
             setCourses(all);
 
             // 5) DONE → go to overview
             navigate("/overview");
-
-            // 6) Optional: feedback (modal hides automatically below)
-            modal.setStatus("success");
-            modal.setTitle("Course Loaded");
-            modal.setMessage(`Routing to overview…`);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Edit handler failed:", err);
-            modal.setStatus("error");
-            modal.setTitle("Error Loading Course");
-            modal.setMessage(err.message || "Something went wrong.");
-        } finally {
-            setTimeout(() => modal.setVisible(false), 500);
+
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "Something went wrong.";
+
+            modal.showError(message);
         }
     };
 };
 
 export const createPreviewHandler = (
-    modal: ModalControls,
+    modal: ModalFactory,
     courseId: string,
     courseTitle: string
 ) => {
     return async () => {
-        modal.setTitle("Generating Preview");
-        modal.setMessage(`Downloading syllabus for "${courseTitle}"…`);
-        modal.setStatus("loading");
-        modal.setVisible(true);
+        modal.showRedirect( "Generating Sylabus Preview",`Downloading syllabus for "${courseTitle}"…`, "loading" );
 
         try {
             const blob = await previewSyllabus(courseId);
+
             if (!blob) throw new Error("Empty preview response");
 
             const url = window.URL.createObjectURL(blob);
@@ -99,34 +78,45 @@ export const createPreviewHandler = (
             a.click();
             window.URL.revokeObjectURL(url);
 
-            modal.setStatus("success");
-            modal.setTitle("Preview Ready!");
-            modal.setMessage(`Downloaded "${courseTitle}".`);
-        } catch (err: any) {
+            modal.showRedirect(
+                "Preview Ready!",
+                `Downloaded "${courseTitle}".`,
+                "success"
+            );
+
+            setTimeout(() => {
+                modal.hide();
+            }, 3000);
+
+        } catch (err: unknown) {
             console.error("Preview failed:", err);
-            modal.setStatus("error");
-            modal.setTitle("Preview Failed");
-            modal.setMessage(err.message || `Could not download "${courseTitle}".`);
-        } finally {
-            setTimeout(() => modal.setVisible(false), 1500);
+
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : `Could not download "${courseTitle}".`;
+
+            modal.showError(message);
         }
     };
 };
 
 export const createDeleteRowHandler = (
-    modal: ModalControls,
-    setCourses: (courses: Course[]) => void
+    modal: ModalFactory,
+    setCourses: (courses: Course[]) => void,
 ) => {
-    return async (courseId: string) => {
+    return async (courseId: string, courseTitle: string) => {
+        const confirmed = window.confirm("Are you sure you want to delete this course? This action cannot be undone");
 
-        if (!window.confirm("Are you sure you want to delete this course? This action cannot be undone")) {
+        if (!confirmed) {
             return;
         }
 
-        modal.setTitle("Deleting Course");
-        modal.setMessage("Please wait while we remove the course…")
-        modal.setStatus("loading")
-        modal.setVisible(true);
+        modal.showRedirect(
+            "Deleting Course",
+            "Please wait while we remove the course…",
+            "loading"
+        );
 
         try {
             const response = await deleteCourseRow(courseId);
@@ -135,60 +125,71 @@ export const createDeleteRowHandler = (
             const updatedCourses = (await apiFetchCourses() || []);
             setCourses(updatedCourses);
 
-            modal.setStatus("success");
-            modal.setTitle("Course Deleted");
-            modal.setMessage(`Course ${courseId} has been removed.`);
-        } catch (err: any) {
-            console.error("Delete handler failed:", err);
-            modal.setStatus("error");
-            modal.setTitle("Deletion Failed");
-            modal.setMessage(err.message || "Something went wrong while deleting the course.");
-        } finally {
-            setTimeout(() => modal.setVisible(false), 1500);
-        }
-    }
+            modal.showRedirect(
+                "Course Deleted",
+                `Course ${courseTitle} has been removed.`,
+                "success"
+            );
 
-}
+            setTimeout(() => {modal.hide();}, 3000);
+
+
+        } catch (err: unknown) {
+            console.error("Delete handler failed:", err);
+
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "Something went wrong while deleting the course.";
+
+            modal.showError(message);
+        }
+    };
+};
 
 export const createDuplicateRowHandler = (
-    modal: ModalControls,
-    setCourses: (courses: Course[]) => void
+    modal: ModalFactory,
+    setCourses: (courses: Course[]) => void,
 ) => {
-    return async (courseId: string) => {
-        modal.setTitle("Duplicating Course");
-        modal.setMessage("Please wait while we duplicate the course…");
-        modal.setStatus("loading");
-        modal.setVisible(true);
+    return async (courseId: string, courseTitle: string) => {
+        modal.showRedirect(
+            "Duplicating Course",
+            "Please wait while we duplicate the course…",
+            "loading"
+        );
+
 
         try {
             const response = await duplicateCourse(courseId);
 
-            // Log response for debugging
-            //console.log("Duplicate course API response:", response);
-
-            // TEMP: Support current backend response key with colon
             const newId =
                 response?.course_id ||
                 response?.courseId ||
                 response?.["courseId:"];
 
-            if (!newId) {
+            if (typeof newId !== "string") {
                 throw new Error("Course could not be duplicated");
             }
 
             const updatedCourses = (await apiFetchCourses()) || [];
             setCourses(updatedCourses);
 
-            modal.setStatus("success");
-            modal.setTitle("Course Duplicated");
-            modal.setMessage(`Course has been duplicated with ID: ${newId}`);
-        } catch (err: any) {
+            modal.showRedirect(
+                "Course Duplicated",
+                `${courseTitle} has been duplicated with ID: ${newId} `,
+                "success"
+            );
+            setTimeout(() => {modal.hide();}, 3000);
+
+        } catch (err: unknown) {
             console.error("Duplicate handler failed:", err);
-            modal.setStatus("error");
-            modal.setTitle("Duplication Failed");
-            modal.setMessage(err.message || "Something went wrong while duplicating the course.");
-        } finally {
-            setTimeout(() => modal.setVisible(false), 1500);
+
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "Something went wrong while duplicating the course.";
+
+            modal.showError(message);
         }
     };
 };

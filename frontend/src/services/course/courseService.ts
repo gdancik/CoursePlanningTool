@@ -53,7 +53,6 @@ export const updateCourseValues = (
  * Loads all courses for the current user.
  */
 export const getCourses = async (): Promise<Course[] | null> => {
-    //const raw = await createApiCaller<any>({
     const raw = await createApiCaller<Record<string, FormState>>({
         url: "getSheet/",
         method: "POST",
@@ -64,21 +63,10 @@ export const getCourses = async (): Promise<Course[] | null> => {
 
     if (!raw) return null;
 
-    const course_list = Object.keys(raw).map((key) => ({
-        course_id: key,
-        course_title_syllabus: raw[key]["Course Title"] || "",
-        subj_code_syllabus:   raw[key]["Course Code"]  || "",
-        crse_number_syllabus: raw[key]["Course Number"]|| "",
-        instructor_name_syllabus: raw[key]["Instructor Name"] || "",
-        term_syllabus: raw[key]["Semester"] || "",
-        year_syllabus: raw[key]["Year"]     || "",
-        last_edited:   raw[key]["Last Edited"] || "",
-        created_at: raw[key]["Created"] || raw[key]["Created At"] || "",
-        course_type: raw[key]["Course Type"] || raw[key]["Type"] || "General Education",
-        ...raw[key],
-    }));
-
-    return course_list;
+    return Object.keys(raw).map((courseId) => ({
+       ...raw[courseId],
+       course_id: courseId,
+    })) as Course[];
 };
 
 
@@ -103,13 +91,10 @@ export const getCourseData = (
  * If you end up switching to this on the backend, you can call it instead of getNewCourseId.
  */
 
-export interface CreateCourseResponse {
-    course_id: string;
-}
 
 export const createNewCourse = (
     data: FormState
-): Promise<CreateCourseResponse | null> => {
+): Promise<{course_id: string }| null> => {
     return createApiCaller<Record<string, any>>({
         url: "createNewCourse/",
         method: "POST",

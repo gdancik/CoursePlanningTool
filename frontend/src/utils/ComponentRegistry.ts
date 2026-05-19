@@ -6,6 +6,7 @@ import CheckboxWrapper from "../components/SyllabusComponents/ComponentWrappers/
 import Alert from "../components/SyllabusComponents/Alert";
 import Information from "../components/SyllabusComponents/Information";
 import {BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy";
+import Image from "../components/SyllabusComponents/Image";
 import {LearningOutcomesCards} from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
 
 export const ComponentRegistry = {
@@ -14,9 +15,9 @@ export const ComponentRegistry = {
     Row: RowWrapper,
     CheckBoxGroup: CheckboxGroupWrapper,
     checkbox: CheckboxWrapper,
-    Alert: Alert,
-    Information: Information,
-    Image: Image,
-    BloomsTaxonomy: BloomsTaxonomy,
+    Alert,
+    Information,
+    Image,
+    BloomsTaxonomy,
 
 }

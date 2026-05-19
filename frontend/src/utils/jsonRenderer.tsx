@@ -22,7 +22,7 @@ import CompetencyTable2 from "../components/SyllabusComponents/Tables/Competency
 
 import {ComponentRegistry} from "./ComponentRegistry";
 import {FormState, FormValue} from "./types";
-import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent} from "./types";
+import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent, AlertComponent, ImageComponent, InformationComponent} from "./types";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -197,17 +197,41 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
             );
         }
 
-        case "Alert":
-            return <Alert text={component.text || ""} file = {component.file} />;
+        case "Alert": {
+            const Component = ComponentRegistry["Alert"];
+            if (!Component) {
+                console.error(Component + "Not found in Registry");
+                return null;
+            }
+            return <Component text={component.text || ""} file={component.file}/>
+        }
 
-        case "Information":
-            return <Information text={component.text || ""} />;
+        case "Information": {
+            const Component = ComponentRegistry["Information"];
+            if (!Component) {
+                console.error(Component + "Not found in Registry");
+                return null;
+            }
+            return <Component text={component.text || ""}/>
+        }
 
-        case "Image":
-            return <Image type = "file" value={component.value} alt={component.alt} />
-           
-        case "BloomsTaxonomy":
-            return <BloomsTaxonomy/>
+        case "Image": {
+            const Component = ComponentRegistry["Image"];
+
+            if (!Component) {
+                console.error("Image not found in registry");
+                return null;
+            }
+            return (
+                <Component type = "file" value = {component.value} alt = {component.alt} />
+            )
+        }
+
+        case "BloomsTaxonomy": {
+            const Component = ComponentRegistry ["BloomsTaxonomy"];
+
+            return <Component/>
+        }
 
         case "LearningOutcomesCards": {
             if (!component.id) {

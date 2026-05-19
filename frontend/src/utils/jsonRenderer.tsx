@@ -1,8 +1,5 @@
 import React from "react";
 
-import Alert from "../components/SyllabusComponents/Alert";
-import Image from "../components/SyllabusComponents/Image";
-import Information from "../components/SyllabusComponents/Information";
 import ParagraphFromFile, {HTMLFromFile} from "../components/SyllabusComponents/ParagraphFromFile";
 import CourseSchedule from "../components/SyllabusComponents/Tables/courseSchedule";
 import SidebarLayout from "../components/SidebarLayout";
@@ -218,12 +215,15 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
         case "Image": {
             const Component = ComponentRegistry["Image"];
 
+
             if (!Component) {
                 console.error("Image not found in registry");
                 return null;
             }
+
+            const imageComponent  = component as ImageComponent
             return (
-                <Component type = "file" value = {component.value} alt = {component.alt} />
+                <Component type ={imageComponent.type} value ={imageComponent.value} alt = {imageComponent.alt}  className = {imageComponent.className}/>
             )
         }
 

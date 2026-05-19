@@ -105,7 +105,6 @@ export interface ImageComponent extends BaseComponent {
     type: "Image";
     value: string;
     alt?: string;
-    imageType?: "file" | "url";
 }
 
 export interface AlertComponent extends BaseComponent {

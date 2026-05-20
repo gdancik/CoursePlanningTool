@@ -36,7 +36,7 @@ export const getNewCourseId = (
  */
 export const updateCourseValues = (
     course_id: string,
-    values: FormState
+    values: Record<string, string>
 ): Promise<void | null> => {
     return createApiCaller<void>({
         url: "updateValue/",

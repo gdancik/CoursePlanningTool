@@ -11,7 +11,6 @@ import OverviewComponent from "../components/SyllabusComponents/OverviewComponen
 import ChecklistComponent from "../components/SyllabusComponents/ChecklistComponent"
 import { CoreCompetencyInterface, FiveCoreCompetencies, AdditionalCompetencies, 
          LearningOutcomesCards } from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
-import { BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy"
 import {GradingPolicies} from "../components/SyllabusComponents/GradingPolicies"
 
 import CompetencyTable1 from "../components/SyllabusComponents/Tables/CompetencyTable1"
@@ -19,7 +18,7 @@ import CompetencyTable2 from "../components/SyllabusComponents/Tables/Competency
 
 import {ComponentRegistry} from "./ComponentRegistry";
 import {FormState, FormValue} from "./types";
-import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent, AlertComponent, ImageComponent, InformationComponent} from "./types";
+import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent, AlertComponent, ImageComponent, InformationComponent,GradingPoliciesComponent,  LearningOutcomesComponent} from "./types";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -205,11 +204,12 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
 
         case "Information": {
             const Component = ComponentRegistry["Information"];
+            const infoComponent =  component as InformationComponent;
             if (!Component) {
                 console.error(Component + "Not found in Registry");
                 return null;
             }
-            return <Component text={component.text || ""}/>
+            return <Component text={infoComponent.text || ""}/>
         }
 
         case "Image": {
@@ -234,26 +234,37 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
         }
 
         case "LearningOutcomesCards": {
-            if (!component.id) {
-                console.error("LearningOutcomesCards component requires an 'id'");
+            const Component = ComponentRegistry["LearningOutcomesCards"];
+
+            if (!Component) {
+                console.error("LearningOutcomesCards not found in registry");
                 return null;
             }
 
-            const LO_raw = formData[component.id];
+            // 1. Narrow down to your precise interface from types.ts
+            const loComponent = component as LearningOutcomesComponent;
 
-            const LearningOutcomesData: CardData[] = isCardDataArray(LO_raw)
-                ? LO_raw
-                : [];
+            if (!loComponent.id) {
+                console.error("LearningOutcomesCards requires an 'id'");
+                return null;
+            }
+
+            // 2. Fetch raw state data directly using the typed ID key
+            const rawData = formData[loComponent.id];
+            const currentCards = isCardDataArray(rawData) ? rawData : [];
 
             return (
-                <LearningOutcomesCards
-                    id={component.id}
-                    data={LearningOutcomesData}
+                <Component
+                    id={loComponent.id}
+                    data={currentCards}
                 />
             );
         }
 
         case "GradingPolicies": {
+
+            const Component = ComponentRegistry["GradingPolicies"]
+            const grdPolComponent = component as GradingPoliciesComponent
             if (!component.id) {
                 console.error("GradingPolicies component requires an 'id'");
                 return null;
@@ -261,13 +272,11 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
 
             const GP_raw = formData[component.id];
 
-            const GPData: CardData[] = isCardDataArray(GP_raw)
-                ? GP_raw
-                : [];
+            const GPData: CardData[] = isCardDataArray(GP_raw) ? GP_raw: [];
 
             return (
-                <GradingPolicies
-                    id={component.id}
+                <Component
+                    id={grdPolComponent.id}
                     data={GPData}
                 />
             );

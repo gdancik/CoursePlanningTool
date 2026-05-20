@@ -8,6 +8,8 @@ import Information from "../components/SyllabusComponents/Information";
 import {BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy";
 import Image from "../components/SyllabusComponents/Image";
 import {LearningOutcomesCards} from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
+import gradeTable from "../components/SyllabusComponents/Tables/gradeTable";
+import GradingPolicies from "../components/SyllabusComponents/GradingPolicies";
 
 export const ComponentRegistry = {
     Accordion: AccordionWrapper,
@@ -19,5 +21,7 @@ export const ComponentRegistry = {
     Information,
     Image,
     BloomsTaxonomy,
+    LearningOutcomesCards,
+    GradingPolicies,
 
 }

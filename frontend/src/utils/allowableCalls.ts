@@ -1,0 +1,20 @@
+// Optional: whitelist of backend-accepted keys
+export const allowedBackendKeys = new Set([
+    'subj_code_syllabus',
+    'crse_number_syllabus',
+    'course_title_syllabus',
+    'days1_syllabus',
+    'times1_syllabus',
+    'location1_syllabus',
+    'term_syllabus',
+    'year_syllabus',
+    'instructor_name_syllabus',
+    'email_syllabus',
+    'phone_syllabus',
+    'office_location_syllabus',
+    'office_hours_syllabus',
+    'instructor_title_syllabus',
+    'form_of_address_syllabus',
+    'created_at',
+    'last_edited',
+]);

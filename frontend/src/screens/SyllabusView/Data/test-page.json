@@ -1,0 +1,38 @@
+{
+  "content": [
+    {
+      "type": "Alert",
+      "text": "Please read this carefully before proceeding"
+    },
+    {
+      "type": "Accordion",
+      "title": "Test Page",
+      "content": [
+        {
+          "type": "Row",
+          "content": [
+            {
+              "type": "text",
+              "id": "studentName",
+              "label": "Student Name",
+              "placeholder": "Enter your Name"
+            },
+            {
+              "type": "text",
+              "id": "studentID",
+              "label": "Student ID",
+              "placeholder": "Enter your ID",
+              "required": true
+            },
+            {
+              "type": "CheckboxGroup",
+              "id": "daysOfWeek",
+              "data": ["M", "T", "W", "R", "F", "Check All"],
+              "horizontal": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

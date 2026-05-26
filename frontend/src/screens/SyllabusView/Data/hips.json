@@ -1,0 +1,115 @@
+{
+  "content": [
+    {
+      "type": "Accordion",
+      "title": "Step 1: Understanding High Impact Practices",
+      "content": [
+         {
+              "type": "Alert",
+              "text": "If you are teaching an ELAC course, you are required to implement at least two High Impact Practices in your ELAC seminar course or one High Impact Practice in your ELAC disciplinary course."              
+         },
+           {
+          "type" : "SidebarLayout",
+          "title" : "Definition of High Impact Practices",          
+          "className" : "shadow-lg",
+          "sidebarClassName": "bg-blue-100",
+          "contentClassName": "space-y-4",          
+          "sidebarContent": [            
+              {
+                  "type" : "Button",
+                  "label" : "Link to CTLA",
+                  "href" : "https://www.easternct.edu/center-for-teaching-learning-and-assessment/teaching-resources/high-impact-practices.html",
+                  "new_tab": true,
+                  "externalLink": true
+
+              }
+          ],                      
+          "sidebarWidth": "250px",
+          "content": [
+              {
+                  "type" : "paragraphFromFile",
+                  "file" : "/data/hipsText/HIPsDefinition1.txt"
+              },
+              {
+                  "type" : "paragraphFromFile",
+                  "file" : "/data/hipsText/HIPsDefinition2.txt"
+              }            
+          ]
+      },
+         {
+              "type": "Image",
+              "value": "/images/HIPS_Table.png",
+              "alt": "Table of High Impact Practices",
+              "className": "hips-table"
+         }
+      ]
+    },
+    {
+      "type": "Accordion",
+      "title": "Step 2: Brainstorming",
+      "content": [
+        {
+          "type": "Column",
+          "content": [                          
+            {
+              "type": "textarea",
+              "id": "hip_what", 
+              "placeholder": "Which high impact practices do you plan to implement in your course? Why do you think this high impact practice will best promote progress toward the learning outcomes for your course? If your course is not in the ELAC curriculum and is not conducive to implementation of a high impact practice, skip to the question about teaching practices within your course below.",             
+              "required": false,
+              "className": "Syllabus-text blue-box"
+            },
+            {
+              "type": "textarea",
+              "id": "hip_approach",
+              "placeholder": "How will you approach embedding high impact practices in your course in a way that recognizes that previous exposure to the practices may be disproportionate based on race, class, and gender and engages students from diverse backgrounds?",
+              "required": false,
+              "className": "Syllabus-text blue-box"
+            },
+            {
+              "type": "textarea",
+              "id": "hip_other",
+              "placeholder": "What other teaching practices do you plan to use in your course? How do you expect students to work toward learning outcomes throughout the semester?",
+              "required": false,
+              "className": "Syllabus-text blue-box"
+            },
+            {
+              "type": "textarea",
+              "id": "hip_teach",
+              "placeholder": "How can you teach with humility, acknowledging your own biases and challenging students to encounter their own?",
+              "required": false,
+              "className": "Syllabus-text blue-box"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Accordion",
+      "title": "Step 3: Summary",
+      "content": [
+          {
+            "type": "informationText",
+            "placeholder": "Based on the information you compiled above, how would you describe the high impact practices and/or other teaching practices you are embedding in this course to your students?"
+          },
+          
+           {
+            "type": "Information",
+            "text": "Information entered below will appear in the final syllabus exactly as written."                            
+          },
+
+          {
+            "type": "Column",
+            "content": [
+              {
+              "type": "textarea",
+              "id": "hip_syllabus",
+              "required": true,
+              "className": "Syllabus-text green-box"
+              }
+        ]
+        }
+
+      ]
+    }
+  ]
+}

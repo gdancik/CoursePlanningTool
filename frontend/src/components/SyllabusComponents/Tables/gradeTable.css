@@ -1,0 +1,44 @@
+h1,
+table {
+  font-family: sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table {
+  overflow-x: auto;
+}
+
+th,
+td {
+  border: none;
+  padding: 5px;
+  text-align: left;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  vertical-align: middle;
+}
+
+th:last-child,
+td:last-child {
+  border-right: none;
+}
+
+th {
+  color: rgb(28, 82, 181);
+  padding-right: 75px;
+}
+
+textarea {
+  display:block;
+  margin: 0px;
+  resize: none; 
+  height: 20px;
+  overflow: hidden;
+}
+
+.grade-table tbody tr {
+  height: 40px;
+}

@@ -1,0 +1,28 @@
+
+ol {
+  list-style: integer;
+}
+
+ol {
+  counter-reset: item;
+}
+
+ol li {
+  display: block;
+}
+
+ol {
+  font-weight:bold;
+}
+
+ol ol {
+  font-weight:normal;
+}
+ol li:before {
+  content: counters(item, ".") ". ";
+  counter-increment: item;
+}
+
+ol ol {
+  margin-left: 2rem;  /* amount of indentation */
+}

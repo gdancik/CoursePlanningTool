@@ -1,0 +1,19 @@
+section,row,layoutRow,label,type,placeholder,required,options
+Course Information,1,1,Subject Code,text,Enter subject code,true,
+Course Information,1,1,Course Number,text,Enter course number,true,
+Course Information,1,1,Course Title,text,Enter course title,true,
+Course Information,1,2,Meeting Days,checkbox-group,,true,M|T|W|R|F|
+Course Information,1,2,Meeting Time,text,Enter meeting time,true,
+Course Information,1,2,Classroom Location,text,Enter classroom location,true,
+Course Information,1,2,Additional Meeting Times,checkbox-group,,false,Yes
+Course Information,1,3,Additional Meeting Days,checkbox-group,,true,M|T|W|R|F|S
+Course Information,1,3,Additional Meeting Time,text,Enter meeting time,true,
+Course Information,1,4,Semester,select,,true,"Fall,Winter,Spring,Summer"
+Course Information,1,4,Year,text,,true,"2025,2026"
+Instructor Information,2,1,Instructor Name,text,Enter instructor name,true,
+Instructor Information,2,1,Instructor Title,text,Enter instructor title,true,
+Instructor Information,2,2,Email,email,Enter email,true,
+Instructor Information,2,2,Office Location,text,Enter office location,true,
+Instructor Information,2,2,Phone (optional),tel,Enter phone,false,
+Instructor Information,2,3,Office Hours,text,Enter office hours,true,
+Instructor Information,2,4,Additional Information (optional),textarea,"Enter additional information about making appointments and how to best contact you (e.g., via email, phone, etc.).",false,

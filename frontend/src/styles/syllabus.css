@@ -1,0 +1,92 @@
+/* Form row container → 2 equal columns */
+.form-row {
+    @apply grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 items-start;
+}
+/* Single-column layout container */
+.form-column {
+  @apply flex flex-col gap-4 w-full mb-4;
+}
+
+/* Label styling */
+.form-row label {
+    @apply block text-base font-semibold mb-1;
+}
+
+/* Input, select, textarea styling */
+.form-row input,
+.form-row select {
+    @apply w-full border-2 border-green-600 p-2 box-border rounded-md;
+}
+
+.form-row textarea,
+.form-column textarea {
+  @apply w-full col-span-3 sm:col-span-3 border-2 p-2 box-border rounded-md min-h-40 resize-y;
+}
+
+.blue-box textarea {
+    border: dashed 2px;
+}
+
+/* Green variant */
+.form-row textarea.green-box,
+.form-column textarea.green-box   {
+  @apply border-green-600;
+}
+
+/* Blue variant */
+.form-row textarea.blue-box,
+.form-column textarea.blue-box   {
+  @apply border-brand;
+}
+
+/* Textarea variant */
+label.text-area-width
+.form-column textarea  {
+    @apply col-span-full w-full
+}
+
+label.text-area-width textarea
+.form-column textarea  {
+    @apply col-span-3 sm:col-span-3 w-full;
+}
+
+/* Make only .form-row.full-width rows stretch across all grid columns */
+.form-row.full-width {
+  @apply grid grid-cols-1; 
+}
+
+.form-row.full-width label {
+  @apply w-full;
+}
+
+.form-row.full-width textarea {
+  @apply w-full border-2 border-green-600 p-2 box-border rounded-md min-h-40 resize-y;
+}
+
+/* Focus on blue */
+.form-row textarea.blue-box:focus,
+.form-column textarea.blue-box:focus {
+  @apply ring-2 ring-blue-300;
+}
+
+/* Focus on green textareas */
+.form-row textarea.green-box:focus,
+.form-column textarea.green-box:focus {
+  @apply ring-2 ring-green-300;
+}
+
+.form-column label > p {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.syllabus-checkbox {
+  @apply border-2 rounded-sm w-5 h-5 focus:ring-2 cursor-pointer;
+}
+
+.syllabus-checkbox.green {
+  @apply border-green-600 accent-green-600 focus:ring-green-300;
+}
+
+.syllabus-checkbox.blue {
+  @apply border-blue-600 accent-blue-600 focus:ring-blue-300;
+}

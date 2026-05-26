@@ -1,0 +1,12 @@
+/backend/__pycache__
+/backend/venv
+/venv
+/frontend/node_modules
+node_modules/
+/backend/experiments
+frontend/.env
+.coverage/
+
+backend/service_account.json
+*.pyc
+GS_CREDENTIALS_JSON.json

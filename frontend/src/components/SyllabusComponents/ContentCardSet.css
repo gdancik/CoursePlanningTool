@@ -1,0 +1,220 @@
+/* ContentCardSet.css - Styling for the ContentCardSet component */
+
+.content-card-set {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.content-card-set-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 4px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.content-card-set-title {
+    color: #155724;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+}
+
+.content-card-set-preface {
+    color: #155724;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+}
+
+
+.add-card-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.add-card-button:hover:not(:disabled) {
+    background-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.add-card-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.add-card-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.content-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.content-card-wrapper {
+    position: relative;
+    margin-bottom: 4px;
+}
+
+.delete-card-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+}
+
+.delete-card-button:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.delete-card-button:active {
+    transform: translateY(0);
+}
+
+.content-card-set-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    padding: 0 4px;
+}
+
+.card-count-info {
+    font-size: 14px;
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+}
+
+/* Add card container at bottom */
+.add-card-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.add-card-button-bottom {
+    width: 100%;
+    justify-content: center;
+    padding: 16px 24px;
+    font-size: 16px;
+    border: 2px dashed #28a745;
+    background-color: transparent;
+    color: #28a745;
+    font-weight: 600;
+    border-radius: 8px;
+    margin: 0;
+}
+
+.add-card-button-bottom:hover:not(:disabled) {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
+.add-card-button-bottom:disabled {
+    border-color: #6c757d;
+    color: #6c757d;
+    background-color: transparent;
+}
+
+/* Card spacing adjustments */
+.content-card-wrapper .content-card {
+    margin: 16px 0;
+    padding-right: 100px; /* Make room for delete button */
+}
+
+.content-card-wrapper:first-child .content-card {
+    margin-top: 0;
+}
+
+.content-card-wrapper:last-child .content-card {
+    margin-bottom: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .content-card-set-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+    
+    .content-card-set-title {
+        text-align: center;
+        font-size: 20px;
+    }
+    
+    .add-card-button {
+        justify-content: center;
+        padding: 14px 20px;
+        font-size: 16px;
+    }
+    
+    .delete-card-button {
+        position: static;
+        margin: 12px auto 0;
+        align-self: center;
+        width: fit-content;
+    }
+    
+    .content-card-wrapper .content-card {
+        padding-right: 20px; /* Reset padding on mobile */
+    }
+    
+    .content-card-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-card-set {
+        padding: 0 8px;
+    }
+    
+    .add-card-button {
+        font-size: 14px;
+        padding: 12px 16px;
+    }
+    
+    .delete-card-button {
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+}

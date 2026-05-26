@@ -1,0 +1,19 @@
+.header-banner{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #002e5d;
+    padding: 0.6rem 2rem;
+    color: white;
+}
+
+.ecsu-logo{
+    height: 60px;
+    object-fit: contain;
+}
+
+.header-title {
+    font-size: 1.8rem;
+    font-weight: bolder;
+    text-transform: uppercase;
+}

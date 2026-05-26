@@ -1,0 +1,21 @@
+
+
+#scrollToTop {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;  
+  background-color: white;
+  margin: 5px;
+  padding: 5px;
+}
+
+.footer #scrollToTop {
+  position: static;
+  //background-color: blue;
+  margin: 5px;
+  padding: 5px;
+}
+
+html {
+    scroll-behavior: smooth;
+}

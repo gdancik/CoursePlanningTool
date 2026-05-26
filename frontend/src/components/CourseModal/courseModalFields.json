@@ -1,0 +1,45 @@
+{
+  "title": "Create New Course",
+  "message": "Please enter the course details below.",
+  "fields": [
+    {
+      "id": "term_syllabus",
+      "label": "Semester",
+      "type": "select",
+      "required": true,
+      "options": ["Fall", "Winter", "Spring", "Summer"]
+    },
+    {
+      "id": "year_syllabus",
+      "label": "Year",
+      "type": "select",
+      "required": true,
+      "options": []
+    },
+    {
+      "id": "subj_code_syllabus",
+      "label": "Subject Code",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "crse_number_syllabus",
+      "label": "Course Number",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "course_title_syllabus",
+      "label": "Course Title",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "elac",
+      "label": "ELAC Course?",
+      "type": "select",
+      "required": true,
+      "options": ["Yes", "No"]
+    }
+  ]
+}

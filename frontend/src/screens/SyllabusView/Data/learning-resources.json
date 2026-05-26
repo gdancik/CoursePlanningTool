@@ -1,0 +1,66 @@
+{
+    "content": [
+        {
+            "type": "Accordion",
+            "title": "Step 1: Brainstorming",
+            "content": [
+                {
+                    "type": "Column",
+                    "content": [
+                        {
+                            "type": "informationText",
+                            "placeholder": "Using learning outcomes to plan your course creates a logic to the course that students can easily follow. The course should be designed in a way that allows students to achieve the goals stated in the learning outcomes. The following exercise will help you to plan your course with your learning outcomes and practical considerations in mind:"
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "lr_materials",
+                            "placeholder": "What course materials are required from your discipline for your students to achieve the course learning outcomes? Are there other disciplines that engage with this issue? Can you provide perspectives on your topic from other scholars?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "lr_inequities",
+                            "placeholder": "What inequities exist in the disciplines that inform your course? What ways might you address those inequities and discourage singular viewpoints?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "lr_order",
+                            "placeholder": "Is there an order to the content that is required? Do you need to take a developmental approach and scaffold the information and skills expected in your learning outcomes?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type":"Accordion",
+            "title": "Step 2: Summary",
+            "content": [
+                {
+                    "type": "Column",
+                    "content": [
+                        {
+                          "type": "informationText",
+                          "placeholder": "Based on the information you compiled above, what course materials will be required for your course (textbooks, readings, software, lab equipment, etc.)?"   
+                        },
+                        {
+                            "type" : "Alert",
+                            "text": "Information entered below will appear in the final syllabus as a numbered list. Each line will be a numbered item, but blank lines are ignored."
+                        },
+                        {
+                            "type": "textarea",
+                            "id": "course_materials_syllabus",                            
+                            "required": true,
+                            "className": "Syllabus-text green-box"
+                        }
+                    ]
+
+                }
+            ]
+        }
+    ]
+}

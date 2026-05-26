@@ -1,0 +1,180 @@
+{
+    "content" : [
+        {
+            "type": "Accordion",
+            "title": "Step 1: Goals for Assignments",
+            "content": [
+                {
+                "type" : "paragraphFromFile",
+                "file" : "/data/assessmentText/AssessmentFirstSegment.txt"
+                },
+                {
+                    "type" : "SidebarLayout",
+                    "title" : "Formative and Summative Assignments",
+                    "className" : "shadow-lg",
+                    "sidebarClassName": "bg-blue-100",
+                    "contentClassName": "space-y-4",
+
+                    "sidebarWidth": "250px",
+
+                    "content": [
+                        {
+                            "type" : "htmlFromFile",
+                            "file" : "/data/assessmentText/AssessmentFirstSegment2.txt"                            
+                        }
+                    ]
+                },
+                {
+                    "type" : "SidebarLayout",
+                    "title" : "Communicating with Students",
+                    "className" : "shadow-lg",
+                    "sidebarClassName": "bg-blue-100",
+                    "contentClassName": "space-y-1",
+
+                    "sidebarWidth": "250px",
+
+                    "content": [
+                        {
+                            "type" : "paragraphFromFile",
+                            "file" : "/data/assessmentText/AssessmentFirstSegment3.txt"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Accordion",
+            "title": "Step 2: Brainstorming",
+            "content": [
+                {
+                    "type": "Column",
+                    "content": [
+                        {
+                            "type" : "textarea",
+                            "id": "assmt_types",
+                            "placeholder": "What are the main types of assignments that you plan to use in this course? How do they align with your high impact teaching practices and learning outcomes? How much flexibility do students have in approaching the assignment?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+                        },
+                        {
+                
+                            "type": "textarea",
+                            "id": "assmt_order",
+                            "placeholder": "How will you order assignments so that students will be able to achieve learning outcomes by the end of the semester?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+               
+                        },
+                
+                        {
+                            "type": "textarea",
+                            "id": "assmt_communicate",
+                            "placeholder": "How will you communicate these assignments to students? How will written assignment prompts prepare them to complete the task? Is the language you use in the prompt accessible to students? How much explanation will you give verbally during class meetings?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box"
+                         },
+                         {
+                            "type" : "textarea",
+                            "id": "assmt_feedback",
+                            "placeholder": "What type of feedback might students expect from each assignment? How will feedback assist students in progressing toward or meeting learning outcomes?",
+                            "required": false,
+                            "className": "Syllabus-text blue-box" 
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Accordion",
+            "title": "Step 3: Describing Assignments",
+            "content": [
+                {
+                    "type" : "informationText",
+                    "placeholder": "In the space below, provide a brief description of all of the assignments you have planned for this course. Try to answer the following questions in the description of each assignment: What are students expected to do in this assignment? How does this assignment connect to the learning objectives of the course? How will students submit the assignment?"
+                    
+                },
+                {
+                    "type": "Information",
+                    "text": "Information entered below will appear in the final syllabus exactly as written."
+                },
+                {
+                    "type": "Assignments",
+                    "id": "assmt_assignments_syllabus_json"
+                }
+           ]
+        },
+        {
+            "type":"Accordion",
+            "title": "Step 4: Grading Policy",
+            "content" : [
+                 {
+                    "type" : "SidebarLayout",
+                    "title" : "Communicating with Students about Course Goals and Policies",
+                    "className" : "shadow-lg",
+                    "sidebarClassName": "bg-blue-100",
+                    "contentClassName": "space-y-4",
+
+                    "sidebarWidth": "250px",
+
+                    "content": [
+                        {
+                            "type" : "paragraphFromFile",
+                            "file" : "/data/assessmentText/AssessmentFourthSegment1.txt"
+                        },
+                        {
+                            "type" : "Button",
+                            "label" : "Course Goals: Student Communication Tips",                            
+                            "externalLink": true,
+                            "new_tab": true,
+                            "href": "/images/CommunicationTips.jpg"                        
+                        },
+                        {
+                            "type": "informationText",
+                            "placeholder" : "In addition to communicating with students about course goals, you will want to ensure all course policies are transparent. Including grading policies and university recommended policy statements on the syllabus provides the instructor of the course and students a written policy to work from when questions or challenges arise."
+                        },
+                        {
+                            "type": "informationText",
+                            "placeholder": "For your course, you will want to start by providing a breakdown of how numeric grades are converted to letter grades at the end of the semester. The table below includes suggested percentage intervals. Please feel free to modify these if you wish."            
+                        },
+                        {
+                            "type": "Information",
+                            "text":"Information entered below will appear in the final syllabus exactly as written."
+                        },
+                        {
+                            "type": "GradeTable",
+                            "id": "grade_table_syllabus_list"
+                        }                        
+                    ]
+                }
+            ]
+        },
+        {
+            "type" : "SidebarLayout",
+            "title" : "Additional Grading Policies",
+            "className" : "shadow-lg",
+            "sidebarClassName": "bg-blue-100",
+            "contentClassName": "space-y-4",
+
+            "sidebarWidth": "250px",
+
+            "content": [                        
+                {
+                    "type": "htmlFromFile",
+                    "file" : "/data/assessmentText/AssessmentAdditionalGradingPolicies.txt"
+                }                                        
+            ]
+        },
+        {
+            "type": "informationText",
+            "placeholder": "Are there other classroom policies that you have that you would like included in your syllabus? If so, please add them in the space below:"
+        },        
+        {
+            "type": "Information",
+            "text": "Information entered below will appear in the final syllabus exactly as written."
+        },
+        {
+            "type": "GradingPolicies",
+            "id": "grading_policies_syllabus_json"            
+        }
+    ]
+}

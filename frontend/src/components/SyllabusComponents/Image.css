@@ -1,0 +1,42 @@
+/* Image.css - Styling for the Image component */
+
+.image-container {
+    margin: 1rem 0;
+}
+
+.image-error {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.image-container img {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .image-container {
+        max-width: 100% !important;
+    }
+    
+    .image-container img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* Loading animation */
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.image-container.loading img {
+    animation: pulse 1.5s ease-in-out infinite;
+}

@@ -585,15 +585,17 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
         ('instructor_title_syllabus', 'title'),
         ('instructor_pronouns_syllabus', 'pronouns'),
         ('phone_syllabus', 'phone'),
-        ('instructor_additional_information', 'instructor_additional_information'),        
+        ('instructor_additional_information_syllabus', 'instructor_additional_information_syllabus'),        
         ('assmt_assignments_syllabus', 'assessments_json'),
         ('course_schedule_syllabus_list', 'course_schedule_syllabus_list')        
     ]
 
     for key,tag in key_tag_list :
         if not fr_dict.get(key):
+            #print("remove block: ", tag)
             removeBlocks.append(tag)
         else:
+            #print("remove tag: ", tag)
             removeTags.append(tag)
 
 

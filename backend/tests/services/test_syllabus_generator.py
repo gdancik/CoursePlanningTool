@@ -55,7 +55,9 @@ def test_generate_syllabus(db_setup):
     else:
         doc= Document('backend/tests/services/TestFiles/(Test)Doc1.docx')
     
-    title = sf.generate_syllabus(doc,'0fBVjCYVsxV73bA00a8R','annie')
+    course_id = '8ykbRM0g80l5wJslRCFj'
+
+    title = sf.generate_syllabus(doc, course_id,'annie')
     # doc.save('test_syllabus.docx')
     assert title != None
 

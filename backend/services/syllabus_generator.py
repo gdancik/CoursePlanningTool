@@ -404,8 +404,13 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
     # fr_dict = fs.getValue(course_id, column_names)
     #fr_dict = fs.getValue(course_id, column_names)
     fr_dict = fs.getCourse(course_id)
+
+    if fr_dict == None: 
+        logging.error(f'Course not found for course_id: {course_id} in sheet: {sheet_name}')
+        return None
     
     # convert from list to string for specified columns
+    print('cp.to_string: ', cp.to_string) #debug
     for i in cp.to_string:
         if i in fr_dict:
             #if fr_dict[i]:

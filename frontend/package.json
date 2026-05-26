@@ -30,7 +30,7 @@
   "scripts": {
     "start": "port=4000 react-scripts start",
     "build": "react-scripts build",
-    "test": "cross-env CI=false react-scripts test --testPathPattern=\"src/test/[^/]+\\.(jsx|ts|tsx)$\"",
+    "test": "cross-env CI=false react-scripts test",
     "eject": "react-scripts eject",
     "myComponents": "node test-runner.js components",
     "check_ids": "cd src/screens/SyllabusView/Data && node check_ids.mjs"

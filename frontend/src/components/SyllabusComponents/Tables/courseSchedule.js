@@ -14,12 +14,48 @@ const createEmptyScheduleRow = () => ({
   unit: "",
   learningOutcomes: "",
   readingAssignments: "",
+  dateTimestamp: Number.POSITIVE_INFINITY,
+  sortableDateTimestamp: Number.POSITIVE_INFINITY,
 });
 
-const parseRowDateValue = (dateValue) => {
+const resolveDefaultYear = (defaultYear) => {
+  const parsedDefaultYear = Number(defaultYear);
+  if (Number.isInteger(parsedDefaultYear) && parsedDefaultYear > 0) {
+    return parsedDefaultYear;
+  }
+
+  return new Date().getFullYear();
+};
+
+const parseStandaloneDateValue = (dateValue, defaultYear) => {
   const value = (dateValue || "").trim();
   if (!value) {
     return Number.POSITIVE_INFINITY;
+  }
+
+  const normalizedDefaultYear = resolveDefaultYear(defaultYear);
+
+  const numericDateMatch = value.match(/^(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?$/);
+  if (numericDateMatch) {
+    const month = Number(numericDateMatch[1]);
+    const day = Number(numericDateMatch[2]);
+    const rawYear = numericDateMatch[3] ? Number(numericDateMatch[3]) : normalizedDefaultYear;
+    if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+      const normalizedYear = rawYear < 100 ? 2000 + rawYear : rawYear;
+      return new Date(normalizedYear, month - 1, day).getTime();
+    }
+  }
+
+  const monthNameDateMatch = value.match(/^([A-Za-z]{3,9})\s+(\d{1,2})(?:,\s*(\d{2,4}))?$/);
+  if (monthNameDateMatch) {
+    const month = Date.parse(`${monthNameDateMatch[1]} 1, 2000`);
+    const day = Number(monthNameDateMatch[2]);
+    const rawYear = monthNameDateMatch[3] ? Number(monthNameDateMatch[3]) : normalizedDefaultYear;
+    if (!Number.isNaN(month) && day >= 1 && day <= 31) {
+      const monthIndex = new Date(month).getMonth();
+      const normalizedYear = rawYear < 100 ? 2000 + rawYear : rawYear;
+      return new Date(normalizedYear, monthIndex, day).getTime();
+    }
   }
 
   const parsed = Date.parse(value);
@@ -27,26 +63,33 @@ const parseRowDateValue = (dateValue) => {
     return parsed;
   }
 
-  const fallbackMatch = value.match(/^(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?$/);
-  if (fallbackMatch) {
-    const month = Number(fallbackMatch[1]);
-    const day = Number(fallbackMatch[2]);
-    const year = fallbackMatch[3] ? Number(fallbackMatch[3]) : new Date().getFullYear();
-    if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-      const normalizedYear = year < 100 ? 2000 + year : year;
-      return new Date(normalizedYear, month - 1, day).getTime();
-    }
-  }
-
   return Number.POSITIVE_INFINITY;
 };
 
-const sortRowsByDate = (rows) =>
+const parseSortableRowDateValue = (dateValue, defaultYear) => {
+  const value = (dateValue || "").trim();
+  if (!value) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  const leadingDateMatch = value.match(/^([A-Za-z]{3,9}\s+\d{1,2}(?:,\s*\d{2,4})?|\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)/);
+  if (leadingDateMatch) {
+    return parseStandaloneDateValue(leadingDateMatch[1], defaultYear);
+  }
+
+  return parseStandaloneDateValue(value, defaultYear);
+};
+
+const sortRowsByDate = (rows, defaultYear) =>
   rows
     .map((row, index) => ({ row, index }))
     .sort((a, b) => {
-      const dateA = parseRowDateValue(a.row.date);
-      const dateB = parseRowDateValue(b.row.date);
+      const dateA = Number.isFinite(a.row.sortableDateTimestamp)
+        ? a.row.sortableDateTimestamp
+        : parseSortableRowDateValue(a.row.date, defaultYear);
+      const dateB = Number.isFinite(b.row.sortableDateTimestamp)
+        ? b.row.sortableDateTimestamp
+        : parseSortableRowDateValue(b.row.date, defaultYear);
 
       if (dateA !== dateB) {
         return dateA - dateB;
@@ -149,6 +192,17 @@ const formatDate = (timestamp, format) => {
   return `${mm}/${dd}/${d.getFullYear()}`;
 };
 
+const withParsedDateMetadata = (row, defaultYear) => {
+  const standaloneTimestamp = parseStandaloneDateValue(row.date, defaultYear);
+  const sortableTimestamp = parseSortableRowDateValue(row.date, defaultYear);
+
+  return {
+    ...row,
+    dateTimestamp: standaloneTimestamp,
+    sortableDateTimestamp: sortableTimestamp,
+  };
+};
+
 
 /**
  * @function CourseSchedule
@@ -177,7 +231,7 @@ function CourseSchedule({ id, term, year, days, data }) {
       // skip header (header will not be changed))
       const pdata = JSON.parse(data);
       const [header, ...body] = pdata;
-      const bodyObjectArray = body.map(createRow);
+      const bodyObjectArray = body.map(createRow).map((row) => withParsedDateMetadata(row, normalizedYear));
 
       setScheduleRows(bodyObjectArray);    
     } 
@@ -196,19 +250,28 @@ function CourseSchedule({ id, term, year, days, data }) {
 
   const datesSorted = scheduleRows.length <= 1 || scheduleRows.every((row, i) => {
     if (i === 0) return true;
-    return parseRowDateValue(scheduleRows[i - 1].date) <= parseRowDateValue(row.date);
+    const previousTimestamp = Number.isFinite(scheduleRows[i - 1].sortableDateTimestamp)
+      ? scheduleRows[i - 1].sortableDateTimestamp
+      : parseSortableRowDateValue(scheduleRows[i - 1].date, normalizedYear);
+    const currentTimestamp = Number.isFinite(row.sortableDateTimestamp)
+      ? row.sortableDateTimestamp
+      : parseSortableRowDateValue(row.date, normalizedYear);
+
+    return previousTimestamp <= currentTimestamp;
   });
 
   useEffect(() => {
     setScheduleRows((currentRows) =>
       currentRows.map((row) => {
-        const ts = parseRowDateValue(row.date);
+        const ts = Number.isFinite(row.dateTimestamp)
+          ? row.dateTimestamp
+          : parseStandaloneDateValue(row.date, normalizedYear);
         if (ts === Number.POSITIVE_INFINITY) return row;
-        return { ...row, date: formatDate(ts, dateFormat) };
+        return { ...row, date: formatDate(ts, dateFormat), dateTimestamp: ts };
       })
     );
     triggerInput();
-  }, [dateFormat]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [dateFormat, normalizedYear]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const addRow = (index) => {
     const newRow = createEmptyScheduleRow();
@@ -246,7 +309,7 @@ function CourseSchedule({ id, term, year, days, data }) {
   const createRow = function(x) {
       const keys = ['date', 'day', 'unit', 'learningOutcomes', 'readingAssignments' ];
       const obj = Object.fromEntries(keys.map( (k,i) => [k,x[i]]));
-      return obj;
+      return withParsedDateMetadata(obj, normalizedYear);
   }
 
   const clearSchedule = () => {
@@ -258,7 +321,7 @@ function CourseSchedule({ id, term, year, days, data }) {
   };
 
   const sortScheduleByDate = () => {
-    setScheduleRows((currentRows) => sortRowsByDate(currentRows));
+    setScheduleRows((currentRows) => sortRowsByDate(currentRows, normalizedYear));
     triggerInput();
   };
 
@@ -302,12 +365,12 @@ function CourseSchedule({ id, term, year, days, data }) {
           unit: item.Description || "",
           learningOutcomes: "",
           readingAssignments: "",
-        }));
+        })).map((row) => withParsedDateMetadata(row, normalizedYear));
 
         setScheduleRows((currentRows) => {
           const mergedRows = [...currentRows, ...generatedSchedule];
           const deduplicatedRows = deduplicateRows(mergedRows);
-          return sortRowsByDate(deduplicatedRows);
+          return sortRowsByDate(deduplicatedRows, normalizedYear);
         });
         triggerInput();
       }
@@ -383,14 +446,33 @@ function CourseSchedule({ id, term, year, days, data }) {
                   value={row.date}
                   onChange={(e) => {
                     const updatedRows = [...scheduleRows];
-                    updatedRows[index].date = e.target.value;
+                    updatedRows[index] = {
+                      ...updatedRows[index],
+                      date: e.target.value,
+                      dateTimestamp: Number.POSITIVE_INFINITY,
+                      sortableDateTimestamp: parseSortableRowDateValue(e.target.value, normalizedYear),
+                    };
                     setScheduleRows(updatedRows);
                   }}
                 onBlur={(e) => {
-                    const ts = parseRowDateValue(e.target.value);
+                    const ts = parseStandaloneDateValue(e.target.value, normalizedYear);
                     if (ts !== Number.POSITIVE_INFINITY) {
                       const updatedRows = [...scheduleRows];
-                      updatedRows[index] = { ...updatedRows[index], date: formatDate(ts, dateFormat) };
+                      updatedRows[index] = {
+                        ...updatedRows[index],
+                        date: formatDate(ts, dateFormat),
+                        dateTimestamp: ts,
+                        sortableDateTimestamp: ts,
+                      };
+                      setScheduleRows(updatedRows);
+                    } else {
+                      const updatedRows = [...scheduleRows];
+                      updatedRows[index] = {
+                        ...updatedRows[index],
+                        date: e.target.value,
+                        dateTimestamp: Number.POSITIVE_INFINITY,
+                        sortableDateTimestamp: parseSortableRowDateValue(e.target.value, normalizedYear),
+                      };
                       setScheduleRows(updatedRows);
                     }
                   }}

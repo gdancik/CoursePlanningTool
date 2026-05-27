@@ -11,6 +11,7 @@ import {LearningOutcomesCards} from "../screens/SyllabusView/Learning Outcomes/L
 import gradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import GradingPolicies from "../components/SyllabusComponents/GradingPolicies";
 import {FormInput} from "../components/SyllabusComponents/FormInput";
+import {DropDownComponent} from "../components/SyllabusComponents/DropDownComponent";
 
 export const ComponentRegistry = {
     Accordion: AccordionWrapper,
@@ -26,5 +27,6 @@ export const ComponentRegistry = {
     GradingPolicies,
     text: FormInput,
     textarea: FormInput,
+    select: DropDownComponent
 
 }

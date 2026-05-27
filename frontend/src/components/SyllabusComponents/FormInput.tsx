@@ -35,7 +35,6 @@ export const FormInput: React.FC<InputFormProps> = ({
             {component.type === "textarea" ? (
                 <textarea
                     id={fieldId}
-                    placeholder={component.placeholder}
                     value={value}
                     maxLength={maxWordLength}
                     required={component.required}

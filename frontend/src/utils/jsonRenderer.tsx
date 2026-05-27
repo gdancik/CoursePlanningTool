@@ -19,7 +19,7 @@ import CompetencyTable2 from "../components/SyllabusComponents/Tables/Competency
 import {ComponentRegistry} from "./ComponentRegistry";
 import {FormState, FormValue} from "./types";
 import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent,
-    AlertComponent, ImageComponent,
+    AlertComponent, ImageComponent, SelectComponent,
     InformationComponent,GradingPoliciesComponent,LearningOutcomesComponent, TextInputComponent, TextAreaComponent} from "./types";
 
 // Type for JSON-driven UI
@@ -306,39 +306,19 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
 
         // Dropdown
         case "select": {
-            if (component.id === undefined || typeof component.id !== "string") {
-                alert("component.id needed for select component");
+            const Component = ComponentRegistry["select"];
+
+            if (!Component) {
+                console.error("select not found in registry");
                 return null;
             }
 
-            const select_id = component.id;
-            const rawValue = formData[select_id];
-
-            const selectValue =
-                typeof rawValue === "string" || typeof rawValue === "number"
-                    ? rawValue
-                    : "";
-
             return (
-                <label key={select_id} className={component.className || ""}>
-                    {component.label}
-                    <select
-                        id={select_id}
-                        value={selectValue}
-                        onChange={(e) => {
-                            onChange(select_id, e.target.value);
-                        }}
-                        required={component.required}
-                        className={component.className || ""}
-                    >
-                        <option value="">Select</option>
-                        {component.options?.map((opt, i) => (
-                            <option key={select_id + i} value={opt}>
-                                {opt}
-                            </option>
-                        ))}
-                    </select>
-                </label>
+                <Component
+                    component={component as SelectComponent}
+                    formData={formData}
+                    onChange={onStringChange}
+                />
             );
         }
 

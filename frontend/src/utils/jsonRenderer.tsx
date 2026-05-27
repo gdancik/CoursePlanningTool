@@ -19,8 +19,8 @@ import CompetencyTable2 from "../components/SyllabusComponents/Tables/Competency
 import {ComponentRegistry} from "./ComponentRegistry";
 import {FormState, FormValue} from "./types";
 import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent,
-    AlertComponent, ImageComponent, SelectComponent,
-    InformationComponent,GradingPoliciesComponent,LearningOutcomesComponent, TextInputComponent, TextAreaComponent} from "./types";
+    AlertComponent, ImageComponent, SelectComponent, InformationComponent,GradingPoliciesComponent,
+    LearningOutcomesComponent, TextInputComponent, TextAreaComponent , ButtonComponent, InformationTextComponent, ParagraphFromFileComponent} from "./types";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -342,28 +342,32 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
             );
         }
         // Textarea
-            case "informationText":
-                return (
-                    component.placeholder ? (
-                    <p>{component.placeholder}</p>
-                    ) : (
-                    <p><br/></p>
-                    )
-                );
+        case "informationText": {
+            const Component = ComponentRegistry["informationText"];
 
-            case "paragraphFromFile" :               
-                return (
-                    <ParagraphFromFile file = {component.file || ""} 
-                       className = {component.className || undefined}/>                                                            
-                )  
-            
-            case "htmlFromFile" :
-                return (
-                    <ParagraphFromFile 
-                       file = {component.file || ""} 
-                       className = {component.className || undefined}
-                       html = {true}/>                                                            
-                )  
+            if (!Component) {
+                console.error("informationText not found in registry");
+                return null;
+            }
+
+            return <Component component={component as InformationTextComponent} />;
+        }
+
+        case "paragraphFromFile":
+        case "htmlFromFile": {
+            const Component = ComponentRegistry[component.type];
+
+            if (!Component) {
+                console.error(`${component.type} not found in registry`);
+                return null;
+            }
+
+            return (
+                <Component
+                    component={component as ParagraphFromFileComponent}
+                />
+            );
+        }
 
             case "courseSchedule" :           
             
@@ -478,19 +482,16 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
             );
         }
 
-            case "Button":
-                return (
-                    <ActionButton
-                        label={component.label || "Button"}
-                        variant={component.variant}
-                        href={component.href}
-                        new_tab={component.new_tab}
-                        modalCase={component.modalCase}
-                        modalProps={component.modalProps}
-                        externalLink={component.externalLink}
+        case "Button": {
+            const Component = ComponentRegistry["Button"];
 
-                    />
-                );
+            if (!Component) {
+                console.error("Button not found in registry");
+                return null;
+            }
+
+            return <Component component={component as ButtonComponent} />;
+        }
 
             case "OverviewComponent": 
                 return (

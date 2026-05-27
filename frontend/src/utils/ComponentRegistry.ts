@@ -12,6 +12,9 @@ import gradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import GradingPolicies from "../components/SyllabusComponents/GradingPolicies";
 import {FormInput} from "../components/SyllabusComponents/FormInput";
 import {DropDownComponent} from "../components/SyllabusComponents/DropDownComponent";
+import {ActionButtonWrapper} from "../components/SyllabusComponents/ComponentWrappers/ActionButtonWrapper";
+import {InformationTextWrapper} from "../components/SyllabusComponents/ComponentWrappers/InformationTextWrapper";
+import {ParagraphFromFileWrapper} from "../components/SyllabusComponents/ComponentWrappers/ParagraphFromFileWrapper";
 
 export const ComponentRegistry = {
     Accordion: AccordionWrapper,
@@ -27,6 +30,10 @@ export const ComponentRegistry = {
     GradingPolicies,
     text: FormInput,
     textarea: FormInput,
-    select: DropDownComponent
+    select: DropDownComponent,
+    Button: ActionButtonWrapper,
+    informationText: InformationTextWrapper,
+    paragraphFromFile: ParagraphFromFileWrapper,
+    htmlFromFile: ParagraphFromFileWrapper,
 
 }

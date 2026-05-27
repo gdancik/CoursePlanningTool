@@ -215,14 +215,10 @@ export interface GradingPoliciesComponent extends BaseComponent, WithId {
 /* ========================= */
 
 export interface ParagraphFromFileComponent extends BaseComponent {
-    type: "paragraphFromFile";
+    type: "paragraphFromFile" | "htmlFromFile";
     file: string;
 }
 
-export interface HtmlFromFileComponent extends BaseComponent {
-    type: "htmlFromFile";
-    file: string,
-}
 
 /* ========================= */
 /*            Misc.          */
@@ -292,7 +288,6 @@ export type JsonComponent =
     | LearningOutcomesComponent
     | GradingPoliciesComponent
     | ParagraphFromFileComponent
-    | HtmlFromFileComponent
     | InformationTextComponent
     | ButtonComponent
     | OverviewComponentType

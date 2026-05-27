@@ -10,6 +10,7 @@ import Image from "../components/SyllabusComponents/Image";
 import {LearningOutcomesCards} from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
 import gradeTable from "../components/SyllabusComponents/Tables/gradeTable";
 import GradingPolicies from "../components/SyllabusComponents/GradingPolicies";
+import {FormInput} from "../components/SyllabusComponents/FormInput";
 
 export const ComponentRegistry = {
     Accordion: AccordionWrapper,
@@ -23,5 +24,7 @@ export const ComponentRegistry = {
     BloomsTaxonomy,
     LearningOutcomesCards,
     GradingPolicies,
+    text: FormInput,
+    textarea: FormInput,
 
 }

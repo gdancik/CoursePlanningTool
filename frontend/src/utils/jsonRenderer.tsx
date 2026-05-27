@@ -18,7 +18,9 @@ import CompetencyTable2 from "../components/SyllabusComponents/Tables/Competency
 
 import {ComponentRegistry} from "./ComponentRegistry";
 import {FormState, FormValue} from "./types";
-import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent, AlertComponent, ImageComponent, InformationComponent,GradingPoliciesComponent,  LearningOutcomesComponent} from "./types";
+import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent,
+    AlertComponent, ImageComponent,
+    InformationComponent,GradingPoliciesComponent,LearningOutcomesComponent, TextInputComponent, TextAreaComponent} from "./types";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -195,11 +197,12 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
 
         case "Alert": {
             const Component = ComponentRegistry["Alert"];
+            const alertComponent =  component as AlertComponent;
             if (!Component) {
                 console.error(Component + "Not found in Registry");
                 return null;
             }
-            return <Component text={component.text || ""} file={component.file}/>
+            return <Component text={alertComponent.text || ""} file={alertComponent.file}/>
         }
 
         case "Information": {
@@ -283,32 +286,21 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
         }
         // Text-like inputs
 
-        case "text": {
-            const maxLength = component.maxLength ? component.maxLength : 100;
+        case "text":
+        case "textarea": {
+            const Component = ComponentRegistry[component.type];
 
-            const rawValue = formData[component.id || component.label || ""];
-
-            const inputValue =
-                typeof rawValue === "string" || typeof rawValue === "number"
-                    ? rawValue
-                    : "";
+            if (!Component) {
+                console.error(`${component.type} not found in registry`);
+                return null;
+            }
 
             return (
-                <label key={component.id} className={component.className || ""}>
-                    {component.label}
-                    <input
-                        id={component.id}
-                        type={component.type}
-                        placeholder={component.placeholder}
-                        value={inputValue}
-                        onChange={(e) =>
-                            onChange(component.id || "", e.target.value)
-                        }
-                        required={component.required}
-                        className={component.className || ""}
-                        maxLength={maxLength}
-                    />
-                </label>
+                <Component
+                    component={component as TextInputComponent | TextAreaComponent}
+                    formData={formData}
+                    onChange={onStringChange}
+                />
             );
         }
 
@@ -370,41 +362,6 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
             );
         }
         // Textarea
-        case "textarea": {
-            const maxLengthTextArea = component.maxLength ? component.maxLength : 4000;
-
-            const fieldId = component.id || component.label || "";
-            const rawValue = formData[fieldId];
-
-            const textareaValue =
-                typeof rawValue === "string" || typeof rawValue === "number"
-                    ? rawValue
-                    : "";
-
-            return (
-                <label key={component.id} className={component.className || ""}>
-                    {component.label}
-                    {component.placeholder && (
-                        <p>{component.placeholder}</p>
-                    )}
-                    <textarea
-                        id={fieldId}
-                        style={{
-                            overflowY: "auto",
-                            resize: "vertical",
-                        }}
-                        value={textareaValue}
-                        onChange={(e) =>
-                            onChange(component.id || "", e.target.value)
-                        }
-                        required={component.required}
-                        className={component.className || ""}
-                        maxLength={maxLengthTextArea}
-                    />
-                </label>
-            );
-        }
-
             case "informationText":
                 return (
                     component.placeholder ? (

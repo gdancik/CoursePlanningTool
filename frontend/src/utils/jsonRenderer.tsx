@@ -17,7 +17,7 @@ import CompetencyTable1 from "../components/SyllabusComponents/Tables/Competency
 import CompetencyTable2 from "../components/SyllabusComponents/Tables/CompetencyTable2"
 
 import {ComponentRegistry} from "./ComponentRegistry";
-import {FormState, FormValue} from "./types";
+import {CourseScheduleComponent, FormState, FormValue} from "./types";
 import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent,
     AlertComponent, ImageComponent, SelectComponent, InformationComponent,GradingPoliciesComponent,
     LearningOutcomesComponent, TextInputComponent, TextAreaComponent , ButtonComponent, InformationTextComponent, ParagraphFromFileComponent} from "./types";
@@ -369,54 +369,18 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
             );
         }
 
-            case "courseSchedule" :           
-            
-                if (component.id === undefined) {
-                    alert('courseSchedule component needs an id');
-                    return null;
-                }
+            case "courseSchedule" : {
+                const Component =  ComponentRegistry[component.type]
+                 if (!Component) {
+                     console.error(`${component.type} not found in registry`);
+                     return null
+                 }
+                 return <Component component={component as CourseScheduleComponent}
+                                   formData={formData}
 
-                const courseScheduleData = formData[component.id];
+                 />
 
-                if (component.term === undefined || component.year === undefined || component.days1 == undefined) {
-                    alert('Must specify term, year, and days fields for courseSchedule component');
-                    return null;
-                    
-                }
-          
-                const days_to_string = function(x: any, name: string) {
-                    if (x === undefined) {
-                        return x;
-                    }                    
-                    if (Array.isArray(x)) {
-                        return x.join('');
-                    } else {
-                        alert("Error: " + name + " must correspond to an array")
-                    return x;
-                    }
-                }
-
-                const term = formData[component.term];
-                const year = formData[component.year];
-                let days = days_to_string(formData[component.days1], 'days1');
-                
-                if (component.days2) {
-                    const days2 = days_to_string(formData[component["days2"]], 'days2'); 
-                    const removeDuplicates = (str:string) => [...new Set(str)].join('');
-                    days = removeDuplicates(days +days2);
-                }                
-
-                
-
-                return (
-                    <CourseSchedule 
-                        id={component.id} 
-                        term={term} 
-                        year={year}
-                        days={days}
-                        data={courseScheduleData}
-                    />
-                )   
+            }
             case "SidebarLayout":
                 //let children = <p>Hi <b>there</b></p>
 

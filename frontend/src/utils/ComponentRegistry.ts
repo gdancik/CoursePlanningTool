@@ -16,6 +16,7 @@ import {ActionButtonWrapper} from "../components/SyllabusComponents/ComponentWra
 import {InformationTextWrapper} from "../components/SyllabusComponents/ComponentWrappers/InformationTextWrapper";
 import {ParagraphFromFileWrapper} from "../components/SyllabusComponents/ComponentWrappers/ParagraphFromFileWrapper";
 import {CourseScheduleWrapper} from "../components/SyllabusComponents/ComponentWrappers/CourseScheduleWrapper";
+import {SidebarLayoutWrapper} from "../components/SyllabusComponents/ComponentWrappers/SideBarWrapper";
 
 export const ComponentRegistry = {
     Accordion: AccordionWrapper,
@@ -37,4 +38,5 @@ export const ComponentRegistry = {
     paragraphFromFile: ParagraphFromFileWrapper,
     htmlFromFile: ParagraphFromFileWrapper,
     courseSchedule: CourseScheduleWrapper,
+    SidebarLayout: SidebarLayoutWrapper,
 }

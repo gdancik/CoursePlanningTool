@@ -146,7 +146,7 @@ export interface RowComponent extends BaseComponent, WithConditional, WithConten
 export interface SidebarLayoutComponent extends BaseComponent, WithContent {
     type: "SidebarLayout";
     title?: string;
-    sideBarContent?: JsonComponent[];
+    sidebarContent?: JsonComponent[];
     sidebarWidth?: string;
     sidebarClassName?: string;
     contentClassName?: string;

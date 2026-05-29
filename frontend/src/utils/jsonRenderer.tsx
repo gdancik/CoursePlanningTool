@@ -20,7 +20,7 @@ import {ComponentRegistry} from "./ComponentRegistry";
 import {CourseScheduleComponent, FormState, FormValue} from "./types";
 import {AccordionComponent, CheckboxComponent, CheckboxGroupComponent, ColumnComponent, RowComponent,
     AlertComponent, ImageComponent, SelectComponent, InformationComponent,GradingPoliciesComponent,
-    LearningOutcomesComponent, TextInputComponent, TextAreaComponent , ButtonComponent, InformationTextComponent, ParagraphFromFileComponent} from "./types";
+    LearningOutcomesComponent, TextInputComponent, TextAreaComponent , ButtonComponent, InformationTextComponent, ParagraphFromFileComponent, SidebarLayoutComponent} from "./types";
 
 // Type for JSON-driven UI
 export type JsonComponent = {
@@ -381,39 +381,24 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                  />
 
             }
-            case "SidebarLayout":
-                //let children = <p>Hi <b>there</b></p>
-
-                // this is the body of the main panel
-                let children = component.content?.map((child, i) => (
-                            <div key={i}>
-                                <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
-                            </div>
-                ))    
-                              
-                // sidebar content (left panel) can be a string (text or informationText)
-                let sidebarContent: React.ReactNode = component.text || component.informationText || undefined
-                            
-                // if undefined, then treat as list of objects                                            
-                sidebarContent = component.sidebarContent?.map((child, i) => (
-                            <div key={i}>
-                                <JsonRenderComponent component = {child} formData = {formData} onChange = {onChange}/>
-                            </div>
-                ))
-                            
-                return (
-                    <SidebarLayout
-                    sidebarTitle={component.title || ""}
-                    sidebarContent={sidebarContent}
-
-                    className = {component.className || ""}
-                    sidebarClassName={component.sidebarClassName || ""}
-                    contentClassName={component.contentClassName || ""}
-                    sidebarWidth={component.sidebarWidth || "300px"}   
-                    children = {children}
-                                
-                    />
-                )
+            case "SidebarLayout":{
+                const Component = ComponentRegistry[component.type]
+                if (!Component) {
+                    console.error(`${component.type} not found in registry`);
+                    return null
+                    }
+                return <Component
+                    component={component as SidebarLayoutComponent}
+                    renderChild={(child, index) => (
+                        <JsonRenderComponent
+                            key={index}
+                            component={child}
+                            formData={formData}
+                            onChange={onChange}
+                        />
+                    )}
+                />
+            }
         case "GradeTable": {
             if (!component.id) {
                 alert("GradeTable component requires an id");

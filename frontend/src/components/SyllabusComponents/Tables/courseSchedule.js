@@ -160,7 +160,7 @@ const normalizeYear = (value) => {
 const normalizeDays = (value) => {
   if (Array.isArray(value)) {
     return [...new Set(value.map((day) => String(day).trim().toUpperCase()).join("").split(""))]
-      .filter((day) => "MTRFS".includes(day))
+      .filter((day) => "MTWRFS".includes(day))
       .join("");
   }
 
@@ -179,7 +179,7 @@ const normalizeDays = (value) => {
     normalized = raw;
   }
 
-  return [...new Set(normalized.toUpperCase().replace(/[^MTRFS]/g, "").split(""))].join("");
+  return [...new Set(normalized.toUpperCase().replace(/[^MTWRFS]/g, "").split(""))].join("");
 };
 
 const formatDate = (timestamp, format) => {

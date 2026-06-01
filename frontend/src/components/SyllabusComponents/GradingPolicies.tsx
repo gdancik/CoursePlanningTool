@@ -21,7 +21,7 @@ export const GradingPolicies = ({ id, data = []}: { id: string, data?:CardData[]
             initialCards={mydata} //[{"title": "t1", "description": "d1"}]}
             onChange = {() => {}}           
             minCards={1}
-            maxCards={3}    
+            maxCards={4}    
         />
     )
 }

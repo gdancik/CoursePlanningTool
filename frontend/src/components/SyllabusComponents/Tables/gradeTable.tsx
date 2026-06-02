@@ -52,7 +52,7 @@ const GradeTable: React.FC<GradeTableProps> = ({ id, data }) => {
           
       const r: [string, string][] = gradeLetters.map((letter, i) => {
         if(data && data[i] && data[i][0]){
-            return [letter, data[i+1][1]];
+            return [letter, data[i][1]];
         }
         return [letter, intervals[i]];
       });

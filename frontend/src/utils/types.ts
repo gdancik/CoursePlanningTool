@@ -192,6 +192,7 @@ export interface AssignmentsComponent extends BaseComponent, WithId {
 
 export interface GradeTableComponent extends BaseComponent, WithId{
     type: "GradeTable"
+    data?: [string,string][]
 }
 
 export interface CourseScheduleComponent extends BaseComponent, WithId {

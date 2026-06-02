@@ -17,18 +17,26 @@ import {InformationTextWrapper} from "../components/SyllabusComponents/Component
 import {ParagraphFromFileWrapper} from "../components/SyllabusComponents/ComponentWrappers/ParagraphFromFileWrapper";
 import {CourseScheduleWrapper} from "../components/SyllabusComponents/ComponentWrappers/CourseScheduleWrapper";
 import {SidebarLayoutWrapper} from "../components/SyllabusComponents/ComponentWrappers/SideBarWrapper";
+import {GradeTableWrapper} from "../components/SyllabusComponents/ComponentWrappers/GradeTableWrapper";
+import BloomsTaxonomyWrapper from "../components/SyllabusComponents/ComponentWrappers/BloomsTaxonomyWrapper";
+import LearningOutcomesCardsWrapper
+    from "../components/SyllabusComponents/ComponentWrappers/LearningOutcomesCardsWrapper";
+import FiveCoreCompetenciesWrapper
+    from "../components/SyllabusComponents/ComponentWrappers/FiveCoreCompetenciesWrapper";
+import AdditionalCompetenciesWrapper
+    from "../components/SyllabusComponents/ComponentWrappers/AdditionalCompetenciesWrapper";
 
 export const ComponentRegistry = {
     Accordion: AccordionWrapper,
     Column: ColumnWrapper,
     Row: RowWrapper,
-    CheckBoxGroup: CheckboxGroupWrapper,
+    CheckboxGroup: CheckboxGroupWrapper,
     checkbox: CheckboxWrapper,
     Alert,
     Information,
     Image,
-    BloomsTaxonomy,
-    LearningOutcomesCards,
+    BloomsTaxonomy: BloomsTaxonomyWrapper,
+    LearningOutcomesCards: LearningOutcomesCardsWrapper,
     GradingPolicies,
     text: FormInput,
     textarea: FormInput,
@@ -39,4 +47,7 @@ export const ComponentRegistry = {
     htmlFromFile: ParagraphFromFileWrapper,
     courseSchedule: CourseScheduleWrapper,
     SidebarLayout: SidebarLayoutWrapper,
+    GradeTable:GradeTableWrapper,
+    FiveCoreCompetencies: FiveCoreCompetenciesWrapper,
+    AdditionalCompetencies: AdditionalCompetenciesWrapper,
 }

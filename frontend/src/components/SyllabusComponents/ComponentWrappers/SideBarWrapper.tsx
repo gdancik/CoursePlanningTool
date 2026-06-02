@@ -1,26 +1,47 @@
 import React from "react";
 
 import SidebarLayout from "../../SidebarLayout";
-import {FormState, FormValue, JsonComponent, SidebarLayoutComponent} from "../../../utils/types";
+import { JsonRenderComponent } from "../../../utils/jsonRenderer";
+import {
+    FormState,
+    FormValue,
+    SidebarLayoutComponent,
+} from "../../../utils/types";
 
-interface SidebarLayoutProps {
+interface SidebarLayoutWrapperProps {
     component: SidebarLayoutComponent;
-    renderChild:  ( child: JsonComponent, index: number) => React.ReactNode;
+    formData: FormState;
+    onChange: (fieldId: string, value: FormValue) => void;
 }
 
-export const SidebarLayoutWrapper: React.FC<SidebarLayoutProps> = ({
-    component,
-    renderChild
-}) => {
-    const children = component.content?.map((child, i) =>(
-        <div key = {i}> {renderChild(child, i)}</div>
+export const SidebarLayoutWrapper: React.FC<SidebarLayoutWrapperProps> = ({
+                                                                              component,
+                                                                              formData,
+                                                                              onChange,
+                                                                          }) => {
+    const children = component.content?.map((child, i) => (
+        <div key={`content-${child.type}-${i}`}>
+            <JsonRenderComponent
+                component={child}
+                formData={formData}
+                onChange={onChange}
+            />
+        </div>
     ));
+
     const sidebarContent =
         component.sidebarContent !== undefined
             ? component.sidebarContent.map((child, i) => (
-                <div key={i}>{renderChild(child, i)}</div>
+                <div key={`sidebar-${child.type}-${i}`}>
+                    <JsonRenderComponent
+                        component={child}
+                        formData={formData}
+                        onChange={onChange}
+                    />
+                </div>
             ))
             : component.text || component.informationText || undefined;
+
     return (
         <SidebarLayout
             sidebarTitle={component.title || ""}
@@ -32,5 +53,5 @@ export const SidebarLayoutWrapper: React.FC<SidebarLayoutProps> = ({
         >
             {children}
         </SidebarLayout>
-    )
+    );
 };

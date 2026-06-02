@@ -164,7 +164,7 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
             )
     }
         case "CheckboxGroup": {
-            const Component = ComponentRegistry["CheckBoxGroup"];
+            const Component = ComponentRegistry["CheckboxGroup"];
 
             if (!Component) {
                 console.error(Component + "Not found in Registry");
@@ -389,16 +389,10 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                     }
                 return <Component
                     component={component as SidebarLayoutComponent}
-                    renderChild={(child, index) => (
-                        <JsonRenderComponent
-                            key={index}
-                            component={child}
-                            formData={formData}
-                            onChange={onChange}
-                        />
-                    )}
+                    formData={formData}
+                    onChange = {onChange}
                 />
-            }
+                    }
         case "GradeTable": {
             if (!component.id) {
                 alert("GradeTable component requires an id");

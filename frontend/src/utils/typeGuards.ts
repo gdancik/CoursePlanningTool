@@ -67,3 +67,34 @@ export function parseStringPairArray(value: unknown): [string, string][] | undef
 
     return undefined;
 }
+
+export function isStringMatrix(value: unknown): value is string[][] {
+    return (
+        Array.isArray(value) &&
+        value.every(
+            (row) =>
+                Array.isArray(row) &&
+                row.every((cell) => typeof cell === "string")
+        )
+    );
+}
+
+export function parseStringMatrix(value: unknown): string[][] | undefined {
+    if (isStringMatrix(value)) {
+        return value;
+    }
+
+    if (typeof value === "string") {
+        try {
+            const parsed: unknown = JSON.parse(value.trim());
+
+            if (isStringMatrix(parsed)) {
+                return parsed;
+            }
+        } catch {
+            return undefined;
+        }
+    }
+
+    return undefined;
+}

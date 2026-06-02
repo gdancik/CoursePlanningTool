@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SyllabusLayout from "../../../SyllabusLayout/SyllabusPageHeader";
 import GeneratePageContent from "./GeneratePageContent";
-import { JsonComponent } from "../../../utils/jsonRenderer";
+import { JsonComponent} from "../../../utils/types";
 import { FormState, FormValue } from "../../../utils/types";
 
 interface GenerateSyllabusPageProps {

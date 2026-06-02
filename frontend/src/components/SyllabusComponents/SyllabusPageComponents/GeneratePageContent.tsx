@@ -1,6 +1,6 @@
 import React from "react";
 import {JsonRenderComponent} from "../../../utils/jsonRenderer";
-import { JsonComponent } from "../../../utils/jsonRenderer";
+import { JsonComponent} from "../../../utils/types";
 import ScrollToTop from "../../ScrollToTop/ScrollToTop";
 import '../../../screens/SyllabusView/BasicInformation/BasicInfo.css'
 import {FormState, FormValue} from "../../../utils/types";

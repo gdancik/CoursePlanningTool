@@ -4,7 +4,7 @@ import { useSyllabusWrapperLogic } from "../../../hooks/useSyllabusWrapperLogic"
 import { loadCourseData } from "../../../utils/loadCourseData";
 import GenerateSyllabusPage from "./GenerateSyllabusPage";
 import ModalRenderer from "../../Modals/ModalRenderer";
-import { JsonComponent } from "../../../utils/jsonRenderer";
+import { JsonComponent} from "../../../utils/types";
 import { FormState, FormValue } from "../../../utils/types";
 
 interface GeneratePageWrapperProps {

@@ -3,13 +3,6 @@ import ColumnWrapper from "../components/SyllabusComponents/ComponentWrappers/Co
 import RowWrapper from "../components/SyllabusComponents/ComponentWrappers/RowWrapper";
 import CheckboxGroupWrapper from "../components/SyllabusComponents/ComponentWrappers/CheckboxGroupWrapper";
 import CheckboxWrapper from "../components/SyllabusComponents/ComponentWrappers/CheckboxWrapper";
-import Alert from "../components/SyllabusComponents/Alert";
-import Information from "../components/SyllabusComponents/Information";
-import {BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy";
-import Image from "../components/SyllabusComponents/Image";
-import {LearningOutcomesCards} from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
-import gradeTable from "../components/SyllabusComponents/Tables/gradeTable";
-import GradingPolicies from "../components/SyllabusComponents/GradingPolicies";
 import {FormInput} from "../components/SyllabusComponents/FormInput";
 import {DropDownComponent} from "../components/SyllabusComponents/DropDownComponent";
 import {ActionButtonWrapper} from "../components/SyllabusComponents/ComponentWrappers/ActionButtonWrapper";
@@ -25,19 +18,26 @@ import FiveCoreCompetenciesWrapper
     from "../components/SyllabusComponents/ComponentWrappers/FiveCoreCompetenciesWrapper";
 import AdditionalCompetenciesWrapper
     from "../components/SyllabusComponents/ComponentWrappers/AdditionalCompetenciesWrapper";
-
+import AlertWrapper from "../components/SyllabusComponents/ComponentWrappers/AlertWrapper";
+import ImageWrapper from "../components/SyllabusComponents/ComponentWrappers/ImageWrapper";
+import GradingPoliciesAdapter from "../components/SyllabusComponents/ComponentWrappers/GradingPoliciesWrapper";
+import AssignmentsWrapper from "../components/SyllabusComponents/ComponentWrappers/AssignmentsWrapper";
+import InformationWrapper from "../components/SyllabusComponents/ComponentWrappers/InformationWrapper";
+import OverviewWrapper from "../components/SyllabusComponents/ComponentWrappers/OverviewWrapper";
+import ChecklistComponentWrapper from "../components/SyllabusComponents/ComponentWrappers/ChecklistComponentWrapper";
+import CompetencyTableWrapper from "../components/SyllabusComponents/ComponentWrappers/CompetencyTableWrapper";
 export const ComponentRegistry = {
     Accordion: AccordionWrapper,
     Column: ColumnWrapper,
     Row: RowWrapper,
     CheckboxGroup: CheckboxGroupWrapper,
     checkbox: CheckboxWrapper,
-    Alert,
-    Information,
-    Image,
+    Alert: AlertWrapper,
+    Information: InformationWrapper,
+    Image: ImageWrapper,
     BloomsTaxonomy: BloomsTaxonomyWrapper,
     LearningOutcomesCards: LearningOutcomesCardsWrapper,
-    GradingPolicies,
+    GradingPolicies: GradingPoliciesAdapter,
     text: FormInput,
     textarea: FormInput,
     select: DropDownComponent,
@@ -50,4 +50,10 @@ export const ComponentRegistry = {
     GradeTable:GradeTableWrapper,
     FiveCoreCompetencies: FiveCoreCompetenciesWrapper,
     AdditionalCompetencies: AdditionalCompetenciesWrapper,
+    Assignments: AssignmentsWrapper,
+    OverviewComponent: OverviewWrapper,
+    ChecklistComponent: ChecklistComponentWrapper,
+    CompetencyTable1: CompetencyTableWrapper,
+    CompetencyTable2: CompetencyTableWrapper,
+
 }

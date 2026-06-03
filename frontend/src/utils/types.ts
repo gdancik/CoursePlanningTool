@@ -64,6 +64,9 @@ export interface BaseComponent {
     className?: string;
 }
 
+export interface BaseComponentNoClass {
+    type: ComponentTypes;
+}
 //Component ID mixin
 export interface WithId {
     id: string;
@@ -225,7 +228,7 @@ export interface ParagraphFromFileComponent extends BaseComponent {
 /*            Misc.          */
 /* ========================= */
 
-export interface InformationTextComponent extends BaseComponent {
+export interface InformationTextComponent extends BaseComponentNoClass, WithPlaceholder {
     type: "informationText";
     placeholder?: string;
 }

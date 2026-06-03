@@ -72,7 +72,7 @@ export const ContentCardSet: React.FC<ContentCardSetProps> = ({
     maxCards = 10,
     showRightValue = false,
     separateLabel = false,
-    titlePlaceholder = 'Enter title ...',
+    titlePlaceholder,
     descriptionPlaceholder = 'Enter description ...'
 }) => {
 

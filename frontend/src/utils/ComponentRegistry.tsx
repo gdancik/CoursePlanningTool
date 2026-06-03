@@ -11,6 +11,7 @@ import Alert from "../components/SyllabusComponents/Alert";
 import Image from "../components/SyllabusComponents/Image";
 import Information from "../components/SyllabusComponents/Information";
 import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
+import {InformationTextComp} from "../components/SyllabusComponents/InformationTextComponent";
 
 import AccordionWrapper from "../components/SyllabusComponents/ComponentWrappers/AccordionWrapper";
 import ColumnWrapper from "../components/SyllabusComponents/ComponentWrappers/ColumnWrapper";
@@ -36,7 +37,7 @@ import {
     FormState,
     FormValue,
     ImageComponent,
-    InformationComponent,
+    InformationComponent, InformationTextComponent,
     JsonComponent,
     ParagraphFromFileComponent,
 } from "./types";
@@ -107,6 +108,10 @@ export const ComponentRegistry = {
 
     Information: ({ component }: RegistryComponentProps<InformationComponent>) => (
         <Information text={component.text || ""} />
+    ),
+
+    informationText: ({component}: RegistryComponentProps<InformationTextComponent>) => (
+        <InformationTextComp component = {component} placeholder = {component.placeholder ||" "} />
     ),
 
     paragraphFromFile: ({

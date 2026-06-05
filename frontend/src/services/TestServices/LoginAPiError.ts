@@ -1,33 +1,37 @@
-import api from "../axios"; //  Your pre-configured axios instance
+import api from "../apiClient";
+import {HTTPError} from "ky";
 
-export const login = async (user: string, password: string): Promise<{ user: string }> => {
+export const login = async (
+    user: string,
+    password: string
+): Promise <{user: string}> => {
     try {
-
-        console.log("BASE URL:", process.env.REACT_APP_API_URL);
-
-        const response = await api.get(
-            `/test_login/?user=${encodeURIComponent(user)}&password=${encodeURIComponent(password)}`
-        );
-        return response.data; //  axios uses `.data`, not `.json()`
-    } catch (err: any) {
-        if (err.response?.status === 401) {
-            throw new Error("Invalid password");
-        } else if (err.response?.status === 400) {
-            throw new Error("Invalid format or missing parameters");
-        } else {
-            throw new Error("Unknown error occurred");
+        return await api
+            .get("test_login/", {
+                searchParams: {
+                    user,
+                    password,
+                },
+            })
+            .json<{user: string}>();
+    } catch  (err: unknown) {
+        if (err instanceof HTTPError) {
+            if(err.response.status === 401) {
+                throw new Error("Invalid password")
+            }
+            if (err.response.status === 400) {
+                throw new Error("Invalid format or missing parameters");
+            }
         }
+
+        throw new Error("Unknown error occurred");
     }
 };
 
 export const logout = async (): Promise<void> => {
-    try {
-        const response = await api.get("/test_logout/");
-        if (!response.data || response.status !== 200) {
-            throw new Error("Failed to log out");
-        }
-    } catch (err) {
-        console.error("Logout error:", err);
-        throw err;
-    }
+    await api.get("test_logout/");
+};
+
+export const getTestData = async () => {
+    return await api.get("test_data/").json();
 };

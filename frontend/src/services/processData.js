@@ -1,4 +1,4 @@
-import {updateCourseValues} from "./course/courselsService";
+import {updateCourseValues} from "./course/courseService";
 import config from "../config.json";
 
 // get_table_records

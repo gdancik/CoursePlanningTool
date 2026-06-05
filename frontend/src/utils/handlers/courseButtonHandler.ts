@@ -158,14 +158,10 @@ export const createDuplicateRowHandler = (
             "loading"
         );
 
-
         try {
             const response = await duplicateCourse(courseId);
 
-            const newId =
-                response?.course_id ||
-                response?.courseId ||
-                response?.["courseId:"];
+            const newId = response?.course_id;
 
             if (typeof newId !== "string") {
                 throw new Error("Course could not be duplicated");
@@ -176,11 +172,13 @@ export const createDuplicateRowHandler = (
 
             modal.showRedirect(
                 "Course Duplicated",
-                `${courseTitle} has been duplicated with ID: ${newId} `,
+                `${courseTitle} has been duplicated with ID: ${newId}`,
                 "success"
             );
-            setTimeout(() => {modal.hide();}, 3000);
 
+            setTimeout(() => {
+                modal.hide();
+            }, 3000);
         } catch (err: unknown) {
             console.error("Duplicate handler failed:", err);
 

@@ -3,7 +3,7 @@
  * Used to validate section completeness in the Syllabus Page Builder
  */
 
-import api from './axios';
+import api from './apiClient';
 import {FormState} from "../utils/types";
 
 export interface ValidInputsResponse {
@@ -17,11 +17,19 @@ export interface ValidInputsResponse {
  */
 export async function fetchRequiredInputs(): Promise<ValidInputsResponse> {
     try {
-        const response = await api.get('/valid_inputs/?type=required');      
-        return response.data;
+        return await api
+            .get("valid_inputs/", {
+                searchParams: {
+                    type: "required",
+                },
+            })
+            .json<ValidInputsResponse>();
     } catch (error) {
-        console.warn('Could not fetch valid inputs from API, using empty validation:', error);
-        // Return empty object to prevent page from breaking
+        console.warn(
+            "Could not fetch valid inputs from API, using empty validation:",
+            error
+        );
+
         return {};
     }
 }

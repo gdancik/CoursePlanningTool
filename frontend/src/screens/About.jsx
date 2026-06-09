@@ -150,9 +150,11 @@ export default function About() {
       </div>
       {/* Bottom SECTION */}
       <BottomSect />
-      <StandardFooter/> 
-      </div>   
-           
+        <div className="login-footer-container">
+            <StandardFooter />
+        </div>
+      </div>
+
     </div>
     
   );

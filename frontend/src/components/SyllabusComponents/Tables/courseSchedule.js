@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./gradeTable.css";
 import "../../../components/Button/ReusableButton.css"
 import {triggerInput} from "../../../services/triggerInput"
-import api from "../../../services/axios";
+import api from "../../../services/apiClient";
 import config from "../../../config.json";
 
 //import axios from "axios";
@@ -327,25 +327,21 @@ function CourseSchedule({ id, term, year, days, data }) {
 
   // scheduleData has schedule
   const generateSchedule = async () => {
-   
-   // Or, if you specifically want a 'change' event
-   //const changeEvent = new Event('change', { bubbles: true });
-   //textarea.dispatchEvent(changeEvent);  
-
-
     try {
       if (missingScheduleInfo(normalizedTerm, normalizedYear, normalizedDays)) {
         alert("Please provide valid term, year, and days before generating a schedule.");
         return;
       }
 
-      //await login();
-
-      const response = await api.post(
-        "generateSchedule/",
-        { term: normalizedTerm, year: normalizedYear, days: normalizedDays }
-      );
-      const scheduleData = response.data;
+      const scheduleData = await api
+          .post("generateSchedule/", {
+            json: {
+              term: normalizedTerm,
+              year: normalizedYear,
+              days: normalizedDays,
+            },
+          })
+          .json();
 
       if (config.log) {
         console.log("API response:", scheduleData);
@@ -353,35 +349,49 @@ function CourseSchedule({ id, term, year, days, data }) {
 
       if (scheduleData.error) {
         alert(
-          "Schedule can’t be generated. Please ensure valid term, year, and days, or try again later."
+            `Schedule can’t be generated: ${scheduleData.error}`
         );
         return;
       }
 
       if (scheduleData.schedule && Array.isArray(scheduleData.schedule)) {
-        const generatedSchedule = scheduleData.schedule.map((item) => ({
-          date: item.Date || "",
-          day: item.Day || "",
-          unit: item.Description || "",
-          learningOutcomes: "",
-          readingAssignments: "",
-        })).map((row) => withParsedDateMetadata(row, normalizedYear));
+        const generatedSchedule = scheduleData.schedule
+            .map((item) => ({
+              date: item.Date || "",
+              day: item.Day || "",
+              unit: item.Description || "",
+              learningOutcomes: "",
+              readingAssignments: "",
+            }))
+            .map((row) => withParsedDateMetadata(row, normalizedYear));
 
         setScheduleRows((currentRows) => {
           const mergedRows = [...currentRows, ...generatedSchedule];
           const deduplicatedRows = deduplicateRows(mergedRows);
           return sortRowsByDate(deduplicatedRows, normalizedYear);
         });
+
         triggerInput();
       }
     } catch (error) {
-      const apiMessage = error?.response?.data?.error;
-      alert(
-        apiMessage
-          ? `Schedule can’t be generated: ${apiMessage}`
-          : "Schedule can’t be generated. Please check your term, year, and days, or try again later."
-      );
       console.error("Error generating schedule", error);
+
+      let apiMessage = "";
+
+      try {
+        if (error.response) {
+          const body = await error.response.json();
+          apiMessage = body?.error || "";
+        }
+      } catch {
+        apiMessage = "";
+      }
+
+      alert(
+          apiMessage
+              ? `Schedule can’t be generated: ${apiMessage}`
+              : "Schedule can’t be generated. Please check your term, year, and days, or try again later."
+      );
     }
   };
 

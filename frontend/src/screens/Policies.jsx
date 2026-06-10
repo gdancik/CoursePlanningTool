@@ -15,7 +15,9 @@ export default function Policies() {
       {/* TOP SECTION */} 
         <UsagePolicy/>        
         <PrivacyPolicy/>
-      <StandardFooter/>
+        <div className="footer-container">
+            <StandardFooter />
+        </div>
       </div>
       
     </div>       

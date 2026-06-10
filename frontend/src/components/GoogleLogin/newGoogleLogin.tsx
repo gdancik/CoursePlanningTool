@@ -174,7 +174,7 @@ export default function MyGoogleLogin({
                 </>
             ) : (
                 <div className="google-login-card">
-                    <h2>Welcome back</h2>
+                    <h2>Welcome to the Eastern Connecticut State University Course Planning Tool</h2>
                     <p>Sign in with your Google account to continue.</p>
                     <GoogleLogin
                         theme="filled_blue"

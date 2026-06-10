@@ -7,6 +7,7 @@
  */
 
 import { NavigateFunction } from "react-router-dom";
+import {FormState} from "../../utils/types";
 
 // Ordered list of page routes for navigation
 const pageOrder = [
@@ -25,7 +26,7 @@ const pageOrder = [
  * Navigates to the previous page in `pageOrder` based on the current path.
  */
 
-function saveCurrentFormToLocalStorage (formData: Record<string, string>, courseId?: string){
+function saveCurrentFormToLocalStorage (formData: FormState, courseId?: string){
     try{
         const existingData = localStorage.getItem("currentCourseData");
         const parsed = existingData ? JSON.parse(existingData) : {};
@@ -44,7 +45,7 @@ function saveCurrentFormToLocalStorage (formData: Record<string, string>, course
 export const handleBack = (
     navigate: NavigateFunction,
     currentPath: string,
-    formData: Record<string, string>,
+    formData: FormState,
     courseID?: string
 ) => {
 
@@ -66,7 +67,7 @@ export const handleBack = (
 export const handleNext = (
     navigate: NavigateFunction,
     currentPath: string,
-    formData: Record<string, string>,
+    formData: FormState,
     courseID?: string
 ) => {
     //console.log("Current Path:", currentPath);
@@ -96,7 +97,7 @@ export const handleNext = (
  * @param data - The data to be saved
  * @param fileName - The name of the downloaded JSON file
  */
-export function saveJsonFile(data: Record<string, string>, fileName: string) {
+export function saveJsonFile(data: FormState, fileName: string) {
     // Create a Blob containing the JSON data
 
     const jsonBlob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });

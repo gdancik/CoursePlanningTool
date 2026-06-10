@@ -1,14 +1,15 @@
 import React from "react";
 import "./SectionAccordion.css";
 import { FaAngleUp } from "react-icons/fa";
-import SafeIcon from "../../../utils/ComponentWrapper";
-import { JsonComponent, JsonRenderComponent } from "../../../utils/jsonRenderer";
+import SafeIcon from "../../utils/ComponentWrapper";
+import {JsonRenderComponent } from "../../utils/jsonRenderer";
+import {JsonComponent, FormState,  FormValue} from "../../utils/types";
 
 interface Props {
     sectionName: string; // Name of the section (e.g., "Personal Info")
     content?: JsonComponent[]; // JSON-defined child components
-    formData: Record<string, string>; // Current form data
-    onFieldChange: (label: string, value: string) => void; // Callback to handle changes
+    formData: FormState; // Current form data
+    onFieldChange: (label: string, value: FormValue) => void; // Callback to handle changes
     children?: React.ReactNode; // Manual override if needed
 }
 

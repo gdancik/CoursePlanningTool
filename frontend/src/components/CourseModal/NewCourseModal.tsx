@@ -3,13 +3,12 @@ import React, { useState, useEffect } from "react";
 import "./CourseModal.css";
 import { useNavigate } from "react-router-dom";
 import modalConfig from "../CourseModal/courseModalFields.json";
-
-export type ModalStatus = "loading" | "success" | "error";
-
+import type {FormState} from "../../utils/types";
+import type {ModalStatus} from "../../utils/useModalFactory";
 interface CourseModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (data: Record<string, string>) => Promise<void>;
+  onCreate: (data: FormState) => Promise<void>;
   modalTitle: string;
   modalMessage: string;
   modalStatus: ModalStatus;
@@ -24,7 +23,7 @@ const NewCourseModal: React.FC<CourseModalProps> = ({
   modalStatus,
 }) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState<FormState>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fields, setFields] = useState(modalConfig.fields);
 
@@ -41,6 +40,10 @@ const NewCourseModal: React.FC<CourseModalProps> = ({
   }, []);
 
   if (!isOpen) return null;
+  const getStringValue = (fieldId: string): string => {
+    const value = formData[fieldId];
+    return typeof value === "string" ? value : "";
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -83,7 +86,7 @@ const NewCourseModal: React.FC<CourseModalProps> = ({
                     <select
                       name={field.id}
                       required={field.required}
-                      value={formData[field.id] || ""}
+                      value={getStringValue(field.id)}
                       onChange={handleChange}
                     >
                       <option value="">Select</option>
@@ -98,7 +101,7 @@ const NewCourseModal: React.FC<CourseModalProps> = ({
                       type={field.type}
                       name={field.id}
                       required={field.required}
-                      value={formData[field.id] || ""}
+                      value={getStringValue(field.id)}
                       onChange={handleChange}
                     />
                   )}

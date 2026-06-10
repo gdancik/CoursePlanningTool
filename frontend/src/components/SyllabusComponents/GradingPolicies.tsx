@@ -17,10 +17,14 @@ export const GradingPolicies = ({ id, data = []}: { id: string, data?:CardData[]
             id = {id}  
             setTitle = "Grading Policies"          
             titleLabel="Grading Policy Title"
-            descriptionLabel="Grading Policy Description:"
+            titlePlaceholder ="Enter Your Grading Policy (e.g., Late Work, Attendance, Participation)."
+            descriptionLabel=""
+
+            descriptionPlaceholder="Policy Details / Criteria: "
             initialCards={mydata} //[{"title": "t1", "description": "d1"}]}
             onChange = {() => {}}           
             minCards={1}
+            separateLabel={true}
             maxCards={4}    
         />
     )

@@ -4,6 +4,7 @@
  */
 
 import api from './axios';
+import {FormState} from "../utils/types";
 
 export interface ValidInputsResponse {
     [sectionId: string]: string[] | null;
@@ -35,7 +36,7 @@ export async function fetchRequiredInputs(): Promise<ValidInputsResponse> {
 export function isSectionComplete(
     sectionId: string,
     validInputs: ValidInputsResponse,
-    formData: Record<string, string>
+    formData: FormState,
 ): boolean {
     // Get the required field IDs for this section
  
@@ -54,30 +55,31 @@ export function isSectionComplete(
     //console.log('checking ' + sectionId + ' --------------');
  
     // Check if all required fields have values
-    const complete =  requiredFields.every(fieldId => {
-        const value = formData[fieldId]; 
-           
-        //console.log(fieldId + ' -- ' + typeof(value) + ' -- ' + value);
+    const complete = requiredFields.every((fieldId) => {
+        const value = formData[fieldId];
 
-        let c = true;
+        if (value === undefined || value === null) {
+            return false;
+        }
 
-        // no value
-        if (value === undefined || value === null) c = false;
+        if (typeof value === "string" && value.trim() === "") {
+            return false;
+        }
 
-        // empty string
-        else if (typeof value === 'string' && value.trim() === '') c = false;
+        if (fieldId.endsWith("list")) {
+            if (typeof value !== "string") {
+                return false;
+            }
 
-        // table header only
-        else if (fieldId.endsWith('list')) {    
-            //alert(value);                    
-            const arr = JSON.parse(value).slice(1).flat().join('').trim();
-            if (arr === "") {
-                c = false;
-            }            
-        } 
-        
+            try {
+                const arr = JSON.parse(value).slice(1).flat().join("").trim();
+                return arr !== "";
+            } catch {
+                return false;
+            }
+        }
 
-        return c;
+        return true;
     });
 
     //console.log(sectionId + " complete: " + complete);

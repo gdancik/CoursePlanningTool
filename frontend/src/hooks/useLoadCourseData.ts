@@ -1,9 +1,10 @@
 // src/hooks/useLoadCourseData.ts
 import { useEffect } from "react";
 import { loadCourseData } from "../utils/loadCourseData";
+import {FormState} from "../utils/types";
 
 export function useLoadCourseData(
-    setFormData: React.Dispatch<React.SetStateAction<Record<string, string>>>,
+    setFormData: React.Dispatch<React.SetStateAction<FormState>>,
     setCourseId?: React.Dispatch<React.SetStateAction<string | null>>
 ) {
     useEffect(() => {

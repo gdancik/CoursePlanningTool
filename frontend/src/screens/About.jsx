@@ -71,14 +71,7 @@ export function PersonCard({ name, role, photo, linkedin, email, website }) {
 export default function About() {
   return (
     <div className="min-h-screen w-screen" style={{ backgroundImage: `url(${bgImage})` }}>
-      <style> {`
-        .inline_link {
-           margin: 0px;
-           color: #012460;
-        }
-      `}
-
-      </style>
+      <style> {`.inline_link { margin: 0px; color: #012460; }`} </style>
 
     <StandardHeader/>
     <h1 className="text-white text-5xl font-bold text-center pt-10">ABOUT</h1>
@@ -226,7 +219,7 @@ function BottomSect() {
       
 
       <p className="text-base text-gray-700 leading-relaxed mb-4">
-       The <a class = 'inline_link' href = "https://www.easternct.edu/center-for-teaching-learning-and-assessment/index.html">
+       The <a className = 'inline_link' href = "https://www.easternct.edu/center-for-teaching-learning-and-assessment/index.html">
         Center for Teaching, Learning, and Assessment (CTLA)</a> supports 
         faculty in developing high quality, innovative, and inclusive 
         teaching and learning experiences to meet the diverse learning needs of 
@@ -243,8 +236,8 @@ function BottomSect() {
           <b>Julia DeLapp</b>
           <br />
           Director
-          <br /
-          ><a class = 'inline_link' href = "mailto:delappj@easternct.edu">delappj@easternct.edu</a>
+          <br />
+            <a classname = 'inline_link' href = "mailto:delappj@easternct.edu">delappj@easternct.edu</a>
           <br />
           860.465.0687
         </p>

@@ -4,7 +4,8 @@ import { useSyllabusWrapperLogic } from "../../../hooks/useSyllabusWrapperLogic"
 import { loadCourseData } from "../../../utils/loadCourseData";
 import GenerateSyllabusPage from "./GenerateSyllabusPage";
 import ModalRenderer from "../../Modals/ModalRenderer";
-import { JsonComponent } from "../../../utils/jsonRenderer";
+import { JsonComponent} from "../../../utils/types";
+import { FormState, FormValue } from "../../../utils/types";
 
 interface GeneratePageWrapperProps {
   json: JsonComponent[];
@@ -12,14 +13,16 @@ interface GeneratePageWrapperProps {
   disableNext?: boolean;
 }
 
-const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json, disableBack = false, disableNext = false }) => {
+const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({
+                                                                   json,
+                                                                   disableBack = false,
+                                                                   disableNext = false,
+                                                                 }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Local page state
-  const [formData, setFormData] = useState<Record<string, string>>({});
-  
-  // useSyllabusWrapperLogic will load course data
+  const [formData, setFormData] = useState<FormState>({});
+
   const {
     modal,
     handleBackClick,
@@ -30,28 +33,26 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({ json, disable
     containerRef,
   } = useSyllabusWrapperLogic(formData, setFormData, navigate, location.pathname);
 
-  // TO DO: do we need handleChange?
-  // Handle input field changes
-  const handleChange = (label: string, value: string) => {   
-      setFormData((prev) => ({ ...prev, [label]: value }));        
+  const handleChange = (fieldId: string, value: FormValue) => {
+    setFormData((prev) => ({ ...prev, [fieldId]: value }));
   };
 
   return (
-    <>
-      <GenerateSyllabusPage
-        json={json}
-        formData={formData}
-        onFieldChange={handleChange}
-        onBack = {disableBack ? undefined : handleBackClick}
-        onNext={disableNext ? undefined : handleNextClick}
-        onSave={handleSave}
-        onSaveAndExit={handleSaveAndExit}
-        onPreview={handlePreviewClick}
-        containerRef={containerRef}
-      />
+      <>
+        <GenerateSyllabusPage
+            json={json}
+            formData={formData}
+            onFieldChange={handleChange}
+            onBack={disableBack ? undefined : handleBackClick}
+            onNext={disableNext ? undefined : handleNextClick}
+            onSave={handleSave}
+            onSaveAndExit={handleSaveAndExit}
+            onPreview={handlePreviewClick}
+            containerRef={containerRef}
+        />
 
-      <ModalRenderer modal={modal} />
-    </>
+        <ModalRenderer modal={modal} />
+      </>
   );
 };
 

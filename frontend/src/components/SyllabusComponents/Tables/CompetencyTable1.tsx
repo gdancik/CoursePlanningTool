@@ -3,14 +3,18 @@ import CompetencyTable from "./CompetencyTable";
 
 const headers = ["Skill, Knowledge, or Attitude", "Competency", "Purpose", "Real-world, field, or education goal connection"];
 
-const CompetencyTable1: React.FC<{ id: string, data?:[]}> = ({ id, data }) => {
-   
+const CompetencyTable1: React.FC<{ id: string; data?: string[][] }> = ({
+                                                                           id,
+                                                                           data,
+                                                                       }) => {
+    const [initialRows, setRows] = useState<string[][]>([
+        ["Attitude", "", "", ""],
+        ["Knowledge", "", "", ""],
+        ["Skill", "", "", ""],
+        ["Skill", "", "", ""],
+    ]);
 
-    const [initialRows, setRows] = useState<string[][]>(
-        [["Attitude", "", "", ""],["Knowledge", "", "", ""],["Skill", "", "", ""],["Skill", "", "", ""]]
-    );
-
-    useEffect(() => {        
+    useEffect(() => {
         if (data && data.length > 1) {
             setRows(data.slice(1));
         }
@@ -18,11 +22,11 @@ const CompetencyTable1: React.FC<{ id: string, data?:[]}> = ({ id, data }) => {
 
     return (
         <CompetencyTable
-            id={id}            
+            id={id}
             headers={headers}
             initialRows={initialRows}
             maxRows={6}
-            variant = "table1"
+            variant="table1"
         />
     );
 };

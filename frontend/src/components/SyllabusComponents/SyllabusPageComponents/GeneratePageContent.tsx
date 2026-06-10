@@ -1,13 +1,14 @@
 import React from "react";
 import {JsonRenderComponent} from "../../../utils/jsonRenderer";
-import { JsonComponent } from "../../../utils/jsonRenderer";
+import { JsonComponent} from "../../../utils/types";
 import ScrollToTop from "../../ScrollToTop/ScrollToTop";
 import '../../../screens/SyllabusView/BasicInformation/BasicInfo.css'
+import {FormState, FormValue} from "../../../utils/types";
 
 interface GeneratePageContentProps {
     json: { content: JsonComponent[] };
-    formData: Record<string, string>;
-    onFieldChange: (label: string, value: string) => void;
+    formData: FormState
+    onFieldChange: (label: string, value: FormValue) => void;
 }
 
 const GeneratePageContent: React.FC<GeneratePageContentProps> = ({

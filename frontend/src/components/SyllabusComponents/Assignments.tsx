@@ -41,14 +41,17 @@ const Assignments: React.FC<AssignmentsProps> = ({
         <ContentCardSet
             id = {id}
             setTitle="Assignments"
-            titleLabel="Assignment {index} Title: "
-            descriptionLabel="Assignment {index} Description: "
+            titleLabel="Assignment {index}"
+            descriptionLabel=" "
+            descriptionPlaceholder="Describe your Assignment in detail here."
+            titlePlaceholder = "Enter assignment title (e.g., Midterm Exam)"
             rightLabel=" "
             onChange = {() => {}}   
             initialCards={mydata}
             minCards={2}
             maxCards={10}
             showRightValue={true}
+            separateLabel = {true}
         />
         </>
     );

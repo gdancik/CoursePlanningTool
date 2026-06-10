@@ -1,6 +1,7 @@
 import React from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import ParagraphFromFile from "../../components/SyllabusComponents/ParagraphFromFile";
+import SafeIcon from "../../utils/ComponentWrapper";
 /**
  * 
  * @function Alert
@@ -15,7 +16,7 @@ import ParagraphFromFile from "../../components/SyllabusComponents/ParagraphFrom
  */
 
 interface AlertProps {
-  text: string;
+  text?: string;
   file?: string;
 }
 
@@ -91,12 +92,7 @@ function Alert({ text, file }: AlertProps) {
             flexShrink: 0,
           }}
         >
-          <FaExclamationCircle 
-            style={{ 
-              color: "#fff", 
-              fontSize: "20px" 
-            }}
-          />
+          <SafeIcon Icon={FaExclamationCircle} style={{color: "#fff", fontSize: "20px"}} />
         </div>
         
         {/* Text content */}

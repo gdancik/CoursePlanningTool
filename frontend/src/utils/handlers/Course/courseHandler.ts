@@ -5,9 +5,9 @@ import {
     getCourseData,
     getCourses as apiFetchCourses,
     Course,
-} from "../../services/course/courseService";
-import {FormState} from "../types";
-import type {ModalFactory} from "../useModalFactory";
+} from "../../../services/course/courseService";
+import {FormState} from "../../types";
+import type {ModalFactory} from "../../useModalFactory";
 
 type rawCourseData = FormState & {
     "Course Title"?: string;

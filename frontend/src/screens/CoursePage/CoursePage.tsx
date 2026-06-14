@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { createCourseHandler } from '../../utils/handlers/courseHandler';
+import { createCourseHandler } from '../../utils/handlers/Course/courseHandler';
 import {
     createDeleteRowHandler,
     createEditHandler,
     createPreviewHandler,
     createDuplicateRowHandler
-} from "../../utils/handlers/courseButtonHandler";
+} from "../../utils/handlers/Course/selectCourseHandler";
 import { getCourses, Course } from '../../services/course/courseService';
 import StandardHeader from '../../components/Header/standardHeader';
 import ReusableButton from '../../components/Button/ReusableButton';

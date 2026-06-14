@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { handleNext, handleBack } from "../components/Button/ButtonLogic";
 //import {createPreviewHandler } from "../utils/handlers/previewExitFactory";
-import {createPreviewHandler} from "../utils/handlers/courseButtonHandler";
+import {createPreviewHandler} from "../utils/handlers/Course/selectCourseHandler";
 import type { NavigateFunction } from "react-router-dom";
 import saveData from "../services/processData";
 import { loadCourseData } from "../utils/loadCourseData";

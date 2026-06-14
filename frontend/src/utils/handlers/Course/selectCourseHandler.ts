@@ -3,9 +3,9 @@ import {
     getCourseData,
     getCourses as apiFetchCourses,
     Course, deleteCourseRow, duplicateCourse
-} from "../../services/course/courseService";
-import {previewSyllabus} from "../../services/TestServices/syllabusService";
-import type {ModalFactory} from "../useModalFactory";
+} from "../../../services/course/courseService";
+import {previewSyllabus} from "../../../services/TestServices/syllabusService";
+import type {ModalFactory} from "../../useModalFactory";
 
 /**
  * Loads an existing course into localStorage, refreshes the list,

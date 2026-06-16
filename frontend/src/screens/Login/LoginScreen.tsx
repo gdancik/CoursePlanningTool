@@ -13,7 +13,7 @@ import StandardFooter from "../../components/Footer/Footer";
 import ModalRenderer from "../../components/Modals/ModalRenderer";
 import { useModalFactory } from "../../utils/useModalFactory";
 
-import config from "../../config.json";
+import config from "../../configs/courseConfig.json";
 
 const LoginScreen: React.FC = () => {
     const [username, setUsername] = useState("annie");

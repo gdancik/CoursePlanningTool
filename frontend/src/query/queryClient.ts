@@ -1,5 +1,5 @@
 import {QueryClient} from "@tanstack/react-query";
-import queryConfig from "./queryConfig.json"
+import queryConfig from "../configs/queryConfig.json"
 
 const minutesToMilliSeconds =(minutes: number) => {
     return minutes * 60 * 1000;

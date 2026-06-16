@@ -11,7 +11,7 @@ import {FormState} from "../../utils/types";
 
 import './Overview.css'
 
-import config from '../../config.json';
+import config from '../../configs/courseConfig.json';
 
 import SyllabusGreen from "../../assets/images/SyllabusGreen.png"
 import SyllabusGrey from "../../assets/images/SyllabusGrey.png"

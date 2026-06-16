@@ -5,7 +5,7 @@ import SafeIcon from '../../utils/ComponentWrapper';
 import { FaPlus } from 'react-icons/fa';
 import bgImage from '../../assets/images/bookstack-bg.png'
 import CourseCard from './CourseCard';
-import config from '../../config.json';
+import config from '../../configs/courseConfig.json';
 import './CoursePage.css';
 
 // Mock course data for testing

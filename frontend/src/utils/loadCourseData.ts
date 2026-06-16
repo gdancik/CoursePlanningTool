@@ -1,5 +1,5 @@
 import { getCourseData } from "../services/course/courseService";
-import config from "../config.json";
+import config from "../configs/courseConfig.json";
 import { FormState } from "./types";
 
 type loadCourseDataResult = {
@@ -33,7 +33,7 @@ export async function loadCourseData(): Promise<loadCourseDataResult> {
         }
 
         if ("loadData" in config && !config.loadData) {
-            alert("loadData is set to False in config.json");
+            alert("loadData is set to False in courseConfig.json");
             return emptyCourseData();
         }
 

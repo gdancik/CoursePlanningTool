@@ -7,7 +7,7 @@ import {
     createPreviewHandler,
     createDuplicateRowHandler
 } from "../../utils/handlers/Course/selectCourseHandler";
-import { getCourses, Course } from '../../services/course/courseService';
+import { Course } from '../../services/course/courseService';
 import StandardHeader from '../../components/Header/standardHeader';
 import ReusableButton from '../../components/Button/ReusableButton';
 import SafeIcon from '../../utils/ComponentWrapper';
@@ -15,41 +15,32 @@ import { FaPlus } from 'react-icons/fa';
 import bgImage from '../../assets/images/bookstack-bg.png'
 import CourseCard from './CourseCard';
 import { Navigate, useNavigate } from 'react-router-dom';
-import config from '../../config.json';
+import config from '../../configs/courseConfig.json';
 import './CoursePage.css';
 import {useModalFactory} from "../../utils/useModalFactory";
 import ModalRenderer from "../../components/Modals/ModalRenderer";
+import {useCoursesQuery} from "../../hooks/queries/useCoursesQuery";
 
 const CoursePage: React.FC = () => {
     // Always call hooks at the top-level
     const { user } = useAuth(); // user: string | null
+    const userEmail = user?.userEmail;
     const navigate = useNavigate();
 
     const modal = useModalFactory();
 
-    const [courses, setCourses] = useState<Course[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { data: queriedCourses = [] , isLoading, error} = useCoursesQuery(userEmail);
+
+    const [courses, setCourses] = useState<Course[]> ([]);
     const [sortBy, setSortBy] = useState<'course_number' | 'created' | 'last_edited'>('last_edited');
     const [sortAscending, setSortAscending] = useState(false); // false = descending (newest/Z-A first)
     
     // Get max courses from config
     const maxCourses = config.max_courses;
 
-
-    // Load existing courses on mount
     useEffect(() => {
-        (async () => {
-            try {
-                const result = await getCourses();
-                setCourses(result ?? []);
-            } catch (err) {
-                console.error('Failed to fetch courses:', err);
-                setCourses([]);
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, []);
+        setCourses(queriedCourses);
+    }, [queriedCourses]);
 
 
     // Create course handler using user ID
@@ -165,9 +156,11 @@ const CoursePage: React.FC = () => {
                                 <p>You have reached the maximum number of courses. If you would like to add another course, please delete one of the current ones.</p>
                             </div>
                         )}
-                        
-                        {loading ? (
+
+                        {isLoading ? (
                             <p>Loading...</p>
+                        ) : error ? (
+                            <p>Failed to load courses.</p>
                         ) : (
                             <div className="course-wrapper">
                                 {sortedCourses.map((course) => (

@@ -1,5 +1,5 @@
 import {updateCourseValues} from "./course/courseService";
-import config from "../config.json";
+import config from "../configs/courseConfig.json";
 
 // get_table_records
 //  - creates nested lists of rows from mytable, returned as 
@@ -123,7 +123,7 @@ const saveData = async (ref) => {
     try {
 
         if ('saveData' in config && !config['saveData']) {
-            alert('saveData is set to false in config.json; see console for more');
+            alert('saveData is set to false in courseConfig.json; see console for more');
             console.log('course id: ' + course_id);
             console.log(combined);
             return;

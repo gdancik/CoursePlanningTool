@@ -65,8 +65,8 @@ export default function MyGoogleLogin({
                 .json<GoogleLoginResponse>();
 
             setUser({
-                user: data.user,
-                name: data.name,
+                userEmail: data.user,
+                userName: data.name,
             });
 
             modal.showRedirect(
@@ -149,7 +149,7 @@ export default function MyGoogleLogin({
             {user ? (
                 <>
                     <p className="google-login-welcome">
-                        Welcome, <b>{user.name}</b> ({user.user})
+                        Welcome, <b>{user.userName}</b> ({user.userEmail})
                     </p>
 
                     {!auto_navigate && (

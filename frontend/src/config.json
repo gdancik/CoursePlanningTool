@@ -3,5 +3,5 @@
   "loadData" : true,
   "saveData" : true,
   "test_login": false,
-  "log": false
+  "log": false,
 }

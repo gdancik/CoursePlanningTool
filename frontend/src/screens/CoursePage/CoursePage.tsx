@@ -20,6 +20,7 @@ import './CoursePage.css';
 import {useModalFactory} from "../../utils/useModalFactory";
 import ModalRenderer from "../../components/Modals/ModalRenderer";
 import {useCoursesQuery} from "../../hooks/queries/useCoursesQuery";
+import {useCourseActions} from "../../hooks/course/useCourseActions";
 
 const CoursePage: React.FC = () => {
     // Always call hooks at the top-level
@@ -44,9 +45,8 @@ const CoursePage: React.FC = () => {
 
 
     // Create course handler using user ID
+    const {editCourse} = useCourseActions( {userEmail, modal,});
     const handleCreateCourse = createCourseHandler(modal, setCourses);
-
-    const handleEditCourse = createEditHandler(modal, setCourses, navigate)
 
     const handlePreviewCourse = (courseId: string, courseTitle: string) => createPreviewHandler(modal, courseId, courseTitle)();
 
@@ -167,7 +167,7 @@ const CoursePage: React.FC = () => {
                                     <CourseCard
                                         key={course.course_id}
                                         course={course}
-                                        onEdit={() => handleEditCourse(course.course_id, getCourseDisplayTitle(course))}
+                                        onEdit={() => editCourse(course.course_id, getCourseDisplayTitle(course))}
                                         onDuplicate={() => handleDuplicateCourse(course.course_id, getCourseDisplayTitle(course))}
                                         onDelete={() => handleDeleteCourse(course.course_id, getCourseDisplayTitle(course))}
                                         onDownload={() => handlePreviewCourse(course.course_id, course.course_title_syllabus)}

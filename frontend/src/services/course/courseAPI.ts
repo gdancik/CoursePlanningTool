@@ -33,9 +33,9 @@ export const getCourses = async (): Promise<Course[]> => {
 
     if (!raw) return [];
 
-    return Object.entries(raw).map(([courseId, courseData]) => ({
+    return Object.entries(raw).map(([course_id, courseData]) => ({
         ...courseData,
-        course_id: courseId,
+        course_id,
     })) as Course[];
 };
 
@@ -43,12 +43,12 @@ export const getCourses = async (): Promise<Course[]> => {
  * Fetches the full data object for a single course.
  */
 export const getCourseData = async (
-    courseId: string
+    course_id: string
 ): Promise<FormState | null> => {
     return createApiCaller<FormState>({
         url: "getCourse/",
         method: "POST",
-        data: { course_id: courseId },
+        data: { course_id},
     })();
 };
 
@@ -56,14 +56,14 @@ export const getCourseData = async (
  * Updates or creates values for a given course.
  */
 export const updateCourseValues = async (
-    courseId: string,
+    course_id: string,
     values: Partial<FormState>
 ): Promise<void | null> => {
     return createApiCaller<void>({
         url: "updateValue/",
         method: "POST",
         data: {
-            course_id: courseId,
+            course_id,
             dict_of_columns_and_vals: values,
         },
         responseType: "empty",
@@ -95,12 +95,12 @@ export const createNewCourse = async (
  * Deletes a course row.
  */
 export const deleteCourseRow = async (
-    courseId: string
+    course_id: string
 ): Promise<CourseIdResponse | null> => {
     return createApiCaller<CourseIdResponse>({
         url: "deleteCourse/",
         method: "POST",
-        data: { course_id: courseId },
+        data: { course_id},
     })();
 };
 
@@ -108,12 +108,12 @@ export const deleteCourseRow = async (
  * Duplicates a course row and returns the new course ID.
  */
 export const duplicateCourse = async (
-    courseId: string
+    course_id: string
 ): Promise<CourseIdResponse | null> => {
     return createApiCaller<CourseIdResponse>({
         url: "duplicateCourse/",
         method: "POST",
-        data: { course_id: courseId },
+        data: { course_id},
     })();
 };
 
@@ -121,12 +121,12 @@ export const duplicateCourse = async (
  * Generates a syllabus preview PDF/blob.
  */
 export const previewSyllabus = async (
-    courseId: string
+    course_id: string
 ): Promise<Blob | null> => {
     return createApiCaller<Blob>({
         url: "preview/",
         method: "POST",
-        data: { course_id: courseId },
+        data: { course_id},
         responseType: "blob",
     })();
 };

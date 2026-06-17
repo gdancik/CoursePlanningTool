@@ -45,7 +45,7 @@ const CoursePage: React.FC = () => {
 
 
     // Create course handler using user ID
-    const {editCourse} = useCourseActions( {userEmail, modal,});
+    const {editCourse, previewCourse} = useCourseActions( {userEmail, modal,});
     const handleCreateCourse = createCourseHandler(modal, setCourses);
 
     const handlePreviewCourse = (courseId: string, courseTitle: string) => createPreviewHandler(modal, courseId, courseTitle)();
@@ -170,7 +170,7 @@ const CoursePage: React.FC = () => {
                                         onEdit={() => editCourse(course.course_id, getCourseDisplayTitle(course))}
                                         onDuplicate={() => handleDuplicateCourse(course.course_id, getCourseDisplayTitle(course))}
                                         onDelete={() => handleDeleteCourse(course.course_id, getCourseDisplayTitle(course))}
-                                        onDownload={() => handlePreviewCourse(course.course_id, course.course_title_syllabus)}
+                                        onDownload={() => previewCourse(course.course_id, getCourseDisplayTitle(course))}
                                         disableDuplicate={isAtMaxCapacity}
                                     />
                                 ))}

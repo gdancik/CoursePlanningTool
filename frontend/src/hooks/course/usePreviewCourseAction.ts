@@ -25,7 +25,7 @@ export const usePreviewCourseAction = ({
     modal,
 }: usePreviewCourseActionParameters) => {
     const previewCourse =  async ( courseId: string, courseTitle: string) => {
-        modal.showRedirect ( "Generating Preview" , `Downloading syllabus for "${courseTitle}". `, "loading");
+        modal.showRedirect ( "Generating Preview" , `Downloading syllabus for "${courseTitle}".... `, "loading");
 
         try {
             const blob  = await previewSyllabus(courseId);

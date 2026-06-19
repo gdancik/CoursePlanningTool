@@ -1,164 +1,189 @@
 import { useEffect, useRef } from "react";
 import { handleNext, handleBack } from "../components/Button/ButtonLogic";
 import type { NavigateFunction } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import {useAuth} from "../context/AuthContext";
 import saveData from "../services/processData";
-import { loadCourseData } from "../utils/loadCourseData";
-import { useModalFactory } from "../utils/useModalFactory"; 
-import { saveAndExitHandler } from "../utils/handlers/SaveAndExitHandler";
-import {previewSyllabus} from "../services/TestServices/syllabusService";
-import {FormState} from "../utils/PageRenderEngine/types";
-import {useCourseActions} from "./course/useCourseActions";
-
-
-// Back and Next buttons call handleSave() by default
+import { useModalFactory } from "../utils/useModalFactory";
+import { saveCourseAndExit} from "../utils/handlers/Course/saveCourseAndExit";
+import { FormState } from "../utils/PageRenderEngine/types";
+import { useCourseActions } from "./course/useCourseActions";
+import {useCourseQuery} from "./queries/useCourseQuery";
 
 interface SyllabusWrapperLogicResult {
-  modal: ReturnType<typeof useModalFactory>;
-  containerRef: React.RefObject<HTMLDivElement | null>;
-  handleBackClick: () => void;
-  handleNextClick: () => void;
-  handleSave: () => void;
-  handleSaveAndExit: (navigate_to:string) => void;
-  handlePreviewClick: () => void;
+    modal: ReturnType<typeof useModalFactory>;
+    containerRef: React.RefObject<HTMLDivElement | null>;
+    handleBackClick: () => void;
+    handleNextClick: () => void;
+    handleSave: () => void;
+    handleSaveAndNavigate: (navigate_to: string) => void;
+    handlePreviewClick: () => void;
 }
 
+const getCourseDisplayName = (
+    courseData: FormState | undefined,
+    fallbackCourseId: string
+): string => {
+    const subject =
+        typeof courseData?.["subj_code_syllabus"] === "string"
+            ? courseData["subj_code_syllabus"]
+            : "???";
+
+    const number =
+        typeof courseData?.["crse_number_syllabus"] === "string"
+            ? courseData["crse_number_syllabus"]
+            : "???";
+
+    if (subject === "???" && number === "???") {
+        return fallbackCourseId;
+    }
+
+    return `${subject}_${number}`;
+};
+
 export function useSyllabusWrapperLogic(
-  formData: FormState,
-  setFormData: React.Dispatch<React.SetStateAction<FormState>>,
-  navigate: NavigateFunction,
-  pathname: string
+    formData: FormState,
+    setFormData: React.Dispatch<React.SetStateAction<FormState>>,
+    navigate: NavigateFunction,
+    pathname: string
 ): SyllabusWrapperLogicResult {
-  const modal = useModalFactory();                
-  const containerRef = useRef<HTMLDivElement>(null);
-  const courseID = localStorage.getItem("currentCourseId");
+    const { user } = useAuth();
+    const userEmail = user?.userEmail;
 
-//Load and data Cache
-  useEffect(() => {
-    const cachedData = localStorage.getItem("courseData");
-    
-    // currently do not load cached data
-    // eventually, we can compare time stamp for cached data and
-    // only pull from back-end if cache is stale
-    if (false || cachedData) {
-      try {
-        setFormData(JSON.parse(cachedData));
-      } catch (err) {
-        console.warn("Invalid local cache:", err);
-      }
-    }
+    const modal = useModalFactory();
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    modal.showRedirect("Loading Data", "Fetching course information...");
-    loadCourseData()
-      .then(({ formData: newData }) => {
-        setFormData(newData);
-        localStorage.setItem("courseData", JSON.stringify(newData));
-        modal.hide();
-      })
-      .catch((err: any) => {
-        console.error("Error loading course data:", err);
-        modal.showError(err.message || "Unable to load course data.");
-      });
-  }, [setFormData]);
+    const { courseId: course_id } = useParams<{ courseId: string }>();
 
-  //Saving Logic
-  const handleSave = async () => {
-    if (!containerRef.current) return;
+    const {
+        data: queriedCourseData,
+        isLoading,
+        error,
+    } = useCourseQuery(course_id);
 
-    try {
-      modal.showRedirect("Saving", "Saving your changes...");
-      await saveData(containerRef);
-      modal.showRedirect("Saved", "Your changes have been saved!", "success");
-      setTimeout(() => modal.hide(), 2500);
-    } catch (err: any) {
-      console.error("Error in saveData:", err);
-      modal.showError(err.message || "An unexpected error occurred.");
-    }
-  };
-
-  //Nav Handlers
-  const handleBackClick = (save = true) => {
-    if (save) handleSave();
-    modal.showRedirect("Loading Previous Section", "Preparing previous section...", "loading");
-    setTimeout(() => {
-      handleBack(navigate, pathname, formData, courseID || undefined);
-      modal.hide();
-    }, 800); 
-  };
-
-  const handleNextClick = async (save = true) => {
-    if (save) handleSave();
-    modal.showRedirect("Loading Next Section", "Fetching next section data...");
-    try {
-      const { formData: newData } = await loadCourseData();
-      setFormData(newData);
-      localStorage.setItem("courseData", JSON.stringify(newData));
-      setTimeout(() => {
-             handleNext(navigate, pathname, newData, courseID || undefined);
-             modal.hide(); 
-      }, 700)
-    } catch (err: any) {
-      console.error("Error loading next section:", err);
-      modal.showError(err.message || "Unable to load next section.");
-    }
-  };
-
-  return {
-    modal,                  
-    containerRef,
-    handleBackClick,
-    handleNextClick,
-    handleSave,
-    handleSaveAndExit: (navigate_to: string) =>
-      saveAndExitHandler({
-        formData,
-        containerRef: containerRef as React.RefObject<HTMLDivElement>,
+    const { previewCourse } = useCourseActions({
         modal,
-        navigate,
-        navigate_to,
-      }),
-    handlePreviewClick: async () => {
-      
-      const courseDataString = localStorage.getItem("currentCourseData");
-      let display_error = false;
-      let courseId:string = '';
-      let courseName:string = '';
+    });
 
-      if (courseDataString !== null) {
-          const courseData = JSON.parse(courseDataString); 
-          courseId = courseData['course_id'];
-          let num = courseData['crse_number_syllabus'] ?? '???'
-          let subj = courseData['subj_code_syllabus'] ?? '???'
-          courseName = subj + '_' + num
-      } else {
-        display_error = true;
-      }
-      
-      if (courseId === '' || display_error) {
-        modal.showRedirect('Error determining course', 'Please logout and back in again');
-        return;
-      }
+    useEffect(() => {
+        if (isLoading) {
+            modal.showRedirect(
+                "Loading Data",
+                "Fetching course information...",
+                "loading"
+            );
+        }
+    }, [isLoading]);
 
-      modal.showRedirect('Generating Syllabus', 'Generating syllabus for ' + courseName);
-            
-      try {
-          const blob = await previewSyllabus(courseId);
-          if (!blob) throw new Error("Empty preview response");
+    useEffect(() => {
+        if (!course_id || !queriedCourseData) return;
 
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = `syllabus_preview_${courseName}.docx`;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          modal.showRedirect('Preview Ready!',`Downloaded "${courseName}".` )
-          
-      } catch (err: any) {
-          console.error("Preview failed:", err);          
-          modal.showRedirect('Error', err.message);
-      } finally {
-          setTimeout(() => modal.hide(), 1500);
-      }
+        setFormData({
+            ...queriedCourseData,
+            course_id: course_id,
+        });
 
-    }    
-  };
+        modal.hide();
+    }, [course_id, queriedCourseData, setFormData]);
+
+    useEffect(() => {
+        if (!error) return;
+
+        console.error("Error loading course data:", error);
+        modal.showError("Unable to load course data.");
+    }, [error]);
+
+    const handleSave = async () => {
+        if (!course_id) {
+            modal.showError("No course ID found. Please reopen the course.");
+            return;
+        }
+
+        if (!containerRef.current) {
+            modal.showError("Unable to find form data.");
+            return;
+        }
+
+        try {
+            modal.showRedirect("Saving", "Saving your changes...", "loading");
+
+            await saveData(
+                containerRef as React.RefObject<HTMLDivElement>,
+                course_id
+            );
+
+            modal.showRedirect("Saved", "Your changes have been saved!", "success");
+            setTimeout(() => modal.hide(), 2500);
+        } catch (err: any) {
+            console.error("Error in saveData:", err);
+            modal.showError(err.message || "An unexpected error occurred.");
+        }
+    };
+
+    const handleBackClick = async (save = true) => {
+        if (save) {
+            await handleSave();
+        }
+
+        modal.showRedirect(
+            "Loading Previous Section",
+            "Preparing previous section...",
+            "loading"
+        );
+
+        setTimeout(() => {
+            handleBack(navigate, pathname, course_id);
+            modal.hide();
+        }, 800);
+    };
+
+    const handleNextClick = async (save = true) => {
+        if (save) {
+            await handleSave();
+        }
+
+        modal.showRedirect(
+            "Loading Next Section",
+            "Preparing next section...",
+            "loading"
+        );
+
+        setTimeout(() => {
+            handleNext(navigate, pathname, course_id);
+            modal.hide();
+        }, 700);
+    };
+
+    const handlePreviewClick = () => {
+        if (!course_id) {
+            modal.showError("No course ID found. Please reopen the course.");
+            return;
+        }
+
+        const courseName = getCourseDisplayName(
+            queriedCourseData ?? formData,
+            course_id
+        );
+
+        void previewCourse(course_id, courseName);
+    };
+
+    return {
+        modal,
+        containerRef,
+        handleBackClick,
+        handleNextClick,
+        handleSave,
+        handleSaveAndNavigate: (navigate_to: string) =>
+            saveCourseAndExit({
+                formData,
+                containerRef: containerRef as React.RefObject<HTMLDivElement>,
+                modal,
+                navigate,
+                navigate_to,
+                course_id,
+                userEmail,
+            }),
+        handlePreviewClick,
+    };
 }

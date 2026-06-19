@@ -80,15 +80,15 @@ const AppRoutes = () => {
                 <Route path="/" element={<LoginScreen />} />
                 <Route path  ="course-page" element={<CoursePage/>}/>
                 <Route path  ="course-test" element={<CoursePageTest/>}/>
-                <Route path = "overview" element={<Overview/>}/>
-                <Route path = "basic-info" element={<BasicInfo/>}/>
-                <Route path = "course-description" element={<Description/>}/>
-                <Route path = "learning-outcomes" element={<LearningOutcomes/>}/>
-                <Route path = "hips" element={<HIPS/>}/>
-                <Route path = "learning-resources" element={<LearningResources/>} />
-                <Route path = "assessment" element={<Assessment/>} />
-                <Route path = "course-schedule" element={<CourseSchedulePage/>}/>
-                <Route path = "checklist" element={<Checklist/>}/>
+                <Route path="/courses/:courseId/overview" element={<Overview />} />
+                <Route path="/courses/:courseId/basic-info" element={<BasicInfo />} />
+                <Route path="/courses/:courseId/course-description" element={<Description />} />
+                <Route path="/courses/:courseId/learning-outcomes" element={<LearningOutcomes />} />
+                <Route path="/courses/:courseId/hips" element={<HIPS />} />
+                <Route path="/courses/:courseId/learning-resources" element={<LearningResources />} />
+                <Route path="/courses/:courseId/assessment" element={<Assessment />} />
+                <Route path="/courses/:courseId/course-schedule" element={<CourseSchedulePage />} />
+                <Route path="/courses/:courseId/checklist" element={<Checklist />} />
                 <Route path = "about" element={<About/>}/>
                 <Route path = "policies" element={<Policies/>}/>
  

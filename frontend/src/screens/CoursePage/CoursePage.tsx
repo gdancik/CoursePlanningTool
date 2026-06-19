@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Course } from '../../services/course/courseService';
+import { Course } from "../../services/courseTypes";
 import StandardHeader from '../../components/Header/standardHeader';
 import ReusableButton from '../../components/Button/ReusableButton';
 import SafeIcon from '../../utils/course/ComponentWrapper';
@@ -16,62 +16,75 @@ import {useCoursesQuery} from "../../hooks/queries/useCoursesQuery";
 import {useCourseActions} from "../../hooks/course/useCourseActions";
 
 const CoursePage: React.FC = () => {
-    // Always call hooks at the top-level
-    const { user } = useAuth(); // user: string | null
+    const { user } = useAuth();
     const userEmail = user?.userEmail;
-    const navigate = useNavigate();
 
     const modal = useModalFactory();
 
-    const { data: queriedCourses = [] , isLoading, error} = useCoursesQuery(userEmail);
+    const {
+        data: queriedCourses,
+        isLoading,
+        error,
+    } = useCoursesQuery(userEmail);
 
-    const [courses, setCourses] = useState<Course[]> ([]);
-    const [sortBy, setSortBy] = useState<'course_number' | 'created' | 'last_edited'>('last_edited');
-    const [sortAscending, setSortAscending] = useState(false); // false = descending (newest/Z-A first)
-    
-    // Get max courses from config
+    const courses = queriedCourses ?? [];
+
+    const [sortBy, setSortBy] =
+        useState<'course_number' | 'created' | 'last_edited'>('last_edited');
+
+    const [sortAscending, setSortAscending] = useState(false);
+
     const maxCourses = config.max_courses;
 
-    useEffect(() => {
-        setCourses(queriedCourses);
-    }, [queriedCourses]);
-
-
-    // Create course handler using user ID
-    const {editCourse, previewCourse, deleteCourse, duplicateCourse, createCourse} = useCourseActions( {userEmail, modal,});
-
+    const {
+        editCourse,
+        previewCourse,
+        deleteCourse,
+        duplicateCourse,
+        createCourse,
+    } = useCourseActions({
+        userEmail,
+        modal,
+    });
 
     const getCourseDisplayTitle = (course: Course): string => {
         return course.course_title_syllabus || "Untitled Course";
     };
     // Sorting function
+    const getSafeTime = (value?: string): number => {
+        if (!value) return 0;
+
+        const time = new Date(value).getTime();
+
+        return Number.isNaN(time) ? 0 : time;
+    };
+
     const sortCourses = (courseList: Course[], sortKey: typeof sortBy): Course[] => {
         return [...courseList].sort((a, b) => {
             let comparison = 0;
-            
+
             switch (sortKey) {
-                case 'course_number':
+                case 'course_number': {
                     const aCode = `${a.subj_code_syllabus || ''} ${a.crse_number_syllabus || ''}`.trim();
                     const bCode = `${b.subj_code_syllabus || ''} ${b.crse_number_syllabus || ''}`.trim();
+
                     comparison = aCode.localeCompare(bCode);
                     break;
+                }
+
                 case 'created':
-                    // Assuming created_at exists, fallback to course_id as creation order
-                    const aCreated = a.created_at || a.course_id;
-                    const bCreated = b.created_at || b.course_id;
-                    comparison = new Date(bCreated).getTime() - new Date(aCreated).getTime();
+                    comparison = getSafeTime(b.created_at) - getSafeTime(a.created_at);
                     break;
+
                 case 'last_edited':
                 default:
-                    comparison = new Date(b.last_edited || '').getTime() - new Date(a.last_edited || '').getTime();
+                    comparison = getSafeTime(b.last_edited) - getSafeTime(a.last_edited);
                     break;
             }
-            
-            // Reverse if ascending
+
             return sortAscending ? -comparison : comparison;
         });
     };
-
     // Get sorted courses
     const sortedCourses = sortCourses(courses, sortBy);
     const isAtMaxCapacity = courses.length >= maxCourses;

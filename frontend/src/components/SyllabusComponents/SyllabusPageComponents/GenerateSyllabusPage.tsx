@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SyllabusLayout from "../../../SyllabusLayout/SyllabusPageHeader";
 import GeneratePageContent from "./GeneratePageContent";
-import { JsonComponent} from "../../../utils/PageRenderEngine/types";
+import { JsonComponent } from "../../../utils/PageRenderEngine/types";
 import { FormState, FormValue } from "../../../utils/PageRenderEngine/types";
 
 interface GenerateSyllabusPageProps {
@@ -11,7 +11,7 @@ interface GenerateSyllabusPageProps {
     onBack?: () => void;
     onNext?: () => void;
     onSave?: () => void;
-    onSaveAndExit?: (navigate_to: string) => void;
+    onSaveAndNavigate?: (navigateTo: string) => void | Promise<void>;
     onPreview: () => void;
     containerRef: React.RefObject<HTMLDivElement | null>;
 }
@@ -23,7 +23,7 @@ const GenerateSyllabusPage = ({
                                   onBack,
                                   onNext,
                                   onSave,
-                                  onSaveAndExit,
+                                  onSaveAndNavigate,
                                   onPreview,
                                   containerRef,
                               }: GenerateSyllabusPageProps) => {
@@ -59,16 +59,14 @@ const GenerateSyllabusPage = ({
             }}
         >
             <SyllabusLayout
-                {...{
-                    onBack,
-                    onNext,
-                    onSave,
-                    onSaveAndExit,
-                    onPreview,
-                    changesDetected,
-                    setChangesDetected,
-                    courseNumber,
-                }}
+                onBack={onBack}
+                onNext={onNext}
+                onSave={onSave}
+                onSaveAndNavigate={onSaveAndNavigate}
+                onPreview={onPreview}
+                changesDetected={changesDetected}
+                setChangesDetected={setChangesDetected}
+                courseNumber={courseNumber}
             />
 
             <GeneratePageContent

@@ -1,5 +1,5 @@
 import type { ModalFactory } from "../../utils/useModalFactory";
-import { FormState} from "../../utils/PageRenderEngine/types";
+import { FormState } from "../../utils/PageRenderEngine/types";
 import { useCreateCourseMutation } from "../mutations/useCreateCourseMutation";
 
 interface UseCreateCourseActionParams {
@@ -42,6 +42,8 @@ export const useCreateCourseAction = ({
             setTimeout(() => {
                 modal.hide();
             }, 2500);
+
+            return newCourse;
         } catch (err: unknown) {
             console.error("Course creation failed:", err);
 
@@ -51,6 +53,8 @@ export const useCreateCourseAction = ({
                     : "An unexpected error occurred.";
 
             modal.showError(message);
+
+            throw err;
         }
     };
 

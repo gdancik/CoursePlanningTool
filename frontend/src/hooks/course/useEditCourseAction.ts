@@ -37,7 +37,7 @@ export const EditCourseActions = ({
             queryClient.setQueryData(queryKeys.course(courseId), course);
             queryClient.setQueryData(queryKeys.currentCourseId(userEmail), courseId);
 
-            navigate("/overview");
+            navigate(`/courses/${courseId}/overview`);
         }catch (err:unknown) {
             console.error("Course handler EDIT failed:", err)
 

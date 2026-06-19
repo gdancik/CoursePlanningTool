@@ -1,5 +1,5 @@
 import React from "react";
-import { Course } from "../../services/course/courseService";
+import { Course} from "../../services/courseTypes";
 import './CourseCard.css';
 import { FaFileAlt } from 'react-icons/fa';
 import SafeIcon from "../../utils/course/ComponentWrapper";

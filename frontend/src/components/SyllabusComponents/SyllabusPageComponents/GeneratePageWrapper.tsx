@@ -27,7 +27,7 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({
     handleBackClick,
     handleNextClick,
     handleSave,
-    handleSaveAndExit,
+    handleSaveAndNavigate,
     handlePreviewClick,
     containerRef,
   } = useSyllabusWrapperLogic(formData, setFormData, navigate, location.pathname);
@@ -45,7 +45,7 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({
             onBack={disableBack ? undefined : handleBackClick}
             onNext={disableNext ? undefined : handleNextClick}
             onSave={handleSave}
-            onSaveAndExit={handleSaveAndExit}
+            onSaveAndNavigate={handleSaveAndNavigate}
             onPreview={handlePreviewClick}
             containerRef={containerRef}
         />

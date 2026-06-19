@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSyllabusWrapperLogic } from "../../../hooks/useSyllabusWrapperLogic";
-import { loadCourseData } from "../../../utils/loadCourseData";
 import GenerateSyllabusPage from "./GenerateSyllabusPage";
 import ModalRenderer from "../../Modals/ModalRenderer";
 import { JsonComponent} from "../../../utils/types";

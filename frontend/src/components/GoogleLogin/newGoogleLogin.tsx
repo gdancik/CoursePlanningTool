@@ -8,7 +8,7 @@ import { HTTPError } from "ky";
 import api from "../../services/apiClient";
 
 import ReusableButton from "../../components/Button/ReusableButton";
-import SafeIcon from "../../utils/ComponentWrapper";
+import SafeIcon from "../../utils/course/ComponentWrapper";
 import { FaHouse } from "react-icons/fa6";
 import { GrLogout } from "react-icons/gr";
 

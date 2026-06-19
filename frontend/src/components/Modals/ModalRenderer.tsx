@@ -6,7 +6,7 @@ import CustomModal from "./CustomModal/CustomModal";
 
 import StudentCommunicationTipsModal from "./SyllabusModals/StudentCommunicationTipsModal";
 import type { ModalFactory } from "../../utils/useModalFactory";
-import {FormState} from "../../utils/types";
+import {FormState} from "../../utils/PageRenderEngine/types";
 
 const CUSTOM_MODAL_COMPONENTS: Record<string, React.FC<any>> = {
   StudentCommunicationTips: StudentCommunicationTipsModal,

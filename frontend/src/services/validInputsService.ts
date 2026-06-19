@@ -4,7 +4,7 @@
  */
 
 import api from './apiClient';
-import {FormState} from "../utils/types";
+import {FormState} from "../utils/PageRenderEngine/types";
 
 export interface ValidInputsResponse {
     [sectionId: string]: string[] | null;

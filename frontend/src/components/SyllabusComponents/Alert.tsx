@@ -1,7 +1,7 @@
 import React from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import ParagraphFromFile from "../../components/SyllabusComponents/ParagraphFromFile";
-import SafeIcon from "../../utils/ComponentWrapper";
+import SafeIcon from "../../utils/course/ComponentWrapper";
 /**
  * 
  * @function Alert

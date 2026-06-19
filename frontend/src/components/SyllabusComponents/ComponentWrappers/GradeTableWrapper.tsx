@@ -1,7 +1,7 @@
 import React from "react";
 
-import {parseStringPairArray} from "../../../utils/typeGuards";
-import {FormState, FormValue, GradeTableComponent} from "../../../utils/types";
+import {parseStringPairArray} from "../../../utils/PageRenderEngine/typeGuards";
+import {FormState, FormValue, GradeTableComponent} from "../../../utils/PageRenderEngine/types";
 import GradeTable from "../Tables/gradeTable";
 interface GradeTableProps {
     component: GradeTableComponent;

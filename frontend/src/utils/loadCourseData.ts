@@ -1,6 +1,6 @@
 import { getCourseData } from "../services/course/courseService";
 import config from "../configs/courseConfig.json";
-import { FormState } from "./types";
+import { FormState } from "./PageRenderEngine/types";
 
 type loadCourseDataResult = {
     courseId: string | null;

@@ -6,7 +6,7 @@ import {
     ChecklistComponentType,
     FormState,
     FormValue,
-} from "../../../utils/types";
+} from "../../../utils/PageRenderEngine/types";
 
 type ChecklistComponentWrapperProps = {
     component: ChecklistComponentType;

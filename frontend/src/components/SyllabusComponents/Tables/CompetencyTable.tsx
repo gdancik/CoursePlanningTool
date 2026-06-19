@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { triggerInput } from "../../../services/triggerInput";
 import "./competencyTable.css";
-import SafeIcon from "../../../utils/ComponentWrapper";
+import SafeIcon from "../../../utils/course/ComponentWrapper";
 import { FaPlus, FaTimes } from "react-icons/fa";
 
 interface CompetencyTableProps {

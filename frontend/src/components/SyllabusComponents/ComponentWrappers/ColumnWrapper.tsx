@@ -1,6 +1,6 @@
 import React from "react";
-import {JsonRenderComponent} from "../../../utils/jsonRenderer";
-import {ColumnComponent, FormState, FormValue} from "../../../utils/types";
+import {JsonRenderComponent} from "../../../utils/PageRenderEngine/jsonRenderer";
+import {ColumnComponent, FormState, FormValue} from "../../../utils/PageRenderEngine/types";
 
 type Props = {
     component: ColumnComponent;

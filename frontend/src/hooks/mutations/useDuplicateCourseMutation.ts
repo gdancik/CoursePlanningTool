@@ -35,5 +35,3 @@ export const useDuplicateCourseMutation = () => {
         },
     })
 }
-
-    // Promise<{ course_id: string }>

@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useSyllabusWrapperLogic } from "../../../hooks/useSyllabusWrapperLogic";
 import GenerateSyllabusPage from "./GenerateSyllabusPage";
 import ModalRenderer from "../../Modals/ModalRenderer";
-import { JsonComponent} from "../../../utils/types";
-import { FormState, FormValue } from "../../../utils/types";
+import { JsonComponent} from "../../../utils/PageRenderEngine/types";
+import { FormState, FormValue } from "../../../utils/PageRenderEngine/types";
 
 interface GeneratePageWrapperProps {
   json: JsonComponent[];

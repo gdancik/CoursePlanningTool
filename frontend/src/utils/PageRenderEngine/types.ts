@@ -1,5 +1,5 @@
 /* Types.TS - All Type components currently used */
-import {CardData} from "../components/SyllabusComponents/ContentCardSet";
+import {CardData} from "../../components/SyllabusComponents/ContentCardSet";
 
 export type ComponentTypes =
     | "Accordion"

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./CourseModal.css";
 import { useNavigate } from "react-router-dom";
 import modalConfig from "../CourseModal/courseModalFields.json";
-import type {FormState} from "../../utils/types";
+import type {FormState} from "../../utils/PageRenderEngine/types";
 import type {ModalStatus} from "../../utils/useModalFactory";
 interface CourseModalProps {
   isOpen: boolean;

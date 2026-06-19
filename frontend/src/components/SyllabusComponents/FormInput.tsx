@@ -1,6 +1,6 @@
 import React from "react";
 
-import {TextAreaComponent, TextInputComponent, FormState} from "../../utils/types";
+import {TextAreaComponent, TextInputComponent, FormState} from "../../utils/PageRenderEngine/types";
 
 interface InputFormProps {
     component: TextInputComponent | TextAreaComponent;

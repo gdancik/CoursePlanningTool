@@ -1,9 +1,9 @@
 import React from "react";
 import "./SectionAccordion.css";
 import { FaAngleUp } from "react-icons/fa";
-import SafeIcon from "../../utils/ComponentWrapper";
-import {JsonRenderComponent } from "../../utils/jsonRenderer";
-import {JsonComponent, FormState,  FormValue} from "../../utils/types";
+import SafeIcon from "../../utils/course/ComponentWrapper";
+import {JsonRenderComponent } from "../../utils/PageRenderEngine/jsonRenderer";
+import {JsonComponent, FormState,  FormValue} from "../../utils/PageRenderEngine/types";
 
 interface Props {
     sectionName: string; // Name of the section (e.g., "Personal Info")

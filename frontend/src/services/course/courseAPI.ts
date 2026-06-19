@@ -1,7 +1,7 @@
 // src/services/courseApi.ts
 
 import { createApiCaller } from "../../utils/apiFactory";
-import { FormState } from "../../utils/types";
+import { FormState } from "../../utils/PageRenderEngine/types";
 import {
     Course,
     CourseIdResponse,

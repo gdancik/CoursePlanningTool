@@ -7,7 +7,7 @@
 import React, {useEffect, useState} from 'react';
 import OverviewCard from "./OverviewCard";
 import {isSectionComplete, ValidInputsResponse, fetchRequiredInputs} from "../../services/validInputsService";
-import {FormState} from "../../utils/types";
+import {FormState} from "../../utils/PageRenderEngine/types";
 
 import './Overview.css'
 

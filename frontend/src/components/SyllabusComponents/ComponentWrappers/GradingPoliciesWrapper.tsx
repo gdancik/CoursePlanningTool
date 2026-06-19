@@ -4,8 +4,8 @@ import {
     FormState,
     FormValue,
     GradingPoliciesComponent,
-} from "../../../utils/types";
-import { parseCardDataArray } from "../../../utils/typeGuards";
+} from "../../../utils/PageRenderEngine/types";
+import { parseCardDataArray } from "../../../utils/PageRenderEngine/typeGuards";
 
 type GradingPoliciesWrapperProps = {
     component: GradingPoliciesComponent;

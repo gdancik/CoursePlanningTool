@@ -7,7 +7,7 @@
  */
 
 import { NavigateFunction } from "react-router-dom";
-import {FormState} from "../../utils/types";
+import {FormState} from "../../utils/PageRenderEngine/types";
 
 // Ordered list of page routes for navigation
 const pageOrder = [

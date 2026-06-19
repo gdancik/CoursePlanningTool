@@ -10,7 +10,7 @@ import api from "../../services/axios";
 import ErrorModal from "../Modals/ErrorModal/ErrorModal";
 
 import ReusableButton from "../../components/Button/ReusableButton";
-import SafeIcon from "../../utils/ComponentWrapper";
+import SafeIcon from "../../utils/course/ComponentWrapper";
 import { FaHouse } from "react-icons/fa6";
 import { GrLogout } from "react-icons/gr";
 

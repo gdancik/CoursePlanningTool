@@ -2,7 +2,7 @@ import React from "react";
 import { Course } from "../../services/course/courseService";
 import './CourseCard.css';
 import { FaFileAlt } from 'react-icons/fa';
-import SafeIcon from "../../utils/ComponentWrapper";
+import SafeIcon from "../../utils/course/ComponentWrapper";
 import CourseButtonBar from "./CourseButtonBar";
 interface CourseCardProps {
     course: Course;

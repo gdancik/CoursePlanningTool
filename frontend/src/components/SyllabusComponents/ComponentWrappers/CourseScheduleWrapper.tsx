@@ -1,7 +1,7 @@
 import React from "react";
 import CourseSchedule from "../Tables/courseSchedule";
 
-import {CourseScheduleComponent, FormState} from "../../../utils/types";
+import {CourseScheduleComponent, FormState} from "../../../utils/PageRenderEngine/types";
 
 interface PropsForCourseSchedule {
     component: CourseScheduleComponent;

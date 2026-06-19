@@ -3,7 +3,7 @@ import {
     FormState,
     FormValue,
     CheckboxComponent,
-} from "../../../utils/types";
+} from "../../../utils/PageRenderEngine/types";
 
 type Props = {
     component: CheckboxComponent;

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import ReusableButton from "../../components/Button/ReusableButton";
 import {FaArrowLeft, FaArrowRight, FaEye, FaRegSave, FaRegWindowClose, FaSignOutAlt} from "react-icons/fa";
-import SafeIcon from "../../utils/ComponentWrapper";
+import SafeIcon from "../../utils/course/ComponentWrapper";
 import HomeButton from "../../assets/images/HomeButton.png"
 import "./AppLayoutButtons.css";
 

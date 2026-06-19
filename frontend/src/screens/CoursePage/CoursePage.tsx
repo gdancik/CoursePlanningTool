@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { createCourseHandler } from '../../utils/handlers/Course/courseHandler';
-
 import { Course } from '../../services/course/courseService';
 import StandardHeader from '../../components/Header/standardHeader';
 import ReusableButton from '../../components/Button/ReusableButton';
-import SafeIcon from '../../utils/ComponentWrapper';
+import SafeIcon from '../../utils/course/ComponentWrapper';
 import { FaPlus } from 'react-icons/fa';
 import bgImage from '../../assets/images/bookstack-bg.png'
 import CourseCard from './CourseCard';
@@ -40,9 +38,8 @@ const CoursePage: React.FC = () => {
 
 
     // Create course handler using user ID
-    const {editCourse, previewCourse, deleteCourse, duplicateCourse} = useCourseActions( {userEmail, modal,});
+    const {editCourse, previewCourse, deleteCourse, duplicateCourse, createCourse} = useCourseActions( {userEmail, modal,});
 
-    const handleCreateCourse = createCourseHandler(modal, setCourses);
 
     const getCourseDisplayTitle = (course: Course): string => {
         return course.course_title_syllabus || "Untitled Course";
@@ -169,7 +166,7 @@ const CoursePage: React.FC = () => {
                      
                     </div>                                   
                 </div>
-            <ModalRenderer modal = {modal} onCourseCreate={handleCreateCourse}/>
+            <ModalRenderer modal = {modal} onCourseCreate={createCourse}/>
         </div>
     );
 };

@@ -6,7 +6,7 @@ import { loadCourseData } from "../utils/loadCourseData";
 import { useModalFactory } from "../utils/useModalFactory"; 
 import { saveAndExitHandler } from "../utils/handlers/SaveAndExitHandler";
 import {previewSyllabus} from "../services/TestServices/syllabusService";
-import {FormState} from "../utils/types";
+import {FormState} from "../utils/PageRenderEngine/types";
 import {useCourseActions} from "./course/useCourseActions";
 
 

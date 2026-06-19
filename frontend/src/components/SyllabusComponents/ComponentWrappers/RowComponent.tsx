@@ -1,6 +1,6 @@
 import React from "react";
-import {JsonRenderComponent} from "../../../utils/jsonRenderer";
-import {FormState, FormValue, RowComponent} from "../../../utils/types";
+import {JsonRenderComponent} from "../../../utils/PageRenderEngine/jsonRenderer";
+import {FormState, FormValue, RowComponent} from "../../../utils/PageRenderEngine/types";
 
 type Props = {
     component: RowComponent;

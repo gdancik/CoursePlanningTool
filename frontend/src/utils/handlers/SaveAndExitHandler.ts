@@ -1,7 +1,7 @@
 import { createNewCourse
  } from "../../services/course/courseService";
  import saveData from "../../services/processData";
-import {FormState} from "../types";
+import {FormState} from "../PageRenderEngine/types";
 
 export async function saveAndExitHandler({
   formData,

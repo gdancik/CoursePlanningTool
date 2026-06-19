@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { FaAngleUp } from "react-icons/fa";
-import SafeIcon from "../../../utils/ComponentWrapper";
-import SyllabusFormField from "../../../components/SyllabusComponents/SyllabusFormField";
+import SafeIcon from "../../../utils/course/ComponentWrapper";
 import {CardData, ContentCardSet} from "../../../components/SyllabusComponents/ContentCardSet";
 import "./LearningOutcomesComponents.css";
 

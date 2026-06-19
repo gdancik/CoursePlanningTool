@@ -6,8 +6,8 @@ import {
     FormState,
     FormValue,
     LearningOutcomesComponent,
-} from "../../../utils/types";
-import { parseCardDataArray } from "../../../utils/typeGuards";
+} from "../../../utils/PageRenderEngine/types";
+import { parseCardDataArray } from "../../../utils/PageRenderEngine/typeGuards";
 
 type Props = {
     component: LearningOutcomesComponent;

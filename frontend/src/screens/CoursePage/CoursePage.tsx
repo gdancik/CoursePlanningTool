@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { createCourseHandler } from '../../utils/handlers/Course/courseHandler';
-import {
-    createDeleteRowHandler,
-    createEditHandler,
-    createPreviewHandler,
-    createDuplicateRowHandler
-} from "../../utils/handlers/Course/selectCourseHandler";
+
 import { Course } from '../../services/course/courseService';
 import StandardHeader from '../../components/Header/standardHeader';
 import ReusableButton from '../../components/Button/ReusableButton';
@@ -45,10 +40,9 @@ const CoursePage: React.FC = () => {
 
 
     // Create course handler using user ID
-    const {editCourse, previewCourse, deleteCourse} = useCourseActions( {userEmail, modal,});
-    const handleCreateCourse = createCourseHandler(modal, setCourses);
+    const {editCourse, previewCourse, deleteCourse, duplicateCourse} = useCourseActions( {userEmail, modal,});
 
-    const handleDuplicateCourse = createDuplicateRowHandler(modal, setCourses);
+    const handleCreateCourse = createCourseHandler(modal, setCourses);
 
     const getCourseDisplayTitle = (course: Course): string => {
         return course.course_title_syllabus || "Untitled Course";
@@ -164,7 +158,7 @@ const CoursePage: React.FC = () => {
                                         key={course.course_id}
                                         course={course}
                                         onEdit={() => editCourse(course.course_id, getCourseDisplayTitle(course))}
-                                        onDuplicate={() => handleDuplicateCourse(course.course_id, getCourseDisplayTitle(course))}
+                                        onDuplicate={() => duplicateCourse(course.course_id, getCourseDisplayTitle(course))}
                                         onDelete={() => deleteCourse(course.course_id, getCourseDisplayTitle(course))}
                                         onDownload={() => previewCourse(course.course_id, getCourseDisplayTitle(course))}
                                         disableDuplicate={isAtMaxCapacity}

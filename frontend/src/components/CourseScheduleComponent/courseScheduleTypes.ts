@@ -1,6 +1,7 @@
 /**
  * COURSE
  */
+export type NormalizedYear = number & {readonly __brand: "NormalizedYear"}
 
 export type DateFormat = "mm/dd" | "mm/dd/yyyy" | "mm/dd/yy";
 
@@ -37,6 +38,7 @@ export type CourseScheduleProps = {
 /**
  * Course Constants
  */
+
 
 export const DEFAULT_DATE_FORMAT: DateFormat = "mm/dd/yyyy";
 

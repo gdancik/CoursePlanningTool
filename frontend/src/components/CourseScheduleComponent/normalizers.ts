@@ -1,4 +1,4 @@
-import type {DayCode} from "./courseScheduleTypes";
+import type {DayCode, NormalizedYear} from "./courseScheduleTypes";
 import {DAY_CODE_ORDER} from "./courseScheduleTypes";
 
 export const coerceToTrimmedString = (value: unknown) => {
@@ -30,11 +30,24 @@ export const normalizeTerm =(value: unknown) => {
 /**
  * Normalize Years
  */
-export const normalizeYear  = (value: unknown) => {
+
+
+export const normalizeYear = (value: unknown): NormalizedYear | null => {
     const trimmed = coerceToTrimmedString(value);
     const yearMatch = trimmed.match(/\d{4}/);
-    return yearMatch ? yearMatch[0] : trimmed;
-}
+
+    if (!yearMatch) {
+        return null;
+    }
+
+    const year = Number(yearMatch[0]);
+
+    if (!Number.isInteger(year) || year < 1900 || year > 2200) {
+        return null;
+    }
+
+    return year as NormalizedYear;
+};
 
 /**
  * Normalize Days

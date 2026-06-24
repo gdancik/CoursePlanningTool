@@ -32,15 +32,23 @@ export const normalizeTerm =(value: unknown) => {
  */
 
 
-export const normalizeYear = (value: unknown): NormalizedYear | null => {
+export const normalizeYearString = (value: unknown): string => {
     const trimmed = coerceToTrimmedString(value);
     const yearMatch = trimmed.match(/\d{4}/);
 
-    if (!yearMatch) {
+    return yearMatch ? yearMatch[0] : "";
+};
+
+export const normalizeCourseYear = (
+    value: unknown
+): NormalizedYear | null => {
+    const yearString = normalizeYearString(value);
+
+    if (!yearString) {
         return null;
     }
 
-    const year = Number(yearMatch[0]);
+    const year = Number(yearString);
 
     if (!Number.isInteger(year) || year < 1900 || year > 2200) {
         return null;

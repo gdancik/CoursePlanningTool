@@ -1,6 +1,7 @@
 import {NormalizedYear, DateFormat, CourseScheduleRow} from "./courseScheduleTypes";
 import {coerceToTrimmedString} from "./normalizers";
-import {INVALID_DATE_TIMESTMP} from "./factories";
+export const INVALID_DATE_TIMESTMP = Number.POSITIVE_INFINITY;
+
 
 type DateParser = {
     name: string;

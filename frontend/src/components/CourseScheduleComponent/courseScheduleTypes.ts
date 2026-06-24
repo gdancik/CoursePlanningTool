@@ -1,15 +1,19 @@
+/**
+ * COURSE
+ */
+
 export type DateFormat = "mm/dd" | "mm/dd/yyyy" | "mm/dd/yy";
 
-export type DayCodes = "M" | "T" | "W" | "R" | "F" | "S";
+export type DayCode = "M" | "T" | "W" | "R" | "F" | "S" | "U";
 
-export type ThursdayOption = "R" | "Th";
+export type ThursdayDisplayOption = "R" | "Th";
 
-export type DayDisplayFormats = "codes" | "shortNames" | "longNames";
+export type DayDisplayFormat = "codes" | "shortNames" | "longNames";
 
 export type DayDisplayOption = {
-    format: DayDisplayFormats;
-    thursdayOption: ThursdayOption;
-}
+    format: DayDisplayFormat;
+    thursdayOption: ThursdayDisplayOption;
+};
 
 export type CourseScheduleRow = {
     id: string;
@@ -18,8 +22,8 @@ export type CourseScheduleRow = {
     unit: string;
     learningOutcomes: string;
     readingAssignments: string;
-    dateTimeStamp: number;
-    sortDateTimeStamp: number;
+    dateTimestamp: number;
+    sortableDateTimestamp: number;
 };
 
 export type CourseScheduleProps = {
@@ -29,3 +33,42 @@ export type CourseScheduleProps = {
     days?: unknown;
     data?: unknown;
 };
+
+/**
+ * Course Constants
+ */
+
+export const DEFAULT_DATE_FORMAT: DateFormat = "mm/dd/yyyy";
+
+export const COURSE_SCHEDULE_COLUMNS = [
+    "Date",
+    "Day",
+    "Unit and Theme/Topic",
+    "Learning Outcomes Addressed",
+    "Reading/Assignments Due",
+] as const;
+
+export type CourseScheduleColumn = (typeof COURSE_SCHEDULE_COLUMNS)[number];
+
+export const DAY_CODE_ORDER: DayCode[] = ["M", "T", "W", "R", "F", "S", "U"];
+
+export const DAY_LONG_NAMES: Record<DayCode, string> = {
+    M: "Monday",
+    T: "Tuesday",
+    W: "Wednesday",
+    R: "Thursday",
+    F: "Friday",
+    S: "Saturday",
+    U: "Sunday",
+};
+
+export const DAY_SHORT_NAMES: Record<DayCode, string> = {
+    M: "Mon",
+    T: "Tue",
+    W: "Wed",
+    R: "Thu",
+    F: "Fri",
+    S: "Sat",
+    U: "Sun",
+};
+

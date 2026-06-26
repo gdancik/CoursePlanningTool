@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../SyllabusComponents/Tables/gradeTable.css";
 import "../Button/ReusableButton.css";
 
-import { triggerInput} from "../../services/triggerInput";
+import { triggerInput } from "../../services/triggerInput";
 import apiClient from "../../services/apiClient";
 import config from "../../configs/courseConfig.json"
 

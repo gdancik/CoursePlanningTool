@@ -1,5 +1,5 @@
 import React from "react";
-import CourseSchedule from "../../CourseScheduleComponent/CourseSchedule";
+import CourseSchedule from "../../CourseScheduleComponent/CourseSchedule/CourseSchedule";
 
 import {CourseScheduleComponent, FormState} from "../../../utils/PageRenderEngine/types";
 

@@ -12,7 +12,7 @@ import Logout from '../screens/testAPI/Logout'
 import Hello from '../screens/testAPI/Hello';
 
 import {AutoPostRequest, AutoTestLogin} from "../components/API_tester";
-import CourseSchedule from "../components/CourseScheduleComponent/CourseSchedule";
+import CourseSchedule from "../components/CourseScheduleComponent/CourseSchedule/CourseSchedule";
 
 //Application Endpoints
 import Overview from "../screens/SyllabusView/Overview/Overview";

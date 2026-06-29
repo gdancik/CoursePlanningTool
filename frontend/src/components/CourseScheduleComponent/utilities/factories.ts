@@ -1,4 +1,4 @@
-import {CourseScheduleRow} from "./courseScheduleTypes";
+import {CourseScheduleRow} from "../types/courseScheduleTypes";
 import {INVALID_DATE_TIMESTMP} from "./dateUtils";
 export const createScheduleRowId = (): string => crypto.randomUUID();
 

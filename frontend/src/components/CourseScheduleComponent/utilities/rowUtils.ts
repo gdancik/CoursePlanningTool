@@ -1,4 +1,4 @@
-import type { CourseScheduleRow } from "./courseScheduleTypes";
+import type { CourseScheduleRow } from "../types/courseScheduleTypes";
 import { parseSortableRowDateValue } from "./dateUtils";
 
 const getSortableTimestamp = (

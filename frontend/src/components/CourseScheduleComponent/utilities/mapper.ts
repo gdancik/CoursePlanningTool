@@ -1,4 +1,4 @@
-import type { CourseScheduleRow } from "./courseScheduleTypes";
+import type { CourseScheduleRow } from "../types/courseScheduleTypes";
 import { createEmptyScheduleRow } from "./factories";
 import { withParsedDateMetadata } from "./dateUtils";
 

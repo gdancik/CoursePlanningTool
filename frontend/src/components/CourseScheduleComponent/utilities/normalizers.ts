@@ -1,5 +1,5 @@
-import type {DayCode, NormalizedYear} from "./courseScheduleTypes";
-import {DAY_CODE_ORDER} from "./courseScheduleTypes";
+import type {DayCode, NormalizedYear} from "../types/courseScheduleTypes";
+import {DAY_CODE_ORDER} from "../types/courseScheduleTypes";
 
 export const coerceToTrimmedString = (value: unknown) => {
     if (value === undefined || value === null) {

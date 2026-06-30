@@ -36,6 +36,10 @@ function CourseSchedule({
                 clearSchedule={schedule.clearSchedule}
                 sortScheduleByDate={schedule.sortScheduleByDate}
                 changeDateFormat={schedule.changeDateFormat}
+                dayDisplayOption={schedule.dayDisplayOption}
+                useOneLetterDays={schedule.useOneLetterDays}
+                changeUseOneLetterDays={schedule.changeUseOneLetterDays}
+                changeThursdayDisplayOption={schedule.changeThursdayDisplayOption}
             />
 
             <CourseScheduleTable

@@ -9,6 +9,8 @@ import { saveCourseAndExit} from "../utils/handlers/Course/saveCourseAndExit";
 import { FormState } from "../utils/PageRenderEngine/types";
 import { useCourseActions } from "./course/useCourseActions";
 import {useCourseQuery} from "./queries/useCourseQuery";
+import {queryKeys} from "../query/queryKeys";
+import {queryClient} from "../query/queryClient";
 
 interface SyllabusWrapperLogicResult {
     modal: ReturnType<typeof useModalFactory>;
@@ -111,6 +113,12 @@ export function useSyllabusWrapperLogic(
                 containerRef as React.RefObject<HTMLDivElement>,
                 course_id
             );
+            /**
+             * NOTE: THIS IS A BANDAID FIX FOR PRODUCTION. THE PROCESS DATA NEEDS TO BE REFACTORED TO COMPLETE THIS - Audrey Windrow
+             */
+            await queryClient.invalidateQueries({
+                queryKey: queryKeys.course(course_id)
+            });
 
             modal.showRedirect("Saved", "Your changes have been saved!", "success");
             setTimeout(() => modal.hide(), 2500);

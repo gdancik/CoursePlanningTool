@@ -6,6 +6,8 @@ import type {
     CourseScheduleProps,
     CourseScheduleRow,
     DateFormat,
+    DayDisplayOption,
+    ThursdayDisplayOption,
 } from "../types/courseScheduleTypes";
 
 import {
@@ -24,7 +26,9 @@ import { backendScheduleToRows } from "../utilities/mapper";
 
 import {
     clearScheduleRows,
-    deleteRowAtIndex, formatScheduleRowsByDate,
+    deleteRowAtIndex,
+    formatScheduleRowsByDate,
+    formatScheduleRowsByDayDisplay,
     insertEmptyRowAtIndex,
     normalizeDateFieldAtIndex,
     sortScheduleRowsByDate,
@@ -65,6 +69,44 @@ export const useCourseSchedule = ({
 
     const [dateFormat, setDateFormat] =
         useState<DateFormat>("mm/dd/yyyy");
+
+    const [dayDisplayOption, setDayDisplayOption] =
+        useState<DayDisplayOption>({
+            format: "longNames",
+            thursdayOption: "R",
+        });
+
+    const applyDayDisplayOption = (
+        nextDayDisplayOption: DayDisplayOption
+    ): void => {
+        setDayDisplayOption(nextDayDisplayOption);
+
+        setScheduleRows((currentRows) =>
+            formatScheduleRowsByDayDisplay(
+                currentRows,
+                nextDayDisplayOption
+            )
+        );
+
+        triggerInput();
+    };
+
+
+    const changeUseOneLetterDays = (useOneLetterDays: boolean): void => {
+        applyDayDisplayOption({
+            ...dayDisplayOption,
+            format: useOneLetterDays ? "codes" : "longNames",
+        });
+    };
+
+    const changeThursdayDisplayOption = (
+        thursdayOption: ThursdayDisplayOption
+    ): void => {
+        applyDayDisplayOption({
+            ...dayDisplayOption,
+            thursdayOption,
+        });
+    };
 
     const changeDateFormat = (nextDateFormat: DateFormat): void => {
         setDateFormat(nextDateFormat);
@@ -178,6 +220,11 @@ export const useCourseSchedule = ({
         normalizedYear,
         normalizedDays,
         dateParsingYear,
+
+        dayDisplayOption,
+        useOneLetterDays: dayDisplayOption.format === "codes",
+        changeUseOneLetterDays,
+        changeThursdayDisplayOption,
 
         missingScheduleInformation,
         datesSorted,

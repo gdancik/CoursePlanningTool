@@ -1,7 +1,8 @@
 import {createEmptyScheduleRow} from "../factories";
-import {CourseScheduleRow, DateFormat} from "../../types/courseScheduleTypes";
+import {CourseScheduleRow, DateFormat, DayDisplayOption} from "../../types/courseScheduleTypes";
 import {formatDate, INVALID_DATE_TIMESTMP, parseSortableRowDateValue, parseStandaloneDateValue} from "../dateUtils";
 import {sortRowsByDate} from "../rowUtils";
+import {formatDayCodes, formatDayValue} from "../normalizers";
 
 export const insertEmptyRowAtIndex = (
     rows: CourseScheduleRow[],
@@ -105,3 +106,12 @@ export const formatScheduleRowsByDate = (
             sortableDateTimestamp: timestamp,
         }
     })
+
+export const formatScheduleRowsByDayDisplay = (
+    rows: CourseScheduleRow[],
+    dayDisplayOption: DayDisplayOption
+): CourseScheduleRow[] =>
+    rows.map((row) => ({
+        ...row,
+        day: formatDayValue(row.day, dayDisplayOption),
+    }));

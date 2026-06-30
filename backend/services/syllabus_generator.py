@@ -388,14 +388,15 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
         Title(str): The title of the syllabus document, which is a combination of course information.
     """
 
-    def table_placeholder_replacement(doc, paragraph, placeholder_text, table_list):
-        if placeholder_text in paragraph.text:
-            table = add_styled_table(doc, table_list)
-            paragraph.clear()
-            paragraph._p.addnext(table._tbl)
-            return True
-        return False
-    
+
+def table_placeholder_replacement(doc, paragraph, placeholder_text, table_list):
+    if placeholder_text in paragraph.text:
+        table = add_styled_table(doc, table_list)
+        paragraph.clear()
+        paragraph._p.addnext(table._tbl)
+        return True
+
+    return False
     # Retrieve course data using fsEditor
     fs = fse.fsEditor(sheet_name)
     column_names = cp.columns

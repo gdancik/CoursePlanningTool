@@ -1,5 +1,5 @@
 import React from "react"
-import {InformationTextComponent} from "../../utils/types";
+import {InformationTextComponent} from "../../utils/PageRenderEngine/types";
 
 interface InfoTextCompProps {
     component: InformationTextComponent;

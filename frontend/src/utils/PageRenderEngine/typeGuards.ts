@@ -1,4 +1,4 @@
-import {CardData} from "../components/SyllabusComponents/ContentCardSet";
+import {CardData} from "../../components/SyllabusComponents/ContentCardSet";
 
 
 /*

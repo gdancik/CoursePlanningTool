@@ -1,6 +1,6 @@
 import React from "react";
 import CheckboxGroup from "../CheckboxGroup";
-import {CheckboxGroupComponent, FormState, FormValue} from "../../../utils/types";
+import {CheckboxGroupComponent, FormState, FormValue} from "../../../utils/PageRenderEngine/types";
 
 type Props = {
     component: CheckboxGroupComponent;

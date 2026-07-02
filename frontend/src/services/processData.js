@@ -1,5 +1,5 @@
-import {updateCourseValues} from "./course/courseService";
-import config from "../config.json";
+import {updateCourseValues} from "./course/courseAPI";
+import config from "../configs/courseConfig.json";
 
 // get_table_records
 //  - creates nested lists of rows from mytable, returned as 
@@ -58,20 +58,27 @@ function get_checkboxes(x) {
 }
 
 // ref is a useRef to the relevant component
-const saveData = async (ref) => {
+// ref is a useRef to the relevant component
+const saveData = async (ref, course_id, formData = {}) => {
     if (!ref.current) {
-        console.error("saveData: ref.current is null.");
-        return;
+        throw new Error("saveData: ref.current is null.");
+    }
+
+    if (!course_id) {
+        throw new Error("No course_id provided — cannot save.");
     }
 
     const res_text = [...ref.current.querySelectorAll('input[type="text"],textarea:not(:is(table *))')]
-        .filter(x => x.id && x.id.trim() !== "")  // only include elements with an ID    
+        .filter(x => x.id && x.id.trim() !== "")
         .map(x => ({ [x.id]: x.value }));
+
     const res_select = [...ref.current.querySelectorAll("select")]
         .filter(x => x.id && x.id.trim() !== "")
         .map(x => ({ [x.id]: x.value }));
+
     const res_list = [...ref.current.querySelectorAll('table[id$="_list"]')]
-        .map(x => get_table_records(x, false));
+        .map(x => get_table_records(x));
+
     const res_checkboxes = [...ref.current.querySelectorAll('div[id$="_checkboxes"]')]
         .map(x => get_checkboxes(x));
 
@@ -79,60 +86,44 @@ const saveData = async (ref) => {
         .map(x => {
             let val = x.value;
 
-            try{
+            try {
                 const parsed = JSON.parse(val);
                 return { [x.id]: parsed };
             } catch {
                 return { [x.id]: val };
             }
-         });
+        });
 
     const res_json = [...ref.current.querySelectorAll('div[id$="_json"]')]
         .map(x => {
-            return { [x.id] : processCard(x)};
+            return { [x.id]: processCard(x) };
         });
-            
-    const combined = Object.assign({}, 
-        ...res_text, 
-        ...res_select, 
-        ...res_list, 
-        ...res_checkboxes, 
+
+    const combined = Object.assign(
+        {},
+        ...res_text,
+        ...res_select,
+        ...res_list,
+        ...res_checkboxes,
         ...res_hidden,
-        ...res_json);
-        
+        ...res_json,
+    );
+
     if (config.log) {
         console.log("Payload to save:", combined);
     }
 
-    const saved = localStorage.getItem("currentCourseData");
-    let course_id = null;
-    if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            course_id = parsed.course_id;
-        } catch {
-            console.error("Failed to parse currentCourseData");
-        }
-    }
-
-    if (!course_id) {
-        console.error("No course_id found — cannot save.");
-        return;
-    }
-
     try {
-
         if ('saveData' in config && !config['saveData']) {
-            alert('saveData is set to false in config.json; see console for more');
+            alert('saveData is set to false in courseConfig.json; see console for more');
             console.log('course id: ' + course_id);
             console.log(combined);
             return;
         }
 
         await updateCourseValues(course_id, combined);
-        //console.log(" Data saved successfully via updateCourseValues");
     } catch (error) {
-        console.error(" Failed to save data:", error);
+        console.error("Failed to save data:", error);
         throw error;
     }
 };

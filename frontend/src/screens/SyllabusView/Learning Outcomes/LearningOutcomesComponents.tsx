@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { FaAngleUp } from "react-icons/fa";
-import SafeIcon from "../../../utils/ComponentWrapper";
-import SyllabusFormField from "../../../components/SyllabusComponents/SyllabusFormField";
+import SafeIcon from "../../../utils/course/ComponentWrapper";
 import {CardData, ContentCardSet} from "../../../components/SyllabusComponents/ContentCardSet";
 import "./LearningOutcomesComponents.css";
 
@@ -9,12 +8,15 @@ import AdditionalCompetenciesImage from "../../../assets/images/AdditionalCompet
 import KnowledgeTable from "../../../assets/images/Knowledge_table.png";
 import SkillsTable from "../../../assets/images/Skill_table.png";
 import AttitudeTable from "../../../assets/images/Attitudes_Table.png";
+import {getImageSource} from "../../../components/SyllabusComponents/Image";
 
 export interface CoreCompetencyInterface {
   icon: string;
   alt: string;
   content: string;
-}; 
+};
+
+
 
 export const FiveCoreCompetencies = ( { five }: { five: CoreCompetencyInterface[] }) => {
         return (
@@ -25,7 +27,7 @@ export const FiveCoreCompetencies = ( { five }: { five: CoreCompetencyInterface[
                 {five.map( (x) => {
                     return (                        
                             <div  key = {x.alt} className="core-competency-card">
-                                <img src={x.icon} alt={x.alt} className="core-icon"/>
+                                <img src={getImageSource(x.icon)} alt={x.alt} className="core-icon"/>
                                 <p>{x.content}</p>
                             </div>                    
                 

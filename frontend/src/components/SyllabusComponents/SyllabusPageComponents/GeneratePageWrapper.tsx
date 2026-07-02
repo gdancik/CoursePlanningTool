@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSyllabusWrapperLogic } from "../../../hooks/useSyllabusWrapperLogic";
-import { loadCourseData } from "../../../utils/loadCourseData";
 import GenerateSyllabusPage from "./GenerateSyllabusPage";
 import ModalRenderer from "../../Modals/ModalRenderer";
-import { JsonComponent} from "../../../utils/types";
-import { FormState, FormValue } from "../../../utils/types";
+import { JsonComponent} from "../../../utils/PageRenderEngine/types";
+import { FormState, FormValue } from "../../../utils/PageRenderEngine/types";
 
 interface GeneratePageWrapperProps {
   json: JsonComponent[];
@@ -28,7 +27,7 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({
     handleBackClick,
     handleNextClick,
     handleSave,
-    handleSaveAndExit,
+    handleSaveAndNavigate,
     handlePreviewClick,
     containerRef,
   } = useSyllabusWrapperLogic(formData, setFormData, navigate, location.pathname);
@@ -46,7 +45,7 @@ const GeneratePageWrapper: React.FC<GeneratePageWrapperProps> = ({
             onBack={disableBack ? undefined : handleBackClick}
             onNext={disableNext ? undefined : handleNextClick}
             onSave={handleSave}
-            onSaveAndExit={handleSaveAndExit}
+            onSaveAndNavigate={handleSaveAndNavigate}
             onPreview={handlePreviewClick}
             containerRef={containerRef}
         />

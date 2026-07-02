@@ -8,8 +8,8 @@ import {
     CompetencyTable2Component,
     FormState,
     FormValue,
-} from "../../../utils/types";
-import { parseStringMatrix } from "../../../utils/typeGuards";
+} from "../../../utils/PageRenderEngine/types";
+import { parseStringMatrix } from "../../../utils/PageRenderEngine/typeGuards";
 
 type CompetencyTableComponent =
     | CompetencyTable1Component

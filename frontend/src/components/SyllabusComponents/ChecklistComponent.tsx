@@ -1,13 +1,13 @@
 import {useNavigate, useLocation} from "react-router-dom";
 import {useState, useEffect} from "react";
 import { FaAngleUp, FaEdit } from "react-icons/fa";
-import SafeIcon from "../../utils/ComponentWrapper";
+import SafeIcon from "../../utils/course/ComponentWrapper";
 import {isSectionComplete, ValidInputsResponse, fetchRequiredInputs} from "../../services/validInputsService";
 import Information from "../../components/SyllabusComponents/Information";
 import {CardData, ContentCardSet} from "../../components/SyllabusComponents/ContentCardSet"
 
 import "./Checklist.css";
-import {FormState} from "../../utils/types";
+import {FormState} from "../../utils/PageRenderEngine/types";
 
 interface ChecklistItem {
     id: string;

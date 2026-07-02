@@ -1,6 +1,6 @@
 import React from "react";
 
-import {SelectComponent, FormState} from "../../utils/types";
+import {SelectComponent, FormState} from "../../utils/PageRenderEngine/types";
 
 interface DropDownComponentProps {
     component: SelectComponent;

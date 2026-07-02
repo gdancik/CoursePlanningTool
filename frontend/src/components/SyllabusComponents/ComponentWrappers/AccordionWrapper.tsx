@@ -1,6 +1,6 @@
 import SectionAccordion from "../SectionAccordion";
-import {JsonRenderComponent} from "../../../utils/jsonRenderer";
-import {AccordionComponent, FormState, FormValue} from "../../../utils/types";
+import {JsonRenderComponent} from "../../../utils/PageRenderEngine/jsonRenderer";
+import {AccordionComponent, FormState, FormValue} from "../../../utils/PageRenderEngine/types";
 
 type Props = {
     component: AccordionComponent;

@@ -1,99 +1,90 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { createCourseHandler } from '../../utils/handlers/courseHandler';
-import {
-    createDeleteRowHandler,
-    createEditHandler,
-    createPreviewHandler,
-    createDuplicateRowHandler
-} from "../../utils/handlers/courseButtonHandler";
-import { getCourses, Course } from '../../services/course/courseService';
+import { Course } from "../../services/courseTypes";
 import StandardHeader from '../../components/Header/standardHeader';
 import ReusableButton from '../../components/Button/ReusableButton';
-import SafeIcon from '../../utils/ComponentWrapper';
+import SafeIcon from '../../utils/course/ComponentWrapper';
 import { FaPlus } from 'react-icons/fa';
 import bgImage from '../../assets/images/bookstack-bg.png'
 import CourseCard from './CourseCard';
 import { Navigate, useNavigate } from 'react-router-dom';
-import config from '../../config.json';
+import config from '../../configs/courseConfig.json';
 import './CoursePage.css';
 import {useModalFactory} from "../../utils/useModalFactory";
 import ModalRenderer from "../../components/Modals/ModalRenderer";
+import {useCoursesQuery} from "../../hooks/queries/useCoursesQuery";
+import {useCourseActions} from "../../hooks/course/useCourseActions";
 
 const CoursePage: React.FC = () => {
-    // Always call hooks at the top-level
-    const { user } = useAuth(); // user: string | null
-    const navigate = useNavigate();
+    const { user } = useAuth();
+    const userEmail = user?.userEmail;
 
     const modal = useModalFactory();
 
-    const [courses, setCourses] = useState<Course[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [sortBy, setSortBy] = useState<'course_number' | 'created' | 'last_edited'>('last_edited');
-    const [sortAscending, setSortAscending] = useState(false); // false = descending (newest/Z-A first)
-    
-    // Get max courses from config
+    const {
+        data: queriedCourses,
+        isLoading,
+        error,
+    } = useCoursesQuery(userEmail);
+
+    const courses = queriedCourses ?? [];
+
+    const [sortBy, setSortBy] =
+        useState<'course_number' | 'created' | 'last_edited'>('last_edited');
+
+    const [sortAscending, setSortAscending] = useState(false);
+
     const maxCourses = config.max_courses;
 
-
-    // Load existing courses on mount
-    useEffect(() => {
-        (async () => {
-            try {
-                const result = await getCourses();
-                setCourses(result ?? []);
-            } catch (err) {
-                console.error('Failed to fetch courses:', err);
-                setCourses([]);
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, []);
-
-
-    // Create course handler using user ID
-    const handleCreateCourse = createCourseHandler(modal, setCourses);
-
-    const handleEditCourse = createEditHandler(modal, setCourses, navigate)
-
-    const handlePreviewCourse = (courseId: string, courseTitle: string) => createPreviewHandler(modal, courseId, courseTitle)();
-
-    const handleDeleteCourse = createDeleteRowHandler(modal, setCourses);
-
-    const handleDuplicateCourse = createDuplicateRowHandler(modal, setCourses);
+    const {
+        editCourse,
+        previewCourse,
+        deleteCourse,
+        duplicateCourse,
+        createCourse,
+    } = useCourseActions({
+        userEmail,
+        modal,
+    });
 
     const getCourseDisplayTitle = (course: Course): string => {
         return course.course_title_syllabus || "Untitled Course";
     };
     // Sorting function
+    const getSafeTime = (value?: string): number => {
+        if (!value) return 0;
+
+        const time = new Date(value).getTime();
+
+        return Number.isNaN(time) ? 0 : time;
+    };
+
     const sortCourses = (courseList: Course[], sortKey: typeof sortBy): Course[] => {
         return [...courseList].sort((a, b) => {
             let comparison = 0;
-            
+
             switch (sortKey) {
-                case 'course_number':
+                case 'course_number': {
                     const aCode = `${a.subj_code_syllabus || ''} ${a.crse_number_syllabus || ''}`.trim();
                     const bCode = `${b.subj_code_syllabus || ''} ${b.crse_number_syllabus || ''}`.trim();
+
                     comparison = aCode.localeCompare(bCode);
                     break;
+                }
+
                 case 'created':
-                    // Assuming created_at exists, fallback to course_id as creation order
-                    const aCreated = a.created_at || a.course_id;
-                    const bCreated = b.created_at || b.course_id;
-                    comparison = new Date(bCreated).getTime() - new Date(aCreated).getTime();
+                    comparison = getSafeTime(b.created_at) - getSafeTime(a.created_at);
                     break;
+
                 case 'last_edited':
                 default:
-                    comparison = new Date(b.last_edited || '').getTime() - new Date(a.last_edited || '').getTime();
+                    comparison = getSafeTime(b.last_edited) - getSafeTime(a.last_edited);
                     break;
             }
-            
-            // Reverse if ascending
+
             return sortAscending ? -comparison : comparison;
         });
     };
-
     // Get sorted courses
     const sortedCourses = sortCourses(courses, sortBy);
     const isAtMaxCapacity = courses.length >= maxCourses;
@@ -165,19 +156,21 @@ const CoursePage: React.FC = () => {
                                 <p>You have reached the maximum number of courses. If you would like to add another course, please delete one of the current ones.</p>
                             </div>
                         )}
-                        
-                        {loading ? (
+
+                        {isLoading ? (
                             <p>Loading...</p>
+                        ) : error ? (
+                            <p>Failed to load courses.</p>
                         ) : (
                             <div className="course-wrapper">
                                 {sortedCourses.map((course) => (
                                     <CourseCard
                                         key={course.course_id}
                                         course={course}
-                                        onEdit={() => handleEditCourse(course.course_id, getCourseDisplayTitle(course))}
-                                        onDuplicate={() => handleDuplicateCourse(course.course_id, getCourseDisplayTitle(course))}
-                                        onDelete={() => handleDeleteCourse(course.course_id, getCourseDisplayTitle(course))}
-                                        onDownload={() => handlePreviewCourse(course.course_id, course.course_title_syllabus)}
+                                        onEdit={() => editCourse(course.course_id, getCourseDisplayTitle(course))}
+                                        onDuplicate={() => duplicateCourse(course.course_id, getCourseDisplayTitle(course))}
+                                        onDelete={() => deleteCourse(course.course_id, getCourseDisplayTitle(course))}
+                                        onDownload={() => previewCourse(course.course_id, getCourseDisplayTitle(course))}
                                         disableDuplicate={isAtMaxCapacity}
                                     />
                                 ))}
@@ -186,7 +179,7 @@ const CoursePage: React.FC = () => {
                      
                     </div>                                   
                 </div>
-            <ModalRenderer modal = {modal} onCourseCreate={handleCreateCourse}/>
+            <ModalRenderer modal = {modal} onCourseCreate={createCourse}/>
         </div>
     );
 };

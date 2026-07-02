@@ -1,6 +1,6 @@
 import React from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
-import SafeIcon from "../../../utils/ComponentWrapper";
+import SafeIcon from "../../../utils/course/ComponentWrapper";
 
 interface CustomModalProps {
     visible: boolean;

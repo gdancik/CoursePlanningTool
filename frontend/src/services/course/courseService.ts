@@ -1,5 +1,5 @@
 import { createApiCaller } from "../../utils/apiFactory";
-import { FormState, FormValue } from "../../utils/types";
+import { FormState, FormValue } from "../../utils/PageRenderEngine/types";
 
 export interface Course {
     course_id: string;

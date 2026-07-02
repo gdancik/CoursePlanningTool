@@ -7,11 +7,11 @@
 import React, {useEffect, useState} from 'react';
 import OverviewCard from "./OverviewCard";
 import {isSectionComplete, ValidInputsResponse, fetchRequiredInputs} from "../../services/validInputsService";
-import {FormState} from "../../utils/types";
+import {FormState} from "../../utils/PageRenderEngine/types";
 
 import './Overview.css'
 
-import config from '../../config.json';
+import config from '../../configs/courseConfig.json';
 
 import SyllabusGreen from "../../assets/images/SyllabusGreen.png"
 import SyllabusGrey from "../../assets/images/SyllabusGrey.png"

@@ -8,7 +8,7 @@ import { HTTPError } from "ky";
 import api from "../../services/apiClient";
 
 import ReusableButton from "../../components/Button/ReusableButton";
-import SafeIcon from "../../utils/ComponentWrapper";
+import SafeIcon from "../../utils/course/ComponentWrapper";
 import { FaHouse } from "react-icons/fa6";
 import { GrLogout } from "react-icons/gr";
 
@@ -65,8 +65,8 @@ export default function MyGoogleLogin({
                 .json<GoogleLoginResponse>();
 
             setUser({
-                user: data.user,
-                name: data.name,
+                userEmail: data.user,
+                userName: data.name,
             });
 
             modal.showRedirect(
@@ -149,7 +149,7 @@ export default function MyGoogleLogin({
             {user ? (
                 <>
                     <p className="google-login-welcome">
-                        Welcome, <b>{user.name}</b> ({user.user})
+                        Welcome, <b>{user.userName}</b> ({user.userEmail})
                     </p>
 
                     {!auto_navigate && (

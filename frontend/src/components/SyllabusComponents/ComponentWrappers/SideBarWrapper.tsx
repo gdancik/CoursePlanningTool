@@ -1,12 +1,12 @@
 import React from "react";
 
 import SidebarLayout from "../../SidebarLayout";
-import { JsonRenderComponent } from "../../../utils/jsonRenderer";
+import { JsonRenderComponent } from "../../../utils/PageRenderEngine/jsonRenderer";
 import {
     FormState,
     FormValue,
     SidebarLayoutComponent,
-} from "../../../utils/types";
+} from "../../../utils/PageRenderEngine/types";
 
 interface SidebarLayoutWrapperProps {
     component: SidebarLayoutComponent;

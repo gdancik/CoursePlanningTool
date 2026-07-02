@@ -3,7 +3,7 @@ import "./gradeTable.css";
 import "../../../components/Button/ReusableButton.css"
 import {triggerInput} from "../../../services/triggerInput"
 import api from "../../../services/apiClient";
-import config from "../../../config.json";
+import config from "../../../configs/courseConfig.json";
 
 //import axios from "axios";
 //import "./gradeTable.css";

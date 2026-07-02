@@ -2,34 +2,34 @@ import React from "react";
 
 import {
     AdditionalCompetencies,
-} from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
-import {BloomsTaxonomy} from "../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy";
+} from "../../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
+import {BloomsTaxonomy} from "../../screens/SyllabusView/Learning Outcomes/BloomsTaxonomy";
 
-import OverviewComponent from "../components/SyllabusComponents/OverviewComponent";
-import ActionButton from "../components/SyllabusComponents/ActionButton";
-import Alert from "../components/SyllabusComponents/Alert";
-import Image from "../components/SyllabusComponents/Image";
-import Information from "../components/SyllabusComponents/Information";
-import ParagraphFromFile from "../components/SyllabusComponents/ParagraphFromFile";
-import {InformationTextComp} from "../components/SyllabusComponents/InformationTextComponent";
+import OverviewComponent from "../../components/SyllabusComponents/OverviewComponent";
+import ActionButton from "../../components/SyllabusComponents/ActionButton";
+import Alert from "../../components/SyllabusComponents/Alert";
+import Image from "../../components/SyllabusComponents/Image";
+import Information from "../../components/SyllabusComponents/Information";
+import ParagraphFromFile from "../../components/SyllabusComponents/ParagraphFromFile";
+import {InformationTextComp} from "../../components/SyllabusComponents/InformationTextComponent";
 
-import AccordionWrapper from "../components/SyllabusComponents/ComponentWrappers/AccordionWrapper";
-import ColumnWrapper from "../components/SyllabusComponents/ComponentWrappers/ColumnWrapper";
-import RowWrapper from "../components/SyllabusComponents/ComponentWrappers/RowWrapper";
-import CheckboxGroupWrapper from "../components/SyllabusComponents/ComponentWrappers/CheckboxGroupWrapper";
-import CheckboxWrapper from "../components/SyllabusComponents/ComponentWrappers/CheckboxWrapper";
-import { CourseScheduleWrapper } from "../components/SyllabusComponents/ComponentWrappers/CourseScheduleWrapper";
-import { SidebarLayoutWrapper } from "../components/SyllabusComponents/ComponentWrappers/SideBarWrapper";
-import { GradeTableWrapper } from "../components/SyllabusComponents/ComponentWrappers/GradeTableWrapper";
-import LearningOutcomesCardsWrapper from "../components/SyllabusComponents/ComponentWrappers/LearningOutcomesCardsWrapper";
-import {FiveCoreCompetencies} from "../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
-import GradingPoliciesWrapper from "../components/SyllabusComponents/ComponentWrappers/GradingPoliciesWrapper";
-import AssignmentsWrapper from "../components/SyllabusComponents/ComponentWrappers/AssignmentsWrapper";
-import ChecklistComponentWrapper from "../components/SyllabusComponents/ComponentWrappers/ChecklistComponentWrapper";
-import CompetencyTableWrapper from "../components/SyllabusComponents/ComponentWrappers/CompetencyTableWrapper";
+import AccordionWrapper from "../../components/SyllabusComponents/ComponentWrappers/AccordionWrapper";
+import ColumnWrapper from "../../components/SyllabusComponents/ComponentWrappers/ColumnWrapper";
+import RowWrapper from "../../components/SyllabusComponents/ComponentWrappers/RowWrapper";
+import CheckboxGroupWrapper from "../../components/SyllabusComponents/ComponentWrappers/CheckboxGroupWrapper";
+import CheckboxWrapper from "../../components/SyllabusComponents/ComponentWrappers/CheckboxWrapper";
+import { CourseScheduleWrapper } from "../../components/SyllabusComponents/ComponentWrappers/CourseScheduleWrapper";
+import { SidebarLayoutWrapper } from "../../components/SyllabusComponents/ComponentWrappers/SideBarWrapper";
+import { GradeTableWrapper } from "../../components/SyllabusComponents/ComponentWrappers/GradeTableWrapper";
+import LearningOutcomesCardsWrapper from "../../components/SyllabusComponents/ComponentWrappers/LearningOutcomesCardsWrapper";
+import {FiveCoreCompetencies} from "../../screens/SyllabusView/Learning Outcomes/LearningOutcomesComponents";
+import GradingPoliciesWrapper from "../../components/SyllabusComponents/ComponentWrappers/GradingPoliciesWrapper";
+import AssignmentsWrapper from "../../components/SyllabusComponents/ComponentWrappers/AssignmentsWrapper";
+import ChecklistComponentWrapper from "../../components/SyllabusComponents/ComponentWrappers/ChecklistComponentWrapper";
+import CompetencyTableWrapper from "../../components/SyllabusComponents/ComponentWrappers/CompetencyTableWrapper";
 
-import { FormInput } from "../components/SyllabusComponents/FormInput";
-import { DropDownComponent } from "../components/SyllabusComponents/DropDownComponent";
+import { FormInput } from "../../components/SyllabusComponents/FormInput";
+import { DropDownComponent } from "../../components/SyllabusComponents/DropDownComponent";
 
 import {
     AlertComponent,

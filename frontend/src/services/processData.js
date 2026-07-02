@@ -77,8 +77,34 @@ const saveData = async (ref, course_id, formData = {}) => {
         .map(x => ({ [x.id]: x.value }));
 
     const res_list = [...ref.current.querySelectorAll('table[id$="_list"]')]
+
         .map(x => get_table_records(x));
 
+    console.log("Detected _list tables:", [
+        ...ref.current.querySelectorAll('table[id$="_list"]')
+    ].map((table) => table.id));
+
+    console.log("Raw res_list:", res_list);
+
+    const courseScheduleList = res_list.find(
+        (item) => item.course_schedule_syllabus_list
+    );
+
+    if (courseScheduleList) {
+        const parsedSchedule = JSON.parse(
+            courseScheduleList.course_schedule_syllabus_list
+        );
+
+        console.log("Parsed course schedule list:", parsedSchedule);
+        console.table(parsedSchedule);
+
+        console.log(
+            "Course schedule column counts:",
+            parsedSchedule.map((row) => row.length)
+        );
+    } else {
+        console.warn("course_schedule_syllabus_list was NOT found in res_list.");
+    }
     const res_checkboxes = [...ref.current.querySelectorAll('div[id$="_checkboxes"]')]
         .map(x => get_checkboxes(x));
 

@@ -141,6 +141,44 @@ def _strip_whitespace_from_div(html_content: str):
     stripped_html = re.sub(r'(<\/div class="content">)\s+', r'\1', stripped_html)
     return stripped_html
 
+def set_table_fixed_width(table):
+    table.autofit = False
+
+    tblPr = table._tbl.tblPr
+
+    # Force fixed layout
+    tblLayout = tblPr.find(qn("w:tblLayout"))
+    if tblLayout is None:
+        tblLayout = OxmlElement("w:tblLayout")
+        tblPr.append(tblLayout)
+    tblLayout.set(qn("w:type"), "fixed")
+
+    # Force table width to 100% of available page width
+    tblW = tblPr.find(qn("w:tblW"))
+    if tblW is None:
+        tblW = OxmlElement("w:tblW")
+        tblPr.append(tblW)
+
+    tblW.set(qn("w:w"), "5000")
+    tblW.set(qn("w:type"), "pct")
+
+def break_long_words(text, max_length=24):
+    words = text.split(" ")
+
+    broken_words = []
+    for word in words:
+        if len(word) <= max_length:
+            broken_words.append(word)
+            continue
+
+        chunks = [
+            word[index:index + max_length]
+            for index in range(0, len(word), max_length)
+        ]
+        broken_words.append("\u200b".join(chunks))
+
+    return " ".join(broken_words)
+
 def add_table_to_doc(doc, table_list:list, merge: list = None, header = True):
     '''
     Adds a table to the given Word document using the provided list of lists.
@@ -157,7 +195,8 @@ def add_table_to_doc(doc, table_list:list, merge: list = None, header = True):
     '''
 
     logging.info(f'Adding table to document')
-    table = doc.add_table(rows=len(table_list), cols=len(table_list[0]),style = "Table Grid")
+    table = doc.add_table(rows=len(table_list), cols=len(table_list[0]), style="Table Grid")
+    set_table_fixed_width(table)
    
     if merge:
         logging.debug('Merging Cells')
@@ -171,7 +210,7 @@ def add_table_to_doc(doc, table_list:list, merge: list = None, header = True):
 
     for i, row in enumerate(table_list):
         for j, cell_data in enumerate(row):
-            table.cell(i, j).text = str(cell_data)
+            table.cell(i, j).text = break_long_words(str(cell_data))
 
     if header == True:
         style_table_header(table)
@@ -388,14 +427,15 @@ def generate_syllabus(doc: object, course_id:str, sheet_name: str, syllabus_stat
         Title(str): The title of the syllabus document, which is a combination of course information.
     """
 
-    def table_placeholder_replacement(doc, paragraph, placeholder_text, table_list):
-        if placeholder_text in paragraph.text:
-            table = add_styled_table(doc, table_list)
-            paragraph.clear()
-            paragraph._p.addnext(table._tbl)
-            return True
-        return False
-    
+
+def table_placeholder_replacement(doc, paragraph, placeholder_text, table_list):
+    if placeholder_text in paragraph.text:
+        table = add_styled_table(doc, table_list)
+        paragraph.clear()
+        paragraph._p.addnext(table._tbl)
+        return True
+
+    return False
     # Retrieve course data using fsEditor
     fs = fse.fsEditor(sheet_name)
     column_names = cp.columns

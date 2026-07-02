@@ -28,6 +28,7 @@
     "react-router-dom": "^6.30.0",
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4",
+    "xlsx-js-style": "^1.2.0",
     "yaml": "^2.9.0"
   },
   "scripts": {

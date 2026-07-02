@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../../SyllabusComponents/Tables/gradeTable.css";
+import "../../SyllabusComponents/Tables/gradeTable.css"
 import "../../Button/ReusableButton.css";
 
 import type { CourseScheduleProps} from "../types/courseScheduleTypes";

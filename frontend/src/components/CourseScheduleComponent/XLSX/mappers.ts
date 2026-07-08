@@ -2,8 +2,7 @@ import type { CourseScheduleColumn, CourseScheduleRow } from "../types/courseSch
 import { createEmptyScheduleRow } from "../utilities/factories";
 import { withParsedDateMetadata } from "../utilities/dateUtils";
 import { Course_Schedule_Excel_Cols } from "./constants";
-import CourseSchedule from "../CourseSchedule/CourseSchedule";
-import LearningOutcomes from "../../../screens/SyllabusView/Learning Outcomes/LearningOutcomes";
+
 
 export type ExcelSchedRow = Record<CourseScheduleColumn, string>;
 
@@ -24,7 +23,7 @@ export const schedRowsToExcelRows = (rows: CourseScheduleRow[]) : ExcelSchedRow[
     "Reading/Assignments Due": row.readingAssignments
 }));
 
-export const excelRowstoSchedRows = (
+export const excelRowsToSchedRows = (
     rows: ExcelSchedRow[],
     courseYear: number
 ): CourseScheduleRow[] => {

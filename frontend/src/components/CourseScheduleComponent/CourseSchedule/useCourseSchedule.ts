@@ -2,21 +2,9 @@ import { useEffect, useState } from "react";
 
 import { triggerInput } from "../../../services/triggerInput";
 
-import type {
-    CourseScheduleProps,
-    CourseScheduleRow,
-    DateFormat,
-    DayDisplayOption,
-    ThursdayDisplayOption,
-} from "../types/courseScheduleTypes";
+import type {CourseScheduleProps, CourseScheduleRow, DateFormat, DayDisplayOption, ThursdayDisplayOption,} from "../types/courseScheduleTypes";
 
-import {
-    coerceToTrimmedString,
-    normalizeCourseYear,
-    normalizeDays,
-    normalizeTerm,
-    normalizeYearString,
-} from "../utilities/normalizers";
+import {coerceToTrimmedString, normalizeCourseYear, normalizeDays, normalizeTerm, normalizeYearString,} from "../utilities/normalizers";
 
 import { createEmptyScheduleRow } from "../utilities/factories";
 
@@ -24,20 +12,11 @@ import { areRowsSortedByDate, mergeGeneratedRows } from "../utilities/rowUtils";
 
 import { backendScheduleToRows } from "../utilities/mapper";
 
-import {
-    clearScheduleRows,
-    deleteRowAtIndex,
-    formatScheduleRowsByDate,
-    formatScheduleRowsByDayDisplay,
-    insertEmptyRowAtIndex,
-    normalizeDateFieldAtIndex,
-    sortScheduleRowsByDate,
-    updateDateFieldAtIndex,
-    updateRowAtIndex,
-} from "../utilities/modifiers/rowModifiers";
+import {clearScheduleRows, deleteRowAtIndex, formatScheduleRowsByDate, formatScheduleRowsByDayDisplay, insertEmptyRowAtIndex, normalizeDateFieldAtIndex, sortScheduleRowsByDate, updateDateFieldAtIndex, updateRowAtIndex,} from "../utilities/modifiers/rowModifiers";
 
 import { generateScheduleRows } from "./generateSchedule";
 import { useGenerateScheduleMutation } from "../hooks/useGenerateScheduleMutation";
+import { downloadScheduleTemplate, exportRowsToExcel, importExcelFile } from "../XLSX/ExcelShorteners";
 
 export const missingScheduleInfo = (
     term: unknown,
@@ -75,6 +54,42 @@ export const useCourseSchedule = ({
             format: "longNames",
             thursdayOption: "R",
         });
+    const downloadExcelTemplate = (): void => {
+        downloadScheduleTemplate();
+    };
+
+    const exportScheduleToExcel = (): void => {
+        exportRowsToExcel(scheduleRows);
+    };
+
+    const importScheduleFromExcel = async (file: File): Promise<void> => {
+        try {
+            const importedRows = await importExcelFile(
+                file,
+                dateParsingYear
+            );
+
+            const shouldReplace = window.confirm(
+                "Importing this file will replace the current course schedule. Continue?"
+            );
+
+            if (!shouldReplace) {
+                return;
+            }
+
+            setScheduleRows(importedRows);
+            triggerInput();
+        } catch (error: unknown) {
+            console.error("Error importing course schedule Excel file", error);
+
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : "Could not import the Excel file.";
+
+            alert(message);
+        }
+    };
 
     const applyDayDisplayOption = (
         nextDayDisplayOption: DayDisplayOption
@@ -140,13 +155,11 @@ export const useCourseSchedule = ({
 
     const deleteRow = (index: number): void => {
         setScheduleRows((currentRows) => deleteRowAtIndex(currentRows, index));
-
         triggerInput();
     };
 
     const clearSchedule = (): void => {
         setScheduleRows((currentRows) => clearScheduleRows(currentRows));
-
         triggerInput();
     };
 
@@ -154,7 +167,6 @@ export const useCourseSchedule = ({
         setScheduleRows((currentRows) =>
             sortScheduleRowsByDate(currentRows, dateParsingYear)
         );
-
         triggerInput();
     };
 
@@ -184,7 +196,6 @@ export const useCourseSchedule = ({
                 dateFormat
             )
         );
-
         triggerInput();
     };
 
@@ -239,6 +250,10 @@ export const useCourseSchedule = ({
         updateDateField,
         normalizeDateField,
         generateSchedule,
+
+        downloadExcelTemplate,
+        exportScheduleToExcel,
+        importScheduleFromExcel
     };
 };
 

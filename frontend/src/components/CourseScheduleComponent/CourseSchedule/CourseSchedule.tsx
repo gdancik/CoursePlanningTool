@@ -40,6 +40,10 @@ function CourseSchedule({
                 useOneLetterDays={schedule.useOneLetterDays}
                 changeUseOneLetterDays={schedule.changeUseOneLetterDays}
                 changeThursdayDisplayOption={schedule.changeThursdayDisplayOption}
+                downloadExcelTemplate = {schedule.downloadExcelTemplate}
+                exportScheduleToExcel = {schedule.exportScheduleToExcel}
+                importScheduleFromExcel = {schedule.importScheduleFromExcel}
+
             />
 
             <CourseScheduleTable

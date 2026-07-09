@@ -4,27 +4,22 @@ import {
     Course_Schedule_Excel_Cols,
     Course_Schedule_Sheet_Identifier,
 } from "./constants";
+import type { CourseScheduleRow } from "../types/courseScheduleTypes";
 
-import type { ExcelSchedRow } from "./mappers";
+import {schedRowsToExcelRows} from "./mappers";
 import {sizeOfWorksheet} from "./excelFormat";
 
 export const downloadScheduleTemplate = (
+    rows: CourseScheduleRow[],
     fileName = "course-schedule-template.xlsx"
 ): void => {
-    const templateRows: ExcelSchedRow[] = [
-        {
-            Date: "01/21/2026",
-            Day: "Wednesday",
-            "Unit and Theme/Topic": "Example topic",
-            "Learning Outcomes Addressed": "LO1",
-            "Reading/Assignments Due": "Example reading due",
-        },
-    ];
+    const templateRows = schedRowsToExcelRows(rows);
 
     const worksheet = XLSX.utils.json_to_sheet(templateRows, {
         header: [...Course_Schedule_Excel_Cols],
     });
-    sizeOfWorksheet(worksheet, templateRows.length)
+
+    sizeOfWorksheet(worksheet, templateRows.length);
 
     const workbook = XLSX.utils.book_new();
 

@@ -54,10 +54,31 @@ export const useCourseSchedule = ({
             format: "longNames",
             thursdayOption: "R",
         });
-    const downloadExcelTemplate = (): void => {
-        downloadScheduleTemplate();
+
+    const generateRowsForCurrentCourse = async () => {
+        return generateScheduleRows({
+            mutation: generateScheduleMutation,
+            term: normalizedTerm,
+            year: normalizedYear,
+            days: normalizedDays,
+            dateParsingYear,
+            missingScheduleInformation,
+        });
     };
 
+    const downloadExcelTemplate = async (): Promise<void> => {
+        const result = await generateRowsForCurrentCourse();
+
+        if (!result.ok) {
+            alert(result.error);
+            return;
+        }
+
+        downloadScheduleTemplate(
+            result.generatedRows,
+            `course-schedule-${normalizedTerm}-${normalizedYear}-template.xlsx`
+        );
+    };
     const exportScheduleToExcel = (): void => {
         exportRowsToExcel(scheduleRows);
     };
@@ -200,14 +221,7 @@ export const useCourseSchedule = ({
     };
 
     const generateSchedule = async (): Promise<void> => {
-        const result = await generateScheduleRows({
-            mutation: generateScheduleMutation,
-            term: normalizedTerm,
-            year: normalizedYear,
-            days: normalizedDays,
-            dateParsingYear,
-            missingScheduleInformation,
-        });
+        const result = await generateRowsForCurrentCourse();
 
         if (!result.ok) {
             alert(result.error);
@@ -220,7 +234,6 @@ export const useCourseSchedule = ({
 
         triggerInput();
     };
-
     return {
         scheduleRows,
 

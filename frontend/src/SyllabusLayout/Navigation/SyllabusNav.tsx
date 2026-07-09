@@ -67,10 +67,7 @@ const SyllabusNav = ({
                                 direction === "next"
                                     ? "Loading Next Section"
                                     : "Loading Previous Section",
-                                direction === "next"
-                                    ? "Preparing next section..."
-                                    : "Preparing previous section...",
-                                "loading"
+                                "Preaparing Section"
                             );
 
                             await new Promise((resolve) =>

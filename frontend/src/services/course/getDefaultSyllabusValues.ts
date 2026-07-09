@@ -1,6 +1,6 @@
 import { FormState } from "../../utils/PageRenderEngine/types";
 
-export const getDefaultGradingPolicies = (): FormState => {
+export const getDefaultSyllabusValues = (): FormState => {
     return {
         grade_table_syllabus_list: JSON.stringify([
             ["Grade", "Percentage Interval"],

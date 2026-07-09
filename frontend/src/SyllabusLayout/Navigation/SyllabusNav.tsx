@@ -1,7 +1,14 @@
 import React from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
-import "./SyllabusNav.css";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";import "./SyllabusNav.css";
+import {useModalFactory} from "../../utils/useModalFactory";
 
+type Direction = "next" | "previous";
+
+interface SyllabusNavProps {
+    onSave?: () => void | Promise<void>;
+    changesDetected?: boolean;
+    modal: ReturnType<typeof useModalFactory>;
+}
 const tabs = [
     { label: "Overview", path: "/overview" },
     { label: "Basic Information", path: "/basic-info" },
@@ -14,14 +21,14 @@ const tabs = [
     { label: "Checklist", path: "/checklist" },
 ];
 
+
 const SyllabusNav = ({
                          onSave,
                          changesDetected = false,
-                     }: {
-    onSave?: () => void | Promise<void>;
-    changesDetected?: boolean;
-}) => {
+                         modal,
+                     }: SyllabusNavProps) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { courseId } = useParams<{ courseId: string }>();
 
     const buildCoursePath = (path: string) => {
@@ -29,9 +36,13 @@ const SyllabusNav = ({
         return `/courses/${courseId}${path}`;
     };
 
+    const currentIndex = tabs.findIndex((tab) =>
+        location.pathname.endsWith(tab.path)
+    );
     return (
         <nav className="syllabus-nav">
-            {tabs.map((tab) => {
+            {tabs.map((tab, index) => {
+
                 const destination = buildCoursePath(tab.path);
 
                 return (
@@ -41,13 +52,30 @@ const SyllabusNav = ({
                         onClick={async (e) => {
                             e.preventDefault();
 
+                            if (index === currentIndex) {
+                                return;
+                            }
+
+                            const direction: Direction =
+                                index > currentIndex ? "next" : "previous";
+
                             if (changesDetected && onSave) {
                                 await onSave();
-
-                                await new Promise((resolve) =>
-                                    setTimeout(resolve, 2500)
-                                );
                             }
+
+                            modal.showRedirect(
+                                direction === "next"
+                                    ? "Loading Next Section"
+                                    : "Loading Previous Section",
+                                direction === "next"
+                                    ? "Preparing next section..."
+                                    : "Preparing previous section...",
+                                "loading"
+                            );
+
+                            await new Promise((resolve) =>
+                                setTimeout(resolve, direction === "next" ? 700 : 800)
+                            );
 
                             navigate(destination);
                         }}

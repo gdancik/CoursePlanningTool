@@ -1,6 +1,7 @@
 import * as XLSX from "xlsx-js-style"
 import {Course_Schedule_Excel_Cols, Course_Schedule_Sheet_Identifier} from "./constants";
 import type {CourseScheduleRow} from "../types/courseScheduleTypes";
+import {sizeOfWorksheet} from "./excelFormat";
 import {schedRowsToExcelRows, excelRowsToSchedRows, type ExcelSchedRow} from "./mappers";
 
 /**
@@ -29,6 +30,8 @@ export const exportRowsToExcel = (
 
     const wrkSheet = XLSX.utils.json_to_sheet(excelRows, { header: [...Course_Schedule_Excel_Cols],});
 
+    sizeOfWorksheet(wrkSheet, excelRows.length)
+
     const workbook = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
@@ -50,7 +53,7 @@ export const importExcelFile = async (
 ): Promise<CourseScheduleRow[]> => {
     const buffer = await file.arrayBuffer();
 
-    const workbook =  XLSX.read(buffer, {type: "array",});
+    const workbook =  XLSX.read(buffer, {type: "array",  cellDates: false,});
 
     const firstSheetName = workbook.SheetNames[0]
 
@@ -63,6 +66,7 @@ export const importExcelFile = async (
         wrkSheet,
         {
             defval: "",
+            raw: true,
         }
     )
     const columns = rawRows[0] ? Object.keys(rawRows[0]) : [];

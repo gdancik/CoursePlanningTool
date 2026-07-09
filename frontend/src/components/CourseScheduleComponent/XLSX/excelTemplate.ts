@@ -5,7 +5,8 @@ import {
     Course_Schedule_Sheet_Identifier,
 } from "./constants";
 
-import type { ExcelSchedRow} from "./mappers";
+import type { ExcelSchedRow } from "./mappers";
+import {sizeOfWorksheet} from "./excelFormat";
 
 export const downloadScheduleTemplate = (
     fileName = "course-schedule-template.xlsx"
@@ -23,6 +24,7 @@ export const downloadScheduleTemplate = (
     const worksheet = XLSX.utils.json_to_sheet(templateRows, {
         header: [...Course_Schedule_Excel_Cols],
     });
+    sizeOfWorksheet(worksheet, templateRows.length)
 
     const workbook = XLSX.utils.book_new();
 

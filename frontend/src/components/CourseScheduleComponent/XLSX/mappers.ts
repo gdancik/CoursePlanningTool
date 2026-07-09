@@ -4,7 +4,7 @@ import { withParsedDateMetadata } from "../utilities/dateUtils";
 import { Course_Schedule_Excel_Cols } from "./constants";
 
 
-export type ExcelSchedRow = Record<CourseScheduleColumn, string>;
+export type ExcelSchedRow = Record<CourseScheduleColumn, unknown>;
 
 export const normalizeExcelCells = (value: unknown): string => {
     if (value === null || value === undefined) {
@@ -29,13 +29,17 @@ export const excelRowsToSchedRows = (
 ): CourseScheduleRow[] => {
     const schedRows = rows.filter(ExcelRowHasData).map((row) => 
     {
-        const schedRow =  { 
-            ...createEmptyScheduleRow(), 
-            date: normalizeExcelCells(row["Date"]),
+        const schedRow = {
+            ...createEmptyScheduleRow(),
+            date: normalizeExcelDateCell(row["Date"]),
             day: normalizeExcelCells(row["Day"]),
             unit: normalizeExcelCells(row["Unit and Theme/Topic"]),
-            LearningOutcome: normalizeExcelCells(row["Learning Outcomes Addressed"]),
-            readingAssignments: normalizeExcelCells(row["Reading/Assignments Due"]),
+            learningOutcomes: normalizeExcelCells(
+                row["Learning Outcomes Addressed"]
+            ),
+            readingAssignments: normalizeExcelCells(
+                row["Reading/Assignments Due"]
+            ),
         };
         return withParsedDateMetadata(schedRow, courseYear);
 
@@ -44,3 +48,50 @@ export const excelRowsToSchedRows = (
 }
 
 
+const formatMonthDayYear = (
+    month: number,
+    day: number,
+    year: number
+): string => {
+    const formattedMonth = String(month).padStart(2, "0");
+    const formattedDay = String(day).padStart(2, "0");
+
+    return `${formattedMonth}/${formattedDay}/${year}`;
+};
+
+const formatExcelSerialDate = (serialDate: number): string => {
+    const excelEpoch = new Date(Date.UTC(1899, 11, 30));
+    const millisecondsPerDay = 24 * 60 * 60 * 1000;
+
+    const date = new Date(
+        excelEpoch.getTime() + serialDate * millisecondsPerDay
+    );
+
+    return formatMonthDayYear(
+        date.getUTCMonth() + 1,
+        date.getUTCDate(),
+        date.getUTCFullYear()
+    );
+};
+
+const isLikelyExcelSerialDate = (value: unknown): boolean => {
+    const numericValue = Number(value);
+
+    return (
+        Number.isFinite(numericValue) &&
+        numericValue > 20000 &&
+        numericValue < 80000
+    );
+};
+
+export const normalizeExcelDateCell = (value: unknown): string => {
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    if (isLikelyExcelSerialDate(value)) {
+        return formatExcelSerialDate(Number(value));
+    }
+
+    return normalizeExcelCells(value);
+};

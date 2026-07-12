@@ -13,7 +13,7 @@ import { areRowsSortedByDate, mergeGeneratedRows } from "../utilities/rowUtils";
 import { backendScheduleToRows } from "../utilities/mapper";
 
 import {clearScheduleRows, deleteRowAtIndex, formatScheduleRowsByDate, formatScheduleRowsByDayDisplay, insertEmptyRowAtIndex, normalizeDateFieldAtIndex, sortScheduleRowsByDate, updateDateFieldAtIndex, updateRowAtIndex,} from "../utilities/modifiers/rowModifiers";
-
+import {validateScheduleDateValue} from "../utilities/dateUtils";
 import { generateScheduleRows } from "./generateSchedule";
 import { useGenerateScheduleMutation } from "../hooks/useGenerateScheduleMutation";
 import { downloadScheduleTemplate, exportRowsToExcel, importExcelFile } from "../XLSX/ExcelShorteners";
@@ -208,16 +208,28 @@ export const useCourseSchedule = ({
     };
 
     const normalizeDateField = (index: number, value: string): void => {
-        setScheduleRows((currentRows) =>
-            normalizeDateFieldAtIndex(
-                currentRows,
-                index,
-                value,
-                dateParsingYear,
-                dateFormat
-            )
-        );
-        triggerInput();
+        try {
+            validateScheduleDateValue(value, dateParsingYear);
+
+            setScheduleRows((currentRows) =>
+                normalizeDateFieldAtIndex(
+                    currentRows,
+                    index,
+                    value,
+                    dateParsingYear,
+                    dateFormat
+                )
+            );
+
+            triggerInput();
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : "Invalid schedule date.";
+
+            alert(message);
+        }
     };
 
     const generateSchedule = async (): Promise<void> => {

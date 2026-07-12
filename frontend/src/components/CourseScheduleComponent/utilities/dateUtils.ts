@@ -96,7 +96,7 @@ export const parseStandaloneDateValue = (
 
     const parsedDate = Date.parse(value);
 
-    return Number.isNaN(parsedDate) ? INVALID_DATE_TIMESTMP : parsedDate;
+    return  INVALID_DATE_TIMESTMP;
 };
 
 const extractLeadingDateText = (value: string): string | null => {
@@ -158,4 +158,23 @@ export const withParsedDateMetadata = (
         dateTimestamp,
         sortableDateTimestamp,
     };
+};
+
+export const validateScheduleDateValue = (
+    dateValue: unknown,
+    courseYear: number
+): void => {
+    const value = coerceToTrimmedString(dateValue);
+
+    if (!value) {
+        return;
+    }
+
+    const timestamp = parseStandaloneDateValue(value, courseYear);
+
+    if (timestamp === INVALID_DATE_TIMESTMP) {
+        throw new Error(
+            `Invalid date "${value}". Dates must be valid and use MM/DD, MM/DD/YYYY, or Month Day format.`
+        );
+    }
 };

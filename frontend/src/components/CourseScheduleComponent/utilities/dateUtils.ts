@@ -159,6 +159,12 @@ export const withParsedDateMetadata = (
         sortableDateTimestamp,
     };
 };
+const splitDateRange = (value: string): string[] => {
+    return value
+        .split(/\s+-\s+/)
+        .map((part) => part.trim())
+        .filter(Boolean);
+};
 
 export const validateScheduleDateValue = (
     dateValue: unknown,
@@ -170,11 +176,27 @@ export const validateScheduleDateValue = (
         return;
     }
 
+    const dateParts = splitDateRange(value);
+
+    if (dateParts.length === 2) {
+        dateParts.forEach((datePart) => {
+            const timestamp = parseStandaloneDateValue(datePart, courseYear);
+
+            if (timestamp === INVALID_DATE_TIMESTMP) {
+                throw new Error(
+                    `Invalid date "${value}". Date ranges must use MM/DD/YYYY - MM/DD/YYYY format.`
+                );
+            }
+        });
+
+        return;
+    }
+
     const timestamp = parseStandaloneDateValue(value, courseYear);
 
     if (timestamp === INVALID_DATE_TIMESTMP) {
         throw new Error(
-            `Invalid date "${value}". Dates must be valid and use MM/DD, MM/DD/YYYY, or Month Day format.`
+            `Invalid date "${value}". Dates must be valid and use MM/DD, MM/DD/YYYY, Month Day, or MM/DD/YYYY - MM/DD/YYYY format.`
         );
     }
 };

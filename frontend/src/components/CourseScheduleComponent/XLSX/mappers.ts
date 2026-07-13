@@ -127,12 +127,8 @@ const isLikelyExcelSerialDate = (value: unknown): boolean => {
     );
 };
 
-const normalizeExcelDateString = (value: string): string => {
+const normalizeSingleExcelDateString = (value: string): string => {
     const trimmed = value.trim();
-
-    if (trimmed === "") {
-        return "";
-    }
 
     const slashDateMatch = trimmed.match(
         /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/
@@ -154,6 +150,28 @@ const normalizeExcelDateString = (value: string): string => {
 
     return formatMonthDayYear(month, day, year);
 };
+
+const normalizeExcelDateString = (value: string): string => {
+    const trimmed = value.trim();
+
+    if (trimmed === "") {
+        return "";
+    }
+
+    const dateRangeParts = trimmed
+        .split(/\s+-\s+/)
+        .map((part) => part.trim());
+
+    if (dateRangeParts.length === 2) {
+        const startDate = normalizeSingleExcelDateString(dateRangeParts[0]);
+        const endDate = normalizeSingleExcelDateString(dateRangeParts[1]);
+
+        return `${startDate} - ${endDate}`;
+    }
+
+    return normalizeSingleExcelDateString(trimmed);
+};
+
 
 export const normalizeExcelDateCell = (value: unknown): string => {
     if (value === null || value === undefined) {

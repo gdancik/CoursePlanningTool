@@ -95,6 +95,7 @@ const Checklist = ({ formData, additional_sections_id, policy_checkboxes_id, res
 
     const policyStatements: PolicyItem[] = [
         { id: "academic_integrity", label: "Academic Integrity" },
+        { id: "class_absence", label: "Class Absence Verification" },
         { id: "diversity", label: "Diversity Statement" },
         { id: "final_exam", label: "Final Examination Statement" },
         { id: "sexual_misconduct", label: "Sexual Misconduct Policy" },

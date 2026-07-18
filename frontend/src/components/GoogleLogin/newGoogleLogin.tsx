@@ -145,15 +145,14 @@ export default function MyGoogleLogin({
     };
 
     return (
-        <div className="google-login-container">
+        <div className="flex flex-col items-center ">
             {user ? (
                 <>
-                    <p className="google-login-welcome">
+                    <center>
                         Welcome, <b>{user.userName}</b> ({user.userEmail})
-                    </p>
-
+                    </center>
                     {!auto_navigate && (
-                        <div className="google-login-actions">
+                        <div className="flex mt-2.5 justify-center gap-2.5">
                             <ReusableButton
                                 label="Continue"
                                 icon={<SafeIcon Icon={FaHouse} />}

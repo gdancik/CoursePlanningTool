@@ -1,16 +1,18 @@
 import React, {useEffect} from "react";
 import './ErrorModal.css'
 import ErrorIcon from "../../../assets/images/Error-Message.png"
+import {detailedErrors} from "../../../configs/courseConfig.json"
 
 type Props ={
     message: string;
+    detailedMsg?: string;
     errorCode?: number;
     onClose: () => void;
 };
 
-const ErrorModal: React.FC<Props> = ({message, errorCode, onClose}) => {
+const ErrorModal: React.FC<Props> = ({message, errorCode,detailedMsg, onClose}) => {
     useEffect(() => {
-        const timer = setTimeout(onClose, 5000);
+        const timer = setTimeout(onClose, 10000);
         return () => clearTimeout(timer);
     }, [onClose]);
 

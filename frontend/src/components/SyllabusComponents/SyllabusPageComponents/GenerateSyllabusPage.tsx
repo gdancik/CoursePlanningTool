@@ -3,6 +3,7 @@ import SyllabusLayout from "../../../SyllabusLayout/SyllabusPageHeader";
 import GeneratePageContent from "./GeneratePageContent";
 import { JsonComponent } from "../../../utils/PageRenderEngine/types";
 import { FormState, FormValue } from "../../../utils/PageRenderEngine/types";
+import { useModalFactory } from "../../../utils/useModalFactory";
 
 interface GenerateSyllabusPageProps {
     json: JsonComponent[];
@@ -14,6 +15,7 @@ interface GenerateSyllabusPageProps {
     onSaveAndNavigate?: (navigateTo: string) => void | Promise<void>;
     onPreview: () => void;
     containerRef: React.RefObject<HTMLDivElement | null>;
+    modal: ReturnType<typeof useModalFactory>;
 }
 
 const GenerateSyllabusPage = ({
@@ -26,6 +28,7 @@ const GenerateSyllabusPage = ({
                                   onSaveAndNavigate,
                                   onPreview,
                                   containerRef,
+                                  modal,
                               }: GenerateSyllabusPageProps) => {
     const [changesDetected, setChangesDetected] = useState(false);
 
@@ -67,6 +70,7 @@ const GenerateSyllabusPage = ({
                 changesDetected={changesDetected}
                 setChangesDetected={setChangesDetected}
                 courseNumber={courseNumber}
+                modal={modal}
             />
 
             <GeneratePageContent

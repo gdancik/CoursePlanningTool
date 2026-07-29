@@ -2,6 +2,7 @@ import React from "react";
 import SyllabusHeader from "./Header/SyllabusHeader";
 import AppLayoutButtons from "./Button/AppLayoutButtons";
 import SyllabusNav from "./Navigation/SyllabusNav";
+import {useModalFactory} from "../utils/useModalFactory";
 
 interface SyllabusPageHeaderProps {
     onBack?: (save?: boolean) => void;
@@ -12,6 +13,7 @@ interface SyllabusPageHeaderProps {
     changesDetected?: boolean;
     setChangesDetected?: (x: boolean) => void;
     courseNumber?: string;
+    modal: ReturnType<typeof useModalFactory>;
 }
 
 const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
@@ -23,6 +25,7 @@ const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
                                                                    changesDetected,
                                                                    setChangesDetected,
                                                                    courseNumber,
+    modal
                                                                }) => {
     return (
         <div style={{ position: "sticky", top: "0px", width: "100%", zIndex: "1000" }}>
@@ -38,7 +41,7 @@ const SyllabusPageHeader: React.FC<SyllabusPageHeaderProps> = ({
                 setChangesDetected={setChangesDetected}
             />
 
-            <SyllabusNav onSave={onSave} changesDetected={changesDetected} />
+            <SyllabusNav onSave={onSave} changesDetected={changesDetected} modal={modal} />
         </div>
     );
 };

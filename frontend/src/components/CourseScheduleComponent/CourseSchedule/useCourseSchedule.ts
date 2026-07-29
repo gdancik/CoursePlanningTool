@@ -2,21 +2,9 @@ import { useEffect, useState } from "react";
 
 import { triggerInput } from "../../../services/triggerInput";
 
-import type {
-    CourseScheduleProps,
-    CourseScheduleRow,
-    DateFormat,
-    DayDisplayOption,
-    ThursdayDisplayOption,
-} from "../types/courseScheduleTypes";
+import type {CourseScheduleProps, CourseScheduleRow, DateFormat, DayDisplayOption, ThursdayDisplayOption,} from "../types/courseScheduleTypes";
 
-import {
-    coerceToTrimmedString,
-    normalizeCourseYear,
-    normalizeDays,
-    normalizeTerm,
-    normalizeYearString,
-} from "../utilities/normalizers";
+import {coerceToTrimmedString, normalizeCourseYear, normalizeDays, normalizeTerm, normalizeYearString,} from "../utilities/normalizers";
 
 import { createEmptyScheduleRow } from "../utilities/factories";
 
@@ -24,20 +12,11 @@ import { areRowsSortedByDate, mergeGeneratedRows } from "../utilities/rowUtils";
 
 import { backendScheduleToRows } from "../utilities/mapper";
 
-import {
-    clearScheduleRows,
-    deleteRowAtIndex,
-    formatScheduleRowsByDate,
-    formatScheduleRowsByDayDisplay,
-    insertEmptyRowAtIndex,
-    normalizeDateFieldAtIndex,
-    sortScheduleRowsByDate,
-    updateDateFieldAtIndex,
-    updateRowAtIndex,
-} from "../utilities/modifiers/rowModifiers";
-
+import {clearScheduleRows, deleteRowAtIndex, formatScheduleRowsByDate, formatScheduleRowsByDayDisplay, insertEmptyRowAtIndex, normalizeDateFieldAtIndex, sortScheduleRowsByDate, updateDateFieldAtIndex, updateRowAtIndex,} from "../utilities/modifiers/rowModifiers";
+import {validateScheduleDateValue} from "../utilities/dateUtils";
 import { generateScheduleRows } from "./generateSchedule";
 import { useGenerateScheduleMutation } from "../hooks/useGenerateScheduleMutation";
+import { downloadScheduleTemplate, exportRowsToExcel, importExcelFile } from "../XLSX/ExcelShorteners";
 
 export const missingScheduleInfo = (
     term: unknown,
@@ -75,6 +54,63 @@ export const useCourseSchedule = ({
             format: "longNames",
             thursdayOption: "R",
         });
+
+    const generateRowsForCurrentCourse = async () => {
+        return generateScheduleRows({
+            mutation: generateScheduleMutation,
+            term: normalizedTerm,
+            year: normalizedYear,
+            days: normalizedDays,
+            dateParsingYear,
+            missingScheduleInformation,
+        });
+    };
+
+    const downloadExcelTemplate = async (): Promise<void> => {
+        const result = await generateRowsForCurrentCourse();
+
+        if (!result.ok) {
+            alert(result.error);
+            return;
+        }
+
+        downloadScheduleTemplate(
+            result.generatedRows,
+            `course-schedule-${normalizedTerm}-${normalizedYear}-template.xlsx`
+        );
+    };
+    const exportScheduleToExcel = (): void => {
+        exportRowsToExcel(scheduleRows);
+    };
+
+    const importScheduleFromExcel = async (file: File): Promise<void> => {
+        try {
+            const importedRows = await importExcelFile(
+                file,
+                dateParsingYear
+            );
+
+            const shouldReplace = window.confirm(
+                "Importing this file will replace the current course schedule. Continue?"
+            );
+
+            if (!shouldReplace) {
+                return;
+            }
+
+            setScheduleRows(importedRows);
+            triggerInput();
+        } catch (error: unknown) {
+            console.error("Error importing course schedule Excel file", error);
+
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : "Could not import the Excel file.";
+
+            alert(message);
+        }
+    };
 
     const applyDayDisplayOption = (
         nextDayDisplayOption: DayDisplayOption
@@ -140,13 +176,11 @@ export const useCourseSchedule = ({
 
     const deleteRow = (index: number): void => {
         setScheduleRows((currentRows) => deleteRowAtIndex(currentRows, index));
-
         triggerInput();
     };
 
     const clearSchedule = (): void => {
         setScheduleRows((currentRows) => clearScheduleRows(currentRows));
-
         triggerInput();
     };
 
@@ -154,7 +188,6 @@ export const useCourseSchedule = ({
         setScheduleRows((currentRows) =>
             sortScheduleRowsByDate(currentRows, dateParsingYear)
         );
-
         triggerInput();
     };
 
@@ -175,28 +208,32 @@ export const useCourseSchedule = ({
     };
 
     const normalizeDateField = (index: number, value: string): void => {
-        setScheduleRows((currentRows) =>
-            normalizeDateFieldAtIndex(
-                currentRows,
-                index,
-                value,
-                dateParsingYear,
-                dateFormat
-            )
-        );
+        try {
+            validateScheduleDateValue(value, dateParsingYear);
 
-        triggerInput();
+            setScheduleRows((currentRows) =>
+                normalizeDateFieldAtIndex(
+                    currentRows,
+                    index,
+                    value,
+                    dateParsingYear,
+                    dateFormat
+                )
+            );
+
+            triggerInput();
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : "Invalid schedule date.";
+
+            alert(message);
+        }
     };
 
     const generateSchedule = async (): Promise<void> => {
-        const result = await generateScheduleRows({
-            mutation: generateScheduleMutation,
-            term: normalizedTerm,
-            year: normalizedYear,
-            days: normalizedDays,
-            dateParsingYear,
-            missingScheduleInformation,
-        });
+        const result = await generateRowsForCurrentCourse();
 
         if (!result.ok) {
             alert(result.error);
@@ -209,7 +246,6 @@ export const useCourseSchedule = ({
 
         triggerInput();
     };
-
     return {
         scheduleRows,
 
@@ -239,6 +275,10 @@ export const useCourseSchedule = ({
         updateDateField,
         normalizeDateField,
         generateSchedule,
+
+        downloadExcelTemplate,
+        exportScheduleToExcel,
+        importScheduleFromExcel
     };
 };
 

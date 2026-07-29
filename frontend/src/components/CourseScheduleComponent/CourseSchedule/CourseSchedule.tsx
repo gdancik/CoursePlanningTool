@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../../SyllabusComponents/Tables/gradeTable.css";
+import "../../SyllabusComponents/Tables/gradeTable.css"
 import "../../Button/ReusableButton.css";
 
 import type { CourseScheduleProps} from "../types/courseScheduleTypes";
@@ -40,6 +40,10 @@ function CourseSchedule({
                 useOneLetterDays={schedule.useOneLetterDays}
                 changeUseOneLetterDays={schedule.changeUseOneLetterDays}
                 changeThursdayDisplayOption={schedule.changeThursdayDisplayOption}
+                downloadExcelTemplate = {schedule.downloadExcelTemplate}
+                exportScheduleToExcel = {schedule.exportScheduleToExcel}
+                importScheduleFromExcel = {schedule.importScheduleFromExcel}
+
             />
 
             <CourseScheduleTable

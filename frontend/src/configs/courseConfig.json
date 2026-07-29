@@ -3,5 +3,6 @@
   "loadData" : true,
   "saveData" : true,
   "test_login": true,
-  "log": false
+  "log": false,
+  "detailedErrors": false
 }

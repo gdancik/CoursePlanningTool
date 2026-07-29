@@ -1,9 +1,13 @@
+import { useRef } from "react";
+
 import type {
     DateFormat,
     ThursdayDisplayOption,
 } from "../types/courseScheduleTypes";
+
 import type { UseCourseScheduleResult } from "./useCourseSchedule";
 import Checkbox from "../../SyllabusComponents/Checkbox";
+import ReusableButton from "../../Button/ReusableButton";
 
 type CourseScheduleToolbarProps = Pick<
     UseCourseScheduleResult,
@@ -22,11 +26,10 @@ type CourseScheduleToolbarProps = Pick<
     | "useOneLetterDays"
     | "changeUseOneLetterDays"
     | "changeThursdayDisplayOption"
+    | "downloadExcelTemplate"
+    | "exportScheduleToExcel"
+    | "importScheduleFromExcel"
 >;
-
-const primaryButtonClassName =
-    "rounded-md bg-blue-700 px-4 py-2 font-bold text-white shadow-sm " +
-    "hover:bg-blue-800 disabled:cursor-not-allowed disabled:bg-blue-300";
 
 const selectClassName =
     "rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm " +
@@ -48,29 +51,71 @@ export function CourseScheduleToolbar({
                                           useOneLetterDays,
                                           changeUseOneLetterDays,
                                           changeThursdayDisplayOption,
+                                          downloadExcelTemplate,
+                                          exportScheduleToExcel,
+                                          importScheduleFromExcel,
                                       }: CourseScheduleToolbarProps) {
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
     return (
         <div className="mx-[2%] my-4 rounded-xl border border-blue-100 bg-white p-4 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex flex-wrap items-center gap-3">
-                    <button
-                        type="button"
-                        className={primaryButtonClassName}
+                    <ReusableButton
+                        label={
+                            isGeneratingSchedule
+                                ? "Generating..."
+                                : `Generate Schedule (${normalizedTerm} ${normalizedYear}, ${normalizedDays})`
+                        }
+                        variant="primary"
                         onClick={generateSchedule}
-                        disabled={missingScheduleInformation || isGeneratingSchedule}
-                    >
-                        {isGeneratingSchedule
-                            ? "Generating..."
-                            : `Generate Schedule (${normalizedTerm} ${normalizedYear}, ${normalizedDays})`}
-                    </button>
+                        disabled={
+                            missingScheduleInformation ||
+                            isGeneratingSchedule
+                        }
+                    />
 
-                    <button
-                        type="button"
-                        className={primaryButtonClassName}
+                    <ReusableButton
+                        label="Clear Schedule"
+                        variant="primary"
                         onClick={clearSchedule}
-                    >
-                        Clear Schedule
-                    </button>
+                    />
+
+                    <ReusableButton
+                        label="Download Template"
+                        variant="primary"
+                        onClick={downloadExcelTemplate}
+                    />
+
+                    <ReusableButton
+                        label="Export Excel"
+                        variant="primary"
+                        onClick={exportScheduleToExcel}
+                    />
+
+                    <ReusableButton
+                        label="Import Excel"
+                        variant="primary"
+                        onClick={() => fileInputRef.current?.click()}
+                    />
+
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".xlsx,.xls"
+                        className="hidden"
+                        onChange={(event) => {
+                            const file = event.target.files?.[0];
+
+                            if (!file) {
+                                return;
+                            }
+
+                            void importScheduleFromExcel(file);
+
+                            event.target.value = "";
+                        }}
+                    />
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4">
@@ -80,7 +125,9 @@ export function CourseScheduleToolbar({
                             className={selectClassName}
                             value={dateFormat}
                             onChange={(event) =>
-                                changeDateFormat(event.target.value as DateFormat)
+                                changeDateFormat(
+                                    event.target.value as DateFormat
+                                )
                             }
                         >
                             <option value="mm/dd">mm/dd</option>
@@ -104,7 +151,8 @@ export function CourseScheduleToolbar({
                                 value={dayDisplayOption.thursdayOption}
                                 onChange={(event) =>
                                     changeThursdayDisplayOption(
-                                        event.target.value as ThursdayDisplayOption
+                                        event.target
+                                            .value as ThursdayDisplayOption
                                     )
                                 }
                             >
@@ -114,21 +162,19 @@ export function CourseScheduleToolbar({
                         </label>
                     )}
 
-                    <button
-                        type="button"
-                        className={primaryButtonClassName}
+                    <ReusableButton
+                        label="Sort by date"
+                        variant="primary"
                         onClick={sortScheduleByDate}
                         disabled={datesSorted}
-                    >
-                        Sort by date
-                    </button>
+                    />
                 </div>
             </div>
 
             {missingScheduleInformation && (
                 <p className="mt-3 rounded-md bg-red-50 px-3 py-2 font-semibold text-red-700">
-                    Note: for the option to autogenerate your schedule, enter a term,
-                    year, and days on the Basic Information page.
+                    Note: for the option to autogenerate your schedule, enter a
+                    term, year, and days on the Basic Information page.
                 </p>
             )}
         </div>

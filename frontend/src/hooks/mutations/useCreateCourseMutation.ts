@@ -9,7 +9,7 @@ import { queryKeys } from "../../query/queryKeys";
 import { FormState} from "../../utils/PageRenderEngine/types";
 import { RawCourseData } from "../../services/courseTypes";
 import { buildCourseFromRaw } from "../../utils/course/buildCourseFromRaw";
-import {getDefaultGradingPolicies} from "../../services/course/defaultGradingPolicies";
+import {getDefaultSyllabusValues} from "../../services/course/getDefaultSyllabusValues";
 
 interface CreateCourseVariables {
     formData: FormState;
@@ -23,7 +23,7 @@ export const useCreateCourseMutation = () => {
         mutationFn: async ({ formData }: CreateCourseVariables) => {
 
            const dataToCreate = {
-                ...getDefaultGradingPolicies(),...formData
+                ...getDefaultSyllabusValues(),...formData
             }
             const createResult = await createNewCourse(dataToCreate);
             const newId = createResult?.course_id;

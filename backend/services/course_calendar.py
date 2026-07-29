@@ -49,6 +49,9 @@ from datetime import datetime, timedelta
 import numpy as np
 import logging
 
+from sympy import re
+import re as base_re
+
 
 def create_schedule(term, year, days, url = None) :
     '''
@@ -61,16 +64,19 @@ def create_schedule(term, year, days, url = None) :
     target = term + ' ' + year
 
     if not url:
-            url = ['https://www.easternct.edu/academics/academic-calendar/index.html',
-                   'https://www.easternct.edu/academics/academic-calendar/academic-calendar-2026-27.html']
+            url = 'https://www.easternct.edu/academics/academic-calendar/index.html'
+            soup = get_webpage(url)            
+            links = soup.find_all('a', href=base_re.compile(r'^academic-calendar'))
+            url = {'https://easternct.edu/academics/academic-calendar/' +l.get('href') for l in links}                   
             try:
-                soup = get_target_webpage(url[0], target)
-            except :
-                soup = get_target_webpage(url[1], target)
+                soup = get_target_webpage(None, target, soup = soup)
+            except Exception as e:                
+                soup = get_target_webpage(url.pop(), target)
     else :
         soup = get_target_webpage(url, target)
 
-    df_calendar = get_dates(soup, target)
+    df_calendar = get_dates(soup, target) 
+
     df_calendar = process_academic_calendar(df_calendar, target, year)
 
     start, end = get_start_and_end_dates(df_calendar)
@@ -98,20 +104,16 @@ def get_webpage(url) :
 
 
 # %%
-def get_target_webpage(url, target):
+def get_target_webpage(url, target, soup = None):
     
-    soup = get_webpage(url)
-    logging.info('Getting target webpage')
-    if not soup.table.find('td', string = target) :
-        a = soup.find(lambda element: element.name =='a' and 'Upcoming Academic Calendar' in element.text.strip())
-
-        if not a :
-            raise Exception(f'Calendar for {target} not found')
-
-        i = url.rfind('/')
-        url = url[:i] + '/' + a['href']
-
+    if not soup :
         soup = get_webpage(url)
+
+    logging.info('Getting target webpage')
+    if not soup.find('h2', string = target) :
+        
+        raise Exception(f'Calendar for {target} not found')
+
     return soup
 
 
@@ -122,13 +124,14 @@ def get_dates(soup, target_semester):
 
     logging.info('Getting table for target semester')
 
-    for t in soup.find_all('table')[1:] :
-        if t.td.text.strip() == target_semester :           
-            df = pd.read_html(StringIO(str(t)))[0]
-            df.rename(columns = {df.columns[1]: 'Description'}, inplace = True)
+    for dl in soup.find_all('dl') :
+        if dl.parent.parent.h2.text == target_semester :           
+            dates = [dt.text for dt in dl.find_all('dt')]
+            description = [dd.text for dd in dl.find_all('dd')]
+            df = pd.DataFrame({target_semester: dates, 'Description': description})
             return df
 
-    raise Exception(f'Term {target_semester} not found in current or upcoming urls')
+    raise Exception(f'Term {target_semester} not found')
     return None
 
 def filter_non_relevant_dates(df, col = 'Description'):

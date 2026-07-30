@@ -16,3 +16,4 @@ python_docx_replace
 htmldocx
 firebase_admin
 flasgger
+sympy

@@ -13,6 +13,7 @@ import backend.services.course_planning as cp
 import re
 import logging
 
+from urllib.parse import urlparse
 
 #%%
 def get_webpage(url: str) :
@@ -109,8 +110,14 @@ def create_syllabus_statment_page(doc,url: str,selected_statements=None):
         # get header and remove whitespace after any closing tag
         header_string = str(header).strip()
         header_string = re.sub(r'(</[^>]+>)\s+', r'\1', header_string)
-        content_string = str(list(content)[0])
         html_to_word_htmldocx(doc,header_string)
+
+        content_string = str(list(content)[0])
+
+        # replace relative urls
+        p = urlparse(url)
+        base = f'{p.scheme}://{p.netloc}'            
+        content_string = content_string.replace('<a href="../..', '<a href = "' + base)                
         html_to_word_htmldocx(doc,content_string)
 
 def html_to_word_htmldocx(doc,html_content: str):

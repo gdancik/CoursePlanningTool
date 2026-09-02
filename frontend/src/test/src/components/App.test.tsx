@@ -1,4 +1,4 @@
-jest.mock('../services/axios', () => ({
+jest.mock('../../../services/apiClient', () => ({
     default: {
         get: jest.fn(),
         post: jest.fn(),
@@ -6,8 +6,8 @@ jest.mock('../services/axios', () => ({
 }));
 
 import { render, screen } from '@testing-library/react';
-import App from '../App';
-import Welcome from '../welcome';
+import App from '../../../App';
+import Welcome from '../../../welcome';
 import {BrowserRouter} from "react-router-dom";
 import {MemoryRouter} from "react-router-dom";
 

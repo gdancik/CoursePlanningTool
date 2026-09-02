@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import CheckboxGroup from "../components/SyllabusComponents/CheckboxGroup";
+import CheckboxGroup from "../../../components/SyllabusComponents/CheckboxGroup";
 
 /**
  * Controlled test wrapper — mimics how CheckboxGroup is used in real components.

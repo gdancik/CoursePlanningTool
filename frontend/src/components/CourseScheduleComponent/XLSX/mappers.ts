@@ -131,20 +131,20 @@ const normalizeSingleExcelDateString = (value: string): string => {
     const trimmed = value.trim();
 
     const slashDateMatch = trimmed.match(
-        /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/
+        /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4}|\d{2})$/
     );
 
     if (!slashDateMatch) {
         throw new Error(
-            `Invalid date "${trimmed}". Dates must use MM/DD/YYYY format.`
+            `Invalid date "${trimmed}". Dates must use a valid date format.`
         );
     }
 
     const month = Number(slashDateMatch[1]);
     const day = Number(slashDateMatch[2]);
-    const rawYear = Number(slashDateMatch[3]);
+    const rawYear = slashDateMatch[3];
 
-    const year = rawYear < 100 ? 2000 + rawYear : rawYear;
+    const year = Number(rawYear);
 
     validateMonthDayYear(month, day, year, trimmed);
 

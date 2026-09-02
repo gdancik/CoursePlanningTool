@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Alert from '../components/SyllabusComponents/Alert';
+import Alert from '../../../components/SyllabusComponents/Alert';
 
 /**
  * Test suite for Alert component

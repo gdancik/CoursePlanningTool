@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import SectionAccordion from "../components/SyllabusComponents/SectionAccordion";
-import { JsonComponent} from "../utils/PageRenderEngine/types";
+import SectionAccordion from "../../../components/SyllabusComponents/SectionAccordion";
+import { JsonComponent} from "../../../utils/PageRenderEngine/types";
 
 const mockContent: JsonComponent[] = [
   {

@@ -16,7 +16,7 @@ import {ContentCardSet, CardData } from '../../components/SyllabusComponents/Con
  * />
  */
 
-interface AssignmentsProps {
+export interface AssignmentsProps {
     id: string;
     onChange?: (assignments: CardData[]) => void;
     data?: CardData[];

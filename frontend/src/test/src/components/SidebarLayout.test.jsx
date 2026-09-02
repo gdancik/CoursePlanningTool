@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
-import SidebarLayout from '../components/SidebarLayout';
+import SidebarLayout from '../../../components/SidebarLayout';
 
 // Mock component for testing
 const MockMainContent = () => <div data-testid="main-content">Main Content Area</div>;

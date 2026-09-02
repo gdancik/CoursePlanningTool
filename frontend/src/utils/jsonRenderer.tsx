@@ -381,30 +381,30 @@ const JsonRenderComponentInner: React.FC<JsonRenderComponentProps> = ({
                     return null;
                     
                 }
-          
-                const days_to_string = function(x: any, name: string) {
-                    if (x === undefined) {
-                        return x;
-                    }                    
-                    if (Array.isArray(x)) {
-                        return x.join('');
-                    } else {
-                        alert("Error: " + name + " must correspond to an array")
-                    return x;
+                const days_to_string = function(x: any, name: string): string {
+                    if(x === undefined || x === null || Number.isNaN(x) ){
+                        console.log("NAN DETECTED");
+                        return ""
                     }
+                    if(Array.isArray(x)) {
+                        return x.join ('');
+                    }
+                    if (typeof x === "string") {
+                        return x;
+                    }
+                    return "";
                 }
+                const dayOrder = ['M', 'T', 'W', 'R', 'F', 'S'];
+                const sortDays = (days: string): string =>
+                    [...new Set(days)]
+                    .sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b))
+                    .join('');
 
                 const term = formData[component.term];
                 const year = formData[component.year];
-                let days = days_to_string(formData[component.days1], 'days1');
-                
-                if (component.days2) {
-                    const days2 = days_to_string(formData[component["days2"]], 'days2'); 
-                    const removeDuplicates = (str:string) => [...new Set(str)].join('');
-                    days = removeDuplicates(days +days2);
-                }                
-
-                
+                const days1 = days_to_string(formData[component.days1], 'days1');
+                const days2 = component.days2 ? days_to_string(formData[component.days2], 'days2') : "";
+                const days = sortDays(days1 + days2);
 
                 return (
                     <CourseSchedule 

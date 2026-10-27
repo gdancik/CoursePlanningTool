@@ -1,9 +1,9 @@
 import * as XLSX from 'xlsx-js-style';
-import {validateScheduleCols,exportRowsToExcel,importExcelFile} from '../../../../components/CourseScheduleComponent/XLSX/exportImportExcel';
-import {downloadScheduleTemplate} from '../../../../components/CourseScheduleComponent/XLSX/excelTemplate';
-import {sizeOfWorksheet} from '../../../../components/CourseScheduleComponent/XLSX/excelFormat';
-import {Course_Schedule_Excel_Cols,Course_Schedule_Sheet_Identifier} from '../../../../components/CourseScheduleComponent/XLSX/constants';
-import {row} from './testRows';
+import {validateScheduleCols,exportRowsToExcel,importExcelFile} from '../../../../../components/CourseScheduleComponent/XLSX/exportImportExcel';
+import {downloadScheduleTemplate} from '../../../../../components/CourseScheduleComponent/XLSX/excelTemplate';
+import {sizeOfWorksheet} from '../../../../../components/CourseScheduleComponent/XLSX/excelFormat';
+import {Course_Schedule_Excel_Cols,Course_Schedule_Sheet_Identifier} from '../../../../../components/CourseScheduleComponent/XLSX/constants';
+import {row} from '../CourseScheduleUnitTest/testRows';
 
 // File.arrayBuffer is not implemented in every jsdom version: provide it explicitly.
 const workbookFile=(rows:Record<string,unknown>[]):File=>{

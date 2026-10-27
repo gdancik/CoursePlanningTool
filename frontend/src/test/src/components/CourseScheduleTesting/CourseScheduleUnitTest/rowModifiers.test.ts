@@ -2,8 +2,8 @@ import {
  insertEmptyRowAtIndex,deleteRowAtIndex,clearScheduleRows,updateRowAtIndex,
  updateDateFieldAtIndex,normalizeDateFieldAtIndex,sortScheduleRowsByDate,
  formatScheduleRowsByDate,formatScheduleRowsByDayDisplay
-} from '../../../../components/CourseScheduleComponent/utilities/modifiers/rowModifiers';
-import {INVALID_DATE_TIMESTMP} from '../../../../components/CourseScheduleComponent/utilities/dateUtils';
+} from '../../../../../components/CourseScheduleComponent/utilities/modifiers/rowModifiers';
+import {INVALID_DATE_TIMESTMP} from '../../../../../components/CourseScheduleComponent/utilities/dateUtils';
 import {row} from './testRows';
 const a=row('a','01/02/2026',{day:'Monday'});
 const b=row('b','02/03/2026',{day:'Thursday'});

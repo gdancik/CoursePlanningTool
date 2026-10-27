@@ -1,7 +1,7 @@
 import {
  backendArrayRowToScheduleRow,backendScheduleToRows,generatedScheduleItemsToRows
-} from '../../../../components/CourseScheduleComponent/utilities/mapper';
-import {runTableTests} from '../../../helpers/courseScheduleTestDriver';
+} from '../../../../../components/CourseScheduleComponent/utilities/mapper';
+import {runTableTests} from '../../../../helpers/courseScheduleTestDriver';
 const headers=['Date','Day','Unit','Outcomes','Reading'];
 runTableTests('backendScheduleToRows',(data:unknown)=>backendScheduleToRows(data,2026).map(r=>[r.date,r.day,r.unit]),[
  {name:'undefined fallback',input:undefined,expected:[['','','']]},

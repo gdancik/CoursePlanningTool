@@ -1,6 +1,6 @@
-import {deduplicateRows,sortRowsByDate,areRowsSortedByDate,hasScheduleContent,mergeGeneratedRows} from '../../../../components/CourseScheduleComponent/utilities/rowUtils';
+import {deduplicateRows,sortRowsByDate,areRowsSortedByDate,hasScheduleContent,mergeGeneratedRows} from '../../../../../components/CourseScheduleComponent/utilities/rowUtils';
 import {row} from './testRows';
-import {runTableTests} from '../../../helpers/courseScheduleTestDriver';
+import {runTableTests} from '../../../../helpers/courseScheduleTestDriver';
 const early=row('early','01/05/2026');
 const late=row('late','03/05/2026');
 runTableTests('areRowsSortedByDate',(rows:ReturnType<typeof row>[])=>areRowsSortedByDate(rows,2026),[

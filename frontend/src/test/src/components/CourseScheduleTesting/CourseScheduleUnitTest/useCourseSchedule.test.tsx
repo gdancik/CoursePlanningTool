@@ -1,12 +1,12 @@
 import {act,renderHook} from '@testing-library/react';
-import {useCourseSchedule,missingScheduleInfo} from '../../../../components/CourseScheduleComponent/CourseSchedule/useCourseSchedule';
-import {useGenerateScheduleMutation} from '../../../..//components/CourseScheduleComponent/hooks/useGenerateScheduleMutation';
-import {triggerInput} from '../../../../services/triggerInput';
-import {importExcelFile,exportRowsToExcel} from '../../../../components/CourseScheduleComponent/XLSX/ExcelShorteners';
+import {useCourseSchedule,missingScheduleInfo} from '../../../../../components/CourseScheduleComponent/CourseSchedule/useCourseSchedule';
+import {useGenerateScheduleMutation} from "../../../../../components/CourseScheduleComponent/hooks/useGenerateScheduleMutation";
+import {triggerInput} from '../../../../../services/triggerInput';
+import {importExcelFile,exportRowsToExcel} from '../../../../../components/CourseScheduleComponent/XLSX/ExcelShorteners';
 
-jest.mock('../../../../components/CourseScheduleComponent/hooks/useGenerateScheduleMutation',()=>({useGenerateScheduleMutation:jest.fn()}));
-jest.mock('../../../../services/triggerInput',()=>({triggerInput:jest.fn()}));
-jest.mock('../../../../components/CourseScheduleComponent/XLSX/ExcelShorteners',()=>({
+jest.mock('../../../../../components/CourseScheduleComponent/hooks/useGenerateScheduleMutation',()=>({useGenerateScheduleMutation:jest.fn()}));
+jest.mock('../../../../../services/triggerInput',()=>({triggerInput:jest.fn()}));
+jest.mock('../../../../../components/CourseScheduleComponent/XLSX/ExcelShorteners',()=>({
  importExcelFile:jest.fn(),exportRowsToExcel:jest.fn(),downloadScheduleTemplate:jest.fn()
 }));
 const mockedMutation=useGenerateScheduleMutation as jest.Mock;

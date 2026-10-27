@@ -8,17 +8,17 @@ import {
   normalizeDaysToCodes,
   formatDayCodes,
   formatDayValue,
-} from '../../../../components/CourseScheduleComponent/utilities/normalizers';
+} from '../../../../../components/CourseScheduleComponent/utilities/normalizers';
 
 import {
   runTableTests,
   runMultiArgTableTests,
-} from '../../../helpers/courseScheduleTestDriver';
+} from '../../../../helpers/courseScheduleTestDriver';
 
 import type {
   DayCode,
   DayDisplayOption,
-} from '../../../../components/CourseScheduleComponent/types/courseScheduleTypes';
+} from '../../../../../components/CourseScheduleComponent/types/courseScheduleTypes';
 
 /**
  * STRING NORMALIZATION

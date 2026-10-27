@@ -1,8 +1,8 @@
 import {
  INVALID_DATE_TIMESTMP, parseStandaloneDateValue, parseSortableRowDateValue,
  formatDate, validateScheduleDateValue, withParsedDateMetadata
-} from '../../../../components/CourseScheduleComponent/utilities/dateUtils';
-import {runMultiArgTableTests,runTableTests,runErrorTableTests} from '../../../helpers/courseScheduleTestDriver';
+} from '../../../../../components/CourseScheduleComponent/utilities/dateUtils';
+import {runMultiArgTableTests,runTableTests,runErrorTableTests} from '../../../../helpers/courseScheduleTestDriver';
 const stamp = (year:number,month:number,day:number) => new Date(year,month-1,day).getTime();
 runMultiArgTableTests('parseStandaloneDateValue',parseStandaloneDateValue,[
  {name:'MM/DD',args:['02/28',2026],expected:stamp(2026,2,28)},

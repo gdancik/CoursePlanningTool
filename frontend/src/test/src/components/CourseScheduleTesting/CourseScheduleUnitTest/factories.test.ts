@@ -1,5 +1,5 @@
-import {createEmptyScheduleRow,createScheduleRowId} from '../../../../components/CourseScheduleComponent/utilities/factories';
-import {INVALID_DATE_TIMESTMP} from '../../../../components/CourseScheduleComponent/utilities/dateUtils';
+import {createEmptyScheduleRow,createScheduleRowId} from '../../../../../components/CourseScheduleComponent/utilities/factories';
+import {INVALID_DATE_TIMESTMP} from '../../../../../components/CourseScheduleComponent/utilities/dateUtils';
 test('createScheduleRowId delegates to crypto.randomUUID',()=>{
  const original=globalThis.crypto.randomUUID;
  const spy=jest.spyOn(globalThis.crypto,'randomUUID').mockReturnValue('00000000-0000-4000-8000-000000000001');

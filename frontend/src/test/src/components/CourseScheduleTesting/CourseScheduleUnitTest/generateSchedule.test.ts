@@ -1,4 +1,4 @@
-import {generateScheduleRows} from '../../../../components/CourseScheduleComponent/CourseSchedule/generateSchedule';
+import {generateScheduleRows} from '../../../../../components/CourseScheduleComponent/CourseSchedule/generateSchedule';
 type Mutation=Parameters<typeof generateScheduleRows>[0]['mutation'];
 const mutation=(impl:jest.Mock):Mutation=>({mutateAsync:impl} as unknown as Mutation);
 const base={term:'Fall',year:'2026',days:'MWF',dateParsingYear:2026,missingScheduleInformation:false};

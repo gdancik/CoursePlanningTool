@@ -1,9 +1,9 @@
 import {
  normalizeExcelCells, ExcelRowHasData, schedRowsToExcelRows, excelRowsToSchedRows,
  normalizeExcelDateCell, type ExcelSchedRow
-} from '../../../../components/CourseScheduleComponent/XLSX/mappers';
-import {runTableTests,runErrorTableTests} from '../../../helpers/courseScheduleTestDriver';
-import {row} from './testRows';
+} from '../../../../../components/CourseScheduleComponent/XLSX/mappers';
+import {runTableTests,runErrorTableTests} from '../../../../helpers/courseScheduleTestDriver';
+import {row} from '../CourseScheduleUnitTest/testRows';
 const excelRow=(overrides:Partial<ExcelSchedRow>={}):ExcelSchedRow=>({
  Date:'',Day:'','Unit and Theme/Topic':'','Learning Outcomes Addressed':'','Reading/Assignments Due':'',...overrides
 });

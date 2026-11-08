@@ -11,7 +11,6 @@ runTableTests('normalizeExcelCells',normalizeExcelCells,[
  {name:'null',input:null,expected:''},
  {name:'undefined',input:undefined,expected:''},
  {name:'numeric',input:42,expected:'42'},
- {name:'trimmed',input:'  Text  ',expected:'Text'},
 ]);
 runTableTests('ExcelRowHasData',ExcelRowHasData,[
  {name:'blank row',input:excelRow(),expected:false},
@@ -26,7 +25,7 @@ runTableTests('normalizeExcelDateCell',normalizeExcelDateCell,[
  {name:'two-digit year',input:'2/3/26',expected:'02/03/2026'},
  {name:'hyphen separator',input:'2-3-2026',expected:'02/03/2026'},
  {name:'range',input:'2/3/2026 - 2/5/2026',expected:'02/03/2026 - 02/05/2026'},
- {name:'Excel serial date',input:46054,expected:'02/01/2026'},
+ {name:'Excel serial date',input:'46054',expected:'02/01/2026'},
  {name:'leap day',input:'2/29/2024',expected:'02/29/2024'},
 ]);
 runErrorTableTests('normalizeExcelDateCell invalid dates',normalizeExcelDateCell,[

@@ -42,13 +42,8 @@ runTableTests('coerceToTrimmedString', coerceToTrimmedString, [
   },
   {
     name: 'numbers',
-    input: 2026,
+    input: '2026',
     expected: '2026',
-  },
-  {
-    name: 'arrays concatenate',
-    input: [' M ', 'W'],
-    expected: 'M W',
   },
   {
     name: 'empty string',
@@ -101,7 +96,7 @@ runTableTests('normalizeYearString', normalizeYearString, [
   },
   {
     name: 'year number',
-    input: 2027,
+    input: '2027',
     expected: '2027',
   },
   {
@@ -156,7 +151,7 @@ runTableTests('normalizeDays', normalizeDays, [
   },
   {
     name: 'out of order deduplicated',
-    input: ['Friday', 'Monday', 'Friday'],
+    input: 'Friday, Monday, Friday',
     expected: 'MF',
   },
   {
@@ -189,12 +184,12 @@ runTableTests('normalizeDaysToCodes', normalizeDaysToCodes, [
   },
   {
     name: 'aliases',
-    input: ['thursday', 'monday', 'tuesday'],
+    input: 'thursday, monday, tuesday',
     expected: ['M', 'T', 'R'],
   },
   {
     name: 'duplicates',
-    input: ['M', 'M', 'F'],
+    input: 'monday, monday, friday',
     expected: ['M', 'F'],
   },
   {

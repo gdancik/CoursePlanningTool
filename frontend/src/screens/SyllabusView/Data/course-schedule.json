@@ -25,7 +25,8 @@
             "id": "course_schedule_syllabus_list",
             "term": "term_syllabus",
             "year": "year_syllabus",
-            "days1": "days1_syllabus_checkboxes"
+            "days1": "days1_syllabus_checkboxes",
+            "days2": "days2_syllabus_checkboxes"
           }           
       ]      
     }

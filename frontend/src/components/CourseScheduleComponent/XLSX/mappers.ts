@@ -144,7 +144,13 @@ const normalizeSingleExcelDateString = (value: string): string => {
     const day = Number(slashDateMatch[2]);
     const rawYear = slashDateMatch[3];
 
-    const year = Number(rawYear);
+    const parsedYear = Number(rawYear);
+    const year =
+    rawYear.length === 2
+        ? parsedYear <= 49
+            ? 2000 + parsedYear
+            : 1900 + parsedYear
+        : parsedYear;
 
     validateMonthDayYear(month, day, year, trimmed);
 
